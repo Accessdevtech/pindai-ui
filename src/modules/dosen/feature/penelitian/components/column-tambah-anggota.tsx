@@ -3,16 +3,15 @@ import { AnggotaType } from "../schema/anggota-schema";
 import { Checkbox } from "@/components/ui/checkbox";
 import { anggota } from "../state/store";
 import { useAtom } from "jotai";
+import { Dosen } from "@/modules/dosen/dosen.interface";
 
-export const columnTambahAnggota = (): ColumnDef<AnggotaType>[] => {
+export const columnTambahAnggota = (): ColumnDef<Dosen>[] => {
   return [
     {
       id: "select",
       cell: ({ row }) => {
         const [anggotaValue, setAnggotaValue] = useAtom(anggota);
-        const isSelected = anggotaValue.some(
-          (item) => item.nidn === row.original.nidn,
-        );
+        const isSelected = anggotaValue.some((item) => item.nidn === row.original.nidn);
         return (
           <Checkbox
             checked={isSelected}
@@ -20,9 +19,7 @@ export const columnTambahAnggota = (): ColumnDef<AnggotaType>[] => {
               if (value) {
                 setAnggotaValue((prev) => [...prev, row.original]);
               } else {
-                setAnggotaValue((prev) =>
-                  prev.filter((item) => item.nidn !== row.original.nidn),
-                );
+                setAnggotaValue((prev) => prev.filter((item) => item.nidn !== row.original.nidn));
               }
             }}
             disabled={isSelected}

@@ -7,16 +7,12 @@ import { useState } from "react";
 import { useAtom, useSetAtom } from "jotai";
 import { anggota } from "../state/store";
 import { UseFormSetValue } from "react-hook-form";
-
-// interface ColumnAnggotaViewProps {
-//   setValue: (value: []) => void;
-// }
+import { Dosen } from "@/modules/dosen/dosen.interface";
 
 export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
-  // export const columnAnggotaView = ({ setValue }: ColumnAnggotaViewProps): ColumnDef<AnggotaType>[] => {
   return [
     {
-      id: "select",
+      id: "no",
       header: "No",
       cell: ({ row }) => <span>{row.index + 1}</span>,
     },
@@ -54,11 +50,11 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
     },
     {
       accessorKey: "job_functional",
-      header: "Job Functional",
+      header: "Jabatan Fungsional",
     },
     {
       accessorKey: "affiliate_campus",
-      header: "Affiliate Campus",
+      header: "Kapus afiliasi",
     },
     {
       id: "action",
@@ -69,9 +65,7 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
         const [open, setOpen] = useState(false);
 
         const handleClick = () => {
-          const newValue = anggotaValue.filter(
-            (item) => item.nidn !== row.original.nidn,
-          );
+          const newValue = anggotaValue.filter((item) => item.nidn !== row.original.nidn);
           setAnggotaValue(newValue);
         };
 
