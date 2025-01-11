@@ -22,15 +22,15 @@ export const navData = {
   main: [
     {
       name: "penelitian",
-      roles: ["dosen", "kaprodi", "dppm"],
+      roles: ["dosen", "kaprodi", "dppm", "keuangan"],
     },
     {
       name: "pengabdian",
-      roles: ["dosen", "kaprodi", "dppm"],
+      roles: ["dosen", "kaprodi", "dppm", "keuangan"],
     },
     {
       name: "publikasi",
-      roles: ["dosen", "kaprodi"],
+      roles: ["dosen", "kaprodi", "dppm", "keuangan"],
     },
     {
       name: "scholar",

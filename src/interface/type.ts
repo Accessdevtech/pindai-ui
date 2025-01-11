@@ -3,7 +3,7 @@ export type Role = "kaprodi" | "dppm" | "dosen" | "keuangan";
 export interface Response {
   message: string;
   status: string;
-  error?: string;
+  errors?: string;
 }
 
 export interface Meta {

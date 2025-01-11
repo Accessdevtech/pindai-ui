@@ -32,7 +32,15 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
       onClose();
     },
     onError: (err) => {
-      toast.error(err.response?.data.message);
+      if (err.response?.data.errors) {
+        for (const [key, value] of Object.entries(err.response.data.errors)) {
+          form.setError(key as keyof RegisterType, {
+            message: value as string,
+            type: "manual",
+          });
+        }
+      }
+      // toast.error(err.response?.data.message);
     },
   });
 

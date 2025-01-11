@@ -11,13 +11,25 @@ import Breadcrumb from "@/components/molecules/bradcrumb";
 import { ROUTE } from "@/services/route";
 import Divider from "@/components/atom/divider";
 import TextAreaField from "@/components/molecules/text-area-field";
-import { FormControl, FormItem, FormLabel } from "@/components/ui/form";
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
 import SelectField from "@/components/molecules/select-field";
 import { Button } from "@/components/ui/button";
 import { InfoIcon } from "lucide-react";
 import Modal from "@/components/molecules/modal";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { Label } from "@/components/ui/label";
 import { useAuthContext } from "@/contexts/auth-context";
 import { Dosen } from "../../dosen.interface";
@@ -36,11 +48,14 @@ import { EachUtil } from "@/utils/each-utils";
 import { Badge } from "@/components/ui/badge";
 import { columnJenisIndeksasi } from "./components/column-jenis-indeksasi";
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian";
+import { toast } from "sonner";
+import { decrypt, encrypt } from "@/lib/crypto";
 
 export default function CreatePenelitian() {
   const { user } = useAuthContext();
   const [value, setValue] = useAtom(dosenSearch);
   const [search] = useDebounce(value, 500);
+  const [error, setError] = useState<string[]>([]);
 
   const [open, setOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
@@ -56,41 +71,62 @@ export default function CreatePenelitian() {
       deskripsi: "",
       jenis_penelitian: "",
       jenis_indeksasi: "",
-      anggota: anggotaValue.length !== 0 ? anggotaValue : [],
+      anggota: [],
     },
   });
 
   const { data: listPenelitian } = useGetListPenelitian();
   const { data: listIndeksasi } = useGetListIndeksasi();
 
-  const { data: dataAnggota, refetch } = useGetAnggota(currentPage, search);
-
-  console.log((user as Dosen).name_with_title);
-  dataAnggota?.dosen.map((item) => {
-    console.log(item.name_with_title);
-  });
+  const {
+    data: dataAnggota,
+    refetch,
+    isFetching,
+  } = useGetAnggota(currentPage, search);
 
   const { mutate } = useCreatePenelitian({
-    onSuccess: () => {
-      setAnggotaValue([]);
+    onSuccess: (res) => {
+      if (!res.status) {
+        return toast.error(res.message);
+      }
+      toast.success(res.message);
+      // setAnggotaValue([]);
       form.reset();
       refetch();
     },
-    onError: () => {
+    onError: (err) => {
+      // console.log(err.response?.data.errors?.anggota);
+      if (err.response?.data?.errors) {
+        for (const [key, value] of Object.entries(err.response.data.errors)) {
+          form.setError(key as keyof PenelitianType, {
+            message: value as string,
+            type: "manual",
+          });
+          if (key === "anggota") {
+            setError(value as unknown as string[]);
+          }
+        }
+      }
+      setAnggotaValue([]);
+      // form.reset();
       refetch();
     },
   });
 
-  anggotaValue.map((item) => {
-    console.log(item.name_with_title);
-  });
   const onSubmit = async (data: PenelitianType) => {
+    // mutate(data);
     // console.log(data);
-    // const formData = {
+    // console.log(form.getValues("anggota"));
+    // mutate({
     //   ...data,
-    //   anggota: anggotaValue,
-    // };
-    // mutate(formData);
+    //   anggota: [
+    //     {
+    //       name: user?.name as string,
+    //       email: user?.email as string,
+    //       nidn: user?.nidn as string,
+    //     },
+    //   ],
+    // });
   };
 
   const columnTambah = columnTambahAnggota();
@@ -98,16 +134,26 @@ export default function CreatePenelitian() {
   const columnsJenisPenelitian = columnJenisPenelitian();
   const columnsJenisIndeksasi = columnJenisIndeksasi();
 
+  form.setValue("anggota", anggotaValue);
   return (
     <div>
-      <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/penelitian`}>Buat Penelitian</Breadcrumb>
+      <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/penelitian`}>
+        Buat Penelitian
+      </Breadcrumb>
       <Card className="max-w-full">
         <CardContent className="py-6">
           <Form form={form} onSubmit={onSubmit}>
             <div className="flex flex-col gap-4 w-full">
-              <Divider text="data penelitian-tahap 1" className="w-[34%] lg:w-[43%]" />
+              <Divider
+                text="data penelitian-tahap 1"
+                className="w-[34%] lg:w-[43%]"
+              />
               <div className="flex flex-col lg:flex-row gap-4 lg:items-center w-full">
-                <InputField name="tahun_akademik" label="Tahun Akademik" control={form.control} />
+                <InputField
+                  name="tahun_akademik"
+                  label="Tahun Akademik"
+                  control={form.control}
+                />
                 <SelectField
                   name="semester"
                   label="Semester"
@@ -124,17 +170,28 @@ export default function CreatePenelitian() {
                   ]}
                 />
                 <FormItem className="flex-grow">
-                  <FormLabel className="uppercase text-xs tracking-wider">kode penelitian</FormLabel>
+                  <FormLabel className="uppercase text-xs tracking-wider">
+                    kode penelitian
+                  </FormLabel>
                   <FormControl>
                     <Input disabled defaultValue={"0000"} />
                   </FormControl>
                 </FormItem>
               </div>
               <InputField name="judul" label="judul" control={form.control} />
-              <TextAreaField name="deskripsi" label="deskripsi" control={form.control} />
+              <TextAreaField
+                name="deskripsi"
+                label="deskripsi"
+                control={form.control}
+              />
               <div className="flex flex-col lg:flex-row gap-4 lg:items-center w-full">
                 <div className="flex items-end grow gap-2">
-                  <SelectField name="jenis_penelitian" label="jenis penelitian" control={form.control} options={listPenelitian?.data || []} />
+                  <SelectField
+                    name="jenis_penelitian"
+                    label="jenis penelitian"
+                    control={form.control}
+                    options={listPenelitian?.data || []}
+                  />
                   <Modal
                     title="Detail jenis Penelitian"
                     Icon={InfoIcon}
@@ -149,7 +206,11 @@ export default function CreatePenelitian() {
                           <TableRow>
                             <EachUtil
                               of={columnsJenisPenelitian}
-                              render={(column) => <TableHead key={column.header as string}>{column.header as string}</TableHead>}
+                              render={(column) => (
+                                <TableHead key={column.header as string}>
+                                  {column.header as string}
+                                </TableHead>
+                              )}
                             />
                           </TableRow>
                         </TableHeader>
@@ -158,15 +219,22 @@ export default function CreatePenelitian() {
                             of={listPenelitian?.data || []}
                             render={(item, index) => (
                               <TableRow key={item.id}>
-                                <TableCell className="border-r">{item.name}</TableCell>
+                                <TableCell className="border-r">
+                                  {item.name}
+                                </TableCell>
                                 <TableCell className="flex flex-wrap gap-2 overflow-hidden max-w-xs">
                                   {item.kriteria.map((keterangan, index) => (
-                                    <Badge key={index} className="capitalize text-ellipsis">
+                                    <Badge
+                                      key={index}
+                                      className="capitalize text-ellipsis"
+                                    >
                                       {keterangan}
                                     </Badge>
                                   ))}
                                 </TableCell>
-                                <TableCell className="border-l">{item.keterangan}</TableCell>
+                                <TableCell className="border-l">
+                                  {item.keterangan}
+                                </TableCell>
                               </TableRow>
                             )}
                           />
@@ -177,7 +245,12 @@ export default function CreatePenelitian() {
                 </div>
 
                 <div className="flex items-end grow gap-2">
-                  <SelectField name="jenis_indeksasi" label="jenis indeksasi" control={form.control} options={listIndeksasi?.data || []} />
+                  <SelectField
+                    name="jenis_indeksasi"
+                    label="jenis indeksasi"
+                    control={form.control}
+                    options={listIndeksasi?.data || []}
+                  />
                   <Modal
                     title="Detail jenis indeksasi"
                     Icon={InfoIcon}
@@ -191,7 +264,11 @@ export default function CreatePenelitian() {
                         <TableRow>
                           <EachUtil
                             of={columnsJenisIndeksasi}
-                            render={(column) => <TableHead key={column.header as string}>{column.header as string}</TableHead>}
+                            render={(column) => (
+                              <TableHead key={column.header as string}>
+                                {column.header as string}
+                              </TableHead>
+                            )}
                           />
                         </TableRow>
                       </TableHeader>
@@ -200,15 +277,22 @@ export default function CreatePenelitian() {
                           of={listIndeksasi?.data || []}
                           render={(item, index) => (
                             <TableRow key={item.id}>
-                              <TableCell className="border-r">{item.name}</TableCell>
+                              <TableCell className="border-r">
+                                {item.name}
+                              </TableCell>
                               <TableCell className="flex flex-wrap gap-2 overflow-hidden max-w-xs">
                                 {item.kriteria.map((keterangan, index) => (
-                                  <Badge key={index} className="capitalize text-ellipsis">
+                                  <Badge
+                                    key={index}
+                                    className="capitalize text-ellipsis"
+                                  >
                                     {keterangan}
                                   </Badge>
                                 ))}
                               </TableCell>
-                              <TableCell className="border-l">{item.keterangan}</TableCell>
+                              <TableCell className="border-l">
+                                {item.keterangan}
+                              </TableCell>
                             </TableRow>
                           )}
                         />
@@ -220,57 +304,98 @@ export default function CreatePenelitian() {
             </div>
 
             <div className="flex flex-col gap-4 w-full mt-4">
-              <Divider text="data ketua penelitian-tahap 2.1" className="w-[30%] lg:w-[41.5%]" />
+              <Divider
+                text="data ketua penelitian-tahap 2.1"
+                className="w-[30%] lg:w-[41.5%]"
+              />
               <div className="flex flex-col lg:flex-row gap-4 lg:items-center w-full">
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">NIDN</Label>
-                  <Input defaultValue={user?.nidn === null ? "0000" : user?.nidn} disabled />
+                  <Label className="uppercase text-xs tracking-wider">
+                    NIDN
+                  </Label>
+                  <Input
+                    defaultValue={user?.nidn === null ? "0000" : user?.nidn}
+                    disabled
+                  />
                 </FormItem>
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">NO. HP</Label>
-                  <Input defaultValue={(user as Dosen)?.phone_number} disabled />
+                  <Label className="uppercase text-xs tracking-wider">
+                    NO. HP
+                  </Label>
+                  <Input
+                    defaultValue={(user as Dosen)?.phone_number}
+                    disabled
+                  />
                 </FormItem>
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">Prodi</Label>
+                  <Label className="uppercase text-xs tracking-wider">
+                    Prodi
+                  </Label>
                   <Input defaultValue={(user as Dosen)?.prodi} disabled />
                 </FormItem>
               </div>
               <div className="flex flex-col lg:flex-row gap-4 lg:items-center w-full">
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">Nama Lengkap (Tanpa Gelar)</Label>
+                  <Label className="uppercase text-xs tracking-wider">
+                    Nama Lengkap (Tanpa Gelar)
+                  </Label>
                   <Input defaultValue={user?.name} disabled />
                 </FormItem>
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">Nama Lengkap (Menggunakan Gelar)</Label>
-                  <Input defaultValue={(user as Dosen)?.name_with_title} disabled />
+                  <Label className="uppercase text-xs tracking-wider">
+                    Nama Lengkap (Menggunakan Gelar)
+                  </Label>
+                  <Input
+                    defaultValue={(user as Dosen)?.name_with_title}
+                    disabled
+                  />
                 </FormItem>
               </div>
               <div className="flex flex-col lg:flex-row lg:items-center gap-4 w-full">
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">Email</Label>
+                  <Label className="uppercase text-xs tracking-wider">
+                    Email
+                  </Label>
                   <Input defaultValue={user?.email} disabled />
                 </FormItem>
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">Scholar ID</Label>
+                  <Label className="uppercase text-xs tracking-wider">
+                    Scholar ID
+                  </Label>
                   <Input defaultValue={(user as Dosen)?.scholar_id} disabled />
                 </FormItem>
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">Scopus ID</Label>
+                  <Label className="uppercase text-xs tracking-wider">
+                    Scopus ID
+                  </Label>
                   <Input defaultValue={(user as Dosen)?.scopus_id} disabled />
                 </FormItem>
                 <FormItem className="flex-grow">
-                  <Label className="uppercase text-xs tracking-wider">Jabatan funsional</Label>
-                  <Input defaultValue={(user as Dosen)?.job_functional} disabled />
+                  <Label className="uppercase text-xs tracking-wider">
+                    Jabatan funsional
+                  </Label>
+                  <Input
+                    defaultValue={(user as Dosen)?.job_functional}
+                    disabled
+                  />
                 </FormItem>
               </div>
               <FormItem className="flex-grow">
-                <Label className="uppercase text-xs tracking-wider">Affiliasi kampus</Label>
-                <Input defaultValue={(user as Dosen)?.affiliate_campus} disabled />
+                <Label className="uppercase text-xs tracking-wider">
+                  Affiliasi kampus
+                </Label>
+                <Input
+                  defaultValue={(user as Dosen)?.affiliate_campus}
+                  disabled
+                />
               </FormItem>
             </div>
 
             <div className="flex flex-col gap-4 w-full mt-4">
-              <Divider text="data anggota (tahap pilih anggota) penelitian-tahap 2.2" className="w-[17.5%] lg:w-[36%]" />
+              <Divider
+                text="data anggota (tahap pilih anggota) penelitian-tahap 2.2"
+                className="w-[17.5%] lg:w-[36%]"
+              />
               <div className="flex flex-col lg:flex-row gap-2">
                 <Modal
                   title="Daftar anggota penelitian"
@@ -288,9 +413,12 @@ export default function CreatePenelitian() {
                       meta={dataAnggota?.meta || ({} as Meta)}
                       currentPage={0}
                       value={value}
+                      isLoading={isFetching}
                       refetch={refetch}
                       setValue={setValue}
-                      onPaginationChange={(page: number) => setCurrentPage(page)}
+                      onPaginationChange={(page: number) =>
+                        setCurrentPage(page)
+                      }
                     />
                   </div>
                   <div className="flex gap-2 justify-end">
@@ -312,11 +440,16 @@ export default function CreatePenelitian() {
                   variant="outline"
                   btnStyle="border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                 >
-                  <div>Isi form berikut untuk menambahkan anggota penelitian</div>
+                  <div>
+                    Isi form berikut untuk menambahkan anggota penelitian
+                  </div>
                 </Modal>
               </div>
 
-              <DataTable columns={columnsView} data={anggotaValue} />
+              <div>
+                <DataTable columns={columnsView} data={anggotaValue} />
+                {error && <FormMessage>{error}</FormMessage>}
+              </div>
             </div>
 
             <Button className="w-full mt-4">simpan</Button>

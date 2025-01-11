@@ -51,7 +51,7 @@ export default function AppSidebar() {
             </Link>
           </SidebarMenuButton>
         </SidebarMenu>
-        {user?.role !== "dosen" && (
+        {user?.role !== "dosen" && user?.role !== "keuangan" && (
           <NavManagemenData role={user?.role} isActive={isActivePage} />
         )}
         <NavMainMenu role={user?.role} isActive={isActivePage} />

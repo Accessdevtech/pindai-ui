@@ -65,7 +65,9 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
         const [open, setOpen] = useState(false);
 
         const handleClick = () => {
-          const newValue = anggotaValue.filter((item) => item.nidn !== row.original.nidn);
+          const newValue = anggotaValue.filter(
+            (item) => item.nidn !== row.original.nidn,
+          );
           setAnggotaValue(newValue);
         };
 

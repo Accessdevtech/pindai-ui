@@ -1,17 +1,26 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { AnggotaType } from "../schema/anggota-schema";
 import { Checkbox } from "@/components/ui/checkbox";
 import { anggota } from "../state/store";
 import { useAtom } from "jotai";
 import { Dosen } from "@/modules/dosen/dosen.interface";
+import {
+  UseControllerProps,
+  UseFormReturn,
+  UseFormSetValue,
+} from "react-hook-form";
+import { PenelitianType } from "../schema/penelitian-schema";
+import { FormField } from "@/components/ui/form";
+import { AnggotaType } from "../schema/anggota-schema";
 
-export const columnTambahAnggota = (): ColumnDef<Dosen>[] => {
+export const columnTambahAnggota = (): ColumnDef<AnggotaType>[] => {
   return [
     {
       id: "select",
       cell: ({ row }) => {
         const [anggotaValue, setAnggotaValue] = useAtom(anggota);
-        const isSelected = anggotaValue.some((item) => item.nidn === row.original.nidn);
+        const isSelected = anggotaValue.some(
+          (item) => item.nidn === row.original.nidn,
+        );
         return (
           <Checkbox
             checked={isSelected}
@@ -19,7 +28,9 @@ export const columnTambahAnggota = (): ColumnDef<Dosen>[] => {
               if (value) {
                 setAnggotaValue((prev) => [...prev, row.original]);
               } else {
-                setAnggotaValue((prev) => prev.filter((item) => item.nidn !== row.original.nidn));
+                setAnggotaValue((prev) =>
+                  prev.filter((item) => item.nidn !== row.original.nidn),
+                );
               }
             }}
             disabled={isSelected}

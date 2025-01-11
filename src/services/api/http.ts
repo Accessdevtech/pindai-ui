@@ -1,4 +1,3 @@
-"use server";
 import axios, { AxiosResponse } from "axios";
 import axiosInstance from "./axios-instance";
 

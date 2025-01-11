@@ -1,4 +1,3 @@
-"use server";
 import { postData } from "@/services/api/http";
 import { API_ENDPOINTS } from "@/services/api/api-config";
 import { RegisterType } from "./schema/register.schema";
@@ -8,9 +7,7 @@ import {
 } from "@/services/storage/cookie-storage-service";
 
 export async function register(data: RegisterType) {
-  return await postData(API_ENDPOINTS.REGISTER, data).catch((err) =>
-    console.log(err),
-  );
+  return await postData(API_ENDPOINTS.REGISTER, data);
 }
 
 export async function logoutAction() {

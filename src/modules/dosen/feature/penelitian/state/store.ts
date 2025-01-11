@@ -1,4 +1,4 @@
-import { atomWithStorage } from "jotai/utils";
+import { atomWithReset } from "jotai/utils";
 import { AnggotaType } from "../schema/anggota-schema";
 
-export const anggota = atomWithStorage<AnggotaType[]>("anggota", []);
+export const anggota = atomWithReset<AnggotaType[]>([]);

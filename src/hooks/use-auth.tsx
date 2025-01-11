@@ -26,16 +26,18 @@ export function useAuth() {
   const login = useCallback(
     async (data: LoginType) => {
       try {
-        const res = await axiosInstance.post(API_ENDPOINTS.LOGIN, data);
-        const response = res.data;
-        const decryptedUser = JSON.parse(
-          decrypt(response.data.user).data as string,
-        );
+        const res = await postData(API_ENDPOINTS.LOGIN, data);
+        const decryptedUser = JSON.parse(decrypt(res.data.user).data as string);
         setUser(decryptedUser);
-        await setCookie("token", response.data.access_token);
-        await setCookie("user", response.data.user);
-        toast.success(response.message);
+        await setCookie("token", res.data.access_token);
+        await setCookie("user", res.data.user);
+        toast.success(res.message);
       } catch (err: any) {
+        if (err.response?.data.errors) {
+          for (const [key, value] of Object.entries(err.response.data.errors)) {
+            toast.error(value as string);
+          }
+        }
         toast.error(err.response?.data?.message);
       } finally {
         if (!isAuthenticated) return;
