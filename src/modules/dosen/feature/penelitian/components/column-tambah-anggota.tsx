@@ -1,32 +1,27 @@
 "use client"
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
-import { useAtom } from "jotai"
+import { useAtomValue } from "jotai"
 import { AnggotaType } from "../schema/anggota-schema"
-import { anggota } from "../state/store"
+import { selectedAnggotaAtom } from "../state/store"
 
-export const columnTambahAnggota = (): ColumnDef<AnggotaType>[] => {
+interface FormFieldProps {
+  handleCheckboxChange: (nidn: string) => void
+}
+
+export const columnTambahAnggota = ({
+  handleCheckboxChange,
+}: FormFieldProps): ColumnDef<AnggotaType>[] => {
   return [
     {
       id: "select",
       cell: ({ row }) => {
-        const [anggotaValue, setAnggotaValue] = useAtom(anggota)
-        const isSelected = anggotaValue.some(
-          item => item.nidn === row.original.nidn,
-        )
+        const selectedAnggota = useAtomValue(selectedAnggotaAtom)
         return (
           <Checkbox
-            checked={isSelected}
-            onCheckedChange={value => {
-              if (value) {
-                setAnggotaValue(prev => [...prev, row.original])
-              } else {
-                setAnggotaValue(prev =>
-                  prev.filter(item => item.nidn !== row.original.nidn),
-                )
-              }
-            }}
-            disabled={isSelected}
+            checked={selectedAnggota.includes(row.original.nidn)}
+            onCheckedChange={() => handleCheckboxChange(row.original.nidn)}
+            disabled={selectedAnggota.includes(row.original.nidn)}
             aria-label='Select row'
           />
         )

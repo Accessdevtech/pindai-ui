@@ -1,6 +1,6 @@
 "use client"
+import InputField from "@/components/atom/input-field"
 import Form from "@/components/molecules/form"
-import InputField from "@/components/molecules/input-field"
 import { Button } from "@/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"

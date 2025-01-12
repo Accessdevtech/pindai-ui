@@ -1,7 +1,7 @@
 "use client"
+import InputField from "@/components/atom/input-field"
+import SelectField from "@/components/atom/select-field"
 import Form from "@/components/molecules/form"
-import InputField from "@/components/molecules/input-field"
-import SelectField from "@/components/molecules/select-field"
 import {
   Breadcrumb,
   BreadcrumbItem,

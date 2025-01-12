@@ -1,4 +1,4 @@
-import Tooltip from "@/components/molecules/tooltip"
+import Tooltip from "@/components/atom/tooltip"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"

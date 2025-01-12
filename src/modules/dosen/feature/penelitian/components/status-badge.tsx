@@ -1,4 +1,4 @@
-import Tooltip from "@/components/molecules/tooltip"
+import Tooltip from "@/components/atom/tooltip"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { CheckIcon, ClockIcon, X } from "lucide-react"

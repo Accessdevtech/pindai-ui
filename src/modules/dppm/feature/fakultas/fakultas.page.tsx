@@ -3,10 +3,10 @@
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useState } from "react"
 
+import InputField from "@/components/atom/input-field"
+import Modal from "@/components/atom/modal"
 import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
-import InputField from "@/components/molecules/input-field"
-import Modal from "@/components/molecules/modal"
 import { Button } from "@/components/ui/button"
 import { useDialog } from "@/hooks/use-dialog"
 import { Meta, Role } from "@/interface/type"

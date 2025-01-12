@@ -10,7 +10,7 @@ import {
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { LucideIcon } from "lucide-react"
-import Tooltips from "./tooltip"
+import Tooltips from "../atom/tooltip"
 
 interface AlertProps {
   open: boolean

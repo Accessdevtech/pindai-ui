@@ -1,12 +1,12 @@
 "use client"
+import Breadcrumb from "@/components/atom/bradcrumb"
 import Divider from "@/components/atom/divider"
-import Breadcrumb from "@/components/molecules/bradcrumb"
+import InputField from "@/components/atom/input-field"
+import Modal from "@/components/atom/modal"
+import SelectField from "@/components/atom/select-field"
+import TextAreaField from "@/components/atom/text-area-field"
 import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
-import InputField from "@/components/molecules/input-field"
-import Modal from "@/components/molecules/modal"
-import SelectField from "@/components/molecules/select-field"
-import TextAreaField from "@/components/molecules/text-area-field"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
@@ -48,7 +48,11 @@ import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { useGetAnggota } from "./hook/use-penelitian/get-anggota"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
-import { anggota } from "./state/store"
+import {
+  anggotaAtom,
+  isDialogOpenAtom,
+  selectedAnggotaAtom,
+} from "./state/store"
 
 export default function CreatePenelitian() {
   const { user } = useAuthContext()
@@ -56,10 +60,11 @@ export default function CreatePenelitian() {
   const [search] = useDebounce(value, 500)
   const [error, setError] = useState<string[]>([])
 
-  const [open, setOpen] = useState(false)
   const [currentPage, setCurrentPage] = useState(1)
 
-  const [anggotaValue, setAnggotaValue] = useAtom(anggota)
+  const [anggota, setAnggota] = useAtom(anggotaAtom)
+  const [selectedAnggota, setSelectedAnggota] = useAtom(selectedAnggotaAtom)
+  const [openModal, setOpenModal] = useAtom(isDialogOpenAtom)
 
   const form = useForm<PenelitianType>({
     resolver: zodResolver(penelitianSchema),
@@ -111,21 +116,40 @@ export default function CreatePenelitian() {
     },
   })
 
+  const handleAddAnggota = () => {
+    const newAnggota = dataAnggota?.dosen.filter((anggota: Dosen) =>
+      selectedAnggota.includes(anggota.nidn),
+    )
+    setAnggota([...anggota, ...newAnggota!])
+    setSelectedAnggota([])
+    setOpenModal(false)
+  }
+
+  const handleCheckboxChange = (nidn: string) => {
+    setSelectedAnggota(prev =>
+      prev.includes(nidn)
+        ? prev.filter(item => item !== nidn)
+        : [...prev, nidn],
+    )
+  }
+
   const onSubmit = async (data: PenelitianType) => {
     const datas = {
       ...data,
-      anggotas: anggotaValue,
+      anggotas: anggota,
     }
     console.log(datas)
     mutate(datas)
   }
 
-  const columnTambah = columnTambahAnggota()
+  const columnTambah = columnTambahAnggota({
+    handleCheckboxChange,
+  })
   const columnsView = columnAnggotaView()
   const columnsJenisPenelitian = columnJenisPenelitian()
   const columnsJenisIndeksasi = columnJenisIndeksasi()
 
-  form.setValue("anggota", anggotaValue)
+  form.setValue("anggota", anggota)
   return (
     <div>
       <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/penelitian`}>
@@ -391,8 +415,8 @@ export default function CreatePenelitian() {
                 <Modal
                   title='Daftar anggota penelitian'
                   name='tambah anggota'
-                  open={open}
-                  setOpen={setOpen}
+                  open={openModal}
+                  setOpen={setOpenModal}
                   description='Menampilkan daftar anggota yang terlibat dalam penelitian'
                   tooltipContent='Klik untuk melihat detail anggota penelitian'
                   className='max-w-3xl'
@@ -415,9 +439,16 @@ export default function CreatePenelitian() {
                   </div>
                   <div className='flex justify-end gap-2'>
                     <Button
+                      type='button'
+                      onClick={handleAddAnggota}
+                      className='capitalize'
+                    >
+                      simpan
+                    </Button>
+                    <Button
                       variant='outline'
                       type='button'
-                      onClick={() => setOpen(false)}
+                      onClick={() => setOpenModal(false)}
                       className='border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
                     >
                       close
@@ -439,12 +470,12 @@ export default function CreatePenelitian() {
               </div>
 
               <div>
-                <DataTable columns={columnsView} data={anggotaValue} />
+                <DataTable columns={columnsView} data={anggota} />
                 {error ? <FormMessage>{error}</FormMessage> : null}
               </div>
             </div>
 
-            <Button className='mt-4 w-full'>simpan</Button>
+            <Button className='mt-4 w-full capitalize'>simpan</Button>
           </Form>
         </CardContent>
       </Card>

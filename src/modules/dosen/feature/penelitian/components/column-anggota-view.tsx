@@ -1,10 +1,10 @@
-import Alert from "@/components/molecules/alert"
+import Alert from "@/components/atom/alert"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 import { AnggotaType } from "../schema/anggota-schema"
-import { anggota } from "../state/store"
+import { anggotaAtom } from "../state/store"
 
 export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
   return [
@@ -57,7 +57,7 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
       id: "action",
       header: "Aksi",
       cell: ({ row }) => {
-        const [anggotaValue, setAnggotaValue] = useAtom(anggota)
+        const [anggotaValue, setAnggotaValue] = useAtom(anggotaAtom)
         const item = row.original
         const [open, setOpen] = useState(false)
 

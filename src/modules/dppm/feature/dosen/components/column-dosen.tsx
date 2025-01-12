@@ -1,5 +1,5 @@
-import Modal from "@/components/molecules/modal"
-import Tooltip from "@/components/molecules/tooltip"
+import Modal from "@/components/atom/modal"
+import Tooltip from "@/components/atom/tooltip"
 import { Badge } from "@/components/ui/badge"
 import { cn } from "@/lib/utils"
 import { ColumnDef } from "@tanstack/react-table"

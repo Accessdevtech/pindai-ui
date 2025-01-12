@@ -17,6 +17,7 @@ import { cn } from "@/lib/utils"
 import { EachUtil } from "@/utils/each-utils"
 import { RefreshCcwIcon, UploadIcon } from "lucide-react"
 import { useState } from "react"
+import Tooltip from "../atom/tooltip"
 import { Button } from "../ui/button"
 import { Input } from "../ui/input"
 import {
@@ -28,7 +29,6 @@ import {
   TableRow,
 } from "../ui/table"
 import { DataTablePagination } from "./data-table-pagination"
-import Tooltip from "./tooltip"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

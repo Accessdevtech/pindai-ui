@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { LucideIcon } from "lucide-react"
+import Tooltip from "../atom/tooltip"
 import { Button } from "../ui/button"
 import {
   Dialog,
@@ -8,7 +9,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../ui/dialog"
-import Tooltip from "./tooltip"
 
 interface ModalProps {
   name?: string

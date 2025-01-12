@@ -8,7 +8,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "@/components/ui/tooltip"
-import ProfileButton from "../molecules/profile-button"
+import ProfileButton from "../atom/profile-button"
 import AppSidebar from "../organisms/app-sidebar"
 
 export default function DashboardLayout({

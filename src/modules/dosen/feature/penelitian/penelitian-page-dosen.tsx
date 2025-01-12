@@ -1,5 +1,5 @@
 "use client"
-import Breadcrumb from "@/components/molecules/bradcrumb"
+import Breadcrumb from "@/components/atom/bradcrumb"
 import DataTable from "@/components/molecules/data-table"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"

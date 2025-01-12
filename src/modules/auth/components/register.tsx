@@ -1,5 +1,5 @@
 "use client"
-import Modal from "@/components/molecules/modal"
+import Modal from "@/components/atom/modal"
 import { useState } from "react"
 import RegisterForm from "./register-form"
 

@@ -1,4 +1,4 @@
-import CardStatus from "@/components/molecules/card-status"
+import CardStatus from "@/components/atom/card-status"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Card } from "@/components/ui/card"
 import { penelitian, pengabdian } from "@/constant/dummy"
