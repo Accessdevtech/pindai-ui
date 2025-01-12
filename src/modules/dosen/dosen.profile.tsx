@@ -1,29 +1,29 @@
-"use client";
-import Form from "@/components/molecules/form";
-import InputField from "@/components/molecules/input-field";
-import SelectField from "@/components/molecules/select-field";
+"use client"
+import Form from "@/components/molecules/form"
+import InputField from "@/components/molecules/input-field"
+import SelectField from "@/components/molecules/select-field"
 import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { profileSchema, ProfileType } from "./profile.schema";
-import { useForm } from "react-hook-form";
-import { useGetFakultasList } from "../listdata/hooks/use-fakultas/get-fakultas-list";
-import { useGetProdiList } from "../listdata/hooks/use-prodi/use-prodi-list";
-import { Button } from "@/components/ui/button";
-import { useUpdateProfile } from "./hooks/use-profile/update-profile";
-import { toast } from "sonner";
-import { useAuthContext } from "@/contexts/auth-context";
-import { IProdi, IProfileDosen } from "./dosen.interface";
-import { IFakultas } from "../listdata/fakultas.interface";
+} from "@/components/ui/breadcrumb"
+import { Button } from "@/components/ui/button"
+import { Card, CardContent } from "@/components/ui/card"
+import { useAuthContext } from "@/contexts/auth-context"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { IFakultas } from "../listdata/fakultas.interface"
+import { useGetFakultasList } from "../listdata/hooks/use-fakultas/get-fakultas-list"
+import { useGetProdiList } from "../listdata/hooks/use-prodi/use-prodi-list"
+import { IProdi, IProfileDosen } from "./dosen.interface"
+import { useUpdateProfile } from "./hooks/use-profile/update-profile"
+import { profileSchema, ProfileType } from "./profile.schema"
 
 export default function ProfileDosen() {
-  const { user } = useAuthContext();
+  const { user } = useAuthContext()
   const form = useForm<ProfileType>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -64,37 +64,45 @@ export default function ProfileDosen() {
           ? ""
           : (user as IProfileDosen)?.scopus_id,
     },
-  });
+  })
 
-  const { data: fakultas } = useGetFakultasList();
-  const watchFakultas = form.watch("fakultas_id");
-  const { data: prodi } = useGetProdiList(watchFakultas);
+  const { data: fakultas } = useGetFakultasList()
+  const watchFakultas = form.watch("fakultas_id")
+  const { data: prodi } = useGetProdiList(watchFakultas)
 
   const { mutate, isError } = useUpdateProfile({
-    onSuccess: (res) => {
+    onSuccess: res => {
       if (!res.status) {
-        return toast.error(res.message);
+        return toast.error(res.message)
       }
-      toast.success(res.message);
-      form.reset();
+      toast.success(res.message)
+      form.reset()
     },
-    onError: (err) => {
-      toast.error(err.response?.data.message);
+    onError: err => {
+      if (err.response?.data.errors) {
+        for (const [key, value] of Object.entries(err.response.data.errors)) {
+          form.setError(key as keyof ProfileType, {
+            message: value as string,
+            type: "manual",
+          })
+        }
+      }
+      toast.error(err.response?.data.message)
     },
-  });
+  })
 
   if (isError) {
-    toast.error("Terjadi kesalahan");
+    toast.error("Terjadi kesalahan")
   }
 
   const onSubmit = (data: ProfileType) => {
-    mutate(data);
-  };
+    mutate(data)
+  }
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className='flex flex-col gap-4'>
       <Breadcrumb>
-        <BreadcrumbList className="capitalize text-base">
+        <BreadcrumbList className='text-base capitalize'>
           <BreadcrumbItem>Seting akun</BreadcrumbItem>
           <BreadcrumbSeparator />
           <BreadcrumbItem>
@@ -103,65 +111,65 @@ export default function ProfileDosen() {
         </BreadcrumbList>
       </Breadcrumb>
       <Card>
-        <CardContent className="p-6">
+        <CardContent className='p-6'>
           <Form form={form} onSubmit={onSubmit}>
-            <InputField label="NIDN" name="nidn" control={form.control} />
-            <InputField label="nama" name="name" control={form.control} />
+            <InputField label='NIDN' name='nidn' control={form.control} />
+            <InputField label='nama' name='name' control={form.control} />
             <InputField
-              label="nama dengan gelar"
-              name="name_with_title"
+              label='nama dengan gelar'
+              name='name_with_title'
               control={form.control}
             />
             <InputField
-              label="email"
-              type="email"
-              name="email"
+              label='email'
+              type='email'
+              name='email'
               control={form.control}
             />
             <InputField
-              label="No. HP"
-              name="phone_number"
+              label='No. HP'
+              name='phone_number'
               control={form.control}
             />
-            <InputField label="alamat" name="address" control={form.control} />
+            <InputField label='alamat' name='address' control={form.control} />
             <InputField
-              label="Jabatan fungsional"
-              name="job_functional"
+              label='Jabatan fungsional'
+              name='job_functional'
               control={form.control}
             />
             <InputField
-              label="kampus afiliasi"
-              name="affiliate_campus"
+              label='kampus afiliasi'
+              name='affiliate_campus'
               control={form.control}
             />
             <SelectField
-              label="fakultas"
-              name="fakultas_id"
+              label='fakultas'
+              name='fakultas_id'
               options={(fakultas?.data as IFakultas[]) || []}
               control={form.control}
             />
             <SelectField
-              label="program studi"
-              name="prodi_id"
+              label='program studi'
+              name='prodi_id'
               options={(prodi?.data as IProdi[]) || []}
               control={form.control}
             />
             <InputField
-              label="scholar ID"
-              name="scholar_id"
+              label='scholar ID'
+              name='scholar_id'
               control={form.control}
             />
             <InputField
-              label="scopus ID"
-              name="scopus_id"
+              label='scopus ID'
+              name='scopus_id'
               control={form.control}
             />
 
-            <div className="flex justify-end">
+            <div className='flex justify-end'>
               <Button
-                type="submit"
+                type='submit'
                 disabled={form.formState.isSubmitting}
-                className="px-8"
+                className='px-8'
               >
                 Simpan
               </Button>
@@ -170,5 +178,5 @@ export default function ProfileDosen() {
         </CardContent>
       </Card>
     </div>
-  );
+  )
 }

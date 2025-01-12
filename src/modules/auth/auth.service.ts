@@ -1,29 +1,29 @@
-import { postData } from "@/services/api/http";
-import { API_ENDPOINTS } from "@/services/api/api-config";
-import { RegisterType } from "./schema/register.schema";
+import { API_ENDPOINTS } from "@/services/api/api-config"
+import { postData } from "@/services/api/http"
 import {
   getCookieDecrypted,
   removeCookie,
-} from "@/services/storage/cookie-storage-service";
+} from "@/services/storage/cookie-storage-service"
+import { RegisterType } from "./schema/register.schema"
 
 export async function register(data: RegisterType) {
-  return await postData(API_ENDPOINTS.REGISTER, data);
+  return await postData(API_ENDPOINTS.REGISTER, data)
 }
 
 export async function logoutAction() {
-  const response = await postData(API_ENDPOINTS.LOGOUT, {});
-  await removeCookie("token");
-  await removeCookie("user");
-  return response.data;
+  const response = await postData(API_ENDPOINTS.LOGOUT, {})
+  await removeCookie("token")
+  await removeCookie("user")
+  return response.data
 }
 
 export async function getCurrentUser() {
-  const userCookie = await getCookieDecrypted("user");
-  if (!userCookie) return null;
+  const userCookie = await getCookieDecrypted("user")
+  if (!userCookie) return null
 
   try {
-    return userCookie;
+    return userCookie
   } catch (error) {
-    return null;
+    return null
   }
 }

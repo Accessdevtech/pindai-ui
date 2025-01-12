@@ -1,19 +1,19 @@
-import { FieldPath, FieldValues, UseControllerProps } from "react-hook-form";
+import { HTMLInputTypeAttribute } from "react"
+import { FieldPath, FieldValues, UseControllerProps } from "react-hook-form"
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
   FormMessage,
-} from "../ui/form";
-import { Input } from "../ui/input";
-import { HTMLInputTypeAttribute } from "react";
+} from "../ui/form"
+import { Input } from "../ui/input"
 
 interface InputFieldProps<TFieldValues extends FieldValues> {
-  label: string;
-  control: UseControllerProps<TFieldValues>["control"];
-  name: FieldPath<TFieldValues>;
-  type?: HTMLInputTypeAttribute;
+  label: string
+  control: UseControllerProps<TFieldValues>["control"]
+  name: FieldPath<TFieldValues>
+  type?: HTMLInputTypeAttribute
 }
 
 export default function InputField<TFieldValues extends FieldValues>({
@@ -25,8 +25,8 @@ export default function InputField<TFieldValues extends FieldValues>({
     <FormField
       {...props}
       render={({ field }) => (
-        <FormItem className="grow">
-          <FormLabel className="capitalize font-medium">{label}</FormLabel>
+        <FormItem className='grow'>
+          <FormLabel className='font-medium capitalize'>{label}</FormLabel>
           <FormControl>
             <Input
               placeholder={label}
@@ -40,5 +40,5 @@ export default function InputField<TFieldValues extends FieldValues>({
         </FormItem>
       )}
     />
-  );
+  )
 }

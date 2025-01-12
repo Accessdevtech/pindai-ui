@@ -3,5 +3,5 @@ export default function DashboardListDibatalkanPengabdian() {
     <div>
       <div>Dashboard List Dibatalkan Pengabdian</div>
     </div>
-  );
+  )
 }

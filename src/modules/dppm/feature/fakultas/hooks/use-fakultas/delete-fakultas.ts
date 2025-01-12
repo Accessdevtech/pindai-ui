@@ -1,11 +1,11 @@
-import { useMutation, UseMutationResult } from "@tanstack/react-query";
-import { deleteFakultas } from "../../fakultas.service";
-import { FakultasResponse } from "../../../../../listdata/fakultas.interface";
-import { AxiosError } from "axios";
+import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { FakultasResponse } from "../../../../../listdata/fakultas.interface"
+import { deleteFakultas } from "../../fakultas.service"
 
 interface Props {
-  onSuccess: (response: FakultasResponse) => void;
-  onError: (error: AxiosError<FakultasResponse>) => void;
+  onSuccess: (response: FakultasResponse) => void
+  onError: (error: AxiosError<FakultasResponse>) => void
 }
 export const useDeleteFakultas = ({ onSuccess, onError }: Props) => {
   return useMutation<
@@ -16,5 +16,5 @@ export const useDeleteFakultas = ({ onSuccess, onError }: Props) => {
     mutationFn: async ({ id }) => await deleteFakultas(id),
     onSuccess,
     onError,
-  });
-};
+  })
+}

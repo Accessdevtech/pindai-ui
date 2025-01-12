@@ -3,5 +3,5 @@ export default function DashboardPublikasi() {
     <div>
       <div>Dashboard Publikasi</div>
     </div>
-  );
+  )
 }

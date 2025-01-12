@@ -1,42 +1,35 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { Checkbox } from "@/components/ui/checkbox";
-import { anggota } from "../state/store";
-import { useAtom } from "jotai";
-import { Dosen } from "@/modules/dosen/dosen.interface";
-import {
-  UseControllerProps,
-  UseFormReturn,
-  UseFormSetValue,
-} from "react-hook-form";
-import { PenelitianType } from "../schema/penelitian-schema";
-import { FormField } from "@/components/ui/form";
-import { AnggotaType } from "../schema/anggota-schema";
+"use client"
+import { Checkbox } from "@/components/ui/checkbox"
+import { ColumnDef } from "@tanstack/react-table"
+import { useAtom } from "jotai"
+import { AnggotaType } from "../schema/anggota-schema"
+import { anggota } from "../state/store"
 
 export const columnTambahAnggota = (): ColumnDef<AnggotaType>[] => {
   return [
     {
       id: "select",
       cell: ({ row }) => {
-        const [anggotaValue, setAnggotaValue] = useAtom(anggota);
+        const [anggotaValue, setAnggotaValue] = useAtom(anggota)
         const isSelected = anggotaValue.some(
-          (item) => item.nidn === row.original.nidn,
-        );
+          item => item.nidn === row.original.nidn,
+        )
         return (
           <Checkbox
             checked={isSelected}
-            onCheckedChange={(value) => {
+            onCheckedChange={value => {
               if (value) {
-                setAnggotaValue((prev) => [...prev, row.original]);
+                setAnggotaValue(prev => [...prev, row.original])
               } else {
-                setAnggotaValue((prev) =>
-                  prev.filter((item) => item.nidn !== row.original.nidn),
-                );
+                setAnggotaValue(prev =>
+                  prev.filter(item => item.nidn !== row.original.nidn),
+                )
               }
             }}
             disabled={isSelected}
-            aria-label="Select row"
+            aria-label='Select row'
           />
-        );
+        )
       },
       enableSorting: false,
       enableHiding: false,
@@ -81,5 +74,5 @@ export const columnTambahAnggota = (): ColumnDef<AnggotaType>[] => {
       accessorKey: "affiliate_campus",
       header: "Affiliate Campus",
     },
-  ];
-};
+  ]
+}

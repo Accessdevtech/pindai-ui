@@ -1,8 +1,8 @@
 export type SelectedMenu = {
-  name: string;
-  roles: string[];
-  mainMenu?: string[];
-};
+  name: string
+  roles: string[]
+  mainMenu?: string[]
+}
 
 export const navData = {
   management: [
@@ -58,4 +58,4 @@ export const navData = {
       mainMenu: ["fakultas"],
     },
   ],
-};
+}

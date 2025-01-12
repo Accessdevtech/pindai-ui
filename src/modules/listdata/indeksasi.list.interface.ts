@@ -1,12 +1,12 @@
-import { Response } from "@/interface/type";
+import { Response } from "@/interface/type"
 
 export interface IndeksasiData {
-  id: string;
-  name: string;
-  kriteria: string[];
-  keterangan: string;
+  id: string
+  name: string
+  kriteria: string[]
+  keterangan: string
 }
 
 export interface ListIndeksasiResponse extends Response {
-  data: IndeksasiData[];
+  data: IndeksasiData[]
 }

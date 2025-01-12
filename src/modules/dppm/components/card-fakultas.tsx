@@ -1,39 +1,38 @@
-import { Badge } from "@/components/ui/badge";
-import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { EllipsisVerticalIcon } from "lucide-react";
-import { Fakultas } from "../dashboard.interface";
+import { Badge } from "@/components/ui/badge"
+import { buttonVariants } from "@/components/ui/button"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import {
   Popover,
-  PopoverAnchor,
   PopoverContent,
   PopoverTrigger,
-} from "@/components/ui/popover";
-import Link from "next/link";
-import { cn } from "@/lib/utils";
-import { buttonVariants } from "@/components/ui/button";
+} from "@/components/ui/popover"
+import { cn } from "@/lib/utils"
+import { EllipsisVerticalIcon } from "lucide-react"
+import Link from "next/link"
+import { Fakultas } from "../dashboard.interface"
 
 interface CardFakultasProps {
-  data: Fakultas;
-  index: number;
+  data: Fakultas
+  index: number
 }
 
 export default function CardFakultas({ data, index }: CardFakultasProps) {
   return (
     <Card>
-      <CardHeader className="flex flex-row items-center justify-between text-sm">
+      <CardHeader className='flex flex-row items-center justify-between text-sm'>
         <Badge
-          variant="outline"
-          className="bg-primary/30 text-primary font-bold rounded-lg flex items-center justify-center h-9 w-9"
+          variant='outline'
+          className='flex h-9 w-9 items-center justify-center rounded-lg bg-primary/30 font-bold text-primary'
         >
           {index + 1}
         </Badge>
         <Popover>
           <PopoverTrigger>
-            <EllipsisVerticalIcon className="text-muted-foreground h-5 w-5" />
+            <EllipsisVerticalIcon className='h-5 w-5 text-muted-foreground' />
           </PopoverTrigger>
-          <PopoverContent className="p-0 overflow-hidden w-36" align="end">
+          <PopoverContent className='w-36 overflow-hidden p-0' align='end'>
             <Link
-              href="dppm/fakultas"
+              href='dppm/fakultas'
               className={cn(
                 buttonVariants({ variant: "ghost" }),
                 "w-full items-start justify-start capitalize",
@@ -44,12 +43,12 @@ export default function CardFakultas({ data, index }: CardFakultasProps) {
           </PopoverContent>
         </Popover>
       </CardHeader>
-      <CardContent className="flex flex-col items-start gap-4 text-muted-foreground">
-        <h1 className="text-lg leading-none capitalize">{data.name}</h1>
-        <p className="flex items-start gap-2 capitalize">
-          <span className="text-2xl">{data.dosen_count}</span> dosen
+      <CardContent className='flex flex-col items-start gap-4 text-muted-foreground'>
+        <h1 className='text-lg capitalize leading-none'>{data.name}</h1>
+        <p className='flex items-start gap-2 capitalize'>
+          <span className='text-2xl'>{data.dosen_count}</span> dosen
         </p>
       </CardContent>
     </Card>
-  );
+  )
 }

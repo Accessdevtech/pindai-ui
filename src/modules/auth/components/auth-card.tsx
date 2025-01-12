@@ -1,15 +1,10 @@
-import {
-  Card,
-  CardHeader,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card";
-import { PropsWithChildren } from "react";
+import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
+import { PropsWithChildren } from "react"
 
 interface Props {
-  title: string;
-  description?: string;
-  footer?: React.ReactNode;
+  title: string
+  description?: string
+  footer?: React.ReactNode
 }
 
 export default function AuthCard({
@@ -19,19 +14,19 @@ export default function AuthCard({
   description,
 }: PropsWithChildren<Props>) {
   return (
-    <Card className="max-w-xs w-full">
-      <CardHeader className="flex justify-center items-center text-center">
-        <p className="uppercase text-2xl tracking-wider font-bold">{title}</p>
+    <Card className='w-full max-w-xs'>
+      <CardHeader className='flex items-center justify-center text-center'>
+        <p className='text-2xl font-bold uppercase tracking-wider'>{title}</p>
         {description && (
-          <p className="uppercase text-sm text-muted-foreground tracking-widest">
+          <p className='text-sm uppercase tracking-widest text-muted-foreground'>
             {description}
           </p>
         )}
       </CardHeader>
-      <CardContent className="flex justify-center">{children}</CardContent>
+      <CardContent className='flex justify-center'>{children}</CardContent>
       {footer && (
-        <CardFooter className="flex justify-center">{footer}</CardFooter>
+        <CardFooter className='flex justify-center'>{footer}</CardFooter>
       )}
     </Card>
-  );
+  )
 }

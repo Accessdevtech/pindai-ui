@@ -1,9 +1,9 @@
-import { KaprodiResponse } from "@/modules/kaprodi/kaprodi.interface";
-import { API_ENDPOINTS_DPPM } from "@/services/api/api-config";
-import { deleteData, getData, postData, putData } from "@/services/api/http";
-import { KaprodiType } from "./kaprodi.schema";
-import { KaprodiData } from "./kaprodi.interface";
-import { DppmResponse } from "../../dashboard.interface";
+import { KaprodiResponse } from "@/modules/kaprodi/kaprodi.interface"
+import { API_ENDPOINTS_DPPM } from "@/services/api/api-config"
+import { deleteData, getData, postData, putData } from "@/services/api/http"
+import { DppmResponse } from "../../dashboard.interface"
+import { KaprodiData } from "./kaprodi.interface"
+import { KaprodiType } from "./kaprodi.schema"
 
 export async function getKaprodi(page: number, search: string) {
   const response: DppmResponse<KaprodiData> = await getData(
@@ -12,16 +12,16 @@ export async function getKaprodi(page: number, search: string) {
       page,
       search,
     },
-  );
-  return response.data;
+  )
+  return response.data
 }
 
 export async function addKaprodi(data: KaprodiType) {
   const response: KaprodiResponse = await postData(API_ENDPOINTS_DPPM.KAPRODI, {
     ...data,
     status: data.status === "true" ? true : false,
-  });
-  return response;
+  })
+  return response
 }
 
 export async function updateKaprodi(id: string, data: KaprodiType) {
@@ -31,13 +31,13 @@ export async function updateKaprodi(id: string, data: KaprodiType) {
       ...data,
       status: data.status === "true" ? true : false,
     },
-  );
-  return response;
+  )
+  return response
 }
 
 export async function deleteKaprodi(id: string) {
   const response: KaprodiResponse = await deleteData(
     `${API_ENDPOINTS_DPPM.KAPRODI}/${id}`,
-  );
-  return response;
+  )
+  return response
 }

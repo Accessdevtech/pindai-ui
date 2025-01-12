@@ -1,4 +1,4 @@
-"use client";
+"use client"
 
 import {
   ColumnDef,
@@ -10,14 +10,15 @@ import {
   getPaginationRowModel,
   getSortedRowModel,
   useReactTable,
-} from "@tanstack/react-table";
+} from "@tanstack/react-table"
 
-import { Input } from "../ui/input";
-import { useCallback, useEffect, useState } from "react";
-import { Button } from "../ui/button";
-import { RefreshCcwIcon, UploadIcon } from "lucide-react";
-import { Meta, Role } from "@/interface/type";
-import Tooltip from "./tooltip";
+import { Meta, Role } from "@/interface/type"
+import { cn } from "@/lib/utils"
+import { EachUtil } from "@/utils/each-utils"
+import { RefreshCcwIcon, UploadIcon } from "lucide-react"
+import { useState } from "react"
+import { Button } from "../ui/button"
+import { Input } from "../ui/input"
 import {
   Table,
   TableBody,
@@ -25,23 +26,22 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "../ui/table";
-import { DataTablePagination } from "./data-table-pagination";
-import { useAtom, useSetAtom } from "jotai";
-import { anggota } from "@/modules/dosen/feature/penelitian/state/store";
-import { AnggotaType } from "@/modules/dosen/feature/penelitian/schema/anggota-schema";
+} from "../ui/table"
+import { DataTablePagination } from "./data-table-pagination"
+import Tooltip from "./tooltip"
 
 interface DataTableProps<TData, TValue> {
-  columns: ColumnDef<TData, TValue>[];
-  data: TData[];
-  meta?: Meta;
-  role?: Role;
-  currentPage?: number;
-  value?: string;
-  isLoading?: boolean;
-  refetch?: () => void;
-  setValue?: (value: string) => void;
-  onPaginationChange?: (page: number) => void;
+  columns: ColumnDef<TData, TValue>[]
+  data: TData[]
+  meta?: Meta
+  role?: Role
+  search?: boolean
+  currentPage?: number
+  value?: string
+  isLoading?: boolean
+  refetch?: () => void
+  setValue?: (value: string) => void
+  onPaginationChange?: (page: number) => void
 }
 
 export default function DataTable<TData, TValue>({
@@ -52,12 +52,13 @@ export default function DataTable<TData, TValue>({
   value,
   role,
   isLoading,
+  search = false,
   refetch,
   setValue,
   onPaginationChange,
 }: DataTableProps<TData, TValue>) {
-  const [sorting, setSorting] = useState<SortingState>([]);
-  const [rowSelection, setRowSelection] = useState({});
+  const [sorting, setSorting] = useState<SortingState>([])
+  const [rowSelection, setRowSelection] = useState({})
 
   const table = useReactTable({
     data,
@@ -79,99 +80,118 @@ export default function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onRowSelectionChange: setRowSelection,
     manualPagination: true,
-  });
+  })
 
   return (
-    <div className="space-y-4">
-      <div className="flex items-center justify-between">
-        <div className="flex flex-1 items-center space-x-2">
-          <Input
-            placeholder="Search data..."
-            value={value}
-            onChange={(event) => setValue && setValue(event.target.value)}
-            className="h-8 w-[150px] lg:w-[250px]"
-          />
-          <Button variant="outline" onClick={() => setValue && setValue("")}>
-            Reset
-          </Button>
-        </div>
-        <div className="flex gap-4">
-          <Tooltip contentText="Refresh Halaman / Data">
+    <div className='space-y-4'>
+      <div className='flex items-center justify-between'>
+        {search && (
+          <div className='flex flex-1 items-center space-x-2'>
+            <Input
+              placeholder='Search data...'
+              value={value}
+              onChange={event => setValue && setValue(event.target.value)}
+              className='h-8 w-[150px] lg:w-[250px]'
+            />
+            <Button variant='outline' onClick={() => setValue && setValue("")}>
+              Reset
+            </Button>
+          </div>
+        )}
+        <div className='flex gap-4'>
+          <Tooltip contentText='Refresh Halaman / Data'>
             {!refetch ? null : (
               <Button
-                size="icon"
-                variant="outline"
-                className="border-primary text-primary hover:bg-primary hover:text-primary-foreground p-4"
+                size='icon'
+                variant='outline'
+                className='border-primary p-4 text-primary hover:bg-primary hover:text-primary-foreground'
                 onClick={() => refetch()}
               >
-                <RefreshCcwIcon className="h-4 w-4" />
+                <RefreshCcwIcon className='h-4 w-4' />
               </Button>
             )}
           </Tooltip>
-          {(role === "kaprodi" || role === "dosen") && (
-            <Tooltip contentText="Export Excel">
-              <Button
-                size="icon"
-                variant="outline"
-                className="border-green-500 text-green-500 hover:bg-green-500 hover:text-white p-4"
-              >
-                <UploadIcon className="h-4 w-4" />
-              </Button>
-            </Tooltip>
-          )}
+          {role === "kaprodi" ||
+            (role === "dosen" && (
+              <Tooltip contentText='Export Excel'>
+                <Button
+                  size='icon'
+                  variant='outline'
+                  className='border-green-500 p-4 text-green-500 hover:bg-green-500 hover:text-white'
+                >
+                  <UploadIcon className='h-4 w-4' />
+                </Button>
+              </Tooltip>
+            ))}
         </div>
       </div>
-      <div className="rounded-md border flex-1 overflow-auto">
-        <Table className="min-w-full w-max">
+      <div className='flex-1 overflow-auto rounded-md border'>
+        <Table className='w-max min-w-full'>
           <TableHeader>
-            {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
-                {headerGroup.headers.map((header) => {
-                  return (
-                    <TableHead key={header.id} className="capitalize">
-                      {header.isPlaceholder
-                        ? null
-                        : flexRender(
-                            header.column.columnDef.header,
-                            header.getContext(),
-                          )}
-                    </TableHead>
-                  );
-                })}
-              </TableRow>
-            ))}
+            <EachUtil
+              of={table.getHeaderGroups()}
+              render={headerGroup => (
+                <TableRow key={headerGroup.id}>
+                  <EachUtil
+                    of={headerGroup.headers}
+                    render={header => {
+                      return (
+                        <TableHead
+                          key={header.id}
+                          className={cn("border-r text-center capitalize", {})}
+                          colSpan={header.colSpan}
+                        >
+                          {header.isPlaceholder
+                            ? null
+                            : flexRender(
+                                header.column.columnDef.header,
+                                header.getContext(),
+                              )}
+                        </TableHead>
+                      )
+                    }}
+                  />
+                </TableRow>
+              )}
+            />
           </TableHeader>
           <TableBody>
             {isLoading ? (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className='h-24 text-center'
                 >
                   Loading...
                 </TableCell>
               </TableRow>
             ) : table.getRowModel().rows?.length ? (
-              table.getRowModel().rows.map((row) => (
-                <TableRow
-                  key={row.id}
-                  data-state={row.getIsSelected() && "selected"}
-                >
-                  {row.getVisibleCells().map((cell) => (
-                    <TableCell key={cell.id} className="capitalize">
-                      {flexRender(
-                        cell.column.columnDef.cell,
-                        cell.getContext(),
+              <EachUtil
+                of={table.getRowModel().rows}
+                render={row => (
+                  <TableRow
+                    key={row.id}
+                    data-state={row.getIsSelected() && "selected"}
+                  >
+                    <EachUtil
+                      of={row.getVisibleCells()}
+                      render={cell => (
+                        <TableCell key={cell.id} className='capitalize'>
+                          {flexRender(
+                            cell.column.columnDef.cell,
+                            cell.getContext(),
+                          )}
+                        </TableCell>
                       )}
-                    </TableCell>
-                  ))}
-                </TableRow>
-              ))
+                    />
+                  </TableRow>
+                )}
+              />
             ) : (
               <TableRow>
                 <TableCell
                   colSpan={columns.length}
-                  className="h-24 text-center"
+                  className='h-24 text-center'
                 >
                   No results.
                 </TableCell>
@@ -188,5 +208,5 @@ export default function DataTable<TData, TValue>({
         />
       )}
     </div>
-  );
+  )
 }

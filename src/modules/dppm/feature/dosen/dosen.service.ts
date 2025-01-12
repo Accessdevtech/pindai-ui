@@ -1,7 +1,7 @@
-import { API_ENDPOINTS_DPPM } from "@/services/api/api-config";
-import { DppmResponse } from "../../dashboard.interface";
-import { getData } from "@/services/api/http";
-import { DosenData } from "./dosen.interface";
+import { API_ENDPOINTS_DPPM } from "@/services/api/api-config"
+import { getData } from "@/services/api/http"
+import { DppmResponse } from "../../dashboard.interface"
+import { DosenData } from "./dosen.interface"
 
 export async function getDosen(page: number, search: string) {
   const response: DppmResponse<DosenData> = await getData(
@@ -10,7 +10,7 @@ export async function getDosen(page: number, search: string) {
       page,
       search,
     },
-  );
+  )
 
-  return response.data;
+  return response.data
 }

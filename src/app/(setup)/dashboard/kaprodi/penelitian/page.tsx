@@ -3,5 +3,5 @@ export default function DashboardPenelitian() {
     <div>
       <div>Dashboard Penelitian</div>
     </div>
-  );
+  )
 }

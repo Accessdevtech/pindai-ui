@@ -1,6 +1,6 @@
 export interface Fakultas {
-  name: string;
-  dosen_count: number;
+  name: string
+  dosen_count: number
 }
 
 export const penelitian = [
@@ -14,7 +14,7 @@ export const penelitian = [
     status: "ditolak",
     totalDosen: 10,
   },
-];
+]
 
 export const pengabdian = [
   {
@@ -27,7 +27,7 @@ export const pengabdian = [
     status: "ditolak",
     totalDosen: 10,
   },
-];
+]
 
 export const researchData = [
   {
@@ -42,7 +42,7 @@ export const researchData = [
       dppm: true,
     },
   },
-];
+]
 
 export const infoData = [
   { label: "NIDN", value: "001" },
@@ -53,4 +53,4 @@ export const infoData = [
   { label: "Prodi", value: "Fakultas Teknik" },
   { label: "Schopus ID", value: "10213123213" },
   { label: "Scholar ID", value: "10213123213" },
-];
+]

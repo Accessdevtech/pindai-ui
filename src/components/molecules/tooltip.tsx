@@ -2,12 +2,12 @@ import {
   Tooltip as ShadcnTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
+} from "@/components/ui/tooltip"
 
 interface TooltipsProps {
-  contentText: string;
-  children?: React.ReactNode;
-  side?: "top" | "right" | "bottom" | "left";
+  contentText: string
+  children?: React.ReactNode
+  side?: "top" | "right" | "bottom" | "left"
 }
 
 export default function Tooltip({
@@ -20,10 +20,10 @@ export default function Tooltip({
       <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent
         side={side}
-        className="bg-black text-white uppercase text-xs"
+        className='bg-black text-xs uppercase text-white'
       >
         {contentText}
       </TooltipContent>
     </ShadcnTooltip>
-  );
+  )
 }

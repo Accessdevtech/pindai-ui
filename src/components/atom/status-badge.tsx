@@ -1,12 +1,12 @@
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
 
 export default function StatusBadge({
   status,
   message,
 }: {
-  status: string;
-  message: string;
+  status: string
+  message: string
 }) {
   return (
     <Badge
@@ -19,5 +19,5 @@ export default function StatusBadge({
     >
       {message}
     </Badge>
-  );
+  )
 }

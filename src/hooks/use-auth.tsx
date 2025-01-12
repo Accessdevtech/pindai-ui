@@ -1,96 +1,92 @@
-"use client";
-import { Role, User } from "@/interface/type";
-import { decrypt } from "@/lib/crypto";
-import { Auth, AuthResponse } from "@/modules/auth/auth.interface";
-import { getCurrentUser } from "@/modules/auth/auth.service";
-import { LoginType } from "@/modules/auth/schema/login.schema";
-import { Dosen } from "@/modules/dosen/dosen.interface";
-import { Kaprodi } from "@/modules/kaprodi/kaprodi.interface";
-import { API_ENDPOINTS } from "@/services/api/api-config";
-import axiosInstance from "@/services/api/axios-instance";
-import { postData } from "@/services/api/http";
+"use client"
+import { User } from "@/interface/type"
+import { decrypt } from "@/lib/crypto"
+import { getCurrentUser } from "@/modules/auth/auth.service"
+import { LoginType } from "@/modules/auth/schema/login.schema"
+import { API_ENDPOINTS } from "@/services/api/api-config"
+import { postData } from "@/services/api/http"
 import {
   getCookie,
   removeCookie,
   setCookie,
-} from "@/services/storage/cookie-storage-service";
-import { useRouter } from "next/navigation";
-import { useState, useCallback, useEffect } from "react";
-import { toast } from "sonner";
+} from "@/services/storage/cookie-storage-service"
+import { useRouter } from "next/navigation"
+import { useCallback, useEffect, useState } from "react"
+import { toast } from "sonner"
 
 export function useAuth() {
-  const [user, setUser] = useState<User | null>(null);
-  const isAuthenticated = !!user;
-  const router = useRouter();
+  const [user, setUser] = useState<User | null>(null)
+  const isAuthenticated = !!user
+  const router = useRouter()
 
   const login = useCallback(
     async (data: LoginType) => {
       try {
-        const res = await postData(API_ENDPOINTS.LOGIN, data);
-        const decryptedUser = JSON.parse(decrypt(res.data.user).data as string);
-        setUser(decryptedUser);
-        await setCookie("token", res.data.access_token);
-        await setCookie("user", res.data.user);
-        toast.success(res.message);
+        const res = await postData(API_ENDPOINTS.LOGIN, data)
+        const decryptedUser = JSON.parse(decrypt(res.data.user).data as string)
+        setUser(decryptedUser)
+        await setCookie("token", res.data.access_token)
+        await setCookie("user", res.data.user)
+        toast.success(res.message)
       } catch (err: any) {
         if (err.response?.data.errors) {
           for (const [key, value] of Object.entries(err.response.data.errors)) {
-            toast.error(value as string);
+            toast.error(value as string)
           }
         }
-        toast.error(err.response?.data?.message);
+        toast.error(err.response?.data?.message)
       } finally {
-        if (!isAuthenticated) return;
-        router.push("/dashboard");
+        if (!isAuthenticated) return
+        router.push("/dashboard")
       }
     },
     [router],
-  );
+  )
 
   const logout = useCallback(async () => {
     try {
-      const res = await postData(API_ENDPOINTS.LOGOUT, {});
-      setUser(null);
-      await removeCookie("token");
-      await removeCookie("user");
-      toast.success(res.message);
-      router.push("/dashboard");
+      const res = await postData(API_ENDPOINTS.LOGOUT, {})
+      setUser(null)
+      await removeCookie("token")
+      await removeCookie("user")
+      toast.success(res.message)
+      router.push("/dashboard")
     } catch (err: any) {
-      toast.error(err.response?.data?.message || "Failed to logout.");
+      toast.error(err.response?.data?.message || "Failed to logout.")
     } finally {
-      if (!isAuthenticated) return;
-      router.push("/dashboard");
+      if (!isAuthenticated) return
+      router.push("/dashboard")
     }
-  }, [router]);
+  }, [router])
 
   const checkAuth = useCallback(async () => {
-    const token = await getCookie("token");
+    const token = await getCookie("token")
     if (token) {
       try {
-        const user = await getCurrentUser();
+        const user = await getCurrentUser()
         if (user) {
-          setUser(user);
+          setUser(user)
         }
       } catch (error) {
-        console.error("Error checking authentication:", error);
-        logout();
+        console.error("Error checking authentication:", error)
+        logout()
       }
     }
-  }, [logout]);
+  }, [logout])
 
   useEffect(() => {
     const authenticate = async () => {
-      await checkAuth();
-    };
-    if (!isAuthenticated) {
-      authenticate();
+      await checkAuth()
     }
-  }, [getCurrentUser]);
+    if (!isAuthenticated) {
+      authenticate()
+    }
+  }, [getCurrentUser])
 
   return {
     user,
     isAuthenticated,
     login,
     logout,
-  };
+  }
 }

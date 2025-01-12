@@ -3,5 +3,5 @@ export default function DashboardPengabdian() {
     <div>
       <div>Dashboard Pengabdian</div>
     </div>
-  );
+  )
 }

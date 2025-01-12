@@ -1,15 +1,15 @@
-import AuthCard from "./components/auth-card";
-import LoginForm from "./components/login-form";
-import { Register } from "./components/register";
+import AuthCard from "./components/auth-card"
+import LoginForm from "./components/login-form"
+import { Register } from "./components/register"
 
 export default function AuthPage() {
   return (
-    <div className="w-full max-w-sm">
+    <div className='w-full max-w-sm'>
       <AuthCard
-        title="Login"
-        description="Silahkan login untuk melanjutkan"
+        title='Login'
+        description='Silahkan login untuk melanjutkan'
         footer={
-          <p className="text-muted-foreground capitalize text-sm space-x-2">
+          <p className='space-x-2 text-sm capitalize text-muted-foreground'>
             tidak memiliki akun ?<Register />
           </p>
         }
@@ -17,5 +17,5 @@ export default function AuthPage() {
         <LoginForm />
       </AuthCard>
     </div>
-  );
+  )
 }

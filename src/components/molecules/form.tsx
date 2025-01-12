@@ -1,11 +1,10 @@
-import { Form as ShadcnForm } from "@/components/ui/form";
-import { FieldValues, UseFormReturn } from "react-hook-form";
-import { cn } from "@/lib/utils";
+import { Form as ShadcnForm } from "@/components/ui/form"
+import { FieldValues, UseFormReturn } from "react-hook-form"
 
 interface FormProps<TFormValues extends FieldValues> {
-  form: UseFormReturn<TFormValues>;
-  children: React.ReactNode;
-  onSubmit?: (data: TFormValues) => void;
+  form: UseFormReturn<TFormValues>
+  children: React.ReactNode
+  onSubmit?: (data: TFormValues) => void
 }
 
 export default function Form<TFormValues extends FieldValues>({
@@ -17,10 +16,10 @@ export default function Form<TFormValues extends FieldValues>({
     <ShadcnForm {...form}>
       <form
         onSubmit={form.handleSubmit(onSubmit || (() => {}))}
-        className="flex flex-col gap-4 w-full"
+        className='flex w-full flex-col gap-4'
       >
         {children}
       </form>
     </ShadcnForm>
-  );
+  )
 }

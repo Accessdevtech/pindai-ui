@@ -1,5 +1,5 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { PenelitianData } from "@/modules/listdata/penelitian.list.interface";
+import { PenelitianData } from "@/modules/listdata/penelitian.list.interface"
+import { ColumnDef } from "@tanstack/react-table"
 
 export const columnJenisPenelitian = (): ColumnDef<PenelitianData>[] => {
   return [
@@ -15,5 +15,5 @@ export const columnJenisPenelitian = (): ColumnDef<PenelitianData>[] => {
       accessorKey: "keterangan",
       header: "Keterangan",
     },
-  ];
-};
+  ]
+}

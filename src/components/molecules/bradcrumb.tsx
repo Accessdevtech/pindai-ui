@@ -1,13 +1,13 @@
 import {
-  Breadcrumb as ShadcnBreadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
   BreadcrumbList,
   BreadcrumbPage,
   BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-import Link from "next/link";
-import { PropsWithChildren } from "react";
+  Breadcrumb as ShadcnBreadcrumb,
+} from "@/components/ui/breadcrumb"
+import Link from "next/link"
+import { PropsWithChildren } from "react"
 
 export default function Breadcrumb({
   href,
@@ -27,5 +27,5 @@ export default function Breadcrumb({
         </BreadcrumbItem>
       </BreadcrumbList>
     </ShadcnBreadcrumb>
-  );
+  )
 }

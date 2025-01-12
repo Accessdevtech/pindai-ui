@@ -1,21 +1,21 @@
-import { navData } from "@/constant/menu";
-import { EachUtil } from "@/utils/each-utils";
+import { navData } from "@/constant/menu"
+import { Role } from "@/interface/type"
+import { ROUTE } from "@/services/route"
+import { EachUtil } from "@/utils/each-utils"
+import { LayersIcon } from "lucide-react"
+import Link from "next/link"
+import { Separator } from "../ui/separator"
 import {
   SidebarGroup,
-  SidebarGroupLabel,
   SidebarGroupContent,
+  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
-} from "../ui/sidebar";
-import { Separator } from "../ui/separator";
-import { LayersIcon } from "lucide-react";
-import Link from "next/link";
-import { Role } from "@/interface/type";
-import { ROUTE } from "@/services/route";
+} from "../ui/sidebar"
 
 interface NavManagemenDataProps {
-  role: Role | undefined;
-  isActive: (path: string) => boolean;
+  role: Role | undefined
+  isActive: (path: string) => boolean
 }
 
 export default function NavManagemenData({
@@ -23,14 +23,14 @@ export default function NavManagemenData({
   isActive,
 }: NavManagemenDataProps) {
   return (
-    <SidebarGroup className="px-0">
-      <div className="flex items-center">
-        <Separator className="w-[1rem] bg-black" />
-        <SidebarGroupLabel className="uppercase">
+    <SidebarGroup className='px-0'>
+      <div className='flex items-center'>
+        <Separator className='w-[1rem] bg-black' />
+        <SidebarGroupLabel className='uppercase'>
           Management Data
         </SidebarGroupLabel>
       </div>
-      <SidebarGroupContent className="space-y-1 px-2">
+      <SidebarGroupContent className='space-y-1 px-2'>
         <SidebarMenu>
           <EachUtil
             of={navData.management}
@@ -40,14 +40,14 @@ export default function NavManagemenData({
                   asChild
                   isActive={isActive(`${ROUTE.DASHBOARD}/${role}/${item.name}`)}
                   key={index}
-                  className="data-[active=true]:bg-primary/30 data-[active=true]:text-primary hover:bg-primary/30 hover:text-primary"
+                  className='hover:bg-primary/30 hover:text-primary data-[active=true]:bg-primary/30 data-[active=true]:text-primary'
                 >
                   <Link
                     href={`${ROUTE.DASHBOARD}/${role}/${item.name}`}
                     key={index}
                   >
                     <LayersIcon />
-                    <span className="capitalize">{item.name}</span>
+                    <span className='capitalize'>{item.name}</span>
                   </Link>
                 </SidebarMenuButton>
               )
@@ -56,5 +56,5 @@ export default function NavManagemenData({
         </SidebarMenu>
       </SidebarGroupContent>
     </SidebarGroup>
-  );
+  )
 }

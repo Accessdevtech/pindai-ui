@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 export const profileSchema = z.object({
   nidn: z.string().optional(),
@@ -13,6 +13,6 @@ export const profileSchema = z.object({
   prodi_id: z.string(),
   scholar_id: z.string().optional(),
   scopus_id: z.string().optional(),
-});
+})
 
-export type ProfileType = z.infer<typeof profileSchema>;
+export type ProfileType = z.infer<typeof profileSchema>

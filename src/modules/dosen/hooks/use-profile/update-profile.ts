@@ -1,12 +1,12 @@
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { ProfileType } from "../../profile.schema";
-import { Response } from "@/interface/type";
-import { updateProfile } from "../../dosen.service";
+import { Response } from "@/interface/type"
+import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { updateProfile } from "../../dosen.service"
+import { ProfileType } from "../../profile.schema"
 
 interface Props {
-  onSuccess: (response: Response) => void;
-  onError: (error: AxiosError<Response>) => void;
+  onSuccess: (response: Response) => void
+  onError: (error: AxiosError<Response>) => void
 }
 
 export const useUpdateProfile = ({ onSuccess, onError }: Props) => {
@@ -14,5 +14,5 @@ export const useUpdateProfile = ({ onSuccess, onError }: Props) => {
     mutationFn: (data: ProfileType) => updateProfile(data),
     onSuccess,
     onError,
-  });
-};
+  })
+}

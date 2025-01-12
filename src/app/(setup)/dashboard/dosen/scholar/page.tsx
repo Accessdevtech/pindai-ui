@@ -3,5 +3,5 @@ export default function DashboardScholar() {
     <div>
       <div>Dashboard Scholar</div>
     </div>
-  );
+  )
 }

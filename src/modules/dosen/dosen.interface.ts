@@ -1,29 +1,29 @@
-import { Meta, Response, User } from "@/interface/type";
+import { Meta, Response, User } from "@/interface/type"
 
 export interface IProdi {
-  id: string;
-  name: string;
+  id: string
+  name: string
 }
 export interface IProfileDosen extends Dosen {
-  fakultas_id: string;
-  prodi_id: string;
+  fakultas_id: string
+  prodi_id: string
 }
 
 export interface Dosen extends User {
-  affiliate_campus: string;
-  name_with_title: string;
-  job_functional: string;
-  phone_number: string;
-  scholar_id: string;
-  scopus_id: string;
-  prodi: string;
+  affiliate_campus: string
+  name_with_title: string
+  job_functional: string
+  phone_number: string
+  scholar_id: string
+  scopus_id: string
+  prodi: string
 }
 
 export interface DosenData {
-  dosen: Dosen[];
-  meta: Meta;
+  dosen: Dosen[]
+  meta: Meta
 }
 
 export interface DosenResponse<T> extends Response {
-  data: T;
+  data: T
 }

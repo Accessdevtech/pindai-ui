@@ -1,67 +1,68 @@
-"use client";
-import DataTable from "@/components/molecules/data-table";
-import { Card } from "@/components/ui/card";
-import { Meta, Role } from "@/interface/type";
-import { dosenSearch } from "@/state/store";
-import { useAtom } from "jotai";
-import { useState } from "react";
-import { useDebounce } from "use-debounce";
-import { columnDosen } from "./components/column-dosen";
-import { useGetDosen } from "./hooks/use-dosen/get-dosen";
-import { useApprovedDosen } from "./hooks/use-dosen/approved-dosen";
-import { toast } from "sonner";
-import { useActiveDosen } from "./hooks/use-dosen/active-dosen";
-import Breadcrumb from "@/components/molecules/bradcrumb";
-import { ROUTE } from "@/services/route";
+"use client"
+import Breadcrumb from "@/components/molecules/bradcrumb"
+import DataTable from "@/components/molecules/data-table"
+import { Card } from "@/components/ui/card"
+import { Meta, Role } from "@/interface/type"
+import { ROUTE } from "@/services/route"
+import { dosenSearch } from "@/state/store"
+import { useAtom } from "jotai"
+import { useState } from "react"
+import { toast } from "sonner"
+import { useDebounce } from "use-debounce"
+import { columnDosen } from "./components/column-dosen"
+import { useActiveDosen } from "./hooks/use-dosen/active-dosen"
+import { useApprovedDosen } from "./hooks/use-dosen/approved-dosen"
+import { useGetDosen } from "./hooks/use-dosen/get-dosen"
 
 export default function KaprodiDashboardDosen({
   role,
 }: {
-  role: Role | undefined;
+  role: Role | undefined
 }) {
-  const [value, setValue] = useAtom(dosenSearch);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [search] = useDebounce(value, 500);
+  const [value, setValue] = useAtom(dosenSearch)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [search] = useDebounce(value, 500)
 
-  const { data, refetch, isFetching } = useGetDosen(currentPage, search);
+  const { data, refetch, isFetching } = useGetDosen(currentPage, search)
   const { mutate: approved } = useApprovedDosen({
-    onSuccess: (res) => {
+    onSuccess: res => {
       if (!res.status) {
-        toast.error(res.message);
+        toast.error(res.message)
       }
-      toast.success(res.message);
-      refetch();
+      toast.success(res.message)
+      refetch()
     },
-    onError: (err) => {
-      toast.error(err.response?.data.message);
+    onError: err => {
+      toast.error(err.response?.data.message)
     },
-  });
+  })
 
   const { mutate: active } = useActiveDosen({
-    onSuccess: (res) => {
+    onSuccess: res => {
       if (!res.status) {
-        toast.error(res.message);
+        toast.error(res.message)
       }
-      toast.success(res.message);
-      refetch();
+      toast.success(res.message)
+      refetch()
     },
-    onError: (err) => {
-      toast.error(err.response?.data.message);
+    onError: err => {
+      toast.error(err.response?.data.message)
     },
-  });
+  })
 
   const column = columnDosen({
     refetch: () => {},
     onApprove: approved,
     onActive: active,
-  });
+  })
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className='flex flex-col gap-4'>
       <Breadcrumb href={`${ROUTE.DASHBOARD}/${role}`}>Dosen</Breadcrumb>
       <Card>
-        <div className="p-6">
+        <div className='p-6'>
           <DataTable
+            search
             role={role}
             columns={column}
             data={data?.dosen || []}
@@ -76,5 +77,5 @@ export default function KaprodiDashboardDosen({
         </div>
       </Card>
     </div>
-  );
+  )
 }

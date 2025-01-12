@@ -2,34 +2,34 @@ import {
   SidebarInset,
   SidebarProvider,
   SidebarTrigger,
-} from "@/components/ui/sidebar";
+} from "@/components/ui/sidebar"
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger,
-} from "@/components/ui/tooltip";
-import AppSidebar from "../organisms/app-sidebar";
-import ProfileButton from "../molecules/profile-button";
+} from "@/components/ui/tooltip"
+import ProfileButton from "../molecules/profile-button"
+import AppSidebar from "../organisms/app-sidebar"
 
 export default function DashboardLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode;
+  children: React.ReactNode
 }>) {
   return (
     <SidebarProvider>
       <AppSidebar />
-      <SidebarInset className="bg-primary/5 overflow-auto">
-        <div className="flex flex-col px-6 flex-grow">
-          <nav className="bg-background my-5 rounded-lg py-4 sticky top-0 z-10 shadow-md">
-            <div className="px-6 flex items-center justify-between">
+      <SidebarInset className='overflow-auto bg-primary/5'>
+        <div className='flex flex-grow flex-col px-6'>
+          <nav className='sticky top-0 z-10 my-5 rounded-lg bg-background py-4 shadow-md'>
+            <div className='flex items-center justify-between px-6'>
               <Tooltip>
                 <TooltipTrigger asChild>
                   <SidebarTrigger />
                 </TooltipTrigger>
                 <TooltipContent
-                  side="bottom"
-                  className="bg-black text-primary-foreground text-sm uppercase"
+                  side='bottom'
+                  className='bg-black text-sm uppercase text-primary-foreground'
                 >
                   Toggle Sidebar
                 </TooltipContent>
@@ -37,13 +37,13 @@ export default function DashboardLayout({
               <ProfileButton />
             </div>
           </nav>
-          <main className="flex flex-col flex-shrink mb-11">{children}</main>
-          <footer className="absolute space-x-2 text-muted-foreground bottom-0">
+          <main className='mb-11 flex flex-shrink flex-col'>{children}</main>
+          <footer className='absolute bottom-0 space-x-2 text-muted-foreground'>
             <span>&copy; 2024, made by</span>
-            <span className="font-bold uppercase">Access Dev Team</span>
+            <span className='font-bold uppercase'>Access Dev Team</span>
           </footer>
         </div>
       </SidebarInset>
     </SidebarProvider>
-  );
+  )
 }

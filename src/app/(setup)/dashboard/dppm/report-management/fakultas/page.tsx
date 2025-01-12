@@ -3,5 +3,5 @@ export default function ReportManagementFakultas() {
     <div>
       <div>Report Management Fakultas</div>
     </div>
-  );
+  )
 }

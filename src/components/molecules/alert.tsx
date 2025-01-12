@@ -1,4 +1,3 @@
-import { LucideIcon } from "lucide-react";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -7,30 +6,31 @@ import {
   AlertDialogDescription,
   AlertDialogTitle,
   AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
-import Tooltips from "./tooltip";
+} from "@/components/ui/alert-dialog"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { LucideIcon } from "lucide-react"
+import Tooltips from "./tooltip"
 
 interface AlertProps {
-  open: boolean;
-  setOpen: (open: boolean) => void;
-  triggerContent?: string;
-  tooltipContentText?: string;
-  title?: string;
-  description?: string;
-  side?: "top" | "right" | "bottom" | "left";
-  Icon?: LucideIcon;
-  onClick?: () => void;
-  className?: string;
+  open: boolean
+  setOpen: (open: boolean) => void
+  triggerContent?: string
+  tooltipContentText?: string
+  title?: string
+  description?: string
+  side?: "top" | "right" | "bottom" | "left"
+  Icon?: LucideIcon
+  onClick?: () => void
+  className?: string
   variant?:
     | "link"
     | "default"
     | "destructive"
     | "outline"
     | "secondary"
-    | "ghost";
-  size?: "default" | "sm" | "lg" | "icon";
+    | "ghost"
+  size?: "default" | "sm" | "lg" | "icon"
 }
 
 export default function Alert({
@@ -57,17 +57,17 @@ export default function Alert({
         </AlertDialogTrigger>
       </Tooltips>
       <AlertDialogContent>
-        <AlertDialogTitle className="capitalize">{title}</AlertDialogTitle>
-        <AlertDialogDescription className="capitalize">
+        <AlertDialogTitle className='capitalize'>{title}</AlertDialogTitle>
+        <AlertDialogDescription className='capitalize'>
           {description}
         </AlertDialogDescription>
-        <div className="flex justify-end gap-2">
+        <div className='flex justify-end gap-2'>
           <AlertDialogAction onClick={onClick}>Hapus</AlertDialogAction>
-          <AlertDialogCancel className="border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground">
+          <AlertDialogCancel className='border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground'>
             Batal
           </AlertDialogCancel>
         </div>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }

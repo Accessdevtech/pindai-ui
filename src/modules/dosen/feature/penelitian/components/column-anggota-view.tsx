@@ -1,13 +1,10 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { AnggotaType } from "../schema/anggota-schema";
-import { Checkbox } from "@/components/ui/checkbox";
-import Alert from "@/components/molecules/alert";
-import { TrashIcon } from "lucide-react";
-import { useState } from "react";
-import { useAtom, useSetAtom } from "jotai";
-import { anggota } from "../state/store";
-import { UseFormSetValue } from "react-hook-form";
-import { Dosen } from "@/modules/dosen/dosen.interface";
+import Alert from "@/components/molecules/alert"
+import { ColumnDef } from "@tanstack/react-table"
+import { useAtom } from "jotai"
+import { TrashIcon } from "lucide-react"
+import { useState } from "react"
+import { AnggotaType } from "../schema/anggota-schema"
+import { anggota } from "../state/store"
 
 export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
   return [
@@ -60,16 +57,16 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
       id: "action",
       header: "Aksi",
       cell: ({ row }) => {
-        const [anggotaValue, setAnggotaValue] = useAtom(anggota);
-        const item = row.original;
-        const [open, setOpen] = useState(false);
+        const [anggotaValue, setAnggotaValue] = useAtom(anggota)
+        const item = row.original
+        const [open, setOpen] = useState(false)
 
         const handleClick = () => {
           const newValue = anggotaValue.filter(
-            (item) => item.nidn !== row.original.nidn,
-          );
-          setAnggotaValue(newValue);
-        };
+            item => item.nidn !== row.original.nidn,
+          )
+          setAnggotaValue(newValue)
+        }
 
         return (
           <Alert
@@ -78,14 +75,14 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
             setOpen={setOpen}
             title={`hapus data ${item.name} ini`}
             description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
-            className="bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground"
+            className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
             onClick={handleClick}
-            tooltipContentText="hapus kaprodi"
-            size="icon"
-            side="right"
+            tooltipContentText='hapus kaprodi'
+            size='icon'
+            side='right'
           />
-        );
+        )
       },
     },
-  ];
-};
+  ]
+}

@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 export const registerSchema = z.object({
   name: z.string().min(1),
@@ -6,6 +6,6 @@ export const registerSchema = z.object({
   password: z.string().min(6, {
     message: "Password minimal 6 karakter",
   }),
-});
+})
 
-export type RegisterType = z.infer<typeof registerSchema>;
+export type RegisterType = z.infer<typeof registerSchema>

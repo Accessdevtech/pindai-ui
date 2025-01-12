@@ -1,29 +1,29 @@
 /* eslint-disable react-hooks/rules-of-hooks */
-import { ColumnDef } from "@tanstack/react-table";
-import { Check, EditIcon, TrashIcon, X } from "lucide-react";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { toast } from "sonner";
-import { IFakultas } from "@/modules/listdata/fakultas.interface";
-import Tooltip from "@/components/molecules/tooltip";
-import { Badge } from "@/components/ui/badge";
-import { kaprodiSchema, KaprodiType } from "../kaprodi.schema";
-import { cn } from "@/lib/utils";
-import Modal from "@/components/molecules/modal";
-import Form from "@/components/molecules/form";
-import InputField from "@/components/molecules/input-field";
-import Alert from "@/components/molecules/alert";
-import { Button } from "@/components/ui/button";
-import SelectField from "@/components/molecules/select-field";
-import RadioField from "@/components/molecules/radio-field";
-import { useUpdateKaprodi } from "../hooks/use-kaprodi/update-kaprodi";
-import { IKaprodi } from "../kaprodi.interface";
-import { useDeleteKaprodi } from "../hooks/use-kaprodi/delete-kaprodi";
+import Alert from "@/components/molecules/alert"
+import Form from "@/components/molecules/form"
+import InputField from "@/components/molecules/input-field"
+import Modal from "@/components/molecules/modal"
+import RadioField from "@/components/molecules/radio-field"
+import SelectField from "@/components/molecules/select-field"
+import Tooltip from "@/components/molecules/tooltip"
+import { Badge } from "@/components/ui/badge"
+import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { IFakultas } from "@/modules/listdata/fakultas.interface"
+import { zodResolver } from "@hookform/resolvers/zod"
+import { ColumnDef } from "@tanstack/react-table"
+import { Check, EditIcon, TrashIcon, X } from "lucide-react"
+import { useState } from "react"
+import { useForm } from "react-hook-form"
+import { toast } from "sonner"
+import { useDeleteKaprodi } from "../hooks/use-kaprodi/delete-kaprodi"
+import { useUpdateKaprodi } from "../hooks/use-kaprodi/update-kaprodi"
+import { IKaprodi } from "../kaprodi.interface"
+import { kaprodiSchema, KaprodiType } from "../kaprodi.schema"
 
 interface ColumnKaprodiProps {
-  fakultas: IFakultas[];
-  refetch: () => void;
+  fakultas: IFakultas[]
+  refetch: () => void
 }
 
 export const columnKaprodi = ({
@@ -35,8 +35,8 @@ export const columnKaprodi = ({
       id: "no",
       header: "No",
       cell: ({ row }) => {
-        const index = row.index + 1;
-        return <span>{index}</span>;
+        const index = row.index + 1
+        return <span>{index}</span>
       },
     },
     {
@@ -59,17 +59,17 @@ export const columnKaprodi = ({
       accessorKey: "status",
       header: "Status",
       cell: ({ row }) => {
-        const item = row.original;
+        const item = row.original
 
         return (
           <Tooltip
             contentText={
               item.status === "true" ? "Kaprodi Aktif" : "Kaprodi Tidak Aktif"
             }
-            side="left"
+            side='left'
           >
             <Badge
-              variant="outline"
+              variant='outline'
               className={cn("p-2 hover:text-primary-foreground", {
                 "border-green-500 text-green-500 hover:bg-green-500":
                   item.status === "true",
@@ -78,22 +78,22 @@ export const columnKaprodi = ({
               })}
             >
               {item.status === "true" ? (
-                <Check className="w-4 h-4" />
+                <Check className='h-4 w-4' />
               ) : (
-                <X className="w-4 h-4" />
+                <X className='h-4 w-4' />
               )}
             </Badge>
           </Tooltip>
-        );
+        )
       },
     },
     {
       id: "action",
       header: "Aksi",
       cell: ({ row }) => {
-        const item = row.original;
-        const [open, setOpen] = useState(false);
-        const [alertOpen, setAlertOpen] = useState(false);
+        const item = row.original
+        const [open, setOpen] = useState(false)
+        const [alertOpen, setAlertOpen] = useState(false)
         const form = useForm<KaprodiType>({
           resolver: zodResolver(kaprodiSchema),
           defaultValues: {
@@ -104,96 +104,96 @@ export const columnKaprodi = ({
             address: item.address,
             status: item.status === "true" ? "true" : "false",
           },
-        });
+        })
 
         const { mutate: updateData } = useUpdateKaprodi({
           onSuccess: () => {
-            toast.success("Kaprodi updated");
-            refetch();
+            toast.success("Kaprodi updated")
+            refetch()
           },
-          onError: (err) => {
-            if (err.response?.data.error) {
+          onError: err => {
+            if (err.response?.data.errors) {
               for (const [key, value] of Object.entries(
-                err.response.data.error,
+                err.response.data.errors,
               )) {
                 form.setError(key as keyof KaprodiType, {
                   message: value as string,
                   type: "manual",
-                });
+                })
               }
             }
-            toast.error(err.response?.data.error);
+            toast.error(err.response?.data.message)
           },
-        });
+        })
 
         const { mutate: deleteData } = useDeleteKaprodi({
           onSuccess: () => {
-            toast.success("Kaprodi deleted");
-            refetch();
+            toast.success("Kaprodi deleted")
+            refetch()
           },
-          onError: (err) => {
-            toast.error(err.response?.data.error);
+          onError: err => {
+            toast.error(err.response?.data.message)
           },
-        });
+        })
 
         const onSubmit = async (data: KaprodiType) => {
           updateData({
             id: item.id,
             data,
-          });
-        };
+          })
+        }
 
         const onDelete = async () => {
-          deleteData({ id: item.id });
-        };
+          deleteData({ id: item.id })
+        }
 
         return (
-          <span className="flex gap-2">
+          <span className='flex gap-2'>
             <Modal
               Icon={EditIcon}
-              size="icon"
-              btnStyle="bg-cyan-500/30 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
+              size='icon'
+              btnStyle='bg-cyan-500/30 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground'
               title={`edit ${item.name}`}
               description={`edit data ${item.name} ini`}
               open={open}
               setOpen={setOpen}
-              side="left"
-              tooltipContent="edit kaprodi"
+              side='left'
+              tooltipContent='edit kaprodi'
             >
               <Form form={form} onSubmit={onSubmit}>
                 <InputField
                   control={form.control}
-                  name="name"
-                  label="nama kaprodi"
+                  name='name'
+                  label='nama kaprodi'
                 />
                 <InputField
                   control={form.control}
-                  name="email"
-                  label="email"
-                  type="email"
+                  name='email'
+                  label='email'
+                  type='email'
                 />
-                <InputField control={form.control} name="nidn" label="nidn" />
+                <InputField control={form.control} name='nidn' label='nidn' />
                 <InputField
                   control={form.control}
-                  name="address"
-                  label="address"
+                  name='address'
+                  label='address'
                 />
                 <SelectField
                   control={form.control}
-                  name="fakultas_id"
-                  label="fakultas"
+                  name='fakultas_id'
+                  label='fakultas'
                   options={fakultas}
                 />
                 <RadioField
                   control={form.control}
-                  name="status"
-                  label="status"
+                  name='status'
+                  label='status'
                   options={[
                     { label: "aktif", value: "true" },
                     { label: "tidak aktif", value: "false" },
                   ]}
                 />
-                <Button type="submit" disabled={form.formState.isSubmitting}>
+                <Button type='submit' disabled={form.formState.isSubmitting}>
                   simpan
                 </Button>
               </Form>
@@ -204,15 +204,15 @@ export const columnKaprodi = ({
               setOpen={setAlertOpen}
               title={`hapus data ${item.name} ini`}
               description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
-              className="bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground"
+              className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
               onClick={onDelete}
-              tooltipContentText="hapus kaprodi"
-              size="icon"
-              side="right"
+              tooltipContentText='hapus kaprodi'
+              size='icon'
+              side='right'
             />
           </span>
-        );
+        )
       },
     },
-  ];
-};
+  ]
+}

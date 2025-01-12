@@ -1,11 +1,11 @@
-import { KaprodiResponse } from "@/modules/kaprodi/kaprodi.interface";
-import { useMutation } from "@tanstack/react-query";
-import { AxiosError } from "axios";
-import { deleteKaprodi } from "../../kaprodi.service";
+import { KaprodiResponse } from "@/modules/kaprodi/kaprodi.interface"
+import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { deleteKaprodi } from "../../kaprodi.service"
 
 interface Props {
-  onSuccess: (response: KaprodiResponse) => void;
-  onError: (error: AxiosError<KaprodiResponse>) => void;
+  onSuccess: (response: KaprodiResponse) => void
+  onError: (error: AxiosError<KaprodiResponse>) => void
 }
 
 export const useDeleteKaprodi = ({ onSuccess, onError }: Props) => {
@@ -17,5 +17,5 @@ export const useDeleteKaprodi = ({ onSuccess, onError }: Props) => {
     mutationFn: ({ id }) => deleteKaprodi(id),
     onSuccess,
     onError,
-  });
-};
+  })
+}

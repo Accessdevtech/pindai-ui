@@ -1,28 +1,27 @@
-import { Meta } from "@/interface/type";
+import { Meta } from "@/interface/type"
 
 export interface PenelitianDosenData {
-  penelitian: PenelitianDosen[];
-  meta: Meta;
+  penelitian: PenelitianDosen[]
+  meta: Meta
 }
 
-export type Status = "accepted" | "rejected" | "pending" | "draft";
+export type Status = "accepted" | "rejected" | "pending" | "draft"
 
 export interface StatusPenelitian {
-  kaprodi: Status;
-  dppm: Status;
-  keuangan: Status;
+  kaprodi: Status
+  dppm: Status
+  keuangan: Status
 }
 
 export interface PenelitianDosen {
-  id: string;
-  title: string;
-  lead: string;
-  field: string;
-  tahun_akademik: string;
-  created_at: string;
-  status: StatusPenelitian[];
+  id: string
+  title: string
+  leader: string
+  academic_year: string
+  created_date: Date
+  status: StatusPenelitian
 }
 
 export interface PenelitianDosenResponse<T> extends Response {
-  data: T;
+  data: T
 }

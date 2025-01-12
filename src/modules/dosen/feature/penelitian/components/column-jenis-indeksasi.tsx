@@ -1,5 +1,5 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { IndeksasiData } from "@/modules/listdata/indeksasi.list.interface";
+import { IndeksasiData } from "@/modules/listdata/indeksasi.list.interface"
+import { ColumnDef } from "@tanstack/react-table"
 
 export const columnJenisIndeksasi = (): ColumnDef<IndeksasiData>[] => {
   return [
@@ -15,5 +15,5 @@ export const columnJenisIndeksasi = (): ColumnDef<IndeksasiData>[] => {
       accessorKey: "keterangan",
       header: "Keterangan",
     },
-  ];
-};
+  ]
+}

@@ -1,14 +1,14 @@
-import Modal from "@/components/molecules/modal";
-import Tooltip from "@/components/molecules/tooltip";
-import { Badge } from "@/components/ui/badge";
-import { cn } from "@/lib/utils";
-import { ColumnDef } from "@tanstack/react-table";
-import { Check, InfoIcon, X } from "lucide-react";
-import DetailDosen from "./detail-dosen";
-import { IDosen } from "../dosen.interface";
+import Modal from "@/components/molecules/modal"
+import Tooltip from "@/components/molecules/tooltip"
+import { Badge } from "@/components/ui/badge"
+import { cn } from "@/lib/utils"
+import { ColumnDef } from "@tanstack/react-table"
+import { Check, InfoIcon, X } from "lucide-react"
+import { IDosen } from "../dosen.interface"
+import DetailDosen from "./detail-dosen"
 
 interface ColumnDosenProps {
-  refetch: () => void;
+  refetch: () => void
 }
 
 export const columnDosen = ({
@@ -50,14 +50,14 @@ export const columnDosen = ({
       accessorKey: "is_active",
       header: "Status",
       cell: ({ row }) => {
-        const item = row.original;
+        const item = row.original
         return (
           <Tooltip
             contentText={item.is_active ? "Dosen Aktif" : "Dosen Tidak Aktif"}
-            side="left"
+            side='left'
           >
             <Badge
-              variant="outline"
+              variant='outline'
               className={cn("p-2 hover:text-primary-foreground", {
                 "border-green-500 text-green-500 hover:bg-green-500":
                   item.is_active,
@@ -65,37 +65,37 @@ export const columnDosen = ({
               })}
             >
               {item.is_active ? (
-                <Check className="w-4 h-4" />
+                <Check className='h-4 w-4' />
               ) : (
-                <X className="w-4 h-4" />
+                <X className='h-4 w-4' />
               )}
             </Badge>
           </Tooltip>
-        );
+        )
       },
     },
     {
       id: "action",
       header: "Aksi",
       cell: ({ row }) => {
-        const item = row.original;
+        const item = row.original
 
         return (
-          <span className="flex gap-2">
+          <span className='flex gap-2'>
             <Modal
-              title="Detail Dosen"
+              title='Detail Dosen'
               description={`Informasi lengkap mengenai dosen bernama ${item.name}.`}
               Icon={InfoIcon}
-              size="icon"
-              side="left"
-              tooltipContent="Detail Dosen"
-              btnStyle="bg-cyan-500/30 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
+              size='icon'
+              side='left'
+              tooltipContent='Detail Dosen'
+              btnStyle='bg-cyan-500/30 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground'
             >
               <DetailDosen dosen={item} />
             </Modal>
           </span>
-        );
+        )
       },
     },
-  ];
-};
+  ]
+}

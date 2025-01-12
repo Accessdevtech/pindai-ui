@@ -1,4 +1,4 @@
-import { z } from "zod";
+import { z } from "zod"
 
 export const anggotaSchema = z.object({
   nidn: z.string(),
@@ -11,6 +11,6 @@ export const anggotaSchema = z.object({
   scopus_id: z.string(),
   job_functional: z.string(),
   affiliate_campus: z.string(),
-});
+})
 
-export type AnggotaType = z.infer<typeof anggotaSchema>;
+export type AnggotaType = z.infer<typeof anggotaSchema>

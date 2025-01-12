@@ -3,5 +3,5 @@ export default function DashboardScopus() {
     <div>
       <div>Dashboard Scopus</div>
     </div>
-  );
+  )
 }

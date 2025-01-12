@@ -3,5 +3,5 @@ export default function ProfileDppm() {
     <div>
       <div>Prodile Dosen</div>
     </div>
-  );
+  )
 }

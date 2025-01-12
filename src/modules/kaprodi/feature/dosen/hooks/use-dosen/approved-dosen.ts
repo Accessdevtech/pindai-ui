@@ -1,11 +1,11 @@
-import { useMutation } from "@tanstack/react-query";
-import { approveDosen } from "../../kaprodi.dosen.service";
-import { AxiosError } from "axios";
-import { DosenResponse } from "@/modules/dppm/feature/dosen/dosen.interface";
+import { DosenResponse } from "@/modules/dppm/feature/dosen/dosen.interface"
+import { useMutation } from "@tanstack/react-query"
+import { AxiosError } from "axios"
+import { approveDosen } from "../../kaprodi.dosen.service"
 
 interface Props {
-  onSuccess: (response: DosenResponse) => void;
-  onError: (error: AxiosError<DosenResponse>) => void;
+  onSuccess: (response: DosenResponse) => void
+  onError: (error: AxiosError<DosenResponse>) => void
 }
 
 export const useApprovedDosen = ({ onSuccess, onError }: Props) => {
@@ -13,5 +13,5 @@ export const useApprovedDosen = ({ onSuccess, onError }: Props) => {
     mutationFn: async ({ id }) => await approveDosen(id),
     onSuccess,
     onError,
-  });
-};
+  })
+}
