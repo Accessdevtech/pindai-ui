@@ -3,7 +3,7 @@ import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtomValue } from "jotai"
 import { AnggotaType } from "../schema/anggota-schema"
-import { selectedAnggotaAtom } from "../state/store"
+import { anggotaAtom, selectedAnggotaAtom } from "../state/store"
 
 interface FormFieldProps {
   handleCheckboxChange: (nidn: string) => void
@@ -16,12 +16,15 @@ export const columnTambahAnggota = ({
     {
       id: "select",
       cell: ({ row }) => {
+        const anggota = useAtomValue(anggotaAtom)
         const selectedAnggota = useAtomValue(selectedAnggotaAtom)
+
+        const isSlected = anggota.some(item => item.nidn === row.original.nidn)
         return (
           <Checkbox
-            checked={selectedAnggota.includes(row.original.nidn)}
+            checked={selectedAnggota.includes(row.original.nidn) || isSlected}
             onCheckedChange={() => handleCheckboxChange(row.original.nidn)}
-            disabled={selectedAnggota.includes(row.original.nidn)}
+            disabled={selectedAnggota.includes(row.original.nidn) || isSlected}
             aria-label='Select row'
           />
         )

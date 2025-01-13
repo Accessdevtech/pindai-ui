@@ -38,7 +38,7 @@ axiosInstance.interceptors.response.use(
       error.response.status === 401 &&
       error.response.data.message === "Unauthenticated."
     ) {
-      await removeCookie("access_token")
+      await removeCookie("token")
       await removeCookie("user")
 
       window.location.href = "/"

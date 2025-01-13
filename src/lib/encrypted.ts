@@ -102,7 +102,8 @@ class EncryptRequestResponse {
           // request.data.anggota = JSON.stringify(request.data.anggota);
           // request.data.anggota = this.encryptData(request.data.anggota);
           // }
-          // request.data = { payload: this.encryptData(request.data) };
+          request.data = { payload: this.encryptData(request.data) }
+          // console.log(this.decryptData(request.data.payload))
         }
 
         return request

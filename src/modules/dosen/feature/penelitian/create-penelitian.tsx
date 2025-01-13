@@ -2,12 +2,10 @@
 import Breadcrumb from "@/components/atom/bradcrumb"
 import Divider from "@/components/atom/divider"
 import InputField from "@/components/atom/input-field"
-import Modal from "@/components/atom/modal"
 import SelectField from "@/components/atom/select-field"
 import TextAreaField from "@/components/atom/text-area-field"
 import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import {
@@ -17,54 +15,28 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table"
-import { useAuthContext } from "@/contexts/auth-context"
-import { Meta } from "@/interface/type"
 import { ROUTE } from "@/services/route"
-import { dosenSearch } from "@/state/store"
-import { EachUtil } from "@/utils/each-utils"
+import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom } from "jotai"
-import { InfoIcon } from "lucide-react"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useDebounce } from "use-debounce"
-import { Dosen } from "../../dosen.interface"
 import { columnAnggotaView } from "./components/column-anggota-view"
-import { columnJenisIndeksasi } from "./components/column-jenis-indeksasi"
-import { columnJenisPenelitian } from "./components/column-jenis-penelitian"
-import { columnTambahAnggota } from "./components/column-tambah-anggota"
-import { useGetListIndeksasi } from "./hook/use-indeksasi/get-list-indeksasi"
+import DataKetuaPenelitian from "./components/data-ketua-penelitian"
+import ModalAnggota from "./components/modal-anggota"
+import ModalAnggotaManual from "./components/modal-anggota-manual"
+import ModalJenisIndeksasi from "./components/modal-jenis-indeksasi"
+import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
-import { useGetAnggota } from "./hook/use-penelitian/get-anggota"
-import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
-import {
-  anggotaAtom,
-  isDialogOpenAtom,
-  selectedAnggotaAtom,
-} from "./state/store"
+import { anggotaAtom } from "./state/store"
 
 export default function CreatePenelitian() {
-  const { user } = useAuthContext()
-  const [value, setValue] = useAtom(dosenSearch)
-  const [search] = useDebounce(value, 500)
   const [error, setError] = useState<string[]>([])
-
-  const [currentPage, setCurrentPage] = useState(1)
+  const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
 
   const [anggota, setAnggota] = useAtom(anggotaAtom)
-  const [selectedAnggota, setSelectedAnggota] = useAtom(selectedAnggotaAtom)
-  const [openModal, setOpenModal] = useAtom(isDialogOpenAtom)
 
   const form = useForm<PenelitianType>({
     resolver: zodResolver(penelitianSchema),
@@ -72,22 +44,12 @@ export default function CreatePenelitian() {
       tahun_akademik: "",
       semester: "",
       judul: "",
+      bidang: "",
       deskripsi: "",
       jenis_penelitian: "",
       jenis_indeksasi: "",
-      anggota: [],
-      anggotas: [],
     },
   })
-
-  const { data: listPenelitian } = useGetListPenelitian()
-  const { data: listIndeksasi } = useGetListIndeksasi()
-
-  const {
-    data: dataAnggota,
-    refetch,
-    isFetching,
-  } = useGetAnggota(currentPage, search)
 
   const { mutate } = useCreatePenelitian({
     onSuccess: res => {
@@ -96,9 +58,8 @@ export default function CreatePenelitian() {
         return toast.error(res.message)
       }
       toast.success(res.message)
-      // setAnggotaValue([]);
-      // form.reset();
-      refetch()
+      setAnggota([])
+      form.reset()
     },
     onError: err => {
       if (err.response?.data?.errors) {
@@ -112,44 +73,29 @@ export default function CreatePenelitian() {
           }
         }
       }
-      refetch()
     },
   })
-
-  const handleAddAnggota = () => {
-    const newAnggota = dataAnggota?.dosen.filter((anggota: Dosen) =>
-      selectedAnggota.includes(anggota.nidn),
-    )
-    setAnggota([...anggota, ...newAnggota!])
-    setSelectedAnggota([])
-    setOpenModal(false)
-  }
-
-  const handleCheckboxChange = (nidn: string) => {
-    setSelectedAnggota(prev =>
-      prev.includes(nidn)
-        ? prev.filter(item => item !== nidn)
-        : [...prev, nidn],
-    )
-  }
 
   const onSubmit = async (data: PenelitianType) => {
     const datas = {
       ...data,
-      anggotas: anggota,
+      anggota,
     }
-    console.log(datas)
+
     mutate(datas)
   }
 
-  const columnTambah = columnTambahAnggota({
-    handleCheckboxChange,
-  })
   const columnsView = columnAnggotaView()
-  const columnsJenisPenelitian = columnJenisPenelitian()
-  const columnsJenisIndeksasi = columnJenisIndeksasi()
 
-  form.setValue("anggota", anggota)
+  useEffect(() => {
+    const currentYear = new Date().getFullYear()
+    const akademikYears = generateAcademicYears(
+      currentYear - 5,
+      currentYear + 5,
+    )
+    setTahunAkademik(akademikYears)
+  }, [])
+
   return (
     <div>
       <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/penelitian`}>
@@ -164,10 +110,14 @@ export default function CreatePenelitian() {
                 className='w-[34%] lg:w-[43%]'
               />
               <div className='flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
-                <InputField
+                <SelectField
                   name='tahun_akademik'
                   label='Tahun Akademik'
                   control={form.control}
+                  options={tahunAkademik.map(item => ({
+                    id: item.split("/").join(""),
+                    name: item,
+                  }))}
                 />
                 <SelectField
                   name='semester'
@@ -193,6 +143,8 @@ export default function CreatePenelitian() {
                   </FormControl>
                 </FormItem>
               </div>
+
+              <InputField name='bidang' label='bidang' control={form.control} />
               <InputField name='judul' label='judul' control={form.control} />
               <TextAreaField
                 name='deskripsi'
@@ -200,211 +152,18 @@ export default function CreatePenelitian() {
                 control={form.control}
               />
               <div className='flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
-                <div className='flex grow items-end gap-2'>
-                  <SelectField
-                    name='jenis_penelitian'
-                    label='jenis penelitian'
-                    control={form.control}
-                    options={listPenelitian?.data || []}
-                  />
-                  <Modal
-                    title='Detail jenis Penelitian'
-                    Icon={InfoIcon}
-                    size='icon'
-                    description='Berisi informasi tentang jenis penelitian yang akan dilakukan, apakah itu penelitian dasar, terapan atau pengembangan'
-                    tooltipContent='Detail jenis Penelitian'
-                    className='max-w-5xl'
-                  >
-                    <div className='flex-1 overflow-auto rounded-md border'>
-                      <Table>
-                        <TableHeader>
-                          <TableRow>
-                            <EachUtil
-                              of={columnsJenisPenelitian}
-                              render={column => (
-                                <TableHead key={column.header as string}>
-                                  {column.header as string}
-                                </TableHead>
-                              )}
-                            />
-                          </TableRow>
-                        </TableHeader>
-                        <TableBody>
-                          <EachUtil
-                            of={listPenelitian?.data || []}
-                            render={(item, index) => (
-                              <TableRow key={item.id}>
-                                <TableCell className='border-r'>
-                                  {item.name}
-                                </TableCell>
-                                <TableCell className='flex max-w-xs flex-wrap gap-2 overflow-hidden'>
-                                  {item.kriteria.map((keterangan, index) => (
-                                    <Badge
-                                      key={index}
-                                      className='text-ellipsis capitalize'
-                                    >
-                                      {keterangan}
-                                    </Badge>
-                                  ))}
-                                </TableCell>
-                                <TableCell className='border-l'>
-                                  {item.keterangan}
-                                </TableCell>
-                              </TableRow>
-                            )}
-                          />
-                        </TableBody>
-                      </Table>
-                    </div>
-                  </Modal>
-                </div>
-
-                <div className='flex grow items-end gap-2'>
-                  <SelectField
-                    name='jenis_indeksasi'
-                    label='jenis indeksasi'
-                    control={form.control}
-                    options={listIndeksasi?.data || []}
-                  />
-                  <Modal
-                    title='Detail jenis indeksasi'
-                    Icon={InfoIcon}
-                    size='icon'
-                    description='Berisi informasi tentang jenis indeksasi yang akan digunakan, apakah itu Sinta, Scopus, WoS, Dimensions, atau DOAJ'
-                    tooltipContent='Detail jenis indeksasi'
-                    className='max-w-5xl'
-                  >
-                    <Table>
-                      <TableHeader>
-                        <TableRow>
-                          <EachUtil
-                            of={columnsJenisIndeksasi}
-                            render={column => (
-                              <TableHead key={column.header as string}>
-                                {column.header as string}
-                              </TableHead>
-                            )}
-                          />
-                        </TableRow>
-                      </TableHeader>
-                      <TableBody>
-                        <EachUtil
-                          of={listIndeksasi?.data || []}
-                          render={(item, index) => (
-                            <TableRow key={item.id}>
-                              <TableCell className='border-r'>
-                                {item.name}
-                              </TableCell>
-                              <TableCell className='flex max-w-xs flex-wrap gap-2 overflow-hidden'>
-                                {item.kriteria.map((keterangan, index) => (
-                                  <Badge
-                                    key={index}
-                                    className='text-ellipsis capitalize'
-                                  >
-                                    {keterangan}
-                                  </Badge>
-                                ))}
-                              </TableCell>
-                              <TableCell className='border-l'>
-                                {item.keterangan}
-                              </TableCell>
-                            </TableRow>
-                          )}
-                        />
-                      </TableBody>
-                    </Table>
-                  </Modal>
-                </div>
-              </div>
-            </div>
-
-            <div className='mt-4 flex w-full flex-col gap-4'>
-              <Divider
-                text='data ketua penelitian-tahap 2.1'
-                className='w-[30%] lg:w-[41.5%]'
-              />
-              <div className='flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    NIDN
-                  </Label>
-                  <Input
-                    defaultValue={user?.nidn === null ? "0000" : user?.nidn}
-                    disabled
-                  />
-                </FormItem>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    NO. HP
-                  </Label>
-                  <Input
-                    defaultValue={(user as Dosen)?.phone_number}
-                    disabled
-                  />
-                </FormItem>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    Prodi
-                  </Label>
-                  <Input defaultValue={(user as Dosen)?.prodi} disabled />
-                </FormItem>
-              </div>
-              <div className='flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    Nama Lengkap (Tanpa Gelar)
-                  </Label>
-                  <Input defaultValue={user?.name} disabled />
-                </FormItem>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    Nama Lengkap (Menggunakan Gelar)
-                  </Label>
-                  <Input
-                    defaultValue={(user as Dosen)?.name_with_title}
-                    disabled
-                  />
-                </FormItem>
-              </div>
-              <div className='flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    Email
-                  </Label>
-                  <Input defaultValue={user?.email} disabled />
-                </FormItem>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    Scholar ID
-                  </Label>
-                  <Input defaultValue={(user as Dosen)?.scholar_id} disabled />
-                </FormItem>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    Scopus ID
-                  </Label>
-                  <Input defaultValue={(user as Dosen)?.scopus_id} disabled />
-                </FormItem>
-                <FormItem className='flex-grow'>
-                  <Label className='text-xs uppercase tracking-wider'>
-                    Jabatan funsional
-                  </Label>
-                  <Input
-                    defaultValue={(user as Dosen)?.job_functional}
-                    disabled
-                  />
-                </FormItem>
-              </div>
-              <FormItem className='flex-grow'>
-                <Label className='text-xs uppercase tracking-wider'>
-                  Affiliasi kampus
-                </Label>
-                <Input
-                  defaultValue={(user as Dosen)?.affiliate_campus}
-                  disabled
+                <ModalJenisPenelitian
+                  control={form.control}
+                  name='jenis_penelitian'
                 />
-              </FormItem>
+                <ModalJenisIndeksasi
+                  control={form.control}
+                  name='jenis_indeksasi'
+                />
+              </div>
             </div>
+
+            <DataKetuaPenelitian />
 
             <div className='mt-4 flex w-full flex-col gap-4'>
               <Divider
@@ -412,61 +171,8 @@ export default function CreatePenelitian() {
                 className='w-[17.5%] lg:w-[36%]'
               />
               <div className='flex flex-col gap-2 lg:flex-row'>
-                <Modal
-                  title='Daftar anggota penelitian'
-                  name='tambah anggota'
-                  open={openModal}
-                  setOpen={setOpenModal}
-                  description='Menampilkan daftar anggota yang terlibat dalam penelitian'
-                  tooltipContent='Klik untuk melihat detail anggota penelitian'
-                  className='max-w-3xl'
-                >
-                  <div className='flex-1 overflow-auto'>
-                    <DataTable
-                      search
-                      columns={columnTambah}
-                      data={dataAnggota?.dosen || []}
-                      meta={dataAnggota?.meta || ({} as Meta)}
-                      currentPage={0}
-                      value={value}
-                      isLoading={isFetching}
-                      refetch={refetch}
-                      setValue={setValue}
-                      onPaginationChange={(page: number) =>
-                        setCurrentPage(page)
-                      }
-                    />
-                  </div>
-                  <div className='flex justify-end gap-2'>
-                    <Button
-                      type='button'
-                      onClick={handleAddAnggota}
-                      className='capitalize'
-                    >
-                      simpan
-                    </Button>
-                    <Button
-                      variant='outline'
-                      type='button'
-                      onClick={() => setOpenModal(false)}
-                      className='border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
-                    >
-                      close
-                    </Button>
-                  </div>
-                </Modal>
-                <Modal
-                  title='Daftar anggota penelitian manual'
-                  name='tambah anggota manual'
-                  description='Tambahkan anggota penelitian secara manual dengan mengisi form yang tersedia'
-                  tooltipContent='Detail anggota penelitian'
-                  variant='outline'
-                  btnStyle='border-primary text-primary hover:bg-primary hover:text-primary-foreground'
-                >
-                  <div>
-                    Isi form berikut untuk menambahkan anggota penelitian
-                  </div>
-                </Modal>
+                <ModalAnggota />
+                <ModalAnggotaManual />
               </div>
 
               <div>
@@ -475,7 +181,9 @@ export default function CreatePenelitian() {
               </div>
             </div>
 
-            <Button className='mt-4 w-full capitalize'>simpan</Button>
+            <Button type='submit' className='mt-4 w-full capitalize'>
+              simpan
+            </Button>
           </Form>
         </CardContent>
       </Card>

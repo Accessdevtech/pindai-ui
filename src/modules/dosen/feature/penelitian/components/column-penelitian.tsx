@@ -11,43 +11,31 @@ import StatusBadge from "./status-badge"
 export const columnPenelitian = (): ColumnDef<PenelitianDosen>[] => {
   return [
     {
-      header: "judul",
-      columns: [
-        {
-          accessorKey: "title",
-        },
-      ],
+      id: "title",
+      accessorKey: "title",
+      header: "Judul Penelitian",
     },
     {
+      id: "leader",
+      accessorKey: "leader",
       header: "Penanggung Jawab",
-      columns: [
-        {
-          accessorKey: "leader",
-        },
-      ],
     },
     {
+      id: "academic_year",
+      accessorKey: "academic_year",
       header: "Tahun Akademik",
-      columns: [
-        {
-          accessorKey: "academic_year",
-        },
-      ],
     },
     {
+      id: "created_date",
+      accessorKey: "created_date",
       header: "tanggal dibuat",
-      columns: [
-        {
-          accessorKey: "created_date",
-        },
-      ],
     },
     {
       accessorKey: "status",
       header: "status",
       columns: [
         {
-          // id: "status.kaprodi",
+          id: "status.kaprodi",
           accessorKey: "status.kaprodi",
           header: "Kaprodi",
           cell: ({ row }) => (
@@ -55,13 +43,13 @@ export const columnPenelitian = (): ColumnDef<PenelitianDosen>[] => {
           ),
         },
         {
-          // id: "status.dppm",
+          id: "status.dppm",
           accessorKey: "status.dppm",
           header: "Dppm",
           cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
         },
         {
-          // id: "status.keuangan",
+          id: "status.keuangan",
           accessorKey: "status.keuangan",
           header: "Keuangan",
           cell: ({ row }) => (
@@ -71,27 +59,25 @@ export const columnPenelitian = (): ColumnDef<PenelitianDosen>[] => {
       ],
     },
     {
+      id: "action",
+      accessorKey: "action",
       header: "aksi",
-      columns: [
-        {
-          accessorKey: "action",
-          cell: ({ row }) => {
-            return (
-              <Tooltip contentText='Detail penelitian'>
-                <Link
-                  href={`${ROUTE.DASHBOARD}/dosen/penelitian/${row.original.id}`}
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "icon" }),
-                    "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
-                  )}
-                >
-                  <InfoIcon />
-                </Link>
-              </Tooltip>
-            )
-          },
-        },
-      ],
+
+      cell: ({ row }) => {
+        return (
+          <Tooltip contentText='Detail penelitian'>
+            <Link
+              href={`${ROUTE.DASHBOARD}/dosen/penelitian/${row.original.id}`}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "icon" }),
+                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
+              )}
+            >
+              <InfoIcon />
+            </Link>
+          </Tooltip>
+        )
+      },
     },
   ]
 }

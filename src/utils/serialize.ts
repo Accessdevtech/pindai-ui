@@ -1,45 +1,21 @@
 type MixedValue = string | number | boolean | object | null | undefined
 
 const serialize = function (mixedValue: MixedValue): string {
-  let val: string
+  let val: string = ""
   let key: string | number
-  let okey: string | number
   let ktype: string = ""
   let vals: string = ""
   let count: number = 0
 
-  const _utf8Size = function (str: string): number {
+  const _utf8Size = (str: string): number => {
     return ~-encodeURI(str).split(/%..|./).length
   }
 
-  const _getType = function (inp: MixedValue): string {
-    let match: RegExpMatchArray | null
-    let cons: string
-    let types: string[]
-    let type: string = typeof inp
-
-    if (type === "object" && !inp) {
-      return "null"
-    }
-
-    if (type === "object" && inp !== null && inp !== undefined) {
-      if (!inp.constructor) {
-        return "object"
-      }
-      cons = inp.constructor.toString()
-      match = cons.match(/(\w+)\(/)
-      if (match) {
-        cons = match[1].toLowerCase()
-      }
-      types = ["boolean", "number", "string", "array"]
-      for (key in types) {
-        if (cons === types[key]) {
-          type = types[key]
-          break
-        }
-      }
-    }
-    return type
+  const _getType = (inp: MixedValue): string => {
+    if (inp === null) return "null"
+    if (Array.isArray(inp)) return "array"
+    if (typeof inp === "object") return "object"
+    return typeof inp
   }
 
   const type: string = _getType(mixedValue)
@@ -61,19 +37,31 @@ const serialize = function (mixedValue: MixedValue): string {
       val = "s:" + _utf8Size(mixedValue as string) + ':"' + mixedValue + '"'
       break
     case "array":
+      val = "a"
+
+      if (Array.isArray(mixedValue)) {
+        for (key = 0; key < mixedValue.length; key++) {
+          ktype = _getType(mixedValue[key])
+          if (ktype === "function") continue
+
+          vals += serialize(key) + serialize(mixedValue[key])
+          count++
+        }
+      }
+
+      val += ":" + count + ":{" + vals + "}"
+      break
     case "object":
       val = "a"
 
       if (typeof mixedValue === "object" && mixedValue !== null) {
         const obj = mixedValue as Record<string, any>
         for (key in obj) {
-          if (mixedValue.hasOwnProperty(key)) {
+          if (Object.prototype.hasOwnProperty.call(obj, key)) {
             ktype = _getType(obj[key])
-            if (ktype === "function") {
-              continue
-            }
+            if (ktype === "function") continue
 
-            okey = key.match(/^[0-9]+$/) ? parseInt(key as string, 10) : key
+            const okey = key.match(/^[0-9]+$/) ? parseInt(key, 10) : key
             vals += serialize(okey) + serialize(obj[key])
             count++
           }
@@ -87,6 +75,7 @@ const serialize = function (mixedValue: MixedValue): string {
       val = "N"
       break
   }
+
   if (type !== "object" && type !== "array") {
     val += ";"
   }

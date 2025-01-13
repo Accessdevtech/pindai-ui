@@ -172,6 +172,7 @@ export default function DataTable<TData, TValue>({
                   <TableRow
                     key={row.id}
                     data-state={row.getIsSelected() && "selected"}
+                    className='text-center'
                   >
                     <EachUtil
                       of={row.getVisibleCells()}

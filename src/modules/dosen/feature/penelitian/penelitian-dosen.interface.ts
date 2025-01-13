@@ -1,4 +1,4 @@
-import { Meta } from "@/interface/type"
+import { Meta, Response } from "@/interface/type"
 
 export interface PenelitianDosenData {
   penelitian: PenelitianDosen[]
@@ -22,6 +22,37 @@ export interface PenelitianDosen {
   status: StatusPenelitian
 }
 
-export interface PenelitianDosenResponse<T> extends Response {
-  data: T
+export interface PenelitianDosenResponse extends Response {
+  data: PenelitianDosen
+}
+
+export interface DetailPenelitian {
+  title: string
+  leader: Leader
+  bidang: string
+  jenis_penelitian: string
+  semester: string
+  jenis_indeksasi: string
+  academic_year: string
+  status: StatusPenelitian
+  anggota: Anggota[]
+}
+
+export interface Leader {
+  name: string
+  prodi: string
+}
+
+export interface Anggota {
+  nidn?: string
+  name: string
+  name_with_title?: string
+  prodi: string
+  phone_number: string
+  email: string
+  scholar_id: string
+  scopus_id: string
+  job_functional: string
+  affiliate_campus: string
+  is_leader: number
 }
