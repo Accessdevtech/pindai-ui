@@ -24,6 +24,10 @@ export interface DosenData {
   meta: Meta
 }
 
+export interface ProfileDosen {
+  user: string
+}
+
 export interface DosenResponse<T> extends Response {
   data: T
 }

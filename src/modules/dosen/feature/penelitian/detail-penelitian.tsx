@@ -18,7 +18,6 @@ import { useGetDetailPenelitian } from "./hook/use-penelitian/get-detail-penelit
 
 export default function DetailPenelitianPage({ id }: { id: string }) {
   const { data } = useGetDetailPenelitian(id)
-  // console.log(data)
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
   const columnsDocuments = columnsDokumen({ status: data?.status })

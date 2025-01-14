@@ -1,10 +1,10 @@
-import { Response } from "@/interface/type"
 import { API_ENDPOINTS } from "@/services/api/api-config"
-import axiosInstance from "@/services/api/axios-instance"
+import { putData } from "@/services/api/http"
+import { DosenResponse, ProfileDosen } from "./dosen.interface"
 import { ProfileType } from "./profile.schema"
 
 export async function updateProfile(data: ProfileType) {
-  const response: Response = await axiosInstance.put(
+  const response: DosenResponse<ProfileDosen> = await putData(
     API_ENDPOINTS.PROFILE,
     data,
   )

@@ -1,18 +1,18 @@
 import { Response } from "@/interface/type"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
-import { DosenResponse, ProfileDosen } from "../../dosen.interface"
-import { updateProfile } from "../../dosen.service"
-import { ProfileType } from "../../profile.schema"
+import { KaprodiResponse, ProfileKaprodi } from "../../kaprodi.interface"
+import { ProfileType } from "../../kaprodi.profile.schema"
+import { updateProfile } from "../../kaprodi.service"
 
 interface Props {
-  onSuccess: (response: DosenResponse<ProfileDosen>) => void
+  onSuccess: (response: KaprodiResponse<ProfileKaprodi>) => void
   onError: (error: AxiosError<Response>) => void
 }
 
 export const useUpdateProfile = ({ onSuccess, onError }: Props) => {
   return useMutation<
-    DosenResponse<ProfileDosen>,
+    KaprodiResponse<ProfileKaprodi>,
     AxiosError<Response>,
     ProfileType
   >({

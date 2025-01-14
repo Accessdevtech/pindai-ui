@@ -2,7 +2,7 @@
 import Tooltip from "@/components/atom/tooltip"
 import { Badge } from "@/components/ui/badge"
 import { ColumnDef } from "@tanstack/react-table"
-import { CheckIcon, RefreshCcwIcon } from "lucide-react"
+import { CheckIcon, RefreshCcwIcon, X } from "lucide-react"
 import { Anggota, StatusPenelitian } from "../penelitian-dosen.interface"
 import StatusBadge from "./status-badge"
 
@@ -49,10 +49,25 @@ export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {
         return (
           <div className='flex items-center justify-center gap-2'>
             {isLeader ? (
-              <div className='flex gap-2'>
-                {status?.kaprodi && <StatusBadge status={status.kaprodi} />}
-                {status?.dppm && <StatusBadge status={status.dppm} />}
-                {status?.keuangan && <StatusBadge status={status.keuangan} />}
+              <div className='flex gap-4'>
+                {status?.kaprodi && (
+                  <div className='flex flex-col items-center gap-2'>
+                    <span>Kaprodi</span>
+                    <StatusBadge status={status.kaprodi} />
+                  </div>
+                )}
+                {status?.dppm && (
+                  <div className='flex flex-col items-center gap-2'>
+                    <span>DPPM</span>
+                    <StatusBadge status={status.dppm} />
+                  </div>
+                )}
+                {status?.keuangan && (
+                  <div className='flex flex-col items-center gap-2'>
+                    <span>Keuangan</span>
+                    <StatusBadge status={status.keuangan} />
+                  </div>
+                )}
               </div>
             ) : status?.kaprodi === "accepted" &&
               status.dppm === "accepted" &&
@@ -63,6 +78,17 @@ export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {
                   className='h-9 w-9 border-green-500 text-center text-green-500'
                 >
                   <CheckIcon />
+                </Badge>
+              </Tooltip>
+            ) : status?.kaprodi === "rejected" &&
+              status.dppm === "rejected" &&
+              status.keuangan === "rejected" ? (
+              <Tooltip contentText='Status Mengikuti Ketua Kelompok'>
+                <Badge
+                  variant='outline'
+                  className='h-9 w-9 border-red-500 text-center text-red-500'
+                >
+                  <X />
                 </Badge>
               </Tooltip>
             ) : (

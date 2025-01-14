@@ -16,14 +16,14 @@ export default function InfoPengabdianCard({
     <div className='flex grow flex-col gap-4'>
       <Card className='flex grow flex-col p-6 text-muted-foreground'>
         <Link
-          href={`${ROUTE.DASHBOARD}/${role}/penelitian}`}
+          href={`${ROUTE.DASHBOARD}/${role}/pengabdian`}
           className={cn(
             buttonVariants({ variant: "outline" }),
             "border-primary text-primary hover:bg-primary hover:text-primary-foreground",
           )}
         >
           <ArrowRightIcon className='h-4 w-4' />
-          <span className='capitalize'>ajukan penelitian</span>
+          <span className='capitalize'>ajukan pengabdian</span>
         </Link>
       </Card>
       <Card className='flex grow flex-col p-6 text-muted-foreground'>
@@ -39,7 +39,7 @@ export default function InfoPengabdianCard({
 
         <Separator className='my-4 bg-neutral-400' />
         <div className='flex items-center justify-between'>
-          <span className='font-semibold capitalize'>Penelitian</span>
+          <span className='font-semibold capitalize'>Pengabdian</span>
           <span>
             <ArrowRightIcon className='h-4 w-4' />
           </span>

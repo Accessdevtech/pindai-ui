@@ -36,10 +36,6 @@ export const navData = {
       name: "scholar",
       roles: ["dosen"],
     },
-    {
-      name: "scopus",
-      roles: ["dosen"],
-    },
   ],
   sub: [
     {

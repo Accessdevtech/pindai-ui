@@ -53,7 +53,6 @@ export default function CreatePenelitian() {
 
   const { mutate } = useCreatePenelitian({
     onSuccess: res => {
-      console.log(res)
       if (!res.status) {
         return toast.error(res.message)
       }

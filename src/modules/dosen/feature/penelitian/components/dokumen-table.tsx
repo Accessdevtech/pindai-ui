@@ -22,7 +22,6 @@ export type Document = {
   suratRekomendasi: string
   proposal: DocumentStatus
   kontrakPenelitian: DocumentStatus
-  kelompokPenelitian: string
   suratKeteranganSelesai: DocumentStatus
   laporan: DocumentStatus
 }
@@ -34,7 +33,6 @@ const data: Document[] = [
     suratRekomendasi: "rekomendasi.pdf",
     proposal: "not_available",
     kontrakPenelitian: "not_available",
-    kelompokPenelitian: "group-1",
     suratKeteranganSelesai: "not_available",
     laporan: "not_available",
   },

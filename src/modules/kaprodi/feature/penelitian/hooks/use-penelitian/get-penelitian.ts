@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getPenelitianDosen } from "../../penelitian-dosen.service"
+import { getPenelitianKaprodi } from "../../kaprodi.penelitian.service"
 
 export const useGetPenelitian = (
   page: number,
@@ -20,7 +20,7 @@ export const useGetPenelitian = (
       status_keuangan,
     ],
     queryFn: async () =>
-      await getPenelitianDosen(
+      await getPenelitianKaprodi(
         page,
         search,
         tahun_akademik,

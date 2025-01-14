@@ -20,7 +20,7 @@ export default function InfoPenelitianCard({
     <div className='flex grow flex-col gap-4'>
       <Card className='flex grow flex-col p-6 text-muted-foreground'>
         <Link
-          href={`${ROUTE.DASHBOARD}/${role}/penelitian}`}
+          href={`${ROUTE.DASHBOARD}/${role}/penelitian`}
           className={cn(
             buttonVariants({ variant: "outline" }),
             "border-primary text-primary hover:bg-primary hover:text-primary-foreground",

@@ -10,10 +10,23 @@ import {
 } from "./penelitian-dosen.interface"
 import { PenelitianType } from "./schema/penelitian-schema"
 
-export async function getPenelitianDosen(page: number, search: string) {
+export async function getPenelitianDosen(
+  page: number,
+  search?: string,
+  tahun_akademik?: string,
+  status_kaprodi?: string,
+  status_dppm?: string,
+  status_keuangan?: string,
+) {
+  const params: Record<string, string | number> = { page }
+  if (status_keuangan) params.status_keuangan = status_keuangan
+  if (status_kaprodi) params.status_kaprodi = status_kaprodi
+  if (tahun_akademik) params.tahun_akademik = tahun_akademik
+  if (status_dppm) params.status_dppm = status_dppm
+  if (search) params.search = search
   const response: DosenResponse<PenelitianDosenData> = await getData(
     API_ENDPOINTS_DOSEN.PENELITIAN,
-    { page, search },
+    params,
   )
   return response.data
 }
