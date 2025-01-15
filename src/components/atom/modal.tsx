@@ -54,7 +54,7 @@ export default function Modal({
         <Tooltip contentText={tooltipContent || ""} side={side}>
           <DialogTrigger asChild>
             <Button variant={variant} size={size} className={cn(btnStyle)}>
-              <Icon />
+              <Icon /> {name ? name : null}
             </Button>
           </DialogTrigger>
         </Tooltip>

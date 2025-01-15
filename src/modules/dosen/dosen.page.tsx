@@ -20,13 +20,29 @@ export default function DosenPage({ role }: { role: Role | undefined }) {
           <EachUtil
             of={penelitian}
             render={(penelitian: any, index) => (
-              <CardStatus data={penelitian} key={index} />
+              <CardStatus
+                data={penelitian}
+                message={
+                  penelitian.status === "rejected"
+                    ? "penelitian ditolak"
+                    : "penelitian disetujui"
+                }
+                key={index}
+              />
             )}
           />
           <EachUtil
             of={pengabdian}
             render={(pengabdian: any, index) => (
-              <CardStatus data={pengabdian} key={index} />
+              <CardStatus
+                data={pengabdian}
+                message={
+                  pengabdian.status === "rejected"
+                    ? "pengabdian ditolak"
+                    : "pengabdian disetujui"
+                }
+                key={index}
+              />
             )}
           />
         </div>

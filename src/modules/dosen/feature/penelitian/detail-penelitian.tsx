@@ -1,5 +1,6 @@
 "use client"
 import Breadcrumb from "@/components/atom/bradcrumb"
+import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import {
   Card,
   CardContent,
@@ -22,6 +23,8 @@ export default function DetailPenelitianPage({ id }: { id: string }) {
   const columnsIdentity = columnsIdentitas({ status: data?.status })
   const columnsDocuments = columnsDokumen({ status: data?.status })
 
+  console.log(data)
+
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -38,6 +41,30 @@ export default function DetailPenelitianPage({ id }: { id: string }) {
       >
         {data?.title}
       </Breadcrumb>
+      {data?.status.kaprodi === "rejected" &&
+        data?.status.kaprodi === "rejected" &&
+        data?.status.keuangan === "rejected" && (
+          <KeteranganDitolak title='Penelitian ditolak oleh kaprodi'>
+            {data.keterangan}
+          </KeteranganDitolak>
+        )}
+
+      {data?.status.kaprodi === "accepted" &&
+        data?.status.dppm === "rejected" &&
+        data?.status.keuangan === "rejected" && (
+          <KeteranganDitolak title='Penelitian ditolak oleh dppm'>
+            {data.keterangan}
+          </KeteranganDitolak>
+        )}
+
+      {data?.status.kaprodi === "accepted" &&
+        data?.status.dppm === "accepted" &&
+        data?.status.keuangan === "rejected" && (
+          <KeteranganDitolak title='Penelitian ditolak oleh keuangan'>
+            {data.keterangan}
+          </KeteranganDitolak>
+        )}
+
       <Card>
         <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
           <CardTitle className='capitalize tracking-wide'>

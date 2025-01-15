@@ -22,7 +22,7 @@ import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian
 import { useCanclePenelitian } from "./hooks/use-penelitian/cancle-penelitian"
 import { useGetDetailPenelitian } from "./hooks/use-penelitian/get-detail-penelitian"
 
-export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
+export default function DetailPenelitianDppmPage({ id }: { id: string }) {
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPenelitian(id)
   const { mutate: approved } = useApprovePenelitian({
@@ -77,7 +77,6 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
       >
         {data?.title}
       </Breadcrumb>
-
       {data?.status.kaprodi === "rejected" &&
         data?.status.kaprodi === "rejected" &&
         data?.status.keuangan === "rejected" && (
@@ -115,7 +114,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        {data?.status.kaprodi === "pending" && (
+        {data?.status.dppm === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
               <Button

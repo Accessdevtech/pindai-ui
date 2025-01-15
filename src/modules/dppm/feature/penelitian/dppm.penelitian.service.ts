@@ -2,11 +2,11 @@ import {
   DetailPenelitian,
   PenelitianDosenData,
 } from "@/modules/dosen/feature/penelitian/penelitian-dosen.interface"
-import { API_ENDPOINTS_KAPRODI } from "@/services/api/api-config"
+import { API_ENDPOINTS_DPPM } from "@/services/api/api-config"
 import { getData, postData } from "@/services/api/http"
-import { KaprodiResponse } from "../../kaprodi.interface"
+import { DppmResponse } from "../../dashboard.interface"
 
-export async function getPenelitianKaprodi(
+export async function getPenelitianDppm(
   page: number,
   search?: string,
   tahun_akademik?: string,
@@ -20,23 +20,23 @@ export async function getPenelitianKaprodi(
   if (tahun_akademik) params.tahun_akademik = tahun_akademik
   if (status_dppm) params.status_dppm = status_dppm
   if (search) params.search = search
-  const response: KaprodiResponse<PenelitianDosenData> = await getData(
-    API_ENDPOINTS_KAPRODI.PENELITIAN,
+  const response: DppmResponse<PenelitianDosenData> = await getData(
+    API_ENDPOINTS_DPPM.PENELITIAN,
     params,
   )
   return response.data
 }
 
 export async function getDetailPenelitian(id: string) {
-  const response: KaprodiResponse<DetailPenelitian> = await getData(
-    `${API_ENDPOINTS_KAPRODI.PENELITIAN}/${id}`,
+  const response: DppmResponse<DetailPenelitian> = await getData(
+    `${API_ENDPOINTS_DPPM.PENELITIAN}/${id}`,
   )
   return response.data
 }
 
 export async function approvePenelitian(id: string) {
   const response = await postData(
-    `${API_ENDPOINTS_KAPRODI.APPROVED_PENELITIAN}/${id}`,
+    `${API_ENDPOINTS_DPPM.APPROVED_PENELITIAN}/${id}`,
     {},
   )
   return response
@@ -44,7 +44,7 @@ export async function approvePenelitian(id: string) {
 
 export async function canclePenelitian(id: string, keterangan: string) {
   const response = await postData(
-    `${API_ENDPOINTS_KAPRODI.CANCELED_PENELITIAN}/${id}`,
+    `${API_ENDPOINTS_DPPM.CANCELED_PENELITIAN}/${id}`,
     { keterangan },
   )
   return response

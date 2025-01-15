@@ -1,17 +1,19 @@
 import CardStatus from "@/components/atom/card-status"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Card } from "@/components/ui/card"
-import { penelitian, pengabdian } from "@/constant/dummy"
+import { pengabdian } from "@/constant/dummy"
 import { Role } from "@/interface/type"
 import { EachUtil } from "@/utils/each-utils"
 import InfoPenelitianCard from "./components/info-penelitian"
 import InfoPengabdianCard from "./components/info-pengabdian"
+import { useGetDashboard } from "./hooks/use-dashboard/get-dashboard"
 
 interface KaprodiDashboardProps {
   role: Role | undefined
 }
 
 export default function KaprodiDashboard({ role }: KaprodiDashboardProps) {
+  const { data } = useGetDashboard()
   return (
     <div className='flex flex-col gap-4'>
       <section className='flex flex-col gap-3'>
@@ -22,15 +24,31 @@ export default function KaprodiDashboard({ role }: KaprodiDashboardProps) {
         </Breadcrumb>
         <div className='grid grid-cols-2 gap-4 xl:grid-cols-4'>
           <EachUtil
-            of={penelitian}
+            of={data?.penelitian || []}
             render={(penelitian: any, index) => (
-              <CardStatus data={penelitian} key={index} />
+              <CardStatus
+                data={penelitian}
+                message={
+                  penelitian.status === "rejected"
+                    ? "penelitian ditolak"
+                    : "penelitian disetujui"
+                }
+                key={index}
+              />
             )}
           />
           <EachUtil
             of={pengabdian}
             render={(pengabdian: any, index) => (
-              <CardStatus data={pengabdian} key={index} />
+              <CardStatus
+                data={pengabdian}
+                message={
+                  pengabdian.status === "rejected"
+                    ? "pengabdian ditolak"
+                    : "pengabdian disetujui"
+                }
+                key={index}
+              />
             )}
           />
         </div>

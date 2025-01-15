@@ -6,26 +6,24 @@ export interface Fakultas {
 export const penelitian = [
   {
     message: "penelitian disetujui",
-    status: "disetujui",
-    totalDosen: 10,
+    status: "accepted",
+    count: 10,
   },
   {
     message: "penelitian ditolak",
-    status: "ditolak",
-    totalDosen: 10,
+    status: "rejected",
+    count: 10,
   },
 ]
 
 export const pengabdian = [
   {
-    message: "pengabdian disetujui",
-    status: "disetujui",
-    totalDosen: 10,
+    status: "accepted",
+    count: 10,
   },
   {
-    message: "pengabdian ditolak",
-    status: "ditolak",
-    totalDosen: 10,
+    status: "rejected",
+    count: 10,
   },
 ]
 
