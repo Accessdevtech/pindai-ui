@@ -31,7 +31,7 @@ export const putData = async (url: string, data: any) => {
   }
 }
 
-export const delData = async (url: string) => {
+export const deleteData = async (url: string) => {
   try {
     const response: AxiosResponse = await axiosInstance.delete(url)
     return response.data

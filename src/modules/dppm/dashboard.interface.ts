@@ -1,11 +1,29 @@
 import { Response } from "@/interface/type"
+import { Status } from "../dosen/feature/penelitian/penelitian-dosen.interface"
 
-export interface DppmDashboardFakultasResopnse extends Response {
-  data: DppmDashboardFakultas
+export interface DppmDashboardResopnse extends Response {
+  data: DppmDashboard
 }
 
-export interface DppmDashboardFakultas {
+export interface DppmDashboard {
   fakultas: Fakultas[]
+  penelitian: Penelitian
+}
+
+export interface News {
+  id: string
+  title: string
+  leader: string
+}
+
+export interface StatusPenelitian {
+  status: Status
+  count: number
+}
+
+export interface Penelitian {
+  news: News[]
+  status: StatusPenelitian[]
 }
 
 export interface Fakultas {

@@ -5,7 +5,7 @@ export interface PenelitianDosenData {
   meta: Meta
 }
 
-export type Status = "accepted" | "rejected" | "pending" | "draft"
+export type Status = "accepted" | "rejected" | "pending"
 
 export interface StatusPenelitian {
   kaprodi: Status

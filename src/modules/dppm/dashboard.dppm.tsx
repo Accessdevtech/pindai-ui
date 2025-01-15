@@ -1,19 +1,15 @@
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { EachUtil } from "@/utils/each-utils"
-import { toast } from "sonner"
 import CardFakultas from "./components/card-fakultas"
 import InfoPenelitian from "./components/info-penelitian"
 import InfoPengabdian from "./components/info-pengabdian"
-import { Fakultas } from "./dashboard.interface"
-import { useFakultas } from "./hooks/use-fakultas"
+import { Fakultas, Penelitian } from "./dashboard.interface"
+import { useDashboard } from "./hooks/use-fakultas"
 
 export default function DashboardDppm() {
-  const { data, isLoading, isError, error } = useFakultas()
+  const { data, isLoading } = useDashboard()
 
-  if (!data) return null
-
-  if (isLoading) return toast.loading("Loading...")
-  if (isError) return toast.error(error?.message)
+  if (isLoading) return <div>Loading...</div>
 
   return (
     <div className='space-y-4'>
@@ -38,8 +34,8 @@ export default function DashboardDppm() {
             Penelitian / Pengabdian
           </BreadcrumbPage>
         </Breadcrumb>
-        <div className='flex flex-col gap-4 lg:flex-row lg:items-center'>
-          <InfoPenelitian />
+        <div className='flex flex-col gap-4 lg:flex-row lg:items-start'>
+          <InfoPenelitian penelitian={data?.penelitian || ({} as Penelitian)} />
           <InfoPengabdian />
         </div>
       </section>
