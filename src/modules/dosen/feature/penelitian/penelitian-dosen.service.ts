@@ -7,6 +7,7 @@ import { DosenData, DosenResponse } from "../../dosen.interface"
 import {
   DetailPenelitian,
   PenelitianDosenData,
+  ResponseDownloadPenelitian,
 } from "./penelitian-dosen.interface"
 import { PenelitianType } from "./schema/penelitian-schema"
 
@@ -68,6 +69,14 @@ export async function getListIndeksasi() {
 export async function getListPengabdian() {
   const response: ListPengabdianResponse = await getData(
     API_ENDPOINTS.LIST_PENGABDIAN,
+  )
+  return response
+}
+
+export async function downloadPenelitian(id: string, jenis_dokumen: string) {
+  const response: ResponseDownloadPenelitian = await postData(
+    `${API_ENDPOINTS_DOSEN.DOWNLOAD_PENELITIAN}/${id}`,
+    { jenis_dokumen },
   )
   return response
 }

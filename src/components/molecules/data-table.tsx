@@ -293,7 +293,10 @@ export default function DataTable<TData, TValue>({
                     <EachUtil
                       of={row.getVisibleCells()}
                       render={cell => (
-                        <TableCell key={cell.id} className='capitalize'>
+                        <TableCell
+                          key={cell.id}
+                          className='max-w-xs text-wrap capitalize'
+                        >
                           {flexRender(
                             cell.column.columnDef.cell,
                             cell.getContext(),

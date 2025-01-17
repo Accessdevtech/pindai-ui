@@ -7,7 +7,8 @@ import {
 import { RegisterType } from "./schema/register.schema"
 
 export async function register(data: RegisterType) {
-  return await postData(API_ENDPOINTS.REGISTER, data)
+  const response = await postData(API_ENDPOINTS.REGISTER, data)
+  return response
 }
 
 export async function logoutAction() {

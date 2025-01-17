@@ -8,13 +8,7 @@ import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  FormControl,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from "@/components/ui/form"
-import { Input } from "@/components/ui/input"
+import { FormMessage } from "@/components/ui/form"
 import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -133,14 +127,6 @@ export default function CreatePenelitian() {
                     },
                   ]}
                 />
-                <FormItem className='flex-grow'>
-                  <FormLabel className='text-xs uppercase tracking-wider'>
-                    kode penelitian
-                  </FormLabel>
-                  <FormControl>
-                    <Input disabled defaultValue={"0000"} />
-                  </FormControl>
-                </FormItem>
               </div>
 
               <InputField name='bidang' label='bidang' control={form.control} />

@@ -5,7 +5,6 @@ import RegisterForm from "./register-form"
 
 export function Register() {
   const [open, setOpen] = useState(false)
-  const handleClose = () => setOpen(false)
 
   return (
     <Modal
@@ -17,7 +16,7 @@ export function Register() {
       open={open}
       setOpen={setOpen}
     >
-      <RegisterForm onClose={handleClose} />
+      <RegisterForm onClose={() => setOpen(false)} />
     </Modal>
   )
 }

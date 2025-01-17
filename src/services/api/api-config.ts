@@ -59,6 +59,8 @@ export const API_ENDPOINTS_DOSEN = {
   DASHBOARD: "/kaprodi/dashboard",
   PENELITIAN: "/dosen/penelitian",
   PENGABDIAN: "/dosen/pengabdian",
+  DOWNLOAD_PENELITIAN: "/dosen/penelitian/download",
+  DOWNLOAD_PENGABDIAN: "/dosen/pengabdian/download",
 }
 
 export { API_BASE_URL }

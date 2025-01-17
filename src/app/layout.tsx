@@ -29,6 +29,8 @@ export default function RootLayout({
               success:
                 "text-green-600 border-green-600 capitalize bg-background",
               error: "text-red-600 border-red-600 capitalize bg-background",
+              loading:
+                "text-foreground border-foreground capitalize bg-background",
             },
           }}
         />

@@ -43,6 +43,11 @@ export default function ModalAnggota() {
     )
   }
 
+  const handleOnClose = () => {
+    setOpenModal(false)
+    setSelectedAnggota([])
+  }
+
   const columnTambah = columnTambahAnggota({
     handleCheckboxChange,
   })
@@ -77,7 +82,7 @@ export default function ModalAnggota() {
         <Button
           variant='outline'
           type='button'
-          onClick={() => setOpenModal(false)}
+          onClick={handleOnClose}
           className='border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
         >
           close

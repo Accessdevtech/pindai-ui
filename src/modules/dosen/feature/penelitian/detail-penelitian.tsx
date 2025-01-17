@@ -10,21 +10,57 @@ import {
 import { Separator } from "@/components/ui/separator"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
+import { downloadDocxFile } from "@/utils/files"
+import { useState } from "react"
+import { toast } from "sonner"
+import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
 import { columnsIdentitas } from "./components/column-identitas"
 import DokumenTable from "./components/dokumen-table"
-import HasilPublikasiTable from "./components/hasil-publikasi-table"
 import { IdentitasTable } from "./components/identitas-table"
+import { useDownloadPenelitian } from "./hook/use-download"
 import { useGetDetailPenelitian } from "./hook/use-penelitian/get-detail-penelitian"
 
-export default function DetailPenelitianPage({ id }: { id: string }) {
+export default function DetailPenelitianPage({
+  id,
+  user,
+}: {
+  id: string
+  user: Dosen
+}) {
+  const [uploadFile, setUploadFile] = useState<string | null>(null)
   const { data } = useGetDetailPenelitian(id)
 
+  const handleFileUpload = (base64String: string) => {
+    setUploadFile(base64String)
+  }
+  const { mutate, isPending } = useDownloadPenelitian({
+    onSuccess(res) {
+      downloadDocxFile(res.base64, res.file_name)
+      toast.dismiss()
+    },
+    onError(err) {
+      toast.error(err.message)
+    },
+  })
+
+  const handleDownload = (jenis_Dokumen: string) => {
+    mutate({ id, jenis_dokumen: jenis_Dokumen })
+  }
+
   const columnsIdentity = columnsIdentitas({ status: data?.status })
-  const columnsDocuments = columnsDokumen({ status: data?.status })
+  const columnsDocuments = columnsDokumen({
+    isLeader: data?.anggota.some(
+      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
+    ),
+    status: data?.status,
+    handleFileUpload,
+    handleDownload,
+  })
 
-  console.log(data)
+  console.log(data?.anggota)
 
+  if (isPending) toast.loading("Sedang Mengunduh Dokumen")
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -137,21 +173,6 @@ export default function DetailPenelitianPage({ id }: { id: string }) {
             data={data?.anggota || []}
             columns={columnsIdentity}
           />
-        </CardContent>
-      </Card>
-
-      {/* Hasil Publikasi */}
-      <Card>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <CardTitle className='capitalize tracking-wide'>
-            hasil publikasi
-          </CardTitle>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <HasilPublikasiTable />
         </CardContent>
       </Card>
     </div>

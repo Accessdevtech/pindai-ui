@@ -13,7 +13,6 @@ export default function InfoPenelitian({
 }: {
   penelitian: Penelitian
 }) {
-  console.log(penelitian.news)
   return (
     <div className='flex grow flex-col gap-4'>
       <Card className='grow space-y-4'>

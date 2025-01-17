@@ -25,9 +25,9 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
   const { mutate } = useRegister({
     onSuccess: res => {
       if (!res.status) {
-        return toast.error(res.data.message)
+        return toast.error(res.message)
       }
-      toast.success(res.data.message)
+      toast.success(res.message)
       onClose()
     },
     onError: err => {

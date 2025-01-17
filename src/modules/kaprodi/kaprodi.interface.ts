@@ -8,7 +8,7 @@ export interface Kaprodi extends User {
   fakultas: string
 }
 
-export interface KaprodiResponse<T> extends Response {
+export interface KaprodiResponse<T = any> extends Response {
   data: T
 }
 

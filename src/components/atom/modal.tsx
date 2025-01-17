@@ -30,6 +30,7 @@ interface ModalProps {
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
   children: React.ReactNode
   className?: string
+  disabled?: boolean
 }
 
 export default function Modal({
@@ -46,6 +47,7 @@ export default function Modal({
   setOpen,
   btnStyle,
   className,
+  disabled,
   ...props
 }: ModalProps) {
   return (
@@ -53,7 +55,12 @@ export default function Modal({
       {Icon ? (
         <Tooltip contentText={tooltipContent || ""} side={side}>
           <DialogTrigger asChild>
-            <Button variant={variant} size={size} className={cn(btnStyle)}>
+            <Button
+              variant={variant}
+              size={size}
+              className={cn(btnStyle)}
+              disabled={disabled}
+            >
               <Icon /> {name ? name : null}
             </Button>
           </DialogTrigger>

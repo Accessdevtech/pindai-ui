@@ -57,3 +57,8 @@ export interface Anggota {
   affiliate_campus: string
   is_leader: number
 }
+
+export interface ResponseDownloadPenelitian extends Response {
+  base64: string
+  file_name: string
+}

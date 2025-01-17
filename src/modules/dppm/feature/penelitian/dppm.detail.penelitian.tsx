@@ -194,21 +194,6 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
           />
         </CardContent>
       </Card>
-
-      {/* Hasil Publikasi */}
-      {/* <Card>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <CardTitle className='capitalize tracking-wide'>
-            hasil publikasi
-          </CardTitle>
-        </CardContent>
-      </Card> */}
-
-      {/* <Card>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <HasilPublikasiTable />
-        </CardContent>
-      </Card> */}
     </div>
   )
 }

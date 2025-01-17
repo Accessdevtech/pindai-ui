@@ -34,8 +34,6 @@ export default function PenelitianDppmPage() {
     statusKeuangan,
   )
 
-  console.log(data)
-
   const columns = columnPenelitian()
 
   return (
