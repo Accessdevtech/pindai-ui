@@ -12,6 +12,7 @@ import { PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useDebounce } from "use-debounce"
+import { Dosen } from "../../dosen.interface"
 import { columnPenelitian } from "./components/column-penelitian"
 import { useGetPenelitian } from "./hook/use-penelitian/get-penelitian"
 import {
@@ -41,17 +42,26 @@ export default function PenelitianDosenPage() {
 
   const columns = columnPenelitian()
 
+  const isNull = Object.fromEntries(
+    Object.entries(user as Dosen).map(([key, value]) => [
+      key,
+      value === null || value === "",
+    ]),
+  )
+
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb href={"/dashboard/dosen"}>Penelitian</Breadcrumb>
       <Card>
         <CardHeader>
-          {user?.nidn === null ? (
+          {Object.values(isNull).some(Boolean) ? (
             <Modal
               Icon={PlusIcon}
               name='Tambah Penelitian'
-              title='Nidn belum terisi'
-              description='Silahkan update data diri terlebih dahulu'
+              title='Profile belum lengkap'
+              btnStyle='w-fit'
+              tooltipContent='Tambah Penelitian'
+              description='Silahkan lengkapi data diri terlebih dahulu'
             >
               <Link
                 href={`${ROUTE.DASHBOARD}/${user?.role}/akun-saya`}

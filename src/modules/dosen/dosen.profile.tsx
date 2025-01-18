@@ -53,14 +53,13 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
   const watchFakultas = form.watch("fakultas_id")
   const { data: prodi } = useGetProdiList(watchFakultas)
 
-  const { mutate, isError } = useUpdateProfile({
+  const { mutate } = useUpdateProfile({
     onSuccess: res => {
       if (!res.status) {
         return toast.error(res.message)
       }
       setCookie("user", res.data.user)
       toast.success(res.message)
-      form.reset()
     },
     onError: err => {
       if (err.response?.data.errors) {
@@ -73,10 +72,6 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
       }
     },
   })
-
-  if (isError) {
-    toast.error("Terjadi kesalahan")
-  }
 
   const onSubmit = (data: ProfileType) => {
     mutate(data)

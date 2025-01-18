@@ -1,6 +1,7 @@
 export type Role = "kaprodi" | "dppm" | "dosen" | "keuangan"
 
-export interface Response {
+export interface Response<T = any> {
+  data: T
   message: string
   status: string
   errors?: string

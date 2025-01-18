@@ -1,9 +1,7 @@
+import { Response, User } from "@/interface/type"
 import { API_ENDPOINTS } from "@/services/api/api-config"
-import { postData } from "@/services/api/http"
-import {
-  getCookieDecrypted,
-  removeCookie,
-} from "@/services/storage/cookie-storage-service"
+import { getData, postData } from "@/services/api/http"
+import { removeCookie } from "@/services/storage/cookie-storage-service"
 import { RegisterType } from "./schema/register.schema"
 
 export async function register(data: RegisterType) {
@@ -18,12 +16,16 @@ export async function logoutAction() {
   return response.data
 }
 
+export async function profileUser() {
+  const response: Response<User> = await getData(API_ENDPOINTS.PROFILE)
+  return response.data
+}
+
 export async function getCurrentUser() {
-  const userCookie = await getCookieDecrypted("user")
-  if (!userCookie) return null
+  const User = await profileUser()
 
   try {
-    return userCookie
+    return User
   } catch (error) {
     return null
   }

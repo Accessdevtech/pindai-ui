@@ -17,7 +17,6 @@ export const columnsDokumen = ({
   status?: StatusPenelitian
   isLeader?: boolean
 }): ColumnDef<Document>[] => {
-  console.log(isLeader)
   return [
     {
       accessorKey: "cover",
@@ -31,7 +30,7 @@ export const columnsDokumen = ({
           onClick={() => handleDownload("cover")}
         >
           <Download />
-          Cover
+          Unduh Cover
         </Button>
       ),
     },
@@ -46,7 +45,7 @@ export const columnsDokumen = ({
           onClick={() => handleDownload("surat_pengajuan")}
         >
           <FileOutput />
-          Surat Pengajuan
+          Unduh Surat Pengajuan
         </Button>
       ),
     },

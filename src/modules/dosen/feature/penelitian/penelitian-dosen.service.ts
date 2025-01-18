@@ -7,6 +7,7 @@ import { DosenData, DosenResponse } from "../../dosen.interface"
 import {
   DetailPenelitian,
   PenelitianDosenData,
+  PenelitianDosenResponse,
   ResponseDownloadPenelitian,
 } from "./penelitian-dosen.interface"
 import { PenelitianType } from "./schema/penelitian-schema"
@@ -40,7 +41,10 @@ export async function getDetailPenelitianDosen(id: string) {
 }
 
 export async function createPenelitianDosen(data: PenelitianType) {
-  const response = await postData(API_ENDPOINTS_DOSEN.PENELITIAN, data)
+  const response: PenelitianDosenResponse = await postData(
+    API_ENDPOINTS_DOSEN.PENELITIAN,
+    data,
+  )
   return response
 }
 

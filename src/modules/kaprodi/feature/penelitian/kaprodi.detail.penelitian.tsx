@@ -9,8 +9,8 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
 import { ROUTE } from "@/services/route"
@@ -135,7 +135,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
                 variant='outline'
                 description='Berikan keterangan penolakan penelitian'
               >
-                <Input
+                <Textarea
                   defaultValue={
                     data?.keterangan === null ? "" : data?.keterangan
                   }

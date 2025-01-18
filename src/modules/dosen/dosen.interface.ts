@@ -17,6 +17,7 @@ export interface Dosen extends User {
   scholar_id: string
   scopus_id: string
   prodi: string
+  fakultas: string
 }
 
 export interface DosenData {

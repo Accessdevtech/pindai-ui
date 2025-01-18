@@ -58,8 +58,6 @@ export default function DetailPenelitianPage({
     handleDownload,
   })
 
-  console.log(data?.anggota)
-
   if (isPending) toast.loading("Sedang Mengunduh Dokumen")
   return (
     <div className='flex flex-col gap-4'>

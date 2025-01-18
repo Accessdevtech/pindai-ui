@@ -8,11 +8,11 @@ import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import { FormMessage } from "@/components/ui/form"
 import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom } from "jotai"
+import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -27,7 +27,7 @@ import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
 import { anggotaAtom } from "./state/store"
 
 export default function CreatePenelitian() {
-  const [error, setError] = useState<string[]>([])
+  const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
 
   const [anggota, setAnggota] = useAtom(anggotaAtom)
@@ -53,6 +53,7 @@ export default function CreatePenelitian() {
       toast.success(res.message)
       setAnggota([])
       form.reset()
+      router.push(`${ROUTE.DASHBOARD}/dosen/penelitian/${res.data.id}`)
     },
     onError: err => {
       if (err.response?.data?.errors) {
@@ -61,9 +62,6 @@ export default function CreatePenelitian() {
             message: value as string,
             type: "manual",
           })
-          if (key === "anggota") {
-            setError(value as unknown as string[])
-          }
         }
       }
     },
@@ -162,7 +160,6 @@ export default function CreatePenelitian() {
 
               <div>
                 <DataTable columns={columnsView} data={anggota} />
-                {error ? <FormMessage>{error}</FormMessage> : null}
               </div>
             </div>
 
