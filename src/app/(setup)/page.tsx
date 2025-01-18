@@ -10,10 +10,9 @@ export default function Auth() {
 
   useEffect(() => {
     if (isAuthenticated && user) {
-      return router.push(`/dashboard/${user.role}`)
+      router.push(`/dashboard/${user.role}`)
     }
   }, [isAuthenticated, router])
-
   return (
     <div className='flex h-screen w-full items-center justify-center'>
       <AuthPage />

@@ -7,6 +7,7 @@ import { API_ENDPOINTS } from "@/services/api/api-config"
 import { postData } from "@/services/api/http"
 import {
   getCookie,
+  getCookieDecrypted,
   removeCookie,
   setCookie,
 } from "@/services/storage/cookie-storage-service"
@@ -27,7 +28,9 @@ export function useAuth() {
         setUser(decryptedUser)
         await setCookie("token", res.data.access_token)
         await setCookie("user", res.data.user)
+        const user: User = await getCookieDecrypted("user")
         toast.success(res.message)
+        router.push(`/dashboard/${user?.role}`)
       } catch (err: any) {
         if (err.response?.data.errors) {
           for (const [key, value] of Object.entries(err.response.data.errors)) {
@@ -35,9 +38,6 @@ export function useAuth() {
           }
         }
         toast.error(err.response?.data?.message)
-      } finally {
-        if (!isAuthenticated) return
-        router.push(`/dashboard/${user.role}`)
       }
     },
     [router],
@@ -53,10 +53,6 @@ export function useAuth() {
       router.push("/")
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Failed to logout.")
-    } finally {
-      if (!isAuthenticated) {
-        router.push("/")
-      }
     }
   }, [router])
 
