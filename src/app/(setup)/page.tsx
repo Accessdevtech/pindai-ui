@@ -5,12 +5,12 @@ import { useRouter } from "next/navigation"
 import { useEffect } from "react"
 
 export default function Auth() {
-  const { isAuthenticated } = useAuthContext()
+  const { isAuthenticated, user } = useAuthContext()
   const router = useRouter()
 
   useEffect(() => {
-    if (isAuthenticated) {
-      return router.push("/dashboard")
+    if (isAuthenticated && user) {
+      return router.push(`/dashboard/${user.role}`)
     }
   }, [isAuthenticated, router])
 

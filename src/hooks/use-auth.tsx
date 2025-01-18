@@ -37,7 +37,7 @@ export function useAuth() {
         toast.error(err.response?.data?.message)
       } finally {
         if (!isAuthenticated) return
-        router.push("/dashboard")
+        router.push(`/dashboard/${user.role}`)
       }
     },
     [router],
@@ -50,12 +50,13 @@ export function useAuth() {
       await removeCookie("token")
       await removeCookie("user")
       toast.success(res.message)
-      router.push("/dashboard")
+      router.push("/")
     } catch (err: any) {
       toast.error(err.response?.data?.message || "Failed to logout.")
     } finally {
-      if (!isAuthenticated) return
-      router.push("/dashboard")
+      if (!isAuthenticated) {
+        router.push("/")
+      }
     }
   }, [router])
 
