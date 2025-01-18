@@ -1,5 +1,6 @@
 "use client"
 import Breadcrumb from "@/components/atom/bradcrumb"
+import Modal from "@/components/atom/modal"
 import DataTable from "@/components/molecules/data-table"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
@@ -45,16 +46,35 @@ export default function PenelitianDosenPage() {
       <Breadcrumb href={"/dashboard/dosen"}>Penelitian</Breadcrumb>
       <Card>
         <CardHeader>
-          <Link
-            href={`${ROUTE.DASHBOARD}/${user?.role}/penelitian/create`}
-            className={cn(
-              buttonVariants({ variant: "default" }),
-              "w-fit capitalize",
-            )}
-          >
-            <PlusIcon className='h-4 w-4' />
-            <span>tambah penelitian</span>
-          </Link>
+          {user?.nidn === null ? (
+            <Modal
+              Icon={PlusIcon}
+              name='Tambah Penelitian'
+              title='Nidn belum terisi'
+              description='Silahkan update data diri terlebih dahulu'
+            >
+              <Link
+                href={`${ROUTE.DASHBOARD}/${user?.role}/akun-saya`}
+                className={cn(
+                  buttonVariants({ variant: "default" }),
+                  "w-fit capitalize",
+                )}
+              >
+                <span>update data diri</span>
+              </Link>
+            </Modal>
+          ) : (
+            <Link
+              href={`${ROUTE.DASHBOARD}/${user?.role}/penelitian/create`}
+              className={cn(
+                buttonVariants({ variant: "default" }),
+                "w-fit capitalize",
+              )}
+            >
+              <PlusIcon className='h-4 w-4' />
+              <span>tambah penelitian</span>
+            </Link>
+          )}
         </CardHeader>
         <CardContent className='py-6'>
           <DataTable
