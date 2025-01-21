@@ -23,3 +23,17 @@ export const uploadDocxFile = (file: File): Promise<string> => {
     reader.readAsDataURL(file)
   })
 }
+
+export const uploadPdfFile = (file: File): Promise<string> => {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader()
+    reader.onload = () => {
+      const fileBase64String = reader.result as string
+      resolve(fileBase64String)
+    }
+    reader.onerror = () => {
+      reject(reader.error)
+    }
+    reader.readAsDataURL(file)
+  })
+}

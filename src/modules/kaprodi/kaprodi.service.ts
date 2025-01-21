@@ -5,7 +5,6 @@ import { ProfileType } from "./kaprodi.profile.schema"
 
 export async function getDashboard() {
   const response = await getData(API_ENDPOINTS_KAPRODI.DASHBOARD)
-
   return response.data
 }
 

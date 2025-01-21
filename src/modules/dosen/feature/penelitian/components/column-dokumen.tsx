@@ -13,7 +13,7 @@ export const columnsDokumen = ({
   handleFileUpload,
 }: {
   handleDownload: (jenis_Dokumen: string) => void
-  handleFileUpload: (base64String: string) => void
+  handleFileUpload: (file: File) => void
   status?: StatusPenelitian
   isLeader?: boolean
 }): ColumnDef<Document>[] => {
@@ -25,7 +25,6 @@ export const columnsDokumen = ({
         <Button
           variant='outline'
           size='sm'
-          className='w-[100px]'
           disabled={!isLeader || status?.kaprodi !== "accepted"}
           onClick={() => handleDownload("cover")}
         >
@@ -127,7 +126,7 @@ export const columnsDokumen = ({
             size='sm'
             Icon={UploadIcon}
             disabled={
-              isLeader ||
+              !isLeader ||
               status?.kaprodi !== "accepted" ||
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"

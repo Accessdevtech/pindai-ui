@@ -1,12 +1,11 @@
 "use client"
 
 import { Button } from "@/components/ui/button"
-import { uploadDocxFile } from "@/utils/files"
-import { Loader2, LucideIcon } from "lucide-react"
+import { LucideIcon } from "lucide-react"
 import React, { useRef, useState } from "react"
 
 interface FileInputProps {
-  onFileUpload: (base64String: string) => void
+  onFileUpload: (file: File) => void
   accept?: string
   buttonText?: string
   disabled?: boolean
@@ -46,8 +45,8 @@ export function FileInput({
       setFileName(file.name)
       setIsLoading(true)
       try {
-        const base64String = await uploadDocxFile(file)
-        onFileUpload(base64String)
+        // const base64String = await uploadPdfFile(file)
+        onFileUpload(file)
       } catch (error) {
         console.error("Error uploading file:", error)
         // You might want to show an error message to the user here
@@ -72,20 +71,8 @@ export function FileInput({
         size={size}
         disabled={isLoading || disabled}
       >
-        {isLoading ? (
-          <>
-            <Loader2 className='mr-2 h-4 w-4 animate-spin' />
-            Uploading...
-          </>
-        ) : (
-          <>
-            {Icon && <Icon />} {buttonText}
-          </>
-        )}
+        {Icon && <Icon />} {buttonText}
       </Button>
-      {fileName && !isLoading && (
-        <p className='text-sm text-muted-foreground'>Uploaded: {fileName}</p>
-      )}
     </div>
   )
 }

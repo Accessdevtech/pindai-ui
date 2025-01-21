@@ -1,13 +1,15 @@
 import CardStatus from "@/components/atom/card-status"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Card } from "@/components/ui/card"
-import { penelitian, pengabdian } from "@/constant/dummy"
+import { pengabdian } from "@/constant/dummy"
 import { Role } from "@/interface/type"
 import { EachUtil } from "@/utils/each-utils"
 import InfoPenelitianCard from "./components/info-penelitian"
 import InfoPengabdianCard from "./components/info-pengabdian"
+import { useGetDashboard } from "./hooks/use-dashboard"
 
 export default function DosenPage({ role }: { role: Role | undefined }) {
+  const { data } = useGetDashboard()
   return (
     <div className='flex flex-col gap-4'>
       <section className='flex flex-col gap-3'>
@@ -18,14 +20,14 @@ export default function DosenPage({ role }: { role: Role | undefined }) {
         </Breadcrumb>
         <div className='grid grid-cols-2 gap-4 xl:grid-cols-4'>
           <EachUtil
-            of={penelitian}
+            of={data?.penelitian || []}
             render={(penelitian: any, index) => (
               <CardStatus
                 data={penelitian}
                 message={
-                  penelitian.status === "rejected"
-                    ? "penelitian ditolak"
-                    : "penelitian disetujui"
+                  penelitian.status === "accepted"
+                    ? "penelitian disetujui"
+                    : "penelitian ditolak"
                 }
                 key={index}
               />

@@ -44,7 +44,8 @@ export default function InfoPenelitian({
                 >
                   <span>{item.count}</span>
                   <span>
-                    {item.status === "accepted" ? "diterima" : "ditolak"}
+                    {item.status === "accepted" && "diterima"}
+                    {item.status === "rejected" && "ditolak"}
                   </span>
                 </Badge>
               )}

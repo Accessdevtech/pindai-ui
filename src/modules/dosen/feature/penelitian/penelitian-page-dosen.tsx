@@ -42,6 +42,8 @@ export default function PenelitianDosenPage() {
 
   const columns = columnPenelitian()
 
+  if (!user) return null
+
   const isNull = Object.fromEntries(
     Object.entries(user as Dosen).map(([key, value]) => [
       key,

@@ -3,12 +3,8 @@ import {
   SidebarProvider,
   SidebarTrigger,
 } from "@/components/ui/sidebar"
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip"
 import ProfileButton from "../atom/profile-button"
+import Tooltip from "../atom/tooltip"
 import AppSidebar from "../organisms/app-sidebar"
 
 export default function DashboardLayout({
@@ -23,16 +19,8 @@ export default function DashboardLayout({
         <div className='flex flex-grow flex-col px-6'>
           <nav className='sticky top-0 z-10 my-5 rounded-lg bg-background py-4 shadow-md'>
             <div className='flex items-center justify-between px-6'>
-              <Tooltip>
-                <TooltipTrigger asChild>
-                  <SidebarTrigger />
-                </TooltipTrigger>
-                <TooltipContent
-                  side='bottom'
-                  className='bg-black text-sm uppercase text-primary-foreground'
-                >
-                  Toggle Sidebar
-                </TooltipContent>
+              <Tooltip contentText='Toggle Sidebar'>
+                <SidebarTrigger />
               </Tooltip>
               <ProfileButton />
             </div>

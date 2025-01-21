@@ -55,7 +55,10 @@ export default function InfoPengabdian() {
                   </Badge>
                   <div className='flex flex-col capitalize text-muted-foreground'>
                     <p className='text-xs'>Ketua penelitian</p>
-                    <p className='font-bold'>asdasdasd</p>
+                    <p className='font-bold'>
+                      Sistem Pendukung Keputusan Berbasis Fuzzy Logic untuk
+                      Penentuan Beasiswa Mahasiswa Berprestasi
+                    </p>
                   </div>
                 </div>
                 <Button

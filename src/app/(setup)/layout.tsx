@@ -1,11 +1,16 @@
-import QueryProvider from "@/components/provider/query-provider"
-import { AuthProvider } from "@/contexts/auth-context"
-import { PropsWithChildren } from "react"
+"use client"
+import { useAuthContext } from "@/contexts/auth-context"
+import { useRouter } from "next/navigation"
+import { PropsWithChildren, useEffect } from "react"
 
 export default function Layout({ children }: PropsWithChildren) {
-  return (
-    <AuthProvider>
-      <QueryProvider>{children}</QueryProvider>
-    </AuthProvider>
-  )
+  const { isAuthenticated } = useAuthContext()
+  const router = useRouter()
+
+  useEffect(() => {
+    if (isAuthenticated) {
+      router.push(`/dashboard`)
+    }
+  }, [isAuthenticated, router])
+  return children
 }

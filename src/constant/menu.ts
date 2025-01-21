@@ -36,18 +36,26 @@ export const navData = {
       name: "scholar",
       roles: ["dosen"],
     },
-  ],
-  sub: [
     {
       name: "list disetujui",
-      roles: ["dppm"],
-      mainMenu: ["penelitian", "pengabdian"],
+      roles: ["dppm", "kaprodi", "keuangan"],
     },
     {
       name: "list dibatalkan",
-      roles: ["dppm"],
-      mainMenu: ["penelitian", "pengabdian"],
+      roles: ["dppm", "kaprodi", "keuangan"],
     },
+  ],
+  sub: [
+    // {
+    //   name: "list disetujui",
+    //   roles: ["dppm"],
+    //   mainMenu: ["penelitian", "pengabdian"],
+    // },
+    // {
+    //   name: "list dibatalkan",
+    //   roles: ["dppm"],
+    //   mainMenu: ["penelitian", "pengabdian"],
+    // },
     {
       name: "report management",
       roles: ["dppm"],

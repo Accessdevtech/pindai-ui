@@ -56,7 +56,7 @@ export const API_ENDPOINTS_KAPRODI = {
 export const API_ENDPOINTS_DOSEN = {
   AKUN: "/dosen/akun",
   DOSEN: "/dosen/dosen",
-  DASHBOARD: "/kaprodi/dashboard",
+  DASHBOARD: "/dosen/dashboard",
   PENELITIAN: "/dosen/penelitian",
   PENGABDIAN: "/dosen/pengabdian",
   DOWNLOAD_PENELITIAN: "/dosen/penelitian/download",

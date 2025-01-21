@@ -1,7 +1,10 @@
 import { Response, User } from "@/interface/type"
 import { API_ENDPOINTS } from "@/services/api/api-config"
 import { getData, postData } from "@/services/api/http"
-import { removeCookie } from "@/services/storage/cookie-storage-service"
+import {
+  getCookieDecrypted,
+  removeCookie,
+} from "@/services/storage/cookie-storage-service"
 import { RegisterType } from "./schema/register.schema"
 
 export async function register(data: RegisterType) {
@@ -22,11 +25,7 @@ export async function profileUser() {
 }
 
 export async function getCurrentUser() {
-  const User = await profileUser()
+  const user: User = await getCookieDecrypted("user")
 
-  try {
-    return User
-  } catch (error) {
-    return null
-  }
+  return user
 }

@@ -11,7 +11,6 @@ import { Separator } from "@/components/ui/separator"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
 import { downloadDocxFile } from "@/utils/files"
-import { useState } from "react"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
@@ -28,12 +27,12 @@ export default function DetailPenelitianPage({
   id: string
   user: Dosen
 }) {
-  const [uploadFile, setUploadFile] = useState<string | null>(null)
   const { data } = useGetDetailPenelitian(id)
 
-  const handleFileUpload = (base64String: string) => {
-    setUploadFile(base64String)
+  const handleFileUpload = (file: File) => {
+    console.log(file)
   }
+
   const { mutate, isPending } = useDownloadPenelitian({
     onSuccess(res) {
       downloadDocxFile(res.base64, res.file_name)

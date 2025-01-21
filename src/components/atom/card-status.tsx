@@ -15,7 +15,7 @@ export default function CardStatus({
       </CardHeader>
       <CardContent className='flex flex-col items-start gap-4 text-muted-foreground'>
         <p className='flex items-start gap-2 capitalize'>
-          <span className='text-2xl'>{data.count}</span> dosen
+          <span className='text-2xl'>{data.count}</span> data
         </p>
       </CardContent>
     </Card>
