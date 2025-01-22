@@ -1,16 +1,22 @@
 "use client"
-import { useAuthContext } from "@/contexts/auth-context"
-import { useRouter } from "next/navigation"
-import { PropsWithChildren, useEffect } from "react"
 
-export default function Layout({ children }: PropsWithChildren) {
-  const { isAuthenticated } = useAuthContext()
-  const router = useRouter()
+import { ReactNode } from "react"
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.push(`/dashboard`)
-    }
-  }, [isAuthenticated, router])
+import withAuth from "@/utils/withAuth"
+
+// NOTE: This is a temporary solution.
+
+// export default function Layout({ children }: PropsWithChildren) {
+//   return children
+// }
+
+interface LayoutProps {
+  children: ReactNode
+}
+
+const Layout: React.FC<LayoutProps> = ({ children }) => {
   return children
 }
+
+// Export the Layout wrapped with the `withAuth` HOC
+export default withAuth(Layout as React.ComponentType)

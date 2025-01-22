@@ -1,20 +1,23 @@
 "use client"
+
+import {
+  getCookie,
+  removeCookie,
+  setCookie,
+} from "@/services/storage/cookie-storage-service"
+import { useCallback, useEffect, useState } from "react"
+
 import { User } from "@/interface/type"
 import { decrypt } from "@/lib/crypto"
 import { getCurrentUser } from "@/modules/auth/auth.service"
 import { LoginType } from "@/modules/auth/schema/login.schema"
 import { API_ENDPOINTS } from "@/services/api/api-config"
 import { postData } from "@/services/api/http"
-import {
-  getCookie,
-  removeCookie,
-  setCookie,
-} from "@/services/storage/cookie-storage-service"
 import { useRouter } from "next/navigation"
-import { useCallback, useEffect, useState } from "react"
 import { toast } from "sonner"
 
 export function useAuth() {
+  const [isLoading, setIsLoading] = useState(true) // State loadig
   const [user, setUser] = useState<User | null>(null)
   const isAuthenticated = !!user
   const router = useRouter()
@@ -60,8 +63,8 @@ export function useAuth() {
   }, [router])
 
   const checkAuth = useCallback(async () => {
+    setIsLoading(true) // Mulai loading
     const token = await getCookie("token")
-
     if (token) {
       try {
         const currentUser = await getCurrentUser()
@@ -71,17 +74,26 @@ export function useAuth() {
         logout()
       }
     }
+    setIsLoading(false) // Selesai loading
   }, [logout])
 
   useEffect(() => {
-    checkAuth()
+    const initAuth = async () => {
+      const userFromCookie = await getCookie("user") // Ambil user dari cookie
+      if (userFromCookie) {
+        const decryptedUser = JSON.parse(decrypt(userFromCookie).data as string)
+        setUser(decryptedUser) // Set user ke state dari cookie
+      }
+      checkAuth() // Lakukan cek autentikasi
+    }
+    initAuth()
+    // checkAuth()
   }, [checkAuth])
-
-  console.log(isAuthenticated)
 
   return {
     user,
     isAuthenticated,
+    isLoading,
     login,
     logout,
   }
