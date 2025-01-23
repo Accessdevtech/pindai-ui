@@ -1,7 +1,5 @@
+import PengabdianKeuanganPage from "@/modules/keuangan/feature/pengabdian/keuangan.pengabdian"
+
 export default function DashboardPengabdian() {
-  return (
-    <div>
-      <div>Dashboard Pengabdian</div>
-    </div>
-  )
+  return <PengabdianKeuanganPage />
 }

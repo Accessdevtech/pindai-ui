@@ -1,7 +1,10 @@
+"use client"
+
+import DetailPengabdianKeuanganPage from "@/modules/keuangan/feature/pengabdian/keuangan.detail.pengabdian"
+import { useParams } from "next/navigation"
+
 export default function PengabdianDetail() {
-  return (
-    <div>
-      <div>Pengabdian Detail</div>
-    </div>
-  )
+  const { id } = useParams()
+  if (!id) return null
+  return <DetailPengabdianKeuanganPage id={id as string} />
 }
