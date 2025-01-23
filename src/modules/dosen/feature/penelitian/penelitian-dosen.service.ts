@@ -1,6 +1,3 @@
-import { ListIndeksasiResponse } from "@/modules/listdata/indeksasi.list.interface"
-import { ListPenelitianResponse } from "@/modules/listdata/penelitian.list.interface"
-import { ListPengabdianResponse } from "@/modules/listdata/pengabdian.list.interface"
 import { API_ENDPOINTS, API_ENDPOINTS_DOSEN } from "@/services/api/api-config"
 import { getData, postData } from "@/services/api/http"
 import { DosenData, DosenResponse } from "../../dosen.interface"
@@ -10,6 +7,10 @@ import {
   PenelitianDosenResponse,
   ResponseDownloadPenelitian,
 } from "./penelitian-dosen.interface"
+
+import { ListIndeksasiResponse } from "@/modules/listdata/indeksasi.list.interface"
+import { ListPenelitianResponse } from "@/modules/listdata/penelitian.list.interface"
+import { ListPengabdianResponse } from "@/modules/listdata/pengabdian.list.interface"
 import { PenelitianType } from "./schema/penelitian-schema"
 
 export async function getPenelitianDosen(
@@ -81,6 +82,17 @@ export async function downloadPenelitian(id: string, jenis_dokumen: string) {
   const response: ResponseDownloadPenelitian = await postData(
     `${API_ENDPOINTS_DOSEN.DOWNLOAD_PENELITIAN}/${id}`,
     { jenis_dokumen },
+  )
+  return response
+}
+
+export async function uploadPenelitian(
+  id: string,
+  file: { base64: string; type: string },
+) {
+  const response: ResponseDownloadPenelitian = await postData(
+    `${API_ENDPOINTS_DOSEN.UPLOAD_PENELITIAN}/${id}`,
+    { file },
   )
   return response
 }

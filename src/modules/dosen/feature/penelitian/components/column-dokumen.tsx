@@ -1,8 +1,10 @@
 "use client"
+
+import { Download, FileOutput, UploadIcon } from "lucide-react"
+
 import { FileInput } from "@/components/atom/file-input"
 import { Button } from "@/components/ui/button"
 import { ColumnDef } from "@tanstack/react-table"
-import { Download, FileOutput, UploadIcon } from "lucide-react"
 import { StatusPenelitian } from "../penelitian-dosen.interface"
 import { Document } from "./dokumen-table"
 
@@ -122,6 +124,7 @@ export const columnsDokumen = ({
           <FileInput
             onFileUpload={handleFileUpload}
             buttonText='Unggah Laporan'
+            accept='.pdf'
             variant='outline'
             size='sm'
             Icon={UploadIcon}

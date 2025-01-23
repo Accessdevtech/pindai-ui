@@ -1,8 +1,9 @@
 "use client"
 
+import React, { useRef, useState } from "react"
+
 import { Button } from "@/components/ui/button"
 import { LucideIcon } from "lucide-react"
-import React, { useRef, useState } from "react"
 
 interface FileInputProps {
   onFileUpload: (file: File) => void

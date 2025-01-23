@@ -1,16 +1,18 @@
 "use client"
-import Breadcrumb from "@/components/atom/bradcrumb"
-import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
+
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
+import { downloadDocxFile, uploadDocxFile } from "@/utils/files"
+
+import Breadcrumb from "@/components/atom/bradcrumb"
+import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Separator } from "@/components/ui/separator"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { downloadDocxFile } from "@/utils/files"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
@@ -19,6 +21,7 @@ import DokumenTable from "./components/dokumen-table"
 import { IdentitasTable } from "./components/identitas-table"
 import { useDownloadPenelitian } from "./hook/use-download"
 import { useGetDetailPenelitian } from "./hook/use-penelitian/get-detail-penelitian"
+import { useUploadPenelitian } from "./hook/use-penelitian/upload"
 
 export default function DetailPenelitianPage({
   id,
@@ -29,10 +32,6 @@ export default function DetailPenelitianPage({
 }) {
   const { data } = useGetDetailPenelitian(id)
 
-  const handleFileUpload = (file: File) => {
-    console.log(file)
-  }
-
   const { mutate, isPending } = useDownloadPenelitian({
     onSuccess(res) {
       downloadDocxFile(res.base64, res.file_name)
@@ -42,6 +41,26 @@ export default function DetailPenelitianPage({
       toast.error(err.message)
     },
   })
+
+  const { mutate: upload, isPending: pendingUpload } = useUploadPenelitian({
+    onSuccess(res) {
+      toast.success("Berhasil Mengunggah Dokumen")
+    },
+    onError(err) {
+      toast.error(err.message)
+    },
+  })
+
+  const handleFileUpload = async (file: File) => {
+    const fileEncode = await uploadDocxFile(file)
+
+    const fileData = {
+      base64: fileEncode,
+      type: file.type,
+    }
+
+    upload({ id, file: fileData })
+  }
 
   const handleDownload = (jenis_Dokumen: string) => {
     mutate({ id, jenis_dokumen: jenis_Dokumen })

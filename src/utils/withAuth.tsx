@@ -14,8 +14,6 @@ function withAuth<T extends React.JSX.IntrinsicAttributes>(
     const router = useRouter()
     const pathname = usePathname()
 
-    if (isLoading) return <LoadingPage />
-
     useEffect(() => {
       // not have session
       if (!isLoading && !isAuthenticated && pathname !== "/") {
@@ -33,7 +31,9 @@ function withAuth<T extends React.JSX.IntrinsicAttributes>(
         router.push(`/dashboard/${user.role}`)
         return
       }
-    }, [user, router, isLoading, isAuthenticated])
+    }, [user, router, isLoading, isAuthenticated, pathname])
+
+    if (isLoading) return <LoadingPage />
 
     if (!user) {
       return null // Optionally render a loading spinner or fallback UI

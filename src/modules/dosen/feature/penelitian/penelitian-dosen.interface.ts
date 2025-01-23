@@ -62,3 +62,5 @@ export interface ResponseDownloadPenelitian extends Response {
   base64: string
   file_name: string
 }
+
+export interface ResponseUploadPenelitian extends Response {}
