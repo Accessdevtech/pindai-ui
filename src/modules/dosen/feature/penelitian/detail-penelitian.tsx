@@ -42,7 +42,7 @@ export default function DetailPenelitianPage({
     },
   })
 
-  const { mutate: upload, isPending: pendingUpload } = useUploadPenelitian({
+  const { mutate: upload } = useUploadPenelitian({
     onSuccess(res) {
       toast.success("Berhasil Mengunggah Dokumen")
     },

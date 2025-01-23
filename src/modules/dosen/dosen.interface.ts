@@ -25,7 +25,7 @@ export interface DosenData {
   meta: Meta
 }
 
-export interface ProfileDosen {
+export interface ProfileDosenUser {
   user: string
 }
 

@@ -3,8 +3,12 @@
 import { Download, FileOutput, UploadIcon } from "lucide-react"
 
 import { FileInput } from "@/components/atom/file-input"
+import Modal from "@/components/atom/modal"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { fileAtom } from "@/state/store"
 import { ColumnDef } from "@tanstack/react-table"
+import { useAtomValue } from "jotai"
 import { StatusPenelitian } from "../penelitian-dosen.interface"
 import { Document } from "./dokumen-table"
 
@@ -120,21 +124,39 @@ export const columnsDokumen = ({
       accessorKey: "laporan",
       header: "LAPORAN",
       cell: ({ row }) => {
+        const file = useAtomValue(fileAtom)
+        const onFileUpload = async () => {
+          try {
+            // const base64String = await uploadPdfFile(file)
+            handleFileUpload(file!)
+          } catch (error) {
+            console.error("Error uploading file:", error)
+            // You might want to show an error message to the user here
+          }
+        }
         return (
-          <FileInput
-            onFileUpload={handleFileUpload}
-            buttonText='Unggah Laporan'
-            accept='.pdf'
+          <Modal
+            name='Unggah Laporan'
+            Icon={UploadIcon}
             variant='outline'
             size='sm'
-            Icon={UploadIcon}
+            title='Unggah Laporan'
             disabled={
               !isLeader ||
               status?.kaprodi !== "accepted" ||
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-          />
+            description='Unggah laporan penelitian Anda dalam format PDF menggunakan form ini.'
+            className={cn({
+              "max-w-4xl": file,
+            })}
+          >
+            <FileInput accept='.pdf' variant='outline' size='sm' />
+            <Button onClick={onFileUpload} disabled={!file}>
+              Simpan
+            </Button>
+          </Modal>
         )
       },
     },

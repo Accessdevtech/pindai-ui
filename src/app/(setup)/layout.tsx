@@ -2,7 +2,7 @@
 
 import { ReactNode } from "react"
 
-import withAuth from "@/utils/withAuth"
+import withAuth from "@/components/layout/withAuth"
 
 // NOTE: This is a temporary solution.
 

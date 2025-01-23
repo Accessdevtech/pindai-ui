@@ -1,12 +1,13 @@
 import Divider from "@/components/atom/divider"
 import { FormItem } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
-import { useAuthContext } from "@/contexts/auth-context"
 import { Dosen } from "@/modules/dosen/dosen.interface"
+import { useUserProfile } from "@/modules/dosen/hooks/use-profile/get-profile"
 import { Label } from "@radix-ui/react-label"
 
 export default function DataKetuaPenelitian() {
-  const { user } = useAuthContext()
+  const { data: user } = useUserProfile()
+  if (!user) return null
   return (
     <div className='mt-4 flex w-full flex-col gap-4'>
       <Divider

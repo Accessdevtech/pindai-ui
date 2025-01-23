@@ -1,12 +1,15 @@
 "use client"
 
-import React, { useRef, useState } from "react"
-
 import { Button } from "@/components/ui/button"
-import { LucideIcon } from "lucide-react"
+import { fileAtom } from "@/state/store"
+import { useAtom } from "jotai"
+import { LucideIcon, X } from "lucide-react"
+import React, { useRef, useState } from "react"
+import { Document, Page, pdfjs } from "react-pdf"
+import Tooltip from "./tooltip"
 
+pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/legacy/build/pdf.worker.min.mjs`
 interface FileInputProps {
-  onFileUpload: (file: File) => void
   accept?: string
   buttonText?: string
   disabled?: boolean
@@ -22,16 +25,15 @@ interface FileInputProps {
 }
 
 export function FileInput({
-  onFileUpload,
-  accept = ".docx",
+  accept,
   buttonText = "Choose File",
-  disabled = false,
   size = "default",
   variant = "default",
   Icon,
 }: FileInputProps) {
-  const [fileName, setFileName] = useState<string | null>(null)
-  const [isLoading, setIsLoading] = useState(false)
+  const [file, setFile] = useAtom(fileAtom)
+  const [numPages, setNumPages] = useState<number | null>(null)
+  const [pageNumber, setPageNumber] = useState(1)
   const fileInputRef = useRef<HTMLInputElement>(null)
 
   const handleButtonClick = () => {
@@ -41,20 +43,14 @@ export function FileInput({
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement>,
   ) => {
-    const file = event.target.files?.[0] || null
-    if (file) {
-      setFileName(file.name)
-      setIsLoading(true)
-      try {
-        // const base64String = await uploadPdfFile(file)
-        onFileUpload(file)
-      } catch (error) {
-        console.error("Error uploading file:", error)
-        // You might want to show an error message to the user here
-      } finally {
-        setIsLoading(false)
-      }
+    const files = event.target.files
+    if (files && files[0]) {
+      setFile(files[0])
     }
+  }
+
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setNumPages(numPages)
   }
 
   return (
@@ -66,14 +62,61 @@ export function FileInput({
         accept={accept}
         className='hidden'
       />
-      <Button
-        onClick={handleButtonClick}
-        variant={variant}
-        size={size}
-        disabled={isLoading || disabled}
-      >
+      <Button onClick={handleButtonClick} variant={variant} size={size}>
         {Icon && <Icon />} {buttonText}
       </Button>
+
+      {file && (
+        <div className='relative overflow-hidden rounded-lg border'>
+          <Tooltip contentText='Hapus'>
+            <Button
+              variant='outline'
+              size='icon'
+              className='absolute right-2 top-2 z-10 rounded-full'
+              onClick={() => setFile(null)}
+            >
+              <X />
+            </Button>
+          </Tooltip>
+          <Document
+            file={file}
+            onLoadSuccess={onDocumentLoadSuccess}
+            error={<div className='p-4 text-red-500'>Failed to load PDF</div>}
+            loading={<div className='p-4 text-gray-500'>Loading PDF...</div>}
+          >
+            <Page
+              pageNumber={pageNumber}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+              scale={1}
+            />
+          </Document>
+
+          {numPages && (
+            <div className='flex items-center justify-between bg-gray-100 p-4'>
+              <Button
+                onClick={() => setPageNumber(page => Math.max(page - 1, 1))}
+                disabled={pageNumber <= 1}
+                variant='outline'
+              >
+                Previous
+              </Button>
+              <p className='text-gray-700'>
+                Page {pageNumber} of {numPages}
+              </p>
+              <Button
+                onClick={() =>
+                  setPageNumber(page => Math.min(page + 1, numPages))
+                }
+                disabled={pageNumber >= numPages}
+                variant='outline'
+              >
+                Next
+              </Button>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }

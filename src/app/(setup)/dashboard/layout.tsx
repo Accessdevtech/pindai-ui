@@ -1,7 +1,7 @@
 "use client"
 
 import DashboardLayout from "@/components/layout/dashboard-layout"
-import withAuth from "@/utils/withAuth"
+import withAuth from "@/components/layout/withAuth"
 import { ReactNode } from "react"
 
 // export default function Layout({ children }: PropsWithChildren) {
