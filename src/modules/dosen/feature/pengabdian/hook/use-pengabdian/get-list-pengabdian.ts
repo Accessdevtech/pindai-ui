@@ -3,7 +3,7 @@ import { getListPengabdian } from "../../pengabdian-dosen.service"
 
 export const useGetListPengabdian = () => {
   return useQuery({
-    queryKey: ["jenis-penelitian"],
+    queryKey: ["jenis-pengabdian"],
     queryFn: async () => await getListPengabdian(),
   })
 }

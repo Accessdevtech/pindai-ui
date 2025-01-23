@@ -21,7 +21,7 @@ export async function getPengabdianDppm(
   if (status_dppm) params.status_dppm = status_dppm
   if (search) params.search = search
   const response: KeuanganResponse<PengabdianDosenData> = await getData(
-    API_ENDPOINTS_KEUANGAN.PENELITIAN,
+    API_ENDPOINTS_KEUANGAN.PENGABDIAN,
     params,
   )
   return response.data
@@ -29,14 +29,14 @@ export async function getPengabdianDppm(
 
 export async function getDetailPegabdian(id: string) {
   const response: KeuanganResponse<DetailPengabdian> = await getData(
-    `${API_ENDPOINTS_KEUANGAN.PENELITIAN}/${id}`,
+    `${API_ENDPOINTS_KEUANGAN.PENGABDIAN}/${id}`,
   )
   return response.data
 }
 
 export async function approvePengabdian(id: string) {
   const response = await postData(
-    `${API_ENDPOINTS_KEUANGAN.APPROVED_PENELITIAN}/${id}`,
+    `${API_ENDPOINTS_KEUANGAN.APPROVED_PENGABDIAN}/${id}`,
     {},
   )
   return response
@@ -44,7 +44,7 @@ export async function approvePengabdian(id: string) {
 
 export async function canclePengabdian(id: string, keterangan: string) {
   const response = await postData(
-    `${API_ENDPOINTS_KEUANGAN.CANCELED_PENELITIAN}/${id}`,
+    `${API_ENDPOINTS_KEUANGAN.CANCELED_PENGABDIAN}/${id}`,
     { keterangan },
   )
   return response
