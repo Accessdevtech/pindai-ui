@@ -5,11 +5,11 @@ import { Download, FileOutput, UploadIcon } from "lucide-react"
 import { FileInput } from "@/components/atom/file-input"
 import Modal from "@/components/atom/modal"
 import { Button } from "@/components/ui/button"
+import { StatusData } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import { fileAtom } from "@/state/store"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtomValue } from "jotai"
-import { StatusPenelitian } from "../penelitian-dosen.interface"
 import { Document } from "./dokumen-table"
 
 export const columnsDokumen = ({
@@ -20,7 +20,7 @@ export const columnsDokumen = ({
 }: {
   handleDownload: (jenis_Dokumen: string) => void
   handleFileUpload: (file: File) => void
-  status?: StatusPenelitian
+  status?: StatusData
   isLeader?: boolean
 }): ColumnDef<Document>[] => {
   return [

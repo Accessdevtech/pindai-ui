@@ -1,13 +1,14 @@
 "use client"
 import Tooltip from "@/components/atom/tooltip"
 import { Badge } from "@/components/ui/badge"
+import { StatusData } from "@/interface/type"
 import { ColumnDef } from "@tanstack/react-table"
 import { CheckIcon, RefreshCcwIcon, X } from "lucide-react"
-import { Anggota, StatusPenelitian } from "../penelitian-dosen.interface"
-import StatusBadge from "./status-badge"
+import StatusBadge from "../../../../../components/atom/status-badge"
+import { Anggota } from "../penelitian-dosen.interface"
 
 interface Props {
-  status?: StatusPenelitian
+  status?: StatusData
 }
 
 export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {

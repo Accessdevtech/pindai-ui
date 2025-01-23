@@ -1,7 +1,12 @@
+"use client"
+
+import DetailPengabdianKaprodiPage from "@/modules/kaprodi/feature/pengabdian/kaprodi.detail.pengabdian"
+import { useParams } from "next/navigation"
+
 export default function PengabdianDetail() {
-  return (
-    <div>
-      <div>Pengabdian Detail</div>
-    </div>
-  )
+  const { id } = useParams()
+
+  if (!id) return null
+
+  return <DetailPengabdianKaprodiPage id={id as string} />
 }

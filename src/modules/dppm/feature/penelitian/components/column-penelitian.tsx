@@ -1,7 +1,7 @@
+import StatusBadge from "@/components/atom/status-badge"
 import Tooltip from "@/components/atom/tooltip"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
-import StatusBadge from "@/modules/dosen/feature/penelitian/components/status-badge"
 import { PenelitianDosen } from "@/modules/dosen/feature/penelitian/penelitian-dosen.interface"
 import { ROUTE } from "@/services/route"
 import { ColumnDef } from "@tanstack/react-table"

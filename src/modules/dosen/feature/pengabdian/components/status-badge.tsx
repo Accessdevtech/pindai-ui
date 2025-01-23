@@ -1,8 +1,8 @@
 import Tooltip from "@/components/atom/tooltip"
 import { Badge } from "@/components/ui/badge"
+import { Status } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import { CheckIcon, ClockIcon, X } from "lucide-react"
-import { Status } from "../penelitian-dosen.interface"
 
 export default function StatusBadge({ status }: { status: Status }) {
   return (

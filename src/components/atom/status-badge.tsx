@@ -1,24 +1,32 @@
+import Tooltip from "@/components/atom/tooltip"
 import { Badge } from "@/components/ui/badge"
+import { Status } from "@/interface/type"
 import { cn } from "@/lib/utils"
-import { Status } from "@/modules/dosen/feature/penelitian/penelitian-dosen.interface"
+import { CheckIcon, ClockIcon, X } from "lucide-react"
 
-export default function StatusBadge({
-  status,
-  message,
-}: {
-  status: Status
-  message: string
-}) {
+export default function StatusBadge({ status }: { status: Status }) {
   return (
-    <Badge
-      className={cn(
-        status === "accepted" &&
-          "bg-green-500/30 text-green-500 hover:bg-green-500 hover:text-primary-foreground",
-        status === "rejected" &&
-          "bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground",
-      )}
+    <Tooltip
+      contentText={
+        status === "accepted"
+          ? "Disetujui"
+          : status === "pending"
+            ? "Diproses"
+            : "Ditolak"
+      }
     >
-      {message}
-    </Badge>
+      <Badge
+        variant='outline'
+        className={cn("h-9 w-9", {
+          "border-green-500 text-green-500": status === "accepted",
+          "border-amber-500 text-amber-500": status === "pending",
+          "border-red-500 text-red-500": status === "rejected",
+        })}
+      >
+        {status === "accepted" && <CheckIcon />}
+        {status === "pending" && <ClockIcon />}
+        {status === "rejected" && <X />}
+      </Badge>
+    </Tooltip>
   )
 }

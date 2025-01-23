@@ -62,6 +62,7 @@ export const API_ENDPOINTS_DOSEN = {
   DOWNLOAD_PENELITIAN: "/dosen/penelitian/download",
   DOWNLOAD_PENGABDIAN: "/dosen/pengabdian/download",
   UPLOAD_PENELITIAN: "/dosen/penelitian/upload",
+  UPLOAD_PENGABDIAN: "/dosen/pengabdian/upload",
 }
 
 export { API_BASE_URL }

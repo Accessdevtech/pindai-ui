@@ -1,7 +1,7 @@
 import { Response } from "@/interface/type"
 import { useMutation } from "@tanstack/react-query"
 import { AxiosError } from "axios"
-import { canclePenelitian } from "../../dppm.penelitian.service"
+import { canclePenelitian } from "../../keuangan.penelitian.service"
 
 interface Props {
   onSuccess: (response: Response) => void

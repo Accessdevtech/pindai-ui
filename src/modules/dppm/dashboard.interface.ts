@@ -1,5 +1,4 @@
-import { Response } from "@/interface/type"
-import { Status } from "../dosen/feature/penelitian/penelitian-dosen.interface"
+import { Response, Status } from "@/interface/type"
 
 export interface DppmDashboardResopnse extends Response {
   data: DppmDashboard

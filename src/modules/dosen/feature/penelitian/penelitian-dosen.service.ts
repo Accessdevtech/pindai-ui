@@ -10,7 +10,6 @@ import {
 
 import { ListIndeksasiResponse } from "@/modules/listdata/indeksasi.list.interface"
 import { ListPenelitianResponse } from "@/modules/listdata/penelitian.list.interface"
-import { ListPengabdianResponse } from "@/modules/listdata/pengabdian.list.interface"
 import { PenelitianType } from "./schema/penelitian-schema"
 
 export async function getPenelitianDosen(
@@ -67,13 +66,6 @@ export async function getListPenelitian() {
 export async function getListIndeksasi() {
   const response: ListIndeksasiResponse = await getData(
     API_ENDPOINTS.LIST_INDEKSASI,
-  )
-  return response
-}
-
-export async function getListPengabdian() {
-  const response: ListPengabdianResponse = await getData(
-    API_ENDPOINTS.LIST_PENGABDIAN,
   )
   return response
 }

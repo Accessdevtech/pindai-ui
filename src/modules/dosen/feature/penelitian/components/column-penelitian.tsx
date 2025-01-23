@@ -5,8 +5,8 @@ import { ROUTE } from "@/services/route"
 import { ColumnDef } from "@tanstack/react-table"
 import { InfoIcon } from "lucide-react"
 import Link from "next/link"
+import StatusBadge from "../../../../../components/atom/status-badge"
 import { PenelitianDosen } from "../penelitian-dosen.interface"
-import StatusBadge from "./status-badge"
 
 export const columnPenelitian = (): ColumnDef<PenelitianDosen>[] => {
   return [

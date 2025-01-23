@@ -1,7 +1,5 @@
+import PengabdianDosenPage from "@/modules/dosen/feature/pengabdian/pengabdian-page-dosen"
+
 export default function DashboardPengabdian() {
-  return (
-    <div>
-      <div>Dashboard Pengabdian</div>
-    </div>
-  )
+  return <PengabdianDosenPage />
 }

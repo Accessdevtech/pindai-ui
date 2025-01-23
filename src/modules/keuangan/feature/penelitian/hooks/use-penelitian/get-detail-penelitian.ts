@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query"
-import { getDetailPenelitian } from "../../dppm.penelitian.service"
+import { getDetailPenelitian } from "../../keuangan.penelitian.service"
 
 export const useGetDetailPenelitian = (id: string) => {
   return useQuery({

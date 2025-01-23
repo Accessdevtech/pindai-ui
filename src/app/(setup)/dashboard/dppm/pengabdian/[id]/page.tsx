@@ -1,7 +1,9 @@
+"use client"
+import DetailPengabdianDppmPage from "@/modules/dppm/feature/pengabdian/dppm.detail.pengabdian"
+import { useParams } from "next/navigation"
+
 export default function PengabdianDetail() {
-  return (
-    <div>
-      <div>Pengabdian Detail</div>
-    </div>
-  )
+  const { id } = useParams()
+  if (!id) return null
+  return <DetailPengabdianDppmPage id={id as string} />
 }

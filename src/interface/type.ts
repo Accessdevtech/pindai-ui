@@ -25,3 +25,11 @@ export interface User {
   address: string
   role: Role
 }
+
+export type Status = "accepted" | "rejected" | "pending"
+
+export interface StatusData {
+  kaprodi: Status
+  dppm: Status
+  keuangan: Status
+}

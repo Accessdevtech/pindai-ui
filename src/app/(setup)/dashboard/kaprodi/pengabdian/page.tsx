@@ -1,7 +1,5 @@
+import PengabdianKaprodiPage from "@/modules/kaprodi/feature/pengabdian/kaprodi.pengabdian.page"
+
 export default function DashboardPengabdian() {
-  return (
-    <div>
-      <div>Dashboard Pengabdian</div>
-    </div>
-  )
+  return <PengabdianKaprodiPage />
 }
