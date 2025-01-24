@@ -94,7 +94,7 @@ export default function DetailPengabdianPage({
         {data?.title}
       </Breadcrumb>
       {data?.status.kaprodi === "rejected" &&
-        data?.status.kaprodi === "rejected" &&
+        data?.status.dppm === "rejected" &&
         data?.status.keuangan === "rejected" && (
           <KeteranganDitolak title='Pengabdian ditolak oleh kaprodi'>
             {data.keterangan}

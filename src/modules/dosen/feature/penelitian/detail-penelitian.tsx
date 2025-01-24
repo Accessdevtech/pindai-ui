@@ -94,7 +94,7 @@ export default function DetailPenelitianPage({
         {data?.title}
       </Breadcrumb>
       {data?.status.kaprodi === "rejected" &&
-        data?.status.kaprodi === "rejected" &&
+        data?.status.dppm === "rejected" &&
         data?.status.keuangan === "rejected" && (
           <KeteranganDitolak title='Penelitian ditolak oleh kaprodi'>
             {data.keterangan}
