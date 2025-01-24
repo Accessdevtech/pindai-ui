@@ -19,7 +19,7 @@ export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
         return (
           <Tooltip contentText='Detail Pengabdian'>
             <Link
-              href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${row.original.id}`}
+              href={`${ROUTE.DASHBOARD}/kaprodi/pengabdian/${row.original.id}`}
               className={cn(
                 buttonVariants({ variant: "outline", size: "icon" }),
                 "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",

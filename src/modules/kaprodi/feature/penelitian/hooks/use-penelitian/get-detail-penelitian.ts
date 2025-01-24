@@ -3,7 +3,7 @@ import { getDetailPenelitian } from "../../kaprodi.penelitian.service"
 
 export const useGetDetailPenelitian = (id: string) => {
   return useQuery({
-    queryKey: ["anggota", id],
+    queryKey: ["detail-penelitian", id],
     queryFn: async () => await getDetailPenelitian(id),
     placeholderData: previouseData => previouseData,
   })

@@ -2,8 +2,8 @@
 import { useQuery } from "@tanstack/react-query"
 import { getDashboard } from "../keuangan.service"
 
-export const useDashboard = () =>
+export const useGetDashboard = () =>
   useQuery({
-    queryKey: ["dashboard"],
+    queryKey: ["dashboard-keuangan"],
     queryFn: async () => await getDashboard(),
   })

@@ -3,11 +3,11 @@ import LoadingPage from "@/components/atom/loading-page"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import InfoPenelitian from "./components/info-penelitian"
 import InfoPengabdian from "./components/info-pengabdian"
-import { useDashboard } from "./hooks/use-dashboard"
+import { useGetDashboard } from "./hooks/use-dashboard"
 import { Penelitian, Pengabdian } from "./keuangan.interface"
 
 export default function KeuanganPage() {
-  const { data, isLoading } = useDashboard()
+  const { data, isLoading } = useGetDashboard()
 
   if (isLoading) return <LoadingPage />
 

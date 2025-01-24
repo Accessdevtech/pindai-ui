@@ -40,7 +40,7 @@ export default function ModalAnggotaManual() {
       tooltipContent='Detail anggota pengabdian'
       variant='outline'
       btnStyle='border-primary text-primary hover:bg-primary hover:text-primary-foreground'
-      className='max-w-xl'
+      className='max-w-2xl'
     >
       <Form form={formAnggotaManual}>
         <div className='flex flex-wrap gap-4'>

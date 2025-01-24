@@ -3,7 +3,7 @@ import { getDetailPengabdianDosen } from "../../pengabdian-dosen.service"
 
 export const useGetDetailPengabdian = (id: string) => {
   return useQuery({
-    queryKey: ["anggota", id],
+    queryKey: ["anggota-pengabdian", id],
     queryFn: async () => await getDetailPengabdianDosen(id),
     placeholderData: previouseData => previouseData,
   })

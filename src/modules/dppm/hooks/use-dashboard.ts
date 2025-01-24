@@ -2,8 +2,8 @@
 import { useQuery } from "@tanstack/react-query"
 import { getDashboard } from "../dashboard.service"
 
-export const useDashboard = () =>
+export const useGetDashboard = () =>
   useQuery({
-    queryKey: ["dashboard"],
+    queryKey: ["dashboard-dppm"],
     queryFn: async () => await getDashboard(),
   })

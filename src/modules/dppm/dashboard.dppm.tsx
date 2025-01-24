@@ -5,10 +5,10 @@ import CardFakultas from "./components/card-fakultas"
 import InfoPenelitian from "./components/info-penelitian"
 import InfoPengabdian from "./components/info-pengabdian"
 import { Fakultas, Penelitian, Pengabdian } from "./dashboard.interface"
-import { useDashboard } from "./hooks/use-dashboard"
+import { useGetDashboard } from "./hooks/use-dashboard"
 
 export default function DashboardDppm() {
-  const { data, isLoading } = useDashboard()
+  const { data, isLoading } = useGetDashboard()
 
   if (isLoading) return <LoadingPage />
 

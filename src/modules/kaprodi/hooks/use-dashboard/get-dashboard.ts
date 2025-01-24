@@ -3,7 +3,7 @@ import { getDashboard } from "../../kaprodi.service"
 
 export const useGetDashboard = () => {
   return useQuery({
-    queryKey: ["dashboard"],
+    queryKey: ["dashboard-kaprodi"],
     queryFn: async () => await getDashboard(),
   })
 }
