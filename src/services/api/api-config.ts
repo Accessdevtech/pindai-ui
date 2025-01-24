@@ -15,16 +15,26 @@ export const API_ENDPOINTS = {
   LIST_INDEKSASI: "/list/jenis-indeksasi",
   LIST_PENELITIAN: "/list/jenis-penelitian",
   LIST_PENGABDIAN: "/list/jenis-pengabdian",
+  LIST_PUBLIKASI: "/list/jenis-publikasi",
+  LIST_APPROVED_PENELITIAN: "/list/approved/penelitian",
+  LIST_CANCELED_PENELITIAN: "/list/canceled/penelitian",
+  LIST_APPROVED_PENGABDIAN: "/list/approved/pengabdian",
+  LIST_CANCELED_PENGABDIAN: "/list/canceled/pengabdian",
+  LIST_APPROVED_PUBLIKASI: "/list/approved/publikasi",
+  LIST_CANCELED_PUBLIKASI: "/list/canceled/publikasi",
 }
 
 export const API_ENDPOINTS_KEUANGAN = {
   PENELITIAN: "/keuangan/penelitian",
   PENGABDIAN: "/keuangan/pengabdian",
+  PUBLIKASI: "/keuangan/publikasi",
 
   APPROVED_PENELITIAN: "/keuangan/approved/penelitian",
   CANCELED_PENELITIAN: "/keuangan/canceled/penelitian",
   APPROVED_PENGABDIAN: "/keuangan/approved/pengabdian",
   CANCELED_PENGABDIAN: "/keuangan/canceled/pengabdian",
+  APPROVED_PUBLIKASI: "/keuangan/approved/publikasi",
+  CANCELED_PUBLIKASI: "/keuangan/canceled/publikasi",
 }
 
 export const API_ENDPOINTS_DPPM = {
@@ -32,6 +42,8 @@ export const API_ENDPOINTS_DPPM = {
   CANCELED_PENELITIAN: "/dppm/canceled/penelitian",
   APPROVED_PENGABDIAN: "/dppm/approved/pengabdian",
   CANCELED_PENGABDIAN: "/dppm/canceled/pengabdian",
+  APPROVED_PUBLIKASI: "/dppm/approved/publikasi",
+  CANCELED_PUBLIKASI: "/dppm/canceled/publikasi",
   PENELITIAN: "/dppm/penelitian",
   PENGABDIAN: "/dppm/pengabdian",
   DASHBOARD: "/dppm/dashboard",
@@ -51,6 +63,8 @@ export const API_ENDPOINTS_KAPRODI = {
   CANCELED_PENELITIAN: "/kaprodi/canceled/penelitian",
   APPROVED_PENGABDIAN: "/kaprodi/approved/pengabdian",
   CANCELED_PENGABDIAN: "/kaprodi/canceled/pengabdian",
+  APPROVED_PUBLIKASI: "/kaprodi/approved/publikasi",
+  CANCELED_PUBLIKASI: "/kaprodi/canceled/publikasi",
 }
 
 export const API_ENDPOINTS_DOSEN = {
@@ -59,6 +73,7 @@ export const API_ENDPOINTS_DOSEN = {
   DASHBOARD: "/dosen/dashboard",
   PENELITIAN: "/dosen/penelitian",
   PENGABDIAN: "/dosen/pengabdian",
+  PUBLIKASI: "/dosen/publikasi",
   DOWNLOAD_PENELITIAN: "/dosen/penelitian/download",
   DOWNLOAD_PENGABDIAN: "/dosen/pengabdian/download",
   UPLOAD_PENELITIAN: "/dosen/penelitian/upload",
