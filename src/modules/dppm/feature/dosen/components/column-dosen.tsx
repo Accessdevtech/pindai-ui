@@ -81,7 +81,7 @@ export const columnDosen = ({
         const item = row.original
 
         return (
-          <span className='flex gap-2'>
+          <span className='flex justify-center gap-2'>
             <Modal
               title='Detail Dosen'
               description={`Informasi lengkap mengenai dosen bernama ${item.name}.`}

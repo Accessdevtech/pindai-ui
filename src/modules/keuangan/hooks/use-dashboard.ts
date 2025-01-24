@@ -1,9 +1,9 @@
 "use client"
 import { useQuery } from "@tanstack/react-query"
-import { getDashboard } from "../dashboard.service"
+import { getDashboard } from "../keuangan.service"
 
 export const useDashboard = () =>
   useQuery({
-    queryKey: ["fakultas"],
+    queryKey: ["dashboard"],
     queryFn: async () => await getDashboard(),
   })

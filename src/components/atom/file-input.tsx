@@ -88,7 +88,7 @@ export function FileInput({
               pageNumber={pageNumber}
               renderTextLayer={false}
               renderAnnotationLayer={false}
-              scale={1}
+              scale={0.9}
             />
           </Document>
 

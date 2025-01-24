@@ -1,15 +1,16 @@
+import LoadingPage from "@/components/atom/loading-page"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { EachUtil } from "@/utils/each-utils"
 import CardFakultas from "./components/card-fakultas"
 import InfoPenelitian from "./components/info-penelitian"
 import InfoPengabdian from "./components/info-pengabdian"
-import { Fakultas, Penelitian } from "./dashboard.interface"
-import { useDashboard } from "./hooks/use-fakultas"
+import { Fakultas, Penelitian, Pengabdian } from "./dashboard.interface"
+import { useDashboard } from "./hooks/use-dashboard"
 
 export default function DashboardDppm() {
   const { data, isLoading } = useDashboard()
 
-  if (isLoading) return <div>Loading...</div>
+  if (isLoading) return <LoadingPage />
 
   return (
     <div className='space-y-4'>
@@ -34,9 +35,10 @@ export default function DashboardDppm() {
             Penelitian / Pengabdian
           </BreadcrumbPage>
         </Breadcrumb>
-        <div className='flex flex-col gap-4 lg:flex-row lg:items-start'>
+        <div className='flex flex-col gap-4 xl:flex-row xl:items-start'>
           <InfoPenelitian penelitian={data?.penelitian || ({} as Penelitian)} />
-          <InfoPengabdian />
+          <InfoPengabdian pengabdian={data?.pengabdian || ({} as Pengabdian)} />
+          {/* <InfoPublikasi publikasi={data?.publikasi || ({} as Publikasi)} /> */}
         </div>
       </section>
     </div>

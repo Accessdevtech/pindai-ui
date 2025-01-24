@@ -43,7 +43,7 @@ export default function NavManagemenData({
                   className='hover:bg-primary/30 hover:text-primary data-[active=true]:bg-primary/30 data-[active=true]:text-primary'
                 >
                   <Link
-                    href={`${ROUTE.DASHBOARD}/${role}/${item.name}`}
+                    href={`${ROUTE.DASHBOARD}/${role}/${item.name.split(" ").join("-")}`}
                     key={index}
                   >
                     <LayersIcon />

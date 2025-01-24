@@ -70,21 +70,26 @@ export async function getListIndeksasi() {
   return response
 }
 
-export async function downloadPenelitian(id: string, jenis_dokumen: string) {
+export async function downloadPenelitian(
+  id: string,
+  jenis_dokumen: string,
+  category: string,
+) {
   const response: ResponseDownloadPenelitian = await postData(
     `${API_ENDPOINTS_DOSEN.DOWNLOAD_PENELITIAN}/${id}`,
-    { jenis_dokumen },
+    { jenis_dokumen, category },
   )
   return response
 }
 
 export async function uploadPenelitian(
   id: string,
-  file: { base64: string; type: string },
+  file: string,
+  category: string,
 ) {
   const response: ResponseDownloadPenelitian = await postData(
     `${API_ENDPOINTS_DOSEN.UPLOAD_PENELITIAN}/${id}`,
-    { file },
+    { file, category },
   )
   return response
 }

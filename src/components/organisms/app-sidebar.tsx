@@ -1,5 +1,5 @@
 "use client"
-import Logo from "@/assets/logo.svg"
+import Logo from "@/assets/logo.png"
 import {
   Sidebar,
   SidebarContent,
@@ -35,8 +35,8 @@ export default function AppSidebar() {
   return (
     <Sidebar variant='inset' className='p-0'>
       <SidebarHeader className='flex flex-row items-center px-6 py-5'>
-        <Image src={Logo} width={50} height={50} alt='Pindai Logo' />
-        <span className='text-2xl font-bold capitalize'>Pindai</span>
+        <Image src={Logo} width={25} height={25} alt='Logo' />
+        <span className='text-2xl font-bold uppercase'>Simlitabmas</span>
       </SidebarHeader>
       <SidebarContent className='space-y-2 p-0'>
         <SidebarMenu className='w-full space-y-2 px-2'>

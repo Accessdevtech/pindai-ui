@@ -152,7 +152,9 @@ export const columnsDokumen = ({
               "max-w-4xl": file,
             })}
           >
-            <FileInput accept='.pdf' variant='outline' size='sm' />
+            <div className='overflow-auto'>
+              <FileInput accept='.pdf' variant='outline' size='sm' />
+            </div>
             <Button onClick={onFileUpload} disabled={!file}>
               Simpan
             </Button>

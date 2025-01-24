@@ -1,11 +1,10 @@
 import CardStatus from "@/components/atom/card-status"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Card } from "@/components/ui/card"
-import { pengabdian } from "@/constant/dummy"
 import { Role } from "@/interface/type"
 import { EachUtil } from "@/utils/each-utils"
-import InfoPenelitianCard from "./components/info-penelitian"
-import InfoPengabdianCard from "./components/info-pengabdian"
+import ActionCard from "./components/ActionCard"
+import InfoCard from "./components/InfoCard"
 import { useGetDashboard } from "./hooks/use-dashboard"
 
 export default function DosenPage({ role }: { role: Role | undefined }) {
@@ -34,7 +33,7 @@ export default function DosenPage({ role }: { role: Role | undefined }) {
             )}
           />
           <EachUtil
-            of={pengabdian}
+            of={data?.pengabdian || []}
             render={(pengabdian: any, index) => (
               <CardStatus
                 data={pengabdian}
@@ -51,16 +50,14 @@ export default function DosenPage({ role }: { role: Role | undefined }) {
       </section>
 
       <Card className='flex grow flex-col p-6 text-muted-foreground'>
-        <span className='font-semibold capitalize'>dashboard kaprodi</span>
+        <span className='font-semibold capitalize'>dashboard dosen</span>
         <span>
           Anda dapat melakukan penelitian dan pengabdian kepada masyarakat.
         </span>
       </Card>
 
-      <div className='flex flex-col gap-4 lg:flex-row lg:items-start'>
-        <InfoPenelitianCard role={role} />
-        <InfoPengabdianCard role={role} />
-      </div>
+      <ActionCard role={role} />
+      <InfoCard role={role} />
     </div>
   )
 }

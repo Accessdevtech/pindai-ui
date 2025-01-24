@@ -1,12 +1,18 @@
 import { Badge } from "@/components/ui/badge"
-import { Button, buttonVariants } from "@/components/ui/button"
+import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
+import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
 import { ExternalLinkIcon } from "lucide-react"
 import Link from "next/link"
+import { Pengabdian } from "../dashboard.interface"
 
-export default function InfoPengabdian() {
+export default function InfoPengabdian({
+  pengabdian,
+}: {
+  pengabdian: Pengabdian
+}) {
   return (
     <div className='flex grow flex-col gap-4'>
       <Card className='grow space-y-4'>
@@ -21,19 +27,27 @@ export default function InfoPengabdian() {
         <CardContent>
           <div className='flex gap-1.5'>
             <p className='capitalize text-muted-foreground'>data:</p>
-            <Badge
-              variant='outline'
-              className='bg-green-500/30 font-semibold uppercase tracking-wide text-green-500'
-            >
-              10 diterima
-            </Badge>
-            /
-            <Badge
-              variant='outline'
-              className='bg-red-500/30 font-semibold uppercase tracking-wide text-red-500'
-            >
-              5 ditolak
-            </Badge>
+            <EachUtil
+              of={pengabdian.status}
+              render={(item, index) => (
+                <Badge
+                  key={index}
+                  variant='outline'
+                  className={cn({
+                    "space-x-1 bg-green-500/30 font-semibold uppercase tracking-wide text-green-500":
+                      item.status === "accepted",
+                    "space-x-1 bg-red-500/30 font-semibold uppercase tracking-wide text-red-500":
+                      item.status === "rejected",
+                  })}
+                >
+                  <span>{item.count}</span>
+                  <span>
+                    {item.status === "accepted" && "diterima"}
+                    {item.status === "rejected" && "ditolak"}
+                  </span>
+                </Badge>
+              )}
+            />
           </div>
         </CardContent>
       </Card>
@@ -43,7 +57,7 @@ export default function InfoPengabdian() {
         </CardHeader>
         <CardContent>
           <EachUtil
-            of={[1, 2, 3, 4, 5, 6, 7, 8]}
+            of={pengabdian.news}
             render={(item, index) => (
               <div className='flex items-center justify-between' key={index}>
                 <div className='flex items-center gap-3'>
@@ -53,21 +67,20 @@ export default function InfoPengabdian() {
                   >
                     {index + 1}
                   </Badge>
-                  <div className='flex flex-col capitalize text-muted-foreground'>
-                    <p className='text-xs'>Ketua penelitian</p>
-                    <p className='font-bold'>
-                      Sistem Pendukung Keputusan Berbasis Fuzzy Logic untuk
-                      Penentuan Beasiswa Mahasiswa Berprestasi
-                    </p>
+                  <div className='flex max-w-md flex-col capitalize text-muted-foreground'>
+                    <p className='text-xs'>{item.leader}</p>
+                    <p className='font-bold'>{item.title}</p>
                   </div>
                 </div>
-                <Button
-                  size='icon'
-                  variant='outline'
-                  className='border-primary text-primary hover:bg-primary hover:text-primary-foreground'
+                <Link
+                  href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${item.id}`}
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "icon" }),
+                    "border-primary text-primary hover:bg-primary hover:text-primary-foreground",
+                  )}
                 >
                   <ExternalLinkIcon />
-                </Button>
+                </Link>
               </div>
             )}
           />

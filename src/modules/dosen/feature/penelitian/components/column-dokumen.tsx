@@ -149,10 +149,12 @@ export const columnsDokumen = ({
             }
             description='Unggah laporan penelitian Anda dalam format PDF menggunakan form ini.'
             className={cn({
-              "max-w-4xl": file,
+              "max-w-2xl": file,
             })}
           >
-            <FileInput accept='.pdf' variant='outline' size='sm' />
+            <div className='overflow-auto'>
+              <FileInput accept='.pdf' variant='outline' size='sm' />
+            </div>
             <Button onClick={onFileUpload} disabled={!file}>
               Simpan
             </Button>

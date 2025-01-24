@@ -1,11 +1,10 @@
 import CardStatus from "@/components/atom/card-status"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Card } from "@/components/ui/card"
-import { pengabdian } from "@/constant/dummy"
 import { Role } from "@/interface/type"
 import { EachUtil } from "@/utils/each-utils"
+import ActionCard from "./components/action-card"
 import InfoPenelitianCard from "./components/info-penelitian"
-import InfoPengabdianCard from "./components/info-pengabdian"
 import { useGetDashboard } from "./hooks/use-dashboard/get-dashboard"
 
 interface KaprodiDashboardProps {
@@ -38,7 +37,7 @@ export default function KaprodiDashboard({ role }: KaprodiDashboardProps) {
             )}
           />
           <EachUtil
-            of={pengabdian}
+            of={data?.pengabdian || []}
             render={(pengabdian: any, index) => (
               <CardStatus
                 data={pengabdian}
@@ -61,10 +60,8 @@ export default function KaprodiDashboard({ role }: KaprodiDashboardProps) {
         </span>
       </Card>
 
-      <div className='flex flex-col gap-4 lg:flex-row lg:items-start'>
-        <InfoPenelitianCard role={role} />
-        <InfoPengabdianCard role={role} />
-      </div>
+      <ActionCard role={role} />
+      <InfoPenelitianCard role={role} />
     </div>
   )
 }

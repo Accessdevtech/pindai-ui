@@ -2,6 +2,7 @@ import { HTMLInputTypeAttribute } from "react"
 import { FieldPath, FieldValues, UseControllerProps } from "react-hook-form"
 import {
   FormControl,
+  FormDescription,
   FormField,
   FormItem,
   FormLabel,
@@ -14,11 +15,13 @@ interface InputFieldProps<TFieldValues extends FieldValues> {
   control: UseControllerProps<TFieldValues>["control"]
   name: FieldPath<TFieldValues>
   type?: HTMLInputTypeAttribute
+  hint?: string
 }
 
 export default function InputField<TFieldValues extends FieldValues>({
   label,
   type = "text",
+  hint,
   ...props
 }: InputFieldProps<TFieldValues>) {
   return (
@@ -36,6 +39,7 @@ export default function InputField<TFieldValues extends FieldValues>({
               autoComplete={type === "password" ? "off" : "on"}
             />
           </FormControl>
+          <FormDescription>{hint}</FormDescription>
           <FormMessage />
         </FormItem>
       )}

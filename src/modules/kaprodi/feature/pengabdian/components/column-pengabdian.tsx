@@ -11,6 +11,27 @@ import Link from "next/link"
 export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
   return [
     {
+      id: "action",
+      accessorKey: "action",
+      header: "aksi",
+
+      cell: ({ row }) => {
+        return (
+          <Tooltip contentText='Detail Pengabdian'>
+            <Link
+              href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${row.original.id}`}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "icon" }),
+                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
+              )}
+            >
+              <InfoIcon />
+            </Link>
+          </Tooltip>
+        )
+      },
+    },
+    {
       id: "title",
       accessorKey: "title",
       header: "Judul Pengabdian",
@@ -57,27 +78,6 @@ export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
           ),
         },
       ],
-    },
-    {
-      id: "action",
-      accessorKey: "action",
-      header: "aksi",
-
-      cell: ({ row }) => {
-        return (
-          <Tooltip contentText='Detail pengabdian'>
-            <Link
-              href={`${ROUTE.DASHBOARD}/kaprodi/pengabdian/${row.original.id}`}
-              className={cn(
-                buttonVariants({ variant: "outline", size: "icon" }),
-                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
-              )}
-            >
-              <InfoIcon />
-            </Link>
-          </Tooltip>
-        )
-      },
     },
   ]
 }

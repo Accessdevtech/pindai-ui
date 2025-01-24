@@ -6,13 +6,15 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
-import { downloadDocxFile, uploadDocxFile } from "@/utils/files"
+import { downloadDocxFile, uploadPdfFile } from "@/utils/files"
 
 import Breadcrumb from "@/components/atom/bradcrumb"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Separator } from "@/components/ui/separator"
 import { ROUTE } from "@/services/route"
+import { fileAtom } from "@/state/store"
 import { EachUtil } from "@/utils/each-utils"
+import { useSetAtom } from "jotai"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
@@ -30,6 +32,7 @@ export default function DetailPengabdianPage({
   id: string
   user: Dosen
 }) {
+  const setFile = useSetAtom(fileAtom)
   const { data } = useGetDetailPengabdian(id)
 
   const { mutate, isPending } = useDownloadPengabdian({
@@ -38,32 +41,29 @@ export default function DetailPengabdianPage({
       toast.dismiss()
     },
     onError(err) {
-      toast.error(err.message)
+      toast.error(err.response?.data.message)
+      toast.dismiss()
     },
   })
 
   const { mutate: upload } = useUploadPengabdian({
     onSuccess(res) {
       toast.success("Berhasil Mengunggah Dokumen")
+      setFile(null)
     },
     onError(err) {
-      toast.error(err.message)
+      toast.error(err.response?.data.message)
     },
   })
 
   const handleFileUpload = async (file: File) => {
-    const fileEncode = await uploadDocxFile(file)
+    const fileEncode = await uploadPdfFile(file)
 
-    const fileData = {
-      base64: fileEncode,
-      type: file.type,
-    }
-
-    upload({ id, file: fileData })
+    upload({ id, file: fileEncode, category: "pengabdian" })
   }
 
   const handleDownload = (jenis_Dokumen: string) => {
-    mutate({ id, jenis_dokumen: jenis_Dokumen })
+    mutate({ id, jenis_dokumen: jenis_Dokumen, category: "pengabdian" })
   }
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })

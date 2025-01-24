@@ -18,6 +18,10 @@ export const navData = {
       name: "dosen",
       roles: ["dppm", "kaprodi"],
     },
+    {
+      name: "master luaran",
+      roles: ["dppm"],
+    },
   ],
   main: [
     {
@@ -56,10 +60,10 @@ export const navData = {
     //   roles: ["dppm"],
     //   mainMenu: ["penelitian", "pengabdian"],
     // },
-    {
-      name: "report management",
-      roles: ["dppm"],
-      mainMenu: ["fakultas"],
-    },
+    // {
+    //   name: "report management",
+    //   roles: ["dppm"],
+    //   mainMenu: ["fakultas"],
+    // },
   ],
 }

@@ -11,7 +11,7 @@ export const useGetPengabdian = (
 ) => {
   return useQuery({
     queryKey: [
-      "anggota",
+      "pengabdian",
       page,
       search,
       tahun_akademik,

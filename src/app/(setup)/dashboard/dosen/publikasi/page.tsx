@@ -1,7 +1,5 @@
+import DosenPublikasi from "@/modules/dosen/feature/publikasi/dosen-publikasi"
+
 export default function DashboardPublikasi() {
-  return (
-    <div>
-      <div>Dashboard Publikasi</div>
-    </div>
-  )
+  return <DosenPublikasi />
 }

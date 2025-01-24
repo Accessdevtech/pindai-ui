@@ -5,7 +5,7 @@ import { API_BASE_URL } from "./api-config"
 
 const axiosInstance = axios.create({
   baseURL: API_BASE_URL, // Gunakan .env
-  timeout: 9000,
+  // timeout: 9000,
   headers: {
     "Content-Type": "application/json",
     Accept: "application/json",

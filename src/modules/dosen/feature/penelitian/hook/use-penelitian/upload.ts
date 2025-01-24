@@ -12,9 +12,10 @@ export const useUploadPenelitian = ({ onSuccess, onError }: Props) => {
   return useMutation<
     ResponseUploadPenelitian,
     AxiosError<ResponseUploadPenelitian>,
-    { id: string; file: { base64: string; type: string } }
+    { id: string; file: string; category: string }
   >({
-    mutationFn: async ({ id, file }) => await uploadPenelitian(id, file),
+    mutationFn: async ({ id, file, category }) =>
+      await uploadPenelitian(id, file, category),
     onSuccess,
     onError,
   })

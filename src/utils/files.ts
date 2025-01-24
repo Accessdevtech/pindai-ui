@@ -29,7 +29,7 @@ export const uploadPdfFile = (file: File): Promise<string> => {
     const reader = new FileReader()
     reader.onload = () => {
       const fileBase64String = reader.result as string
-      resolve(fileBase64String)
+      resolve(fileBase64String.split(",")[1])
     }
     reader.onerror = () => {
       reject(reader.error)

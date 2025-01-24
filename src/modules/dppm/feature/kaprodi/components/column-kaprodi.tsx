@@ -148,7 +148,7 @@ export const columnKaprodi = ({
         }
 
         return (
-          <span className='flex gap-2'>
+          <span className='flex justify-center gap-2'>
             <Modal
               Icon={EditIcon}
               size='icon'

@@ -25,6 +25,7 @@ export const API_ENDPOINTS = {
 }
 
 export const API_ENDPOINTS_KEUANGAN = {
+  DASHBOARD: "/keuangan/dashboard",
   PENELITIAN: "/keuangan/penelitian",
   PENGABDIAN: "/keuangan/pengabdian",
   PUBLIKASI: "/keuangan/publikasi",
@@ -46,6 +47,7 @@ export const API_ENDPOINTS_DPPM = {
   CANCELED_PUBLIKASI: "/dppm/canceled/publikasi",
   PENELITIAN: "/dppm/penelitian",
   PENGABDIAN: "/dppm/pengabdian",
+  PUBLIKASI: "/dppm/publikasi",
   DASHBOARD: "/dppm/dashboard",
   FAKULTAS: "/dppm/fakultas",
   KAPRODI: "/dppm/kaprodi",

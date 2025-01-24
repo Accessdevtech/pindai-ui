@@ -70,21 +70,26 @@ export async function getListIndeksasi() {
   return response
 }
 
-export async function downloadPengabdian(id: string, jenis_dokumen: string) {
+export async function downloadPengabdian(
+  id: string,
+  jenis_dokumen: string,
+  category: string,
+) {
   const response: ResponseDownloadPengabdian = await postData(
     `${API_ENDPOINTS_DOSEN.DOWNLOAD_PENGABDIAN}/${id}`,
-    { jenis_dokumen },
+    { jenis_dokumen, category },
   )
   return response
 }
 
 export async function uploadPengabdian(
   id: string,
-  file: { base64: string; type: string },
+  file: string,
+  category: string,
 ) {
   const response: ResponseDownloadPengabdian = await postData(
     `${API_ENDPOINTS_DOSEN.UPLOAD_PENGABDIAN}/${id}`,
-    { file },
+    { file, category },
   )
   return response
 }

@@ -26,9 +26,7 @@ export default function InfoPenelitian({
         </CardHeader>
         <CardContent>
           <div className='flex gap-1.5'>
-            <p className='text-muted-id: string, title: string, leader: stringforeground capitalize'>
-              data:
-            </p>
+            <p className='capitalize text-muted-foreground'>data:</p>
             <EachUtil
               of={penelitian.status}
               render={(item, index) => (
@@ -69,7 +67,7 @@ export default function InfoPenelitian({
                   >
                     {index + 1}
                   </Badge>
-                  <div className='flex flex-col capitalize text-muted-foreground'>
+                  <div className='flex max-w-md flex-col capitalize text-muted-foreground'>
                     <p className='text-xs'>{item.leader}</p>
                     <p className='font-bold'>{item.title}</p>
                   </div>

@@ -7,6 +7,8 @@ export interface DppmDashboardResopnse extends Response {
 export interface DppmDashboard {
   fakultas: Fakultas[]
   penelitian: Penelitian
+  pengabdian: Pengabdian
+  publikasi: Publikasi
 }
 
 export interface News {
@@ -15,14 +17,24 @@ export interface News {
   leader: string
 }
 
-export interface StatusPenelitian {
+export interface StatusData {
   status: Status
   count: number
 }
 
 export interface Penelitian {
   news: News[]
-  status: StatusPenelitian[]
+  status: StatusData[]
+}
+
+export interface Pengabdian {
+  news: News[]
+  status: StatusData[]
+}
+
+export interface Publikasi {
+  news: News[]
+  status: StatusData[]
 }
 
 export interface Fakultas {

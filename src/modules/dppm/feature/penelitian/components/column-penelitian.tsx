@@ -11,6 +11,27 @@ import Link from "next/link"
 export const columnPenelitian = (): ColumnDef<PenelitianDosen>[] => {
   return [
     {
+      id: "action",
+      accessorKey: "action",
+      header: "aksi",
+
+      cell: ({ row }) => {
+        return (
+          <Tooltip contentText='Detail penelitian'>
+            <Link
+              href={`${ROUTE.DASHBOARD}/dppm/penelitian/${row.original.id}`}
+              className={cn(
+                buttonVariants({ variant: "outline", size: "icon" }),
+                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
+              )}
+            >
+              <InfoIcon />
+            </Link>
+          </Tooltip>
+        )
+      },
+    },
+    {
       id: "title",
       accessorKey: "title",
       header: "Judul Penelitian",
@@ -57,27 +78,6 @@ export const columnPenelitian = (): ColumnDef<PenelitianDosen>[] => {
           ),
         },
       ],
-    },
-    {
-      id: "action",
-      accessorKey: "action",
-      header: "aksi",
-
-      cell: ({ row }) => {
-        return (
-          <Tooltip contentText='Detail penelitian'>
-            <Link
-              href={`${ROUTE.DASHBOARD}/dppm/penelitian/${row.original.id}`}
-              className={cn(
-                buttonVariants({ variant: "outline", size: "icon" }),
-                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
-              )}
-            >
-              <InfoIcon />
-            </Link>
-          </Tooltip>
-        )
-      },
     },
   ]
 }

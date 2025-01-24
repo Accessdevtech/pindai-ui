@@ -11,7 +11,7 @@ export const useGetPenelitian = (
 ) => {
   return useQuery({
     queryKey: [
-      "anggota",
+      "penelitian",
       page,
       search,
       tahun_akademik,
