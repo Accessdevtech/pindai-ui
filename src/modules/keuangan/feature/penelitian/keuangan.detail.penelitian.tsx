@@ -64,11 +64,11 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
-        href={`${ROUTE.DASHBOARD}/kaprodi`}
+        href={`${ROUTE.DASHBOARD}/keuangan`}
         data={[
           {
             name: "Penelitian",
-            href: `${ROUTE.DASHBOARD}/kaprodi/penelitian`,
+            href: `${ROUTE.DASHBOARD}/keuangan/penelitian`,
           },
           {
             name: "Detail",
@@ -78,7 +78,7 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
         {data?.title}
       </Breadcrumb>
       {data?.status.kaprodi === "rejected" &&
-        data?.status.kaprodi === "rejected" &&
+        data?.status.dppm === "rejected" &&
         data?.status.keuangan === "rejected" && (
           <KeteranganDitolak title='Penelitian ditolak oleh kaprodi'>
             {data.keterangan}

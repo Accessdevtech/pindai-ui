@@ -64,11 +64,11 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
-        href={`${ROUTE.DASHBOARD}/kaprodi`}
+        href={`${ROUTE.DASHBOARD}/dppm`}
         data={[
           {
             name: "Pengabdian",
-            href: `${ROUTE.DASHBOARD}/kaprodi/pengabdian`,
+            href: `${ROUTE.DASHBOARD}/dppm/pengabdian`,
           },
           {
             name: "Detail",
@@ -78,7 +78,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
         {data?.title}
       </Breadcrumb>
       {data?.status.kaprodi === "rejected" &&
-        data?.status.kaprodi === "rejected" &&
+        data?.status.dppm === "rejected" &&
         data?.status.keuangan === "rejected" && (
           <KeteranganDitolak title='Pengabdian ditolak oleh kaprodi'>
             {data.keterangan}
