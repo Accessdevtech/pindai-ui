@@ -1,6 +1,6 @@
 import { API_ENDPOINTS, API_ENDPOINTS_DOSEN } from "@/services/api/api-config"
 import { getData, putData } from "@/services/api/http"
-import { DosenResponse, IProfileDosen } from "./dosen.interface"
+import { DosenResponse, ProfileDosenUser } from "./dosen.interface"
 import { ProfileType } from "./profile.schema"
 
 export async function getDashboard() {
@@ -9,7 +9,7 @@ export async function getDashboard() {
 }
 
 export async function updateProfile(data: ProfileType) {
-  const response: DosenResponse<IProfileDosen> = await putData(
+  const response: DosenResponse<ProfileDosenUser> = await putData(
     API_ENDPOINTS.PROFILE,
     data,
   )

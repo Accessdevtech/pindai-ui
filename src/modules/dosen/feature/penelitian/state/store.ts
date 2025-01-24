@@ -1,5 +1,5 @@
+import { StatusData } from "@/interface/type"
 import { atom } from "jotai"
-import { StatusData } from "../penelitian-dosen.interface"
 import { AnggotaType } from "../schema/anggota-schema"
 
 export const anggotaAtom = atom<AnggotaType[]>([])

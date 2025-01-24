@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import { encrypt } from "@/lib/crypto"
 import { setCookie } from "@/services/storage/cookie-storage-service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtomValue } from "jotai"
@@ -58,7 +59,8 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
       if (!res.status) {
         return toast.error(res.message)
       }
-      setCookie("user", res.data.user)
+      const encryptUser = encrypt(res.data.user).data as string
+      setCookie("user", encryptUser)
       toast.success(res.message)
     },
     onError: err => {
