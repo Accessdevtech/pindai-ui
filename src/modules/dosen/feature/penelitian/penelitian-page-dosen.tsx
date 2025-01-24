@@ -4,7 +4,6 @@ import Modal from "@/components/atom/modal"
 import DataTable from "@/components/molecules/data-table"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
-import { useAuthContext } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
 import { useAtomValue } from "jotai"
@@ -13,6 +12,7 @@ import Link from "next/link"
 import { useState } from "react"
 import { useDebounce } from "use-debounce"
 import { Dosen } from "../../dosen.interface"
+import { useUserProfile } from "../../hooks/use-profile/get-profile"
 import { columnPenelitian } from "./components/column-penelitian"
 import { useGetPenelitian } from "./hook/use-penelitian/get-penelitian"
 import {
@@ -27,7 +27,7 @@ export default function PenelitianDosenPage() {
   const statusKaprodi = useAtomValue(statusKaprodiAtom)
   const statusDppm = useAtomValue(statusDppmAtom)
   const statusKeuangan = useAtomValue(statusKeuanganAtom)
-  const { user } = useAuthContext()
+  const { data: user } = useUserProfile()
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [search] = useDebounce(value, 1000)
