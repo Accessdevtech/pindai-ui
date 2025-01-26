@@ -8,8 +8,7 @@ export const penelitianSchema = z.object({
   deskripsi: z.string(),
   jenis_penelitian: z.string(),
   jenis_indeksasi: z.string(),
-  // anggota: z.array(anggotaSchema),
-  // anggotas: z.any(),
+  jenis_luaran: z.string(),
 })
 
 export type PenelitianType = z.infer<typeof penelitianSchema>

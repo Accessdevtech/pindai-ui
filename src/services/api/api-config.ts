@@ -11,11 +11,12 @@ export const API_ENDPOINTS = {
   LIST_PRODI: "/list/prodi",
   REGISTER: "/auth/register",
   LIST_FAKULTAS: "/list/fakultas",
+  LIST_LUARAN: "/list/jenis-luaran",
   LIST_SCHOLAR: "/list/author-scholar",
   LIST_INDEKSASI: "/list/jenis-indeksasi",
+  LIST_PUBLIKASI: "/list/jenis-publikasi",
   LIST_PENELITIAN: "/list/jenis-penelitian",
   LIST_PENGABDIAN: "/list/jenis-pengabdian",
-  LIST_PUBLIKASI: "/list/jenis-publikasi",
   LIST_APPROVED_PENELITIAN: "/list/approved/penelitian",
   LIST_CANCELED_PENELITIAN: "/list/canceled/penelitian",
   LIST_APPROVED_PENGABDIAN: "/list/approved/pengabdian",
@@ -26,9 +27,9 @@ export const API_ENDPOINTS = {
 
 export const API_ENDPOINTS_KEUANGAN = {
   DASHBOARD: "/keuangan/dashboard",
+  PUBLIKASI: "/keuangan/publikasi",
   PENELITIAN: "/keuangan/penelitian",
   PENGABDIAN: "/keuangan/pengabdian",
-  PUBLIKASI: "/keuangan/publikasi",
 
   APPROVED_PENELITIAN: "/keuangan/approved/penelitian",
   CANCELED_PENELITIAN: "/keuangan/canceled/penelitian",
@@ -51,6 +52,7 @@ export const API_ENDPOINTS_DPPM = {
   DASHBOARD: "/dppm/dashboard",
   FAKULTAS: "/dppm/fakultas",
   KAPRODI: "/dppm/kaprodi",
+  LUARAN: "/dppm/luaran",
   DOSEN: "/dppm/dosen",
 }
 
@@ -73,9 +75,9 @@ export const API_ENDPOINTS_DOSEN = {
   AKUN: "/dosen/akun",
   DOSEN: "/dosen/dosen",
   DASHBOARD: "/dosen/dashboard",
+  PUBLIKASI: "/dosen/publikasi",
   PENELITIAN: "/dosen/penelitian",
   PENGABDIAN: "/dosen/pengabdian",
-  PUBLIKASI: "/dosen/publikasi",
   DOWNLOAD_PENELITIAN: "/dosen/penelitian/download",
   DOWNLOAD_PENGABDIAN: "/dosen/pengabdian/download",
   UPLOAD_PENELITIAN: "/dosen/penelitian/upload",

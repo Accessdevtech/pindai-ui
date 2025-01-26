@@ -11,6 +11,7 @@ import { downloadDocxFile, uploadPdfFile } from "@/utils/files"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Separator } from "@/components/ui/separator"
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ROUTE } from "@/services/route"
 import { fileAtom } from "@/state/store"
 import { EachUtil } from "@/utils/each-utils"
@@ -18,6 +19,7 @@ import { useSetAtom } from "jotai"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
+import { columnsDokumenManual } from "./components/column-dokumen-manual"
 import { columnsIdentitas } from "./components/column-identitas"
 import DokumenTable from "./components/dokumen-table"
 import { IdentitasTable } from "./components/identitas-table"
@@ -56,14 +58,23 @@ export default function DetailPenelitianPage({
     },
   })
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (file: File, jenis_dokumen?: string) => {
     const fileEncode = await uploadPdfFile(file)
 
-    upload({ id, file: fileEncode, category: "penelitian" })
+    upload({
+      id,
+      file: fileEncode,
+      category: "penelitian",
+      jenis_dokumen: jenis_dokumen?.split(" ").join("_"),
+    })
   }
 
   const handleDownload = (jenis_Dokumen: string) => {
-    mutate({ id, jenis_dokumen: jenis_Dokumen, category: "penelitian" })
+    mutate({
+      id,
+      jenis_dokumen: jenis_Dokumen.split(" ").join("_"),
+      category: "penelitian",
+    })
   }
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
@@ -74,6 +85,14 @@ export default function DetailPenelitianPage({
     status: data?.status,
     handleFileUpload,
     handleDownload,
+  })
+
+  const columnsDocumentsManual = columnsDokumenManual({
+    isLeader: data?.anggota.some(
+      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
+    ),
+    status: data?.status,
+    handleFileUpload,
   })
 
   if (isPending) toast.loading("Sedang Mengunduh Dokumen")
@@ -165,11 +184,26 @@ export default function DetailPenelitianPage({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <DokumenTable columns={columnsDocuments} />
-        </CardContent>
-      </Card>
+      <Tabs defaultValue='manual'>
+        <TabsList>
+          <TabsTrigger value='generate'>Generate</TabsTrigger>
+          <TabsTrigger value='manual'>Manual</TabsTrigger>
+        </TabsList>
+        <TabsContent value='generate'>
+          <Card>
+            <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+              <DokumenTable columns={columnsDocuments} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+        <TabsContent value='manual'>
+          <Card>
+            <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+              <DokumenTable columns={columnsDocumentsManual} />
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
 
       {/* Identitas Kelompok */}
       <Card>

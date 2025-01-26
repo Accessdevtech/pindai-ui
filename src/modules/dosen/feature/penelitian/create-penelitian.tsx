@@ -22,6 +22,7 @@ import ModalAnggota from "./components/modal-anggota"
 import ModalAnggotaManual from "./components/modal-anggota-manual"
 import ModalJenisIndeksasi from "./components/modal-jenis-indeksasi"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
+import ModalMasterLuaran from "./components/modal-master-luaran"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
 import { anggotaAtom } from "./state/store"
@@ -42,6 +43,7 @@ export default function CreatePenelitian() {
       deskripsi: "",
       jenis_penelitian: "",
       jenis_indeksasi: "",
+      jenis_luaran: "",
     },
   })
 
@@ -134,7 +136,7 @@ export default function CreatePenelitian() {
                 label='deskripsi'
                 control={form.control}
               />
-              <div className='flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
+              <div className='flex w-full flex-col gap-4 xl:flex-row xl:items-center'>
                 <ModalJenisPenelitian
                   control={form.control}
                   name='jenis_penelitian'
@@ -143,6 +145,7 @@ export default function CreatePenelitian() {
                   control={form.control}
                   name='jenis_indeksasi'
                 />
+                <ModalMasterLuaran control={form.control} name='jenis_luaran' />
               </div>
             </div>
 

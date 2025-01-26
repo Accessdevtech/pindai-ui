@@ -15,26 +15,27 @@ import {
   TableRow,
 } from "@/components/ui/table"
 
-export type DocumentStatus = "pending" | "available" | "not_available"
 export type Document = {
   cover: string
   suratPengajuan: string
   suratRekomendasi: string
-  proposal: DocumentStatus
-  kontrakPenelitian: DocumentStatus
-  suratKeteranganSelesai: DocumentStatus
-  laporan: DocumentStatus
+  proposal: string
+  kontrakPenelitian: string
+  suratKeteranganSelesai: string
+  laporanKemajuan: string
+  laporan: string
 }
 
 const data: Document[] = [
   {
-    cover: "cover.pdf",
-    suratPengajuan: "surat.pdf",
-    suratRekomendasi: "rekomendasi.pdf",
-    proposal: "not_available",
-    kontrakPenelitian: "not_available",
-    suratKeteranganSelesai: "not_available",
-    laporan: "not_available",
+    cover: "cover",
+    suratPengajuan: "surat pengajuan",
+    suratRekomendasi: "surat rekomendasi",
+    proposal: "proposal",
+    kontrakPenelitian: "kontrak penelitian",
+    suratKeteranganSelesai: "surat keterangan selesai",
+    laporanKemajuan: "laporan kemajuan",
+    laporan: "laporan",
   },
 ]
 export default function DokumenTable({

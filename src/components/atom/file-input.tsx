@@ -1,8 +1,5 @@
 "use client"
-
 import { Button } from "@/components/ui/button"
-import { fileAtom } from "@/state/store"
-import { useAtom } from "jotai"
 import { LucideIcon, X } from "lucide-react"
 import React, { useRef, useState } from "react"
 import { Document, Page, pdfjs } from "react-pdf"
@@ -14,6 +11,8 @@ interface FileInputProps {
   buttonText?: string
   disabled?: boolean
   Icon?: LucideIcon
+  file: File
+  setFile: (file: File | null) => void
   size?: "sm" | "default" | "lg" | "icon"
   variant?:
     | "default"
@@ -30,8 +29,9 @@ export function FileInput({
   size = "default",
   variant = "default",
   Icon,
+  file,
+  setFile,
 }: FileInputProps) {
-  const [file, setFile] = useAtom(fileAtom)
   const [numPages, setNumPages] = useState<number | null>(null)
   const [pageNumber, setPageNumber] = useState(1)
   const fileInputRef = useRef<HTMLInputElement>(null)

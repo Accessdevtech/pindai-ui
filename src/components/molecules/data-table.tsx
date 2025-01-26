@@ -295,7 +295,7 @@ export default function DataTable<TData, TValue>({
                       render={cell => (
                         <TableCell
                           key={cell.id}
-                          className='max-w-xs text-wrap capitalize'
+                          className='max-w-xs text-wrap border-r capitalize'
                         >
                           {flexRender(
                             cell.column.columnDef.cell,

@@ -9,6 +9,7 @@ import {
 } from "./penelitian-dosen.interface"
 
 import { ListIndeksasiResponse } from "@/modules/listdata/indeksasi.list.interface"
+import { listLuaranResponse } from "@/modules/listdata/luaran.list.interface"
 import { ListPenelitianResponse } from "@/modules/listdata/penelitian.list.interface"
 import { PenelitianType } from "./schema/penelitian-schema"
 
@@ -70,6 +71,11 @@ export async function getListIndeksasi() {
   return response
 }
 
+export async function getListLuaran() {
+  const response: listLuaranResponse = await getData(API_ENDPOINTS.LIST_LUARAN)
+  return response
+}
+
 export async function downloadPenelitian(
   id: string,
   jenis_dokumen: string,
@@ -86,10 +92,11 @@ export async function uploadPenelitian(
   id: string,
   file: string,
   category: string,
+  jenis_dokumen?: string,
 ) {
   const response: ResponseDownloadPenelitian = await postData(
     `${API_ENDPOINTS_DOSEN.UPLOAD_PENELITIAN}/${id}`,
-    { file, category },
+    { file, category, jenis_dokumen },
   )
   return response
 }
