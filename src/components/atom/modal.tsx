@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { LucideIcon } from "lucide-react"
+import { useState } from "react"
 import Tooltip from "../atom/tooltip"
 import { Button } from "../ui/button"
 import {
@@ -31,6 +32,7 @@ interface ModalProps {
   children: React.ReactNode
   className?: string
   disabled?: boolean
+  preventAutoClose?: boolean
 }
 
 export default function Modal({
@@ -48,10 +50,21 @@ export default function Modal({
   btnStyle,
   className,
   disabled,
+  preventAutoClose = false,
   ...props
 }: ModalProps) {
+  const [internalOpen, setInternalOpen] = useState<boolean>(false)
+  const handleOpenChange = (newOpen: boolean) => {
+    if (!preventAutoClose || newOpen) {
+      setInternalOpen(newOpen)
+      setOpen?.(newOpen)
+    }
+  }
   return (
-    <Dialog open={open} onOpenChange={setOpen}>
+    <Dialog
+      open={preventAutoClose ? internalOpen : open}
+      onOpenChange={handleOpenChange}
+    >
       {Icon ? (
         <Tooltip contentText={tooltipContent || ""} side={side}>
           <DialogTrigger asChild>

@@ -71,8 +71,10 @@ export async function getListIndeksasi() {
   return response
 }
 
-export async function getListLuaran() {
-  const response: listLuaranResponse = await getData(API_ENDPOINTS.LIST_LUARAN)
+export async function getListLuaran(id: string) {
+  const response: listLuaranResponse = await getData(
+    `${API_ENDPOINTS.LIST_LUARAN}/${id}`,
+  )
   return response
 }
 

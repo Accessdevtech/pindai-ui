@@ -7,7 +7,6 @@ export const penelitianSchema = z.object({
   bidang: z.string(),
   deskripsi: z.string(),
   jenis_penelitian: z.string(),
-  jenis_indeksasi: z.string(),
   jenis_luaran: z.string(),
 })
 

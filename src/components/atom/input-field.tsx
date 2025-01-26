@@ -36,7 +36,7 @@ export default function InputField<TFieldValues extends FieldValues>({
               type={type}
               {...field}
               value={field.value === null ? "" : field.value}
-              autoComplete={type === "password" ? "off" : "on"}
+              autoComplete='off'
             />
           </FormControl>
           <FormDescription>{hint}</FormDescription>

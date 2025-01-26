@@ -138,18 +138,18 @@ export const columnsDokumen = ({
         }
         return (
           <Modal
-            name='Unggah Laporan kemajuan'
+            name={`Unggah ${row.original.laporanKemajuan}`}
             Icon={UploadIcon}
             variant='outline'
             size='sm'
-            title='Unggah Laporan'
+            title={`Unggah ${row.original.laporanKemajuan}`}
             disabled={
               !isLeader ||
               status?.kaprodi !== "accepted" ||
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description='Unggah laporan kemajuan penelitian Anda dalam format PDF menggunakan form ini.'
+            description={`Unggah ${row.original.laporanKemajuan} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": laporanKemajuan,
             })}
@@ -193,18 +193,18 @@ export const columnsDokumen = ({
         }
         return (
           <Modal
-            name='Unggah Laporan'
+            name={`Unggah ${row.original.laporan}`}
             Icon={UploadIcon}
             variant='outline'
             size='sm'
-            title='Unggah Laporan'
+            title={row.original.laporan}
             disabled={
               !isLeader ||
               status?.kaprodi !== "accepted" ||
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description='Unggah laporan penelitian Anda dalam format PDF menggunakan form ini.'
+            description={`Unggah ${row.original.laporan} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": laporan,
             })}

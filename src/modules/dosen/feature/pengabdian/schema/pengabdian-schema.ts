@@ -7,9 +7,7 @@ export const pengabdianSchema = z.object({
   bidang: z.string(),
   deskripsi: z.string(),
   jenis_pengabdian: z.string(),
-  jenis_indeksasi: z.string(),
-  // anggota: z.array(anggotaSchema),
-  // anggotas: z.any(),
+  jenis_luaran: z.string(),
 })
 
 export type PengabdianType = z.infer<typeof pengabdianSchema>

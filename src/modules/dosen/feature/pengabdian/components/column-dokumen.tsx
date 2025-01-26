@@ -5,11 +5,13 @@ import { Download, FileOutput, UploadIcon } from "lucide-react"
 import { FileInput } from "@/components/atom/file-input"
 import Modal from "@/components/atom/modal"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { StatusData } from "@/interface/type"
 import { cn } from "@/lib/utils"
-import { fileAtom } from "@/state/store"
+import { laporanAtom, laporanKemajuanAtom } from "@/state/store"
 import { ColumnDef } from "@tanstack/react-table"
-import { useAtomValue } from "jotai"
+import { useAtom } from "jotai"
+import { toast } from "sonner"
 import { Document } from "./dokumen-table"
 
 export const columnsDokumen = ({
@@ -19,7 +21,7 @@ export const columnsDokumen = ({
   handleFileUpload,
 }: {
   handleDownload: (jenis_Dokumen: string) => void
-  handleFileUpload: (file: File) => void
+  handleFileUpload: (file: File, jenis_dokumen?: string) => void
   status?: StatusData
   isLeader?: boolean
 }): ColumnDef<Document>[] => {
@@ -32,10 +34,10 @@ export const columnsDokumen = ({
           variant='outline'
           size='sm'
           disabled={!isLeader || status?.kaprodi !== "accepted"}
-          onClick={() => handleDownload("cover")}
+          onClick={() => handleDownload(row.original.cover)}
         >
           <Download />
-          Unduh Cover
+          Unduh {row.original.cover}
         </Button>
       ),
     },
@@ -47,10 +49,10 @@ export const columnsDokumen = ({
           variant='outline'
           size='sm'
           disabled={!isLeader || status?.kaprodi !== "accepted"}
-          onClick={() => handleDownload("surat_pengajuan")}
+          onClick={() => handleDownload(row.original.suratPengajuan)}
         >
           <FileOutput />
-          Unduh Surat Pengajuan
+          Unduh {row.original.suratPengajuan}
         </Button>
       ),
     },
@@ -63,10 +65,10 @@ export const columnsDokumen = ({
             variant='outline'
             size='sm'
             disabled={!isLeader || status?.kaprodi !== "accepted"}
-            onClick={() => handleDownload("surat_rekomendasi")}
+            onClick={() => handleDownload(row.original.suratRekomendasi)}
           >
             <FileOutput />
-            Unduh Surat Rekomendasi
+            Unduh {row.original.suratRekomendasi}
           </Button>
         )
       },
@@ -79,7 +81,7 @@ export const columnsDokumen = ({
           variant='outline'
           size='sm'
           disabled={!isLeader || status?.kaprodi !== "accepted"}
-          onClick={() => handleDownload("proposal")}
+          onClick={() => handleDownload(row.original.proposal)}
         >
           <FileOutput />
           Unduh Proposal
@@ -94,10 +96,10 @@ export const columnsDokumen = ({
           size='sm'
           variant='outline'
           disabled={!isLeader || status?.dppm !== "accepted"}
-          onClick={() => handleDownload("kontrak_pengabdian")}
+          onClick={() => handleDownload(row.original.kontrakPengabdian)}
         >
           <FileOutput />
-          Unduh Kontrak Pengabdian
+          Unduh {row.original.kontrakPengabdian}
         </Button>
       ),
     },
@@ -113,49 +115,115 @@ export const columnsDokumen = ({
             status?.keuangan !== "accepted" ||
             status?.dppm !== "accepted"
           }
-          onClick={() => handleDownload("surat_keterangan_selesai")}
+          onClick={() => handleDownload(row.original.suratKeteranganSelesai)}
         >
           <FileOutput />
-          Unduh Surat Keterangan
+          Unduh {row.original.suratKeteranganSelesai}
         </Button>
       ),
     },
     {
-      accessorKey: "laporan",
-      header: "LAPORAN",
+      accessorKey: "laporan_kemajuan",
+      header: "LAPORAN KEMAJUAN",
       cell: ({ row }) => {
-        const file = useAtomValue(fileAtom)
-        const onFileUpload = async () => {
+        const [laporanKemajuan, setLaporanKemajuan] =
+          useAtom(laporanKemajuanAtom)
+
+        const onFileUpload = async (file: File, jenis_dokumen?: string) => {
           try {
-            // const base64String = await uploadPdfFile(file)
-            handleFileUpload(file!)
+            handleFileUpload(file!, jenis_dokumen)
           } catch (error) {
-            console.error("Error uploading file:", error)
-            // You might want to show an error message to the user here
+            toast.error(`Error uploading file ${error}`)
           }
         }
         return (
           <Modal
-            name='Unggah Laporan'
+            name={`Unggah ${row.original.laporanKemajuan}`}
             Icon={UploadIcon}
             variant='outline'
             size='sm'
-            title='Unggah Laporan'
+            title={`Unggah ${row.original.laporanKemajuan}`}
             disabled={
               !isLeader ||
               status?.kaprodi !== "accepted" ||
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description='Unggah laporan pengabdian Anda dalam format PDF menggunakan form ini.'
+            description={`Unggah ${row.original.laporanKemajuan} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
-              "max-w-4xl": file,
+              "max-w-2xl": laporanKemajuan,
             })}
           >
-            <div className='overflow-auto'>
-              <FileInput accept='.pdf' variant='outline' size='sm' />
-            </div>
-            <Button onClick={onFileUpload} disabled={!file}>
+            <ScrollArea className='max-h-[70vh]'>
+              <FileInput
+                file={laporanKemajuan as File}
+                setFile={setLaporanKemajuan}
+                accept='.pdf'
+                variant='outline'
+                size='sm'
+              />
+            </ScrollArea>
+            <Button
+              onClick={() =>
+                onFileUpload(
+                  laporanKemajuan as File,
+                  row.original.laporanKemajuan,
+                )
+              }
+              disabled={!laporanKemajuan}
+            >
+              Simpan
+            </Button>
+          </Modal>
+        )
+      },
+    },
+    {
+      accessorKey: "laporan",
+      header: "LAPORAN",
+      cell: ({ row }) => {
+        const [laporan, setLaporan] = useAtom(laporanAtom)
+
+        const onFileUpload = async (file: File, jenis_dokumen?: string) => {
+          try {
+            handleFileUpload(file!, jenis_dokumen)
+          } catch (error) {
+            toast.error(`Error uploading file ${error}`)
+          }
+        }
+        return (
+          <Modal
+            name={`Unggah ${row.original.laporan}`}
+            Icon={UploadIcon}
+            variant='outline'
+            size='sm'
+            title={row.original.laporan}
+            disabled={
+              !isLeader ||
+              status?.kaprodi !== "accepted" ||
+              status?.dppm !== "accepted" ||
+              status?.keuangan !== "accepted"
+            }
+            description={`Unggah ${row.original.laporan} pengabdian Anda dalam format PDF menggunakan form ini.`}
+            className={cn({
+              "max-w-2xl": laporan,
+            })}
+          >
+            <ScrollArea className='max-h-[70vh]'>
+              <FileInput
+                file={laporan as File}
+                setFile={setLaporan}
+                accept='.pdf'
+                variant='outline'
+                size='sm'
+              />
+            </ScrollArea>
+            <Button
+              onClick={() =>
+                onFileUpload(laporan as File, row.original.laporan)
+              }
+              disabled={!laporan}
+            >
               Simpan
             </Button>
           </Modal>

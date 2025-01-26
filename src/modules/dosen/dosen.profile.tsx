@@ -29,7 +29,13 @@ import { scholarSearchAtom } from "./feature/scholar/state/store"
 import { useUpdateProfile } from "./hooks/use-profile/update-profile"
 import { profileSchema, ProfileType } from "./profile.schema"
 
-export default function ProfileDosen({ user }: { user: IProfileDosen }) {
+export default function ProfileDosen({
+  user,
+  refetch,
+}: {
+  user: IProfileDosen
+  refetch: () => void
+}) {
   const form = useForm<ProfileType>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -61,6 +67,7 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
       }
       const encryptUser = encrypt(res.data.user).data as string
       setCookie("user", encryptUser)
+      refetch()
       toast.success(res.message)
     },
     onError: err => {

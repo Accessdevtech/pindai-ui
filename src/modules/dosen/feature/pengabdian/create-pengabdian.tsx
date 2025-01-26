@@ -12,6 +12,7 @@ import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom } from "jotai"
+import { Loader2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -20,8 +21,8 @@ import { columnAnggotaView } from "./components/column-anggota-view"
 import DataKetuaPengabdian from "./components/data-ketua-pengabdian"
 import ModalAnggota from "./components/modal-anggota"
 import ModalAnggotaManual from "./components/modal-anggota-manual"
-import ModalJenisIndeksasi from "./components/modal-jenis-indeksasi"
 import ModalJenisPengabdian from "./components/modal-jenis-pengabdian"
+import { useGetListLuaran } from "./hook/use-luaran/get-luaran"
 import { useCreatePengabdian } from "./hook/use-pengabdian/create-pengabdian"
 import { PengabdianType, pengabdianSchema } from "./schema/pengabdian-schema"
 import { anggotaAtom } from "./state/store"
@@ -41,11 +42,11 @@ export default function CreatePengabdian() {
       bidang: "",
       deskripsi: "",
       jenis_pengabdian: "",
-      jenis_indeksasi: "",
+      jenis_luaran: "",
     },
   })
 
-  const { mutate } = useCreatePengabdian({
+  const { mutate, isPending } = useCreatePengabdian({
     onSuccess: res => {
       if (!res.status) {
         return toast.error(res.message)
@@ -77,6 +78,10 @@ export default function CreatePengabdian() {
   }
 
   const columnsView = columnAnggotaView()
+
+  const watchJenisPengabdian = form.watch("jenis_pengabdian")
+
+  const { data: listLuaran } = useGetListLuaran(watchJenisPengabdian)
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
@@ -139,10 +144,14 @@ export default function CreatePengabdian() {
                   control={form.control}
                   name='jenis_pengabdian'
                 />
-                <ModalJenisIndeksasi
-                  control={form.control}
-                  name='jenis_indeksasi'
-                />
+                {watchJenisPengabdian && (
+                  <SelectField
+                    name='jenis_luaran'
+                    label='jenis luaran'
+                    options={listLuaran?.data || []}
+                    control={form.control}
+                  />
+                )}
               </div>
             </div>
 
@@ -163,8 +172,13 @@ export default function CreatePengabdian() {
               </div>
             </div>
 
-            <Button type='submit' className='mt-4 w-full capitalize'>
-              simpan
+            <Button
+              type='submit'
+              className='mt-4 w-full capitalize'
+              disabled={isPending}
+            >
+              simpan{" "}
+              {isPending && <Loader2Icon className='ml-2 animate-spin' />}
             </Button>
           </Form>
         </CardContent>

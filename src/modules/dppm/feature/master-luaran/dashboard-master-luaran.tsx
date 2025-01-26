@@ -5,6 +5,7 @@ import Modal from "@/components/atom/modal"
 import DataTable from "@/components/molecules/data-table"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useAuthContext } from "@/contexts/auth-context"
+import { formatRupiah } from "@/utils/format-rupiah"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
 import { EditIcon, PlusIcon, TrashIcon } from "lucide-react"
@@ -22,14 +23,6 @@ export default function MasterLuaranPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [search] = useDebounce(value, 500)
   const { data, refetch, isFetching } = useGetLuaran(currentPage, search)
-
-  const formatRupiah = (angka: number) => {
-    const formatter = new Intl.NumberFormat("id-ID", {
-      style: "currency",
-      currency: "IDR",
-    })
-    return formatter.format(angka).replace(/^Rp/, "Rp ")
-  }
 
   const columns: ColumnDef<Luaran>[] = [
     {

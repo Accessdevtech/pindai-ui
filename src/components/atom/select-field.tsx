@@ -53,10 +53,11 @@ export default function SelectField<TFieldValues extends FieldValues>({
                     "text-muted-foreground": !field.value,
                   })}
                 >
-                  {field.value
-                    ? options?.find(opt => opt.id === field.value)?.name
-                    : `Select ${label}...`}
-
+                  <span className='truncate'>
+                    {field.value
+                      ? options?.find(opt => opt.id === field.value)?.name
+                      : `Select ${label}...`}
+                  </span>
                   <ChevronsUpDown className='ml-2 h-4 w-4 shrink-0 opacity-50' />
                 </Button>
               </FormControl>

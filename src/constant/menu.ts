@@ -50,11 +50,11 @@ export const navData = {
     },
   ],
   sub: [
-    // {
-    //   name: "list disetujui",
-    //   roles: ["dppm"],
-    //   mainMenu: ["penelitian", "pengabdian"],
-    // },
+    {
+      name: "progress",
+      roles: ["dosen"],
+      mainMenu: ["penelitian", "pengabdian", "publikasi"],
+    },
     // {
     //   name: "list dibatalkan",
     //   roles: ["dppm"],

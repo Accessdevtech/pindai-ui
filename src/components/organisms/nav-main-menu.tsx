@@ -2,14 +2,21 @@ import { navData } from "@/constant/menu"
 import { Role } from "@/interface/type"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { LayersIcon } from "lucide-react"
+import { ArchiveIcon, ChevronDown, LayersIcon } from "lucide-react"
 import Link from "next/link"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "../ui/collapsible"
 import { Separator } from "../ui/separator"
 import {
   SidebarGroup,
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub,
 } from "../ui/sidebar"
 
 interface NavMainMenuProps {
@@ -47,7 +54,7 @@ export default function NavMainMenu({ role, isActive }: NavMainMenuProps) {
           }
         />
 
-        {/* <EachUtil
+        <EachUtil
           of={navData.sub}
           render={(item, index) =>
             item.roles.includes(role as string) && (
@@ -89,7 +96,7 @@ export default function NavMainMenu({ role, isActive }: NavMainMenuProps) {
               </Collapsible>
             )
           }
-        /> */}
+        />
       </SidebarMenu>
     </SidebarGroup>
   )

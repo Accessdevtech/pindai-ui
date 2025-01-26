@@ -12,6 +12,7 @@ import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom } from "jotai"
+import { Loader2Icon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -20,9 +21,8 @@ import { columnAnggotaView } from "./components/column-anggota-view"
 import DataKetuaPenelitian from "./components/data-ketua-penelitian"
 import ModalAnggota from "./components/modal-anggota"
 import ModalAnggotaManual from "./components/modal-anggota-manual"
-import ModalJenisIndeksasi from "./components/modal-jenis-indeksasi"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
-import ModalMasterLuaran from "./components/modal-master-luaran"
+import { useGetListLuaran } from "./hook/use-luaran/get-luaran"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
 import { anggotaAtom } from "./state/store"
@@ -42,12 +42,15 @@ export default function CreatePenelitian() {
       bidang: "",
       deskripsi: "",
       jenis_penelitian: "",
-      jenis_indeksasi: "",
       jenis_luaran: "",
     },
   })
 
-  const { mutate } = useCreatePenelitian({
+  const watchJenisPenelitian = form.watch("jenis_penelitian")
+
+  const { data: listLuaran } = useGetListLuaran(watchJenisPenelitian)
+
+  const { mutate, isPending } = useCreatePenelitian({
     onSuccess: res => {
       if (!res.status) {
         return toast.error(res.message)
@@ -136,17 +139,18 @@ export default function CreatePenelitian() {
                 label='deskripsi'
                 control={form.control}
               />
-              <div className='flex w-full flex-col gap-4 xl:flex-row xl:items-center'>
-                <ModalJenisPenelitian
+              <ModalJenisPenelitian
+                control={form.control}
+                name='jenis_penelitian'
+              />
+              {watchJenisPenelitian && (
+                <SelectField
+                  label='jenis kriteria'
                   control={form.control}
-                  name='jenis_penelitian'
+                  name='jenis_luaran'
+                  options={listLuaran?.data || []}
                 />
-                <ModalJenisIndeksasi
-                  control={form.control}
-                  name='jenis_indeksasi'
-                />
-                <ModalMasterLuaran control={form.control} name='jenis_luaran' />
-              </div>
+              )}
             </div>
 
             <DataKetuaPenelitian />
@@ -166,8 +170,13 @@ export default function CreatePenelitian() {
               </div>
             </div>
 
-            <Button type='submit' className='mt-4 w-full capitalize'>
+            <Button
+              type='submit'
+              className='mt-4 w-full capitalize'
+              disabled={isPending}
+            >
               simpan
+              {isPending && <Loader2Icon className='ml-2 animate-spin' />}
             </Button>
           </Form>
         </CardContent>

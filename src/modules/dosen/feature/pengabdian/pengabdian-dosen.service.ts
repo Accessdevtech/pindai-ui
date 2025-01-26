@@ -9,6 +9,7 @@ import {
 } from "./pengabdian-dosen.interface"
 
 import { ListIndeksasiResponse } from "@/modules/listdata/indeksasi.list.interface"
+import { listLuaranResponse } from "@/modules/listdata/luaran.list.interface"
 import { ListPengabdianResponse } from "@/modules/listdata/pengabdian.list.interface"
 import { PengabdianType } from "./schema/pengabdian-schema"
 
@@ -66,6 +67,13 @@ export async function getListPengabdian() {
 export async function getListIndeksasi() {
   const response: ListIndeksasiResponse = await getData(
     API_ENDPOINTS.LIST_INDEKSASI,
+  )
+  return response
+}
+
+export async function getListLuaran(id: string) {
+  const response: listLuaranResponse = await getData(
+    `${API_ENDPOINTS.LIST_LUARAN}/${id}`,
   )
   return response
 }

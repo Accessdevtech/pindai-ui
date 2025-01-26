@@ -9,7 +9,7 @@ import { StatusData } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import {
   coverAtom,
-  kontrakPenelitianAtom,
+  kontrakPengabdianAtom,
   laporanAtom,
   laporanKemajuanAtom,
   proposalAtom,
@@ -57,7 +57,7 @@ export const columnsDokumenManual = ({
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description={`Unggah ${row.original.cover} penelitian Anda dalam format PDF menggunakan form ini.`}
+            description={`Unggah ${row.original.cover} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": cover,
             })}
@@ -107,7 +107,7 @@ export const columnsDokumenManual = ({
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description={`Unggah ${row.original.suratPengajuan} penelitian Anda dalam format PDF menggunakan form ini.`}
+            description={`Unggah ${row.original.suratPengajuan} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": suratPengajuan,
             })}
@@ -163,7 +163,7 @@ export const columnsDokumenManual = ({
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description={`Unggah ${row.original.suratRekomendasi} penelitian Anda dalam format PDF menggunakan form ini.`}
+            description={`Unggah ${row.original.suratRekomendasi} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": suratRekomendasi,
             })}
@@ -218,7 +218,7 @@ export const columnsDokumenManual = ({
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description={`Unggah ${row.original.proposal} penelitian Anda dalam format PDF menggunakan form ini.`}
+            description={`Unggah ${row.original.proposal} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": proposal,
             })}
@@ -245,11 +245,11 @@ export const columnsDokumenManual = ({
       },
     },
     {
-      accessorKey: "kontrakPenelitian",
-      header: "KONTRAK PENELITIAN",
+      accessorKey: "kontrakPengabdian",
+      header: "KONTRAK PENGABDIAN",
       cell: ({ row }) => {
-        const [kontrakPenelitian, setKontrakPenelitian] = useAtom(
-          kontrakPenelitianAtom,
+        const [kontrakPengabdian, setKontrakPengabdian] = useAtom(
+          kontrakPengabdianAtom,
         )
 
         const onFileUpload = async (file: File, jenis_dokumen?: string) => {
@@ -261,26 +261,26 @@ export const columnsDokumenManual = ({
         }
         return (
           <Modal
-            name={`Unggah ${row.original.kontrakPenelitian}`}
+            name={`Unggah ${row.original.kontrakPengabdian}`}
             Icon={UploadIcon}
             variant='outline'
             size='sm'
-            title={`Unggah ${row.original.kontrakPenelitian}`}
+            title={`Unggah ${row.original.kontrakPengabdian}`}
             disabled={
               !isLeader ||
               status?.kaprodi !== "accepted" ||
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description={`Unggah ${row.original.kontrakPenelitian} Anda dalam format PDF menggunakan form ini.`}
+            description={`Unggah ${row.original.kontrakPengabdian} Anda dalam format PDF menggunakan form ini.`}
             className={cn({
-              "max-w-2xl": kontrakPenelitian,
+              "max-w-2xl": kontrakPengabdian,
             })}
           >
             <ScrollArea className='max-h-[70vh]'>
               <FileInput
-                file={kontrakPenelitian as File}
-                setFile={setKontrakPenelitian}
+                file={kontrakPengabdian as File}
+                setFile={setKontrakPengabdian}
                 accept='.pdf'
                 variant='outline'
                 size='sm'
@@ -289,11 +289,11 @@ export const columnsDokumenManual = ({
             <Button
               onClick={() =>
                 onFileUpload(
-                  kontrakPenelitian as File,
-                  row.original.kontrakPenelitian,
+                  kontrakPengabdian as File,
+                  row.original.kontrakPengabdian,
                 )
               }
-              disabled={!kontrakPenelitian}
+              disabled={!kontrakPengabdian}
             >
               Simpan
             </Button>
@@ -329,7 +329,7 @@ export const columnsDokumenManual = ({
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description={`Unggah ${row.original.suratKeteranganSelesai} penelitian Anda dalam format PDF menggunakan form ini.`}
+            description={`Unggah ${row.original.suratKeteranganSelesai} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": suratKeteranganSelesai,
             })}
@@ -385,7 +385,7 @@ export const columnsDokumenManual = ({
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description={`Unggah ${row.original.laporanKemajuan} penelitian Anda dalam format PDF menggunakan form ini.`}
+            description={`Unggah ${row.original.laporanKemajuan} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": laporanKemajuan,
             })}
@@ -440,7 +440,7 @@ export const columnsDokumenManual = ({
               status?.dppm !== "accepted" ||
               status?.keuangan !== "accepted"
             }
-            description={`Unggah ${row.original.laporan} penelitian Anda dalam format PDF menggunakan form ini.`}
+            description={`Unggah ${row.original.laporan} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-h-fit max-w-2xl": laporan,
             })}
