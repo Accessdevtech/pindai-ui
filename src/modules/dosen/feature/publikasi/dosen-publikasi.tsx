@@ -1,24 +1,41 @@
 "use client"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import Modal from "@/components/atom/modal"
+import DataTable from "@/components/molecules/data-table"
 import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useAuthContext } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
+import { publikasiSearch } from "@/state/store"
+import { useAtom } from "jotai"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import { useDebounce } from "use-debounce"
 import { Dosen } from "../../dosen.interface"
+import { columnPublikasi } from "./components/column-publikasi"
 import FormPublikasi from "./components/form-publikasi"
+import { useGetPublikasi } from "./hooks/use-publikasi/get-publikasi"
 
 export default function DosenPublikasi() {
+  const [open, setOpen] = useState(false)
+  const [value, setValue] = useAtom(publikasiSearch)
+  const [search] = useDebounce(value, 500)
+  const [currentPage, setCurrentPage] = useState(1)
   const { user } = useAuthContext()
+  const { data, refetch, isFetching } = useGetPublikasi(currentPage, search)
   const isNull = Object.fromEntries(
     Object.entries(user as Dosen).map(([key, value]) => [
       key,
       value === null || value === "",
     ]),
   )
+
+  const columns = columnPublikasi({
+    pubilkasi: data?.publikasi || [],
+    refetch,
+  })
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb href={"/dashboard/dosen"}>Publikasi</Breadcrumb>
@@ -45,24 +62,31 @@ export default function DosenPublikasi() {
             </Modal>
           ) : (
             <Modal
+              open={open}
+              setOpen={setOpen}
               Icon={PlusIcon}
               name='Tambah Publikasi'
               title='Tambah Publikasi'
               btnStyle='w-fit'
-              tooltipContent='Tambah Publikasi'
               description='Silahkan isi formulir publikasi'
+              className='max-w-2xl'
             >
-              <FormPublikasi />
+              <div className='flex flex-col gap-4 overflow-hidden px-1'>
+                <FormPublikasi
+                  refetch={refetch}
+                  onClose={() => setOpen(false)}
+                />
+              </div>
             </Modal>
           )}
         </CardHeader>
         <CardContent className='py-6'>
-          {/* <DataTable
+          <DataTable
             search
             filtering
             role={user?.role}
             columns={columns}
-            data={data?.pengabdian || []}
+            data={data?.publikasi || []}
             meta={data?.meta}
             value={value}
             refetch={refetch}
@@ -70,7 +94,7 @@ export default function DosenPublikasi() {
             setValue={setValue}
             currentPage={currentPage}
             onPaginationChange={(page: number) => setCurrentPage(page)}
-          /> */}
+          />
         </CardContent>
       </Card>
     </div>

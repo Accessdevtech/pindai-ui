@@ -65,7 +65,6 @@ export default function FormMasterLuaran({
       toast.error(err.response?.data.message)
     },
   })
-  console.log(luaran)
   const onSubmit = async (data: MasterLuaranType) => {
     if (!luaran) {
       return createLuaran(data)

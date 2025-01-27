@@ -7,7 +7,7 @@ export const penelitianSchema = z.object({
   bidang: z.string(),
   deskripsi: z.string(),
   jenis_penelitian: z.string(),
-  jenis_luaran: z.string(),
+  luaran_kriteria: z.string(),
 })
 
 export type PenelitianType = z.infer<typeof penelitianSchema>

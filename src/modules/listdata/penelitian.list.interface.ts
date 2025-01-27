@@ -7,6 +7,7 @@ export interface PenelitianData {
 }
 
 interface Kriteria {
+  id: string
   name: string
   keterangan: string
   nominal: number

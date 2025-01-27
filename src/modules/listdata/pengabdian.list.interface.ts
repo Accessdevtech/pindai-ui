@@ -10,7 +10,7 @@ export interface Kriteria {
   id: string
   name: string
   keterangan: string
-  nominal: string
+  nominal: number
 }
 
 export interface ListPengabdianResponse extends Response {

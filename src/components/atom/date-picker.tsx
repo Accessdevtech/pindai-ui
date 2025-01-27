@@ -1,6 +1,5 @@
 "use client"
 
-import { format } from "date-fns"
 import { CalendarIcon } from "lucide-react"
 
 import { Button } from "@/components/ui/button"
@@ -11,6 +10,8 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
+import { format } from "date-fns"
+import { id } from "date-fns/locale"
 import { FieldPath, FieldValues, UseControllerProps } from "react-hook-form"
 import {
   FormControl,
@@ -46,7 +47,7 @@ export function DatePickerField<TFieldValues extends FieldValues>({
                   })}
                 >
                   {field.value
-                    ? format(field.value, "PPP")
+                    ? format(field.value, "PPP", { locale: id })
                     : "pilih tanggal..."}
                   <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
                 </Button>
@@ -56,10 +57,12 @@ export function DatePickerField<TFieldValues extends FieldValues>({
               <Calendar
                 mode='single'
                 selected={field.value}
-                onSelect={field.onChange}
-                disabled={date =>
-                  date > new Date() || date < new Date("1900-01-01")
-                }
+                onSelect={date => {
+                  field.onChange(date)
+                }}
+                // disabled={date =>
+                //   date > new Date() || date < new Date("1900-01-01")
+                // }
                 initialFocus
               />
             </PopoverContent>

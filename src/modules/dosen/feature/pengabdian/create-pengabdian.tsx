@@ -22,8 +22,8 @@ import DataKetuaPengabdian from "./components/data-ketua-pengabdian"
 import ModalAnggota from "./components/modal-anggota"
 import ModalAnggotaManual from "./components/modal-anggota-manual"
 import ModalJenisPengabdian from "./components/modal-jenis-pengabdian"
-import { useGetListLuaran } from "./hook/use-luaran/get-luaran"
 import { useCreatePengabdian } from "./hook/use-pengabdian/create-pengabdian"
+import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
 import { PengabdianType, pengabdianSchema } from "./schema/pengabdian-schema"
 import { anggotaAtom } from "./state/store"
 
@@ -42,7 +42,7 @@ export default function CreatePengabdian() {
       bidang: "",
       deskripsi: "",
       jenis_pengabdian: "",
-      jenis_luaran: "",
+      luaran_kriteria: "",
     },
   })
 
@@ -79,9 +79,12 @@ export default function CreatePengabdian() {
 
   const columnsView = columnAnggotaView()
 
+  const { data: listPengabdian, isFetching } = useGetListPengabdian()
   const watchJenisPengabdian = form.watch("jenis_pengabdian")
 
-  const { data: listLuaran } = useGetListLuaran(watchJenisPengabdian)
+  const kriteria = listPengabdian?.data.filter(
+    item => item.id === watchJenisPengabdian,
+  )[0]?.kriteria
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
@@ -139,20 +142,20 @@ export default function CreatePengabdian() {
                 label='deskripsi'
                 control={form.control}
               />
-              <div className='flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
-                <ModalJenisPengabdian
+              <ModalJenisPengabdian
+                data={listPengabdian?.data || []}
+                isFetching={isFetching}
+                control={form.control}
+                name='jenis_pengabdian'
+              />
+              {kriteria && (
+                <SelectField
+                  name='luaran_kriteria'
+                  label='jenis luaran'
+                  options={kriteria}
                   control={form.control}
-                  name='jenis_pengabdian'
                 />
-                {watchJenisPengabdian && (
-                  <SelectField
-                    name='jenis_luaran'
-                    label='jenis luaran'
-                    options={listLuaran?.data || []}
-                    control={form.control}
-                  />
-                )}
-              </div>
+              )}
             </div>
 
             <DataKetuaPengabdian />

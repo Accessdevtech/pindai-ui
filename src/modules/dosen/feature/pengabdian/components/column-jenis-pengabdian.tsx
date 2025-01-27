@@ -22,8 +22,8 @@ export const columnJenisPengabdian = (): ColumnDef<PengabdianData>[] => {
               <EachUtil
                 of={kriteria}
                 render={({ name }, index) => (
-                  <span className='flex flex-col items-start justify-start'>
-                    <Badge key={index}>{name}</Badge>
+                  <span className='flex w-fit flex-col text-start' key={index}>
+                    <Badge>{name}</Badge>
                   </span>
                 )}
               />
@@ -38,7 +38,10 @@ export const columnJenisPengabdian = (): ColumnDef<PengabdianData>[] => {
               <EachUtil
                 of={kriteria}
                 render={({ nominal }, index) => (
-                  <span className='flex flex-col items-end justify-end'>
+                  <span
+                    className='flex flex-col items-end justify-end'
+                    key={index}
+                  >
                     {formatRupiah(nominal)}
                   </span>
                 )}
@@ -54,7 +57,10 @@ export const columnJenisPengabdian = (): ColumnDef<PengabdianData>[] => {
               <EachUtil
                 of={kriteria}
                 render={({ keterangan }, index) => (
-                  <span className='flex flex-col items-end justify-end'>
+                  <span
+                    className='flex flex-col items-start justify-start'
+                    key={index}
+                  >
                     {keterangan}
                   </span>
                 )}

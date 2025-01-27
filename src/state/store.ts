@@ -1,8 +1,13 @@
+import { Kriteria } from "@/modules/listdata/pengabdian.list.interface"
 import { atom } from "jotai"
 
 export const dosenSearch = atom("")
 export const fakultasSearch = atom("")
 export const kaprodiSearch = atom("")
+export const publikasiSearch = atom("")
+
+export const kriteriaAtom = atom<Kriteria>()
+
 export const fileAtom = atom<File | null>(null)
 export const coverAtom = atom<File | null>(null)
 export const suratPengajuanAtom = atom<File | null>(null)

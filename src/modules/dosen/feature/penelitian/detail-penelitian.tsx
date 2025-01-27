@@ -156,7 +156,7 @@ export default function DetailPenelitianPage({
               { label: "Judul Penelitian", value: data?.title },
               { label: "Bidang", value: data?.bidang || "-" },
               { label: "Jenis Penelitian", value: data?.jenis_penelitian },
-              { label: "Target Indeksasi", value: data?.jenis_indeksasi },
+              { label: "Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
             ]}

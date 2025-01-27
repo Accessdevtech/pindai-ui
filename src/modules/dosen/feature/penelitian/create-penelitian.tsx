@@ -22,8 +22,8 @@ import DataKetuaPenelitian from "./components/data-ketua-penelitian"
 import ModalAnggota from "./components/modal-anggota"
 import ModalAnggotaManual from "./components/modal-anggota-manual"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
-import { useGetListLuaran } from "./hook/use-luaran/get-luaran"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
+import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
 import { anggotaAtom } from "./state/store"
 
@@ -42,13 +42,9 @@ export default function CreatePenelitian() {
       bidang: "",
       deskripsi: "",
       jenis_penelitian: "",
-      jenis_luaran: "",
+      luaran_kriteria: "",
     },
   })
-
-  const watchJenisPenelitian = form.watch("jenis_penelitian")
-
-  const { data: listLuaran } = useGetListLuaran(watchJenisPenelitian)
 
   const { mutate, isPending } = useCreatePenelitian({
     onSuccess: res => {
@@ -80,6 +76,14 @@ export default function CreatePenelitian() {
 
     mutate(datas)
   }
+
+  const { data: listPenelitian, isFetching } = useGetListPenelitian()
+
+  const watchJenisPenelitian = form.watch("jenis_penelitian")
+
+  const kriteria = listPenelitian?.data.filter(
+    item => item.id === watchJenisPenelitian,
+  )[0]?.kriteria
 
   const columnsView = columnAnggotaView()
 
@@ -140,15 +144,17 @@ export default function CreatePenelitian() {
                 control={form.control}
               />
               <ModalJenisPenelitian
+                data={listPenelitian?.data || []}
+                isFetching={isFetching}
                 control={form.control}
                 name='jenis_penelitian'
               />
-              {watchJenisPenelitian && (
+              {kriteria && (
                 <SelectField
                   label='jenis kriteria'
                   control={form.control}
-                  name='jenis_luaran'
-                  options={listLuaran?.data || []}
+                  name='luaran_kriteria'
+                  options={kriteria || []}
                 />
               )}
             </div>

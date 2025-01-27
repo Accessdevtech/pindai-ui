@@ -1,26 +1,25 @@
 import Modal from "@/components/atom/modal"
 import SelectField from "@/components/atom/select-field"
+import { PengabdianData } from "@/modules/listdata/pengabdian.list.interface"
 import { InfoIcon } from "lucide-react"
 import { FieldPath, FieldValues, UseControllerProps } from "react-hook-form"
-import { useGetListPengabdian } from "../hook/use-pengabdian/get-list-pengabdian"
 import { columnJenisPengabdian } from "./column-jenis-pengabdian"
-import DataTableJenisPengabdian from "./data-table-jenis-penelitian"
+import DataTableJenisPengabdian from "./data-table-jenis-pengabdian"
 
 export default function ModalJenisPengabdian<TFormValue extends FieldValues>({
+  data,
+  isFetching,
   ...props
 }: {
+  data: PengabdianData[]
+  isFetching?: boolean
   control: UseControllerProps<TFormValue>["control"]
   name: FieldPath<TFormValue>
 }) {
-  const { data: listPengabdian, isFetching } = useGetListPengabdian()
   const columnsJenisPengabdian = columnJenisPengabdian()
   return (
     <div className='flex grow items-end gap-2'>
-      <SelectField
-        label='jenis pengabdian'
-        {...props}
-        options={listPengabdian?.data || []}
-      />
+      <SelectField label='jenis pengabdian' {...props} options={data || []} />
       <Modal
         title='Detail jenis Pengabdian'
         Icon={InfoIcon}
@@ -31,8 +30,8 @@ export default function ModalJenisPengabdian<TFormValue extends FieldValues>({
       >
         <DataTableJenisPengabdian
           columns={columnsJenisPengabdian}
-          data={listPengabdian?.data || []}
-          isLoading={isFetching}
+          data={data || []}
+          isLoading={isFetching || false}
         />
       </Modal>
     </div>

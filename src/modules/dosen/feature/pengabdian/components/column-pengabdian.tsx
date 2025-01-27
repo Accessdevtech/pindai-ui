@@ -1,3 +1,4 @@
+import StatusBadge from "@/components/atom/status-badge"
 import Tooltip from "@/components/atom/tooltip"
 import { buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -6,7 +7,6 @@ import { ColumnDef } from "@tanstack/react-table"
 import { InfoIcon } from "lucide-react"
 import Link from "next/link"
 import { PengabdianDosen } from "../pengabdian-dosen.interface"
-import StatusBadge from "./status-badge"
 
 export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
   return [

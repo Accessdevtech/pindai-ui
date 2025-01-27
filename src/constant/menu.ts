@@ -51,7 +51,7 @@ export const navData = {
   ],
   sub: [
     {
-      name: "progress",
+      name: "timeline",
       roles: ["dosen"],
       mainMenu: ["penelitian", "pengabdian", "publikasi"],
     },
