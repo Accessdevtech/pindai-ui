@@ -1,7 +1,5 @@
+import KaprodiPublikasi from "@/modules/kaprodi/feature/publikasi/kaprodi-publikasi"
+
 export default function DashboardPublikasi() {
-  return (
-    <div>
-      <div>Dashboard Publikasi</div>
-    </div>
-  )
+  return <KaprodiPublikasi />
 }

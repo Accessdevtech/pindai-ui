@@ -1,16 +1,16 @@
-import LoadingPage from "@/components/atom/loading-page"
+import DashboardLoader from "@/components/atom/dashboard-loader"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { EachUtil } from "@/utils/each-utils"
 import CardFakultas from "./components/card-fakultas"
 import InfoPenelitian from "./components/info-penelitian"
 import InfoPengabdian from "./components/info-pengabdian"
-import { Fakultas, Penelitian, Pengabdian } from "./dashboard.interface"
+import { Fakultas } from "./dashboard.interface"
 import { useGetDashboard } from "./hooks/use-dashboard"
 
 export default function DashboardDppm() {
   const { data, isLoading } = useGetDashboard()
 
-  if (isLoading) return <LoadingPage />
+  if (isLoading) return <DashboardLoader />
 
   return (
     <div className='space-y-4'>
@@ -36,8 +36,14 @@ export default function DashboardDppm() {
           </BreadcrumbPage>
         </Breadcrumb>
         <div className='flex flex-col gap-4 xl:flex-row xl:items-start'>
-          <InfoPenelitian penelitian={data?.penelitian || ({} as Penelitian)} />
-          <InfoPengabdian pengabdian={data?.pengabdian || ({} as Pengabdian)} />
+          <InfoPenelitian
+            status={data?.penelitian.status || []}
+            news={data?.penelitian.news || []}
+          />
+          <InfoPengabdian
+            status={data?.pengabdian.status || []}
+            news={data?.pengabdian.news || []}
+          />
           {/* <InfoPublikasi publikasi={data?.publikasi || ({} as Publikasi)} /> */}
         </div>
       </section>

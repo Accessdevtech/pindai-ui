@@ -2,6 +2,7 @@
 import Tooltip from "@/components/atom/tooltip"
 import { Badge } from "@/components/ui/badge"
 import { StatusData } from "@/interface/type"
+import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { CheckIcon, RefreshCcwIcon, X } from "lucide-react"
 import StatusBadge from "../../../../../components/atom/status-badge"
@@ -47,6 +48,16 @@ export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {
       cell: ({ row }) => {
         const isLeader = row.original.is_leader
 
+        const isStatusAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status === "accepted",
+        )
+
+        const isStatusRejected = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status === "rejected",
+        )
+
         return (
           <div className='flex items-center justify-center gap-2'>
             {isLeader ? (
@@ -70,9 +81,7 @@ export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {
                   </div>
                 )}
               </div>
-            ) : status?.kaprodi === "accepted" &&
-              status.dppm === "accepted" &&
-              status.keuangan === "accepted" ? (
+            ) : isStatusAccepted ? (
               <Tooltip contentText='Status Mengikuti Ketua Kelompok'>
                 <Badge
                   variant='outline'
@@ -81,9 +90,7 @@ export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {
                   <CheckIcon />
                 </Badge>
               </Tooltip>
-            ) : status?.kaprodi === "rejected" &&
-              status.dppm === "rejected" &&
-              status.keuangan === "rejected" ? (
+            ) : isStatusRejected ? (
               <Tooltip contentText='Status Mengikuti Ketua Kelompok'>
                 <Badge
                   variant='outline'

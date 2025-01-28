@@ -22,7 +22,11 @@ export default function Tooltip({
     setOpen(prevOpen => (isContentText ? !prevOpen : prevOpen))
   }
   return (
-    <ShadcnTooltip open={open} onOpenChange={handleOpenChange}>
+    <ShadcnTooltip
+      open={open}
+      onOpenChange={handleOpenChange}
+      disableHoverableContent
+    >
       <TooltipTrigger asChild>{children}</TooltipTrigger>
       <TooltipContent
         side={side}

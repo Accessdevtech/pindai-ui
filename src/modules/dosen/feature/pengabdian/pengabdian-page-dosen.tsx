@@ -91,7 +91,10 @@ export default function PengabdianDosenPage() {
         <CardContent className='py-6'>
           <DataTable
             search
-            filtering
+            filtering={{
+              tahunAkademik: Boolean(tahunAkademik),
+              status: Boolean(statusKaprodi || statusDppm || statusKeuangan),
+            }}
             role={user?.role}
             columns={columns}
             data={data?.pengabdian || []}

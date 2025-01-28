@@ -4,12 +4,14 @@ export interface Publikasi {
   id: string
   judul: string
   jenis_publikasi: string
+  jenis_publikasi_label: string
   tanggal_publikasi: string
   tahun: string
   author: string
   jurnal: string
   link_publikasi: string
   luaran_kriteria: string
+  luaran_kriteria_label: string
 }
 
 export interface PublikasiDosen extends Publikasi {

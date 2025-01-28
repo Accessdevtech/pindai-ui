@@ -17,6 +17,7 @@ import {
   suratPengajuanAtom,
   suratRekomendasiAtom,
 } from "@/state/store"
+import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
 import { toast } from "sonner"
@@ -44,6 +45,10 @@ export const columnsDokumenManual = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.cover}`}
@@ -51,12 +56,7 @@ export const columnsDokumenManual = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.cover}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.cover} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": cover,
@@ -94,6 +94,11 @@ export const columnsDokumenManual = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.suratPengajuan}`}
@@ -101,12 +106,7 @@ export const columnsDokumenManual = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.suratPengajuan}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.suratPengajuan} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": suratPengajuan,
@@ -150,6 +150,11 @@ export const columnsDokumenManual = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.suratRekomendasi}`}
@@ -157,12 +162,7 @@ export const columnsDokumenManual = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.suratRekomendasi}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.suratRekomendasi} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": suratRekomendasi,
@@ -205,6 +205,11 @@ export const columnsDokumenManual = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.proposal}`}
@@ -212,12 +217,7 @@ export const columnsDokumenManual = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.proposal}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.proposal} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": proposal,
@@ -246,7 +246,7 @@ export const columnsDokumenManual = ({
     },
     {
       accessorKey: "kontrakPenelitian",
-      header: "KONTRAK PENELITIAN",
+      header: "KONTRAK PENGABDIAN",
       cell: ({ row }) => {
         const [kontrakPenelitian, setKontrakPenelitian] = useAtom(
           kontrakPenelitianAtom,
@@ -259,6 +259,11 @@ export const columnsDokumenManual = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.kontrakPenelitian}`}
@@ -266,12 +271,7 @@ export const columnsDokumenManual = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.kontrakPenelitian}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.kontrakPenelitian} Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": kontrakPenelitian,
@@ -316,6 +316,11 @@ export const columnsDokumenManual = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.suratKeteranganSelesai}`}
@@ -323,12 +328,7 @@ export const columnsDokumenManual = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.suratKeteranganSelesai}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.suratKeteranganSelesai} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": suratKeteranganSelesai,
@@ -372,6 +372,11 @@ export const columnsDokumenManual = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.laporanKemajuan}`}
@@ -379,12 +384,7 @@ export const columnsDokumenManual = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.laporanKemajuan}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.laporanKemajuan} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": laporanKemajuan,
@@ -427,6 +427,11 @@ export const columnsDokumenManual = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.laporan}`}
@@ -434,12 +439,7 @@ export const columnsDokumenManual = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.laporan}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.laporan} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-h-fit max-w-2xl": laporan,

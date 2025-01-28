@@ -3,7 +3,7 @@
 import { usePathname, useRouter } from "next/navigation"
 import React, { useEffect } from "react"
 
-import LoadingPage from "@/components/atom/loading-page"
+import LoadingPage from "@/components/molecules/loading-page"
 import { useAuthContext } from "@/contexts/auth-context"
 
 function withAuth<T extends React.JSX.IntrinsicAttributes>(

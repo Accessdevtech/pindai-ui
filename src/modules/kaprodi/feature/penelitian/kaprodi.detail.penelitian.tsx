@@ -135,12 +135,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
                 variant='outline'
                 description='Berikan keterangan penolakan penelitian'
               >
-                <Textarea
-                  defaultValue={
-                    data?.keterangan === null ? "" : data?.keterangan
-                  }
-                  onChange={e => setKeterangan(e.target.value)}
-                />
+                <Textarea onChange={e => setKeterangan(e.target.value)} />
 
                 <Button onClick={() => reject({ id, keterangan })}>
                   Simpan
@@ -159,7 +154,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
               { label: "Judul Penelitian", value: data?.title },
               { label: "Bidang", value: data?.bidang || "-" },
               { label: "Jenis Penelitian", value: data?.jenis_penelitian },
-              { label: "Target Indeksasi", value: data?.jenis_indeksasi },
+              { label: "Target Indeksasi", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
             ]}

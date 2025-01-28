@@ -31,8 +31,10 @@ export const API_ENDPOINTS_KEUANGAN = {
 
   APPROVED_PENELITIAN: "/keuangan/approved/penelitian",
   CANCELED_PENELITIAN: "/keuangan/canceled/penelitian",
+
   APPROVED_PENGABDIAN: "/keuangan/approved/pengabdian",
   CANCELED_PENGABDIAN: "/keuangan/canceled/pengabdian",
+
   APPROVED_PUBLIKASI: "/keuangan/approved/publikasi",
   CANCELED_PUBLIKASI: "/keuangan/canceled/publikasi",
 }
@@ -40,13 +42,17 @@ export const API_ENDPOINTS_KEUANGAN = {
 export const API_ENDPOINTS_DPPM = {
   APPROVED_PENELITIAN: "/dppm/approved/penelitian",
   CANCELED_PENELITIAN: "/dppm/canceled/penelitian",
+
   APPROVED_PENGABDIAN: "/dppm/approved/pengabdian",
   CANCELED_PENGABDIAN: "/dppm/canceled/pengabdian",
+
   APPROVED_PUBLIKASI: "/dppm/approved/publikasi",
   CANCELED_PUBLIKASI: "/dppm/canceled/publikasi",
+
   PENELITIAN: "/dppm/penelitian",
   PENGABDIAN: "/dppm/pengabdian",
   PUBLIKASI: "/dppm/publikasi",
+
   DASHBOARD: "/dppm/dashboard",
   FAKULTAS: "/dppm/fakultas",
   KAPRODI: "/dppm/kaprodi",
@@ -58,13 +64,18 @@ export const API_ENDPOINTS_KAPRODI = {
   DOSEN: "/kaprodi/dosen",
   DASHBOARD: "/kaprodi/dashboard",
   ACTIVE: "/kaprodi/active/dosen",
+
+  PUBLIKASI: "/kaprodi/publikasi",
   PENELITIAN: "/kaprodi/penelitian",
   PENGABDIAN: "/kaprodi/pengabdian",
   APPROVED: "/kaprodi/approved/dosen",
+
   APPROVED_PENELITIAN: "/kaprodi/approved/penelitian",
   CANCELED_PENELITIAN: "/kaprodi/canceled/penelitian",
+
   APPROVED_PENGABDIAN: "/kaprodi/approved/pengabdian",
   CANCELED_PENGABDIAN: "/kaprodi/canceled/pengabdian",
+
   APPROVED_PUBLIKASI: "/kaprodi/approved/publikasi",
   CANCELED_PUBLIKASI: "/kaprodi/canceled/publikasi",
 }
@@ -73,11 +84,14 @@ export const API_ENDPOINTS_DOSEN = {
   AKUN: "/dosen/akun",
   DOSEN: "/dosen/dosen",
   DASHBOARD: "/dosen/dashboard",
+
   PUBLIKASI: "/dosen/publikasi",
   PENELITIAN: "/dosen/penelitian",
   PENGABDIAN: "/dosen/pengabdian",
+
   DOWNLOAD_PENELITIAN: "/dosen/penelitian/download",
   DOWNLOAD_PENGABDIAN: "/dosen/pengabdian/download",
+
   UPLOAD_PENELITIAN: "/dosen/penelitian/upload",
   UPLOAD_PENGABDIAN: "/dosen/pengabdian/upload",
 }

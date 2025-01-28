@@ -1,5 +1,5 @@
 import { API_ENDPOINTS, API_ENDPOINTS_DOSEN } from "@/services/api/api-config"
-import { getData, postData } from "@/services/api/http"
+import { deleteData, getData, postData, putData } from "@/services/api/http"
 import { DosenData, DosenResponse } from "../../dosen.interface"
 import {
   DetailPenelitian,
@@ -8,8 +8,6 @@ import {
   ResponseDownloadPenelitian,
 } from "./penelitian-dosen.interface"
 
-import { ListIndeksasiResponse } from "@/modules/listdata/indeksasi.list.interface"
-import { listLuaranResponse } from "@/modules/listdata/luaran.list.interface"
 import { ListPenelitianResponse } from "@/modules/listdata/penelitian.list.interface"
 import { PenelitianType } from "./schema/penelitian-schema"
 
@@ -49,6 +47,21 @@ export async function createPenelitianDosen(data: PenelitianType) {
   return response
 }
 
+export async function updatePenelitianDosen(id: string, data: PenelitianType) {
+  const response: PenelitianDosenResponse = await putData(
+    `${API_ENDPOINTS_DOSEN.PENELITIAN}/${id}`,
+    data,
+  )
+  return response
+}
+
+export async function deletePenelitian(id: string) {
+  const response: PenelitianDosenResponse = await deleteData(
+    `${API_ENDPOINTS_DOSEN.PENELITIAN}/${id}`,
+  )
+  return response
+}
+
 export async function getAnggota(page: number, search: string) {
   const response: DosenResponse<DosenData> = await getData(
     API_ENDPOINTS.ANGGOTA,
@@ -60,20 +73,6 @@ export async function getAnggota(page: number, search: string) {
 export async function getListPenelitian() {
   const response: ListPenelitianResponse = await getData(
     API_ENDPOINTS.LIST_PENELITIAN,
-  )
-  return response
-}
-
-export async function getListIndeksasi() {
-  const response: ListIndeksasiResponse = await getData(
-    API_ENDPOINTS.LIST_INDEKSASI,
-  )
-  return response
-}
-
-export async function getListLuaran(id: string) {
-  const response: listLuaranResponse = await getData(
-    `${API_ENDPOINTS.LIST_LUARAN}/${id}`,
   )
   return response
 }

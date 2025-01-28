@@ -24,7 +24,7 @@ interface ModalProps {
     | "ghost"
   size?: "default" | "sm" | "lg" | "icon"
   title: string
-  description: string
+  description?: string
   open?: boolean
   btnStyle?: string
   tooltipContent?: string

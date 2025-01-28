@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { StatusData } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import { laporanAtom, laporanKemajuanAtom } from "@/state/store"
+import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
 import { toast } from "sonner"
@@ -136,6 +137,10 @@ export const columnsDokumen = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.laporanKemajuan}`}
@@ -143,12 +148,7 @@ export const columnsDokumen = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.laporanKemajuan}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.laporanKemajuan} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": laporanKemajuan,
@@ -191,6 +191,11 @@ export const columnsDokumen = ({
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.laporan}`}
@@ -198,12 +203,7 @@ export const columnsDokumen = ({
             variant='outline'
             size='sm'
             title={row.original.laporan}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.laporan} pengabdian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": laporan,

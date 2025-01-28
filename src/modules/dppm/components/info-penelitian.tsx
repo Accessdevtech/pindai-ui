@@ -6,12 +6,14 @@ import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
 import { ExternalLinkIcon } from "lucide-react"
 import Link from "next/link"
-import { Penelitian } from "../dashboard.interface"
+import { News, StatusData } from "../dashboard.interface"
 
 export default function InfoPenelitian({
-  penelitian,
+  status,
+  news,
 }: {
-  penelitian: Penelitian
+  status: StatusData[]
+  news: News[]
 }) {
   return (
     <div className='flex grow flex-col gap-4'>
@@ -28,7 +30,7 @@ export default function InfoPenelitian({
           <div className='flex gap-1.5'>
             <p className='capitalize text-muted-foreground'>data:</p>
             <EachUtil
-              of={penelitian.status}
+              of={status}
               render={(item, index) => (
                 <Badge
                   key={index}
@@ -57,7 +59,7 @@ export default function InfoPenelitian({
         </CardHeader>
         <CardContent>
           <EachUtil
-            of={penelitian.news}
+            of={news}
             render={(item, index) => (
               <div className='flex items-center justify-between' key={index}>
                 <div className='flex items-center gap-3'>

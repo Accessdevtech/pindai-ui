@@ -40,7 +40,7 @@ export default function PenelitianDosenPage() {
     statusKeuangan,
   )
 
-  const columns = columnPenelitian()
+  const columns = columnPenelitian({ refetch })
 
   if (!user) return null
 
@@ -91,7 +91,10 @@ export default function PenelitianDosenPage() {
         <CardContent className='py-6'>
           <DataTable
             search
-            filtering
+            filtering={{
+              tahunAkademik: Boolean(tahunAkademik),
+              status: Boolean(statusKaprodi || statusDppm || statusKeuangan),
+            }}
             role={user?.role}
             columns={columns}
             data={data?.penelitian || []}

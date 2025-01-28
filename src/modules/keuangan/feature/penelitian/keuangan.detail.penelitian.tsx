@@ -1,6 +1,5 @@
 "use client"
 import Breadcrumb from "@/components/atom/bradcrumb"
-import Modal from "@/components/atom/modal"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Button } from "@/components/ui/button"
 import {
@@ -9,13 +8,12 @@ import {
   CardDescription,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { CheckIcon, X } from "lucide-react"
+import { CheckIcon } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian"
@@ -125,26 +123,6 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
                 <CheckIcon />
                 Setuju
               </Button>
-              <Modal
-                title='Tolak Penelitian'
-                name='Tolak'
-                Icon={X}
-                tooltipContent='Tolak Penelitian'
-                btnStyle='grow border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground lg:w-fit'
-                variant='outline'
-                description='Berikan keterangan penolakan penelitian'
-              >
-                <Input
-                  defaultValue={
-                    data?.keterangan === null ? "" : data?.keterangan
-                  }
-                  onChange={e => setKeterangan(e.target.value)}
-                />
-
-                <Button onClick={() => reject({ id, keterangan })}>
-                  Simpan
-                </Button>
-              </Modal>
             </CardContent>
           </Card>
         )}

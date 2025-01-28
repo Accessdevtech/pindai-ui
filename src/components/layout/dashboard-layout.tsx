@@ -25,7 +25,9 @@ export default function DashboardLayout({
               <ProfileButton />
             </div>
           </nav>
-          <main className='mb-11 flex flex-shrink flex-col'>{children}</main>
+          <main className='max-h-[calc(100vh-64px] mb-11 flex flex-shrink flex-col'>
+            {children}
+          </main>
           <footer className='absolute bottom-0 space-x-2 text-muted-foreground'>
             <span>&copy; 2024, made by</span>
             <span className='font-bold uppercase'>Access Dev Team</span>

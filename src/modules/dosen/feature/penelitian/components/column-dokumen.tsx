@@ -9,6 +9,7 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { StatusData } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import { laporanAtom, laporanKemajuanAtom } from "@/state/store"
+import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
 import { toast } from "sonner"
@@ -131,11 +132,16 @@ export const columnsDokumen = ({
 
         const onFileUpload = async (file: File, jenis_dokumen?: string) => {
           try {
-            handleFileUpload(file!, jenis_dokumen)
+            handleFileUpload(file, jenis_dokumen)
           } catch (error) {
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.laporanKemajuan}`}
@@ -143,12 +149,7 @@ export const columnsDokumen = ({
             variant='outline'
             size='sm'
             title={`Unggah ${row.original.laporanKemajuan}`}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.laporanKemajuan} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
               "max-w-2xl": laporanKemajuan,
@@ -186,27 +187,27 @@ export const columnsDokumen = ({
 
         const onFileUpload = async (file: File, jenis_dokumen?: string) => {
           try {
-            handleFileUpload(file!, jenis_dokumen)
+            handleFileUpload(file, jenis_dokumen)
           } catch (error) {
             toast.error(`Error uploading file ${error}`)
           }
         }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
         return (
           <Modal
             name={`Unggah ${row.original.laporan}`}
             Icon={UploadIcon}
             variant='outline'
             size='sm'
-            title={row.original.laporan}
-            disabled={
-              !isLeader ||
-              status?.kaprodi !== "accepted" ||
-              status?.dppm !== "accepted" ||
-              status?.keuangan !== "accepted"
-            }
+            title={`Unggah ${row.original.laporan}`}
+            disabled={!isLeader || isStatusNotAccepted}
             description={`Unggah ${row.original.laporan} penelitian Anda dalam format PDF menggunakan form ini.`}
             className={cn({
-              "max-w-2xl": laporan,
+              "max-h-fit max-w-2xl": laporan,
             })}
           >
             <ScrollArea className='max-h-[70vh]'>

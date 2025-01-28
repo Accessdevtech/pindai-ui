@@ -14,7 +14,7 @@ import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ROUTE } from "@/services/route"
 import { fileAtom } from "@/state/store"
-import { EachUtil } from "@/utils/each-utils"
+import { EachUtil, Every, Reduce } from "@/utils/each-utils"
 import { useSetAtom } from "jotai"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
@@ -96,6 +96,16 @@ export default function DetailPenelitianPage({
   })
 
   if (isPending) toast.loading("Sedang Mengunduh Dokumen")
+
+  const statusArray = [
+    data?.status.kaprodi,
+    data?.status.dppm,
+    data?.status.keuangan,
+  ]
+
+  const isRejectedDppm = Reduce(statusArray, status => status === "rejected")
+
+  const isRejectedKaprodi = Every(statusArray, status => status === "rejected")
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -112,29 +122,18 @@ export default function DetailPenelitianPage({
       >
         {data?.title}
       </Breadcrumb>
-      {data?.status.kaprodi === "rejected" &&
-        data?.status.dppm === "rejected" &&
-        data?.status.keuangan === "rejected" && (
-          <KeteranganDitolak title='Penelitian ditolak oleh kaprodi'>
-            {data.keterangan}
-          </KeteranganDitolak>
-        )}
 
-      {data?.status.kaprodi === "accepted" &&
-        data?.status.dppm === "rejected" &&
-        data?.status.keuangan === "rejected" && (
-          <KeteranganDitolak title='Penelitian ditolak oleh dppm'>
-            {data.keterangan}
-          </KeteranganDitolak>
-        )}
+      {isRejectedKaprodi && (
+        <KeteranganDitolak title='Penelitian ditolak oleh kaprodi'>
+          {data?.keterangan}
+        </KeteranganDitolak>
+      )}
 
-      {data?.status.kaprodi === "accepted" &&
-        data?.status.dppm === "accepted" &&
-        data?.status.keuangan === "rejected" && (
-          <KeteranganDitolak title='Penelitian ditolak oleh keuangan'>
-            {data.keterangan}
-          </KeteranganDitolak>
-        )}
+      {isRejectedDppm && (
+        <KeteranganDitolak title='Penelitian ditolak oleh dppm'>
+          {data?.keterangan}
+        </KeteranganDitolak>
+      )}
 
       <Card>
         <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>

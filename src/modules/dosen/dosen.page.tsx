@@ -1,4 +1,5 @@
 import CardStatus from "@/components/atom/card-status"
+import DashboardLoader from "@/components/atom/dashboard-loader"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
 import { Card } from "@/components/ui/card"
 import { Role } from "@/interface/type"
@@ -8,7 +9,9 @@ import InfoCard from "./components/InfoCard"
 import { useGetDashboard } from "./hooks/use-dashboard"
 
 export default function DosenPage({ role }: { role: Role | undefined }) {
-  const { data } = useGetDashboard()
+  const { data, isLoading } = useGetDashboard()
+
+  if (isLoading) return <DashboardLoader />
   return (
     <div className='flex flex-col gap-4'>
       <section className='flex flex-col gap-3'>

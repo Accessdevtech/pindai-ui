@@ -8,23 +8,37 @@ import { useAuthContext } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
 import { publikasiSearch } from "@/state/store"
-import { useAtom } from "jotai"
+import { useAtom, useAtomValue } from "jotai"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useDebounce } from "use-debounce"
 import { Dosen } from "../../dosen.interface"
+import {
+  statusDppmAtom,
+  statusKaprodiAtom,
+  statusKeuanganAtom,
+} from "../penelitian/state/store"
 import { columnPublikasi } from "./components/column-publikasi"
 import FormPublikasi from "./components/form-publikasi"
 import { useGetPublikasi } from "./hooks/use-publikasi/get-publikasi"
 
 export default function DosenPublikasi() {
+  const statusKaprodi = useAtomValue(statusKaprodiAtom)
+  const statusDppm = useAtomValue(statusDppmAtom)
+  const statusKeuangan = useAtomValue(statusKeuanganAtom)
   const [open, setOpen] = useState(false)
   const [value, setValue] = useAtom(publikasiSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
   const { user } = useAuthContext()
-  const { data, refetch, isFetching } = useGetPublikasi(currentPage, search)
+  const { data, refetch, isFetching } = useGetPublikasi(
+    currentPage,
+    search,
+    statusKaprodi,
+    statusDppm,
+    statusKeuangan,
+  )
   const isNull = Object.fromEntries(
     Object.entries(user as Dosen).map(([key, value]) => [
       key,
@@ -83,7 +97,9 @@ export default function DosenPublikasi() {
         <CardContent className='py-6'>
           <DataTable
             search
-            filtering
+            filtering={{
+              status: true,
+            }}
             role={user?.role}
             columns={columns}
             data={data?.publikasi || []}
