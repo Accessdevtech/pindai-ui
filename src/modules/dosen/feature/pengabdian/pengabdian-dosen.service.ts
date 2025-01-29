@@ -13,6 +13,7 @@ import { PengabdianType } from "./schema/pengabdian-schema"
 
 export async function getPengabdianDosen(
   page: number,
+  perPage?: number,
   search?: string,
   tahun_akademik?: string,
   status_kaprodi?: string,
@@ -24,6 +25,7 @@ export async function getPengabdianDosen(
   if (status_kaprodi) params.status_kaprodi = status_kaprodi
   if (tahun_akademik) params.tahun_akademik = tahun_akademik
   if (status_dppm) params.status_dppm = status_dppm
+  if (perPage) params.per_page = perPage
   if (search) params.search = search
   const response: DosenResponse<PengabdianDosenData> = await getData(
     API_ENDPOINTS_DOSEN.PENGABDIAN,
@@ -47,10 +49,17 @@ export async function createPengabdianDosen(data: PengabdianType) {
   return response
 }
 
-export async function getAnggota(page: number, search: string) {
+export async function getAnggota(
+  page: number,
+  perPage?: number,
+  search?: string,
+) {
+  const params: Record<string, string | number> = { page }
+  if (perPage) params.per_page = perPage
+  if (search) params.search = search
   const response: DosenResponse<DosenData> = await getData(
     API_ENDPOINTS.ANGGOTA,
-    { page, search },
+    params,
   )
   return response.data
 }

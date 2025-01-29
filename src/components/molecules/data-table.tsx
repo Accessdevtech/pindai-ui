@@ -46,6 +46,8 @@ interface DataTableProps<TData, TValue> {
   role?: Role
   search?: boolean
   currentPage?: number
+  perPage?: number
+  setPerPage?: (perPage: number) => void
   value?: string
   isLoading?: boolean
   filtering?: {
@@ -67,6 +69,8 @@ export default function DataTable<TData, TValue>({
   isLoading,
   search = false,
   filtering = { status: false, tahunAkademik: false },
+  perPage,
+  setPerPage,
   refetch,
   setValue,
   onPaginationChange,
@@ -86,7 +90,7 @@ export default function DataTable<TData, TValue>({
       rowSelection,
       pagination: {
         pageIndex: currentPage ? currentPage - 1 : 0,
-        pageSize: meta?.per_page || 10,
+        pageSize: meta?.per_page || perPage || 10,
       },
     },
     pageCount: meta?.last_page,
@@ -285,6 +289,8 @@ export default function DataTable<TData, TValue>({
           table={table}
           onPaginationChange={onPaginationChange}
           meta={meta || ({} as Meta)}
+          perPage={perPage || 10}
+          serPerPage={setPerPage || (() => {})}
         />
       )}
     </div>

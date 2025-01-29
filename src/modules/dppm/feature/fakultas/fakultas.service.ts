@@ -7,13 +7,17 @@ import { deleteData, getData, postData, putData } from "@/services/api/http"
 import { DppmResponse } from "../../dashboard.interface"
 import { FakultasType } from "./fakultas.schema"
 
-export async function getFakultas(page: number, search: string) {
+export async function getFakultas(
+  page: number,
+  perPage?: number,
+  search?: string,
+) {
+  const params: Record<string, string | number> = { page }
+  if (perPage) params.per_page = perPage
+  if (search) params.search = search
   const response: DppmResponse<FakultasData> = await getData(
     API_ENDPOINTS_DPPM.FAKULTAS,
-    {
-      page,
-      search,
-    },
+    params,
   )
   return response.data
 }

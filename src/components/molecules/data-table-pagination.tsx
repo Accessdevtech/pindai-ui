@@ -19,13 +19,17 @@ import {
 
 interface DataTablePaginationProps<TData> {
   table: Table<TData>
+  serPerPage: (perPage: number) => void
+  perPage: number
   onPaginationChange: (page: number) => void
   meta: Meta
 }
 
 export function DataTablePagination<TData>({
   table,
+  perPage,
   onPaginationChange,
+  serPerPage,
   meta,
 }: DataTablePaginationProps<TData>) {
   return (
@@ -38,14 +42,14 @@ export function DataTablePagination<TData>({
         <div className='flex items-center space-x-2'>
           <p className='text-sm font-medium'>Rows per page</p>
           <Select
-            value={`${table.getState().pagination.pageSize}`}
+            value={perPage.toString()}
             onValueChange={value => {
-              table.setPageSize(Number(value))
+              serPerPage(Number(value))
               onPaginationChange(1)
             }}
           >
             <SelectTrigger className='h-8 w-[70px]'>
-              <SelectValue placeholder={table.getState().pagination.pageSize} />
+              <SelectValue placeholder={perPage} />
             </SelectTrigger>
             <SelectContent side='top'>
               {[10, 20, 30, 40, 50].map(pageSize => (

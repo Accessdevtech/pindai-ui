@@ -3,6 +3,7 @@ import { getPublikasi } from "../../publikasi-service"
 
 export const useGetPublikasi = (
   page: number,
+  perPage?: number,
   search?: string,
   status_kaprodi?: string,
   status_dppm?: string,
@@ -12,6 +13,7 @@ export const useGetPublikasi = (
     queryKey: [
       "publikasi",
       page,
+      perPage,
       search,
       status_kaprodi,
       status_dppm,
@@ -20,6 +22,7 @@ export const useGetPublikasi = (
     queryFn: async () =>
       await getPublikasi(
         page,
+        perPage,
         search,
         status_kaprodi,
         status_dppm,

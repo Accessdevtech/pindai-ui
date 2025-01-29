@@ -12,9 +12,14 @@ import { useGetDosen } from "./hooks/use-dosen/get-dosen"
 export default function DosenPageDppm() {
   const [value, setValue] = useAtom(dosenSearch)
   const [currentPage, setCurrentPage] = useState(1)
+  const [perPage, setPerPage] = useState(10)
   const [search] = useDebounce(value, 500)
 
-  const { data, refetch, isFetching } = useGetDosen(currentPage, search)
+  const { data, refetch, isFetching } = useGetDosen(
+    currentPage,
+    perPage,
+    search,
+  )
   const column = columnDosen({
     refetch,
   })
@@ -30,6 +35,8 @@ export default function DosenPageDppm() {
           currentPage={currentPage}
           isLoading={isFetching}
           refetch={refetch}
+          perPage={perPage}
+          setPerPage={setPerPage}
           value={value}
           setValue={setValue}
           onPaginationChange={(page: number) => setCurrentPage(page)}

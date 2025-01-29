@@ -3,6 +3,7 @@ import { getPengabdianDosen } from "../../pengabdian-dosen.service"
 
 export const useGetPengabdian = (
   page: number,
+  perPage?: number,
   search?: string,
   tahun_akademik?: string,
   status_kaprodi?: string,
@@ -13,6 +14,7 @@ export const useGetPengabdian = (
     queryKey: [
       "pengabdian",
       page,
+      perPage,
       search,
       tahun_akademik,
       status_kaprodi,
@@ -22,6 +24,7 @@ export const useGetPengabdian = (
     queryFn: async () =>
       await getPengabdianDosen(
         page,
+        perPage,
         search,
         tahun_akademik,
         status_kaprodi,

@@ -25,7 +25,12 @@ export default function FakultasPage({ role }: { role: Role | undefined }) {
   const [value, setValue] = useAtom(fakultasSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
-  const { data, refetch, isFetching } = useGetFakultas(currentPage, search)
+  const [perPage, setPerPage] = useState(10)
+  const { data, refetch, isFetching } = useGetFakultas(
+    currentPage,
+    perPage,
+    search,
+  )
 
   const { isOpen, closeDialog, toggleDialog } = useDialog(data?.fakultas || [])
   const { mutate, isError, error } = useAddFakultas({
@@ -101,10 +106,12 @@ export default function FakultasPage({ role }: { role: Role | undefined }) {
           data={data?.fakultas || []}
           meta={data?.meta || ({} as Meta)}
           currentPage={currentPage}
+          perPage={perPage}
           value={value}
           isLoading={isFetching}
           refetch={refetch}
           setValue={setValue}
+          setPerPage={setPerPage}
           onPaginationChange={(page: number) => setCurrentPage(page)}
         />
       </CardContent>

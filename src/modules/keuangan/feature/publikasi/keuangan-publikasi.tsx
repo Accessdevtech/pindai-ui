@@ -28,9 +28,6 @@ export default function KeuanganPublikasi() {
         <CardContent className='py-6'>
           <DataTable
             search
-            filtering={{
-              status: true,
-            }}
             role={user?.role}
             columns={columns}
             data={data?.publikasi || []}

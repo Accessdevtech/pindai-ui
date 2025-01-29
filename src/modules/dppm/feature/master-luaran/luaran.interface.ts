@@ -8,6 +8,18 @@ export interface ILuaran {
 export interface Luaran {
   id: string
   name: string
+  category: string
+  kriteria: Kriteria[]
+}
+
+export interface LuaranShorted {
+  category: string
+  items: Luaran[]
+}
+
+export interface Kriteria {
+  id?: string
+  name: string
   nominal: number
-  terbilang: string
+  keterangan: string
 }

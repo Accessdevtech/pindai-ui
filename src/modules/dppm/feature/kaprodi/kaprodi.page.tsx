@@ -26,7 +26,12 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
   const [value, setValue] = useAtom(kaprodiSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
-  const { data, refetch, isFetching } = useGetKaprodi(currentPage, search)
+  const [perPage, setPerPage] = useState(10)
+  const { data, refetch, isFetching } = useGetKaprodi(
+    currentPage,
+    perPage,
+    search,
+  )
   const { data: fakultasList } = useGetFakultasList()
 
   const { isOpen, closeDialog, toggleDialog } = useDialog(data?.kaprodi || [])
@@ -132,9 +137,11 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
           data={data?.kaprodi || []}
           meta={data?.meta || ({} as Meta)}
           currentPage={currentPage}
+          perPage={perPage}
           value={value}
           isLoading={isFetching}
           refetch={refetch}
+          setPerPage={setPerPage}
           setValue={setValue}
           onPaginationChange={(page: number) => setCurrentPage(page)}
         />

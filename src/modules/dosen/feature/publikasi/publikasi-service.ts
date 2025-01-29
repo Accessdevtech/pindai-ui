@@ -6,6 +6,7 @@ import { PublikasiType } from "./schema/publikasi-schema"
 
 export const getPublikasi = async (
   page: number,
+  perPage?: number,
   search?: string,
   status_kaprodi?: string,
   status_dppm?: string,
@@ -15,6 +16,7 @@ export const getPublikasi = async (
   if (status_kaprodi) params.status_kaprodi = status_kaprodi
   if (status_dppm) params.status_dppm = status_dppm
   if (status_keuangan) params.status_keuangan = status_keuangan
+  if (perPage) params.per_page = perPage
   if (search) params.search = search
   const response: DosenResponse<PublikasiData> = await getData(
     API_ENDPOINTS_DOSEN.PUBLIKASI,

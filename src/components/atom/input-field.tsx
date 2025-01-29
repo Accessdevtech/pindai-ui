@@ -11,7 +11,7 @@ import {
 import { Input } from "../ui/input"
 
 interface InputFieldProps<TFieldValues extends FieldValues> {
-  label: string
+  label?: string
   control: UseControllerProps<TFieldValues>["control"]
   name: FieldPath<TFieldValues>
   type?: HTMLInputTypeAttribute

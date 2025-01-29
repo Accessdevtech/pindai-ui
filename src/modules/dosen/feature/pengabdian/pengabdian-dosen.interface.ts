@@ -25,7 +25,7 @@ export interface DetailPengabdian {
   jenis_pengabdian: string
   semester: string
   keterangan: string
-  jenis_indeksasi: string
+  jenis_kriteria: string
   academic_year: string
   status: StatusData
   anggota: Anggota[]

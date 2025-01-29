@@ -17,8 +17,8 @@ import { Input } from "../ui/input" // Shandcn UI Input
 
 interface InputFieldProps<TFieldValues extends FieldValues> {
   form: UseFormReturn<TFieldValues>
-  label: string
-  control: UseControllerProps<TFieldValues>["control"]
+  label?: string
+  control?: UseControllerProps<TFieldValues>["control"]
   name: FieldPath<TFieldValues>
   type?: HTMLInputTypeAttribute
   hint?: string

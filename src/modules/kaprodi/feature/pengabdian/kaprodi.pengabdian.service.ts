@@ -8,6 +8,7 @@ import { KaprodiResponse } from "../../kaprodi.interface"
 
 export async function getPengabdianKaprodi(
   page: number,
+  perPage?: number,
   search?: string,
   tahun_akademik?: string,
   status_kaprodi?: string,
@@ -19,6 +20,7 @@ export async function getPengabdianKaprodi(
   if (status_kaprodi) params.status_kaprodi = status_kaprodi
   if (tahun_akademik) params.tahun_akademik = tahun_akademik
   if (status_dppm) params.status_dppm = status_dppm
+  if (perPage) params.per_page = perPage
   if (search) params.search = search
   const response: KaprodiResponse<PengabdianDosenData> = await getData(
     API_ENDPOINTS_KAPRODI.PENGABDIAN,

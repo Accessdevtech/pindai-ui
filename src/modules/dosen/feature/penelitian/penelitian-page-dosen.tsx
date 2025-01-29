@@ -31,8 +31,10 @@ export default function PenelitianDosenPage() {
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [search] = useDebounce(value, 1000)
+  const [perPage, setPerPage] = useState(10)
   const { data, refetch, isFetching } = useGetPenelitian(
     currentPage,
+    perPage,
     search,
     tahunAkademik,
     statusKaprodi,
@@ -100,6 +102,8 @@ export default function PenelitianDosenPage() {
             data={data?.penelitian || []}
             meta={data?.meta}
             value={value}
+            perPage={perPage}
+            setPerPage={setPerPage}
             refetch={refetch}
             isLoading={isFetching}
             setValue={setValue}

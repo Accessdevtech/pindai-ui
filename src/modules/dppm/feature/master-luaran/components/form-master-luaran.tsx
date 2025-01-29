@@ -1,15 +1,21 @@
 "use client"
 import InputField from "@/components/atom/input-field"
-import MoneyField from "@/components/atom/money-field"
+import SelectField from "@/components/atom/select-field"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
+import { EditableFormTable } from "@/modules/dppm/feature/master-luaran/components/table-input-kriteria"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { useCreateLuaran } from "../hooks/use-master-luaran/create-luaran"
 import { useUpdateLuaran } from "../hooks/use-master-luaran/update-luaran"
 import { Luaran } from "../luaran.interface"
-import { masterLuaranSchema, MasterLuaranType } from "../schema/luaran"
+import {
+  KriteriaType,
+  masterLuaranSchema,
+  MasterLuaranType,
+} from "../schema/luaran"
+import { createEditableColumns } from "./column-input-luaran"
 
 export default function FormMasterLuaran({
   onClose,
@@ -24,7 +30,8 @@ export default function FormMasterLuaran({
     resolver: zodResolver(masterLuaranSchema),
     defaultValues: {
       name: luaran?.name || "",
-      nominal: luaran?.nominal || 0,
+      category: luaran?.category || "",
+      kriteria: luaran?.kriteria || [],
     },
   })
   const { mutate: createLuaran } = useCreateLuaran({
@@ -73,16 +80,48 @@ export default function FormMasterLuaran({
     }
   }
 
+  const kriteriaColumns = createEditableColumns<KriteriaType>(
+    form,
+    "kriteria",
+    ["name", "nominal", "keterangan"],
+  )
+
   return (
     <Form form={form} onSubmit={onSubmit}>
       <InputField label='Nama Luaran' name='name' control={form.control} />
+      <SelectField
+        label='Kategori Luaran'
+        name='category'
+        control={form.control}
+        options={[
+          {
+            id: "penelitian",
+            name: "penelitian",
+          },
+          {
+            id: "pengabdian",
+            name: "pengabdian",
+          },
+          {
+            id: "publikasi",
+            name: "publikasi",
+          },
+        ]}
+      />
 
-      <MoneyField
+      <EditableFormTable
+        form={form}
+        name='kriteria'
+        columns={kriteriaColumns}
+        defaultRow={{ name: "", nominal: 0, keterangan: "" }}
+      />
+
+      {/* <MoneyField
         label='Biaya Luaran'
-        name='nominal'
+        name=''
         control={form.control}
         form={form}
-      />
+      /> */}
 
       <Button type='submit'>Simpan</Button>
     </Form>

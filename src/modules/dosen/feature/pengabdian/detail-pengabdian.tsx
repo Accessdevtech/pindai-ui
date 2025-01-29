@@ -146,7 +146,7 @@ export default function DetailPengabdianPage({
               { label: "Judul pengabdian", value: data?.title },
               { label: "Bidang", value: data?.bidang || "-" },
               { label: "Jenis pengabdian", value: data?.jenis_pengabdian },
-              { label: "Target Indeksasi", value: data?.jenis_indeksasi },
+              { label: "Jenis Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
             ]}

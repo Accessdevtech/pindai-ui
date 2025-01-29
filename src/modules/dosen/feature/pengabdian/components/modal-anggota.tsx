@@ -20,10 +20,15 @@ export default function ModalAnggota() {
   const [value, setValue] = useAtom(dosenSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
+  const [perPage, setPerPage] = useState(10)
   const [openModal, setOpenModal] = useAtom(isDialogOpenAtom)
 
   const setAnggota = useSetAtom(anggotaAtom)
-  const { data, refetch, isFetching } = useGetAnggota(currentPage, search)
+  const { data, refetch, isFetching } = useGetAnggota(
+    currentPage,
+    perPage,
+    search,
+  )
 
   const [selectedAnggota, setSelectedAnggota] = useAtom(selectedAnggotaAtom)
   const handleAddAnggota = () => {
@@ -68,8 +73,10 @@ export default function ModalAnggota() {
           data={data?.dosen || []}
           meta={data?.meta || ({} as Meta)}
           currentPage={currentPage}
+          perPage={perPage}
           value={value}
           isLoading={isFetching}
+          setPerPage={setPerPage}
           refetch={refetch}
           setValue={setValue}
           onPaginationChange={(page: number) => setCurrentPage(page)}

@@ -2,23 +2,30 @@ const API_BASE_URL =
   process.env.NEXT_PUBLIC_API_URL || "http://pindai-be.test/api/v1"
 
 export const API_ENDPOINTS = {
-  DOSEN: "/dosen",
-  CURRENT_USER: "/me",
-  PROFILE: "/profile",
   LOGIN: "/auth/login",
-  ANGGOTA: "/list/dosen",
   LOGOUT: "/auth/logout",
-  LIST_PRODI: "/list/prodi",
   REGISTER: "/auth/register",
+
+  DOSEN: "/dosen",
+  PROFILE: "/profile",
+  CURRENT_USER: "/me",
+  ANGGOTA: "/list/dosen",
+
+  LIST_PRODI: "/list/prodi",
   LIST_FAKULTAS: "/list/fakultas",
+
   LIST_SCHOLAR: "/list/author-scholar",
   LIST_PUBLIKASI: "/list/jenis-publikasi",
+
   LIST_PENELITIAN: "/list/jenis-penelitian",
   LIST_PENGABDIAN: "/list/jenis-pengabdian",
+
   LIST_APPROVED_PENELITIAN: "/list/approved/penelitian",
   LIST_CANCELED_PENELITIAN: "/list/canceled/penelitian",
+
   LIST_APPROVED_PENGABDIAN: "/list/approved/pengabdian",
   LIST_CANCELED_PENGABDIAN: "/list/canceled/pengabdian",
+
   LIST_APPROVED_PUBLIKASI: "/list/approved/publikasi",
   LIST_CANCELED_PUBLIKASI: "/list/canceled/publikasi",
 }
@@ -88,6 +95,10 @@ export const API_ENDPOINTS_DOSEN = {
   PUBLIKASI: "/dosen/publikasi",
   PENELITIAN: "/dosen/penelitian",
   PENGABDIAN: "/dosen/pengabdian",
+
+  TRACKING_PENELITIAN: "/dosen/tracking/penelitian",
+  TRACKING_PENGABDIAN: "/dosen/tracking/pengabdian",
+  TRACKING_PUBLIKASI: "/dosen/tracking/publikasi",
 
   DOWNLOAD_PENELITIAN: "/dosen/penelitian/download",
   DOWNLOAD_PENGABDIAN: "/dosen/pengabdian/download",

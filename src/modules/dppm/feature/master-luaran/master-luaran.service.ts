@@ -4,13 +4,17 @@ import { DppmResponse } from "../../dashboard.interface"
 import { ILuaran } from "./luaran.interface"
 import { MasterLuaranType } from "./schema/luaran"
 
-export async function getMasterLuaran(page: number, search: string) {
+export async function getMasterLuaran(
+  page: number,
+  search?: string,
+  perPage?: number,
+) {
+  const params: Record<string, string | number> = { page }
+  if (perPage) params.per_page = perPage
+  if (search) params.search = search
   const response: DppmResponse<ILuaran> = await getData(
     API_ENDPOINTS_DPPM.LUARAN,
-    {
-      page,
-      search,
-    },
+    params,
   )
   return response.data
 }

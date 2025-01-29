@@ -5,13 +5,17 @@ import { DppmResponse } from "../../dashboard.interface"
 import { KaprodiData } from "./kaprodi.interface"
 import { KaprodiType } from "./kaprodi.schema"
 
-export async function getKaprodi(page: number, search: string) {
+export async function getKaprodi(
+  page: number,
+  perPage?: number,
+  search?: string,
+) {
+  const params: Record<string, string | number> = { page }
+  if (perPage) params.per_page = perPage
+  if (search) params.search = search
   const response: DppmResponse<KaprodiData> = await getData(
     API_ENDPOINTS_DPPM.KAPRODI,
-    {
-      page,
-      search,
-    },
+    params,
   )
   return response.data
 }

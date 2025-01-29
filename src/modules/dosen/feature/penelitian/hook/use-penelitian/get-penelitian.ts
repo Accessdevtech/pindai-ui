@@ -3,6 +3,7 @@ import { getPenelitianDosen } from "../../penelitian-dosen.service"
 
 export const useGetPenelitian = (
   page: number,
+  perPage?: number,
   search?: string,
   tahun_akademik?: string,
   status_kaprodi?: string,
@@ -13,6 +14,7 @@ export const useGetPenelitian = (
     queryKey: [
       "penelitian",
       page,
+      perPage,
       search,
       tahun_akademik,
       status_kaprodi,
@@ -22,6 +24,7 @@ export const useGetPenelitian = (
     queryFn: async () =>
       await getPenelitianDosen(
         page,
+        perPage,
         search,
         tahun_akademik,
         status_kaprodi,

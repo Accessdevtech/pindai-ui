@@ -31,9 +31,11 @@ export default function DosenPublikasi() {
   const [value, setValue] = useAtom(publikasiSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
+  const [perPage, setPerPage] = useState(10)
   const { user } = useAuthContext()
   const { data, refetch, isFetching } = useGetPublikasi(
     currentPage,
+    perPage,
     search,
     statusKaprodi,
     statusDppm,
@@ -98,13 +100,15 @@ export default function DosenPublikasi() {
           <DataTable
             search
             filtering={{
-              status: true,
+              status: Boolean(statusKaprodi || statusDppm || statusKeuangan),
             }}
             role={user?.role}
             columns={columns}
             data={data?.publikasi || []}
             meta={data?.meta}
             value={value}
+            perPage={perPage}
+            setPerPage={setPerPage}
             refetch={refetch}
             isLoading={isFetching}
             setValue={setValue}

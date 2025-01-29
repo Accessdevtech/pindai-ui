@@ -21,9 +21,14 @@ export default function KaprodiDashboardDosen({
 }) {
   const [value, setValue] = useAtom(dosenSearch)
   const [currentPage, setCurrentPage] = useState(1)
+  const [perPage, setPerPage] = useState(10)
   const [search] = useDebounce(value, 500)
 
-  const { data, refetch, isFetching } = useGetDosen(currentPage, search)
+  const { data, refetch, isFetching } = useGetDosen(
+    currentPage,
+    perPage,
+    search,
+  )
   const { mutate: approved } = useApprovedDosen({
     onSuccess: res => {
       if (!res.status) {
@@ -70,8 +75,10 @@ export default function KaprodiDashboardDosen({
             currentPage={currentPage}
             isLoading={isFetching}
             refetch={refetch}
+            perPage={perPage}
             value={value}
             setValue={setValue}
+            setPerPage={setPerPage}
             onPaginationChange={(page: number) => setCurrentPage(page)}
           />
         </div>

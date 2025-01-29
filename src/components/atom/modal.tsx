@@ -89,7 +89,7 @@ export default function Modal({
           </Button>
         </DialogTrigger>
       )}
-      <DialogContent {...props} className={cn(className)}>
+      <DialogContent {...props} className={cn("max-w-2xl", className)}>
         <DialogTitle className='capitalize'>{title}</DialogTitle>
         <DialogDescription className='capitalize'>
           {description}
