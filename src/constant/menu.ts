@@ -48,13 +48,17 @@ export const navData = {
       name: "list dibatalkan",
       roles: ["dppm", "kaprodi", "keuangan"],
     },
+    {
+      name: "aktifitas",
+      roles: ["dosen"],
+    },
   ],
   sub: [
-    {
-      name: "timeline",
-      roles: ["dosen"],
-      mainMenu: ["penelitian", "pengabdian", "publikasi"],
-    },
+    // {
+    //   name: "timeline",
+    //   roles: ["dosen"],
+    //   mainMenu: ["penelitian", "pengabdian", "publikasi"],
+    // },
     // {
     //   name: "list dibatalkan",
     //   roles: ["dppm"],
