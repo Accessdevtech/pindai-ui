@@ -31,7 +31,9 @@ export default function NavMainMenu({ role, isActive }: NavMainMenuProps) {
             item.roles.includes(role as string) && (
               <SidebarMenuButton
                 asChild
-                isActive={isActive(`${ROUTE.DASHBOARD}/${role}/${item.name}`)}
+                isActive={isActive(
+                  `${ROUTE.DASHBOARD}/${role}/${item.name.split(" ").join("-")}`,
+                )}
                 key={index}
                 className='hover:bg-primary/30 hover:text-primary data-[active=true]:bg-primary/30 data-[active=true]:text-primary'
               >

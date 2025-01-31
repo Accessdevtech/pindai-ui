@@ -18,6 +18,7 @@ import {
   statusKaprodiAtom,
   statusKeuanganAtom,
 } from "@/modules/dosen/feature/penelitian/state/store"
+import { columnVisibilityAtom } from "@/state/store"
 import { EachUtil } from "@/utils/each-utils"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { useAtom } from "jotai"
@@ -81,6 +82,7 @@ export default function DataTable<TData, TValue>({
   const [statusKaprodi, setStatusKaprodi] = useAtom(statusKaprodiAtom)
   const [statusDppm, setStatusDppm] = useAtom(statusDppmAtom)
   const [statusKeuangan, setStatusKeuangan] = useAtom(statusKeuanganAtom)
+  const [columnVisibility, setColumnVisibility] = useAtom(columnVisibilityAtom)
 
   const table = useReactTable({
     data,
@@ -92,6 +94,7 @@ export default function DataTable<TData, TValue>({
         pageIndex: currentPage ? currentPage - 1 : 0,
         pageSize: meta?.per_page || perPage || 10,
       },
+      columnVisibility,
     },
     pageCount: meta?.last_page,
     onSortingChange: setSorting,
@@ -101,6 +104,7 @@ export default function DataTable<TData, TValue>({
     getFacetedRowModel: getFacetedRowModel(),
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onRowSelectionChange: setRowSelection,
+    onColumnVisibilityChange: setColumnVisibility,
     manualPagination: true,
   })
 

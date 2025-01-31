@@ -10,8 +10,9 @@ import {
   statusKeuanganAtom,
   tahunAkademikAtom,
 } from "@/modules/dosen/feature/pengabdian/state/store"
-import { useAtomValue } from "jotai"
-import { useState } from "react"
+import { columnVisibilityAtom } from "@/state/store"
+import { useAtomValue, useSetAtom } from "jotai"
+import { useEffect, useState } from "react"
 import { useDebounce } from "use-debounce"
 import { columnPengabdian } from "./components/column-pengabdian"
 import { useGetPengabdian } from "./hooks/use-pengabdian/get-pengabdian"
@@ -26,6 +27,7 @@ export default function PengabdianKaprodiPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [search] = useDebounce(value, 1000)
+  const setColumnVisibility = useSetAtom(columnVisibilityAtom)
   const { data, refetch, isFetching } = useGetPengabdian(
     currentPage,
     perPage,
@@ -38,6 +40,14 @@ export default function PengabdianKaprodiPage() {
 
   const columns = columnPengabdian()
 
+  useEffect(() => {
+    setColumnVisibility({
+      status_kaprodi: true,
+      status_dppm: true,
+      status_keuangan: true,
+    })
+  }, [])
+
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb href={"/dashboard/kaprodi"}>Pengabdian</Breadcrumb>
@@ -46,7 +56,7 @@ export default function PengabdianKaprodiPage() {
           <DataTable
             search
             filtering={{
-              tahunAkademik: Boolean(tahunAkademik),
+              tahunAkademik: true,
             }}
             role={user?.role}
             columns={columns}

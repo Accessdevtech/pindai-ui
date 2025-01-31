@@ -44,22 +44,22 @@ export const columnPenelitian = ({
       header: "status",
       columns: [
         {
-          id: "status.kaprodi",
-          accessorKey: "status.kaprodi",
+          id: "status_kaprodi",
+          accessorKey: "status_kaprodi",
           header: "Kaprodi",
           cell: ({ row }) => (
             <StatusBadge status={row.original.status.kaprodi} />
           ),
         },
         {
-          id: "status.dppm",
-          accessorKey: "status.dppm",
+          id: "status_dppm",
+          accessorKey: "status_dppm",
           header: "Dppm",
           cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
         },
         {
-          id: "status.keuangan",
-          accessorKey: "status.keuangan",
+          id: "status_keuangan",
+          accessorKey: "status_keuangan",
           header: "Keuangan",
           cell: ({ row }) => (
             <StatusBadge status={row.original.status.keuangan} />

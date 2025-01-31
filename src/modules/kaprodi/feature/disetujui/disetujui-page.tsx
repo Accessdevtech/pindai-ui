@@ -1,10 +1,14 @@
+"use client"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { useAuthContext } from "@/contexts/auth-context"
+import { Kaprodi } from "../../kaprodi.interface"
 import PenelitianList from "./components/penelitian-list"
 import PengabdianList from "./components/pengabdian-list"
 import PublikasiList from "./components/publikasi-list"
 
 export default function DisetujuiPage() {
+  const { user } = useAuthContext()
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb href={"/dashboard/kaprodi"}>Disetujui</Breadcrumb>
@@ -21,13 +25,13 @@ export default function DisetujuiPage() {
           </TabsTrigger>
         </TabsList>
         <TabsContent value='penelitian'>
-          <PenelitianList />
+          <PenelitianList user={user as Kaprodi} />
         </TabsContent>
         <TabsContent value='pengabdian'>
-          <PengabdianList />
+          <PengabdianList user={user as Kaprodi} />
         </TabsContent>
         <TabsContent value='publikasi'>
-          <PublikasiList />
+          <PublikasiList user={user as Kaprodi} />
         </TabsContent>
       </Tabs>
     </div>

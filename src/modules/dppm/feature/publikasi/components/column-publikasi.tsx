@@ -3,17 +3,14 @@ import StatusBadge from "@/components/atom/status-badge"
 import Tooltip from "@/components/atom/tooltip"
 import { Button, buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
-import { Textarea } from "@/components/ui/textarea"
 import { cn } from "@/lib/utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
-import { CheckIcon, InfoIcon, XIcon } from "lucide-react"
+import { CheckIcon, InfoIcon } from "lucide-react"
 import Link from "next/link"
-import { useState } from "react"
 import { toast } from "sonner"
 import { useApprovePublikasi } from "../hooks/use-publikasi/approve-publikasi"
-import { useCanclePublikasi } from "../hooks/use-publikasi/cancle-publikasi"
 import { Publikasi, PublikasiDppm } from "../publikasi-interface"
 
 interface columnPublikasiProps {
@@ -27,77 +24,11 @@ export const columnPublikasi = ({
 }: columnPublikasiProps): ColumnDef<PublikasiDppm>[] => {
   return [
     {
-      accessorKey: "judul",
-      header: "Judul Pengabdian",
-    },
-    {
-      accessorKey: "author",
-      header: "Penulis",
-    },
-    {
-      accessorKey: "tanggal_publikasi",
-      header: "Tanggal Publikasi",
-      cell: ({ row }) => {
-        const date = new Date(row.original.tanggal_publikasi)
-        return <span>{format(date, "PPP", { locale: id })}</span>
-      },
-    },
-    {
-      accessorKey: "tahun",
-      header: "Tahun",
-    },
-    {
-      accessorKey: "jurnal",
-      header: "Jurnal",
-    },
-    {
-      accessorKey: "status",
-      header: "status",
-      columns: [
-        {
-          id: "status.kaprodi",
-          accessorKey: "status.kaprodi",
-          header: "Kaprodi",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.kaprodi} />
-          ),
-        },
-        {
-          id: "status.dppm",
-          accessorKey: "status.dppm",
-          header: "Dppm",
-          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
-        },
-        {
-          id: "status.keuangan",
-          accessorKey: "status.keuangan",
-          header: "Keuangan",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.keuangan} />
-          ),
-        },
-      ],
-    },
-    {
       id: "action",
       accessorKey: "action",
       header: "aksi",
       cell: ({ row }) => {
-        const [keterangan, setKeterangan] = useState("")
         const { mutate: approved } = useApprovePublikasi({
-          onSuccess: res => {
-            if (!res.status) {
-              toast.error(res.message)
-            }
-            toast.success(res.message)
-            refetch()
-          },
-          onError: err => {
-            toast.error(err.response?.data.message)
-          },
-        })
-
-        const { mutate: reject } = useCanclePublikasi({
           onSuccess: res => {
             if (!res.status) {
               toast.error(res.message)
@@ -125,15 +56,17 @@ export const columnPublikasi = ({
               btnStyle='bg-cyan-500/30 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground'
             >
               <div className='flex flex-col gap-4 tracking-wide'>
-                {row.original.status.kaprodi === "rejected" &&
-                  row.original.status.dppm === "rejected" && (
-                    <div className='rounded-lg border border-red-500 px-4 py-2 text-red-500'>
-                      <p className='text-sm capitalize'>
-                        <span className='font-medium'>Kaprodi Komentar: </span>
-                        {data?.keterangan}
-                      </p>
-                    </div>
-                  )}
+                {[
+                  row.original.status.kaprodi,
+                  row.original.status.dppm,
+                ].includes("rejected") && (
+                  <div className='rounded-lg border border-red-500 px-4 py-2 text-red-500'>
+                    <p className='text-sm capitalize'>
+                      <span className='font-medium'>Kaprodi Komentar: </span>
+                      {data?.keterangan}
+                    </p>
+                  </div>
+                )}
                 {row.original.status.kaprodi === "accepted" &&
                   row.original.status.dppm === "rejected" && (
                     <div className='rounded-lg border border-red-500 px-4 py-2 text-red-500'>
@@ -205,42 +138,77 @@ export const columnPublikasi = ({
                 </Link>
               </div>
             </Modal>
-            {row.original.status.kaprodi === "pending" ||
-              (row.original.status.dppm === "pending" && (
-                <>
-                  <Tooltip contentText='Setuju'>
-                    <Button
-                      variant='ghost'
-                      size='icon'
-                      className='bg-green-500/30 text-green-500 hover:bg-green-500 hover:text-primary-foreground'
-                      onClick={() => approved({ id: row.original.id })}
-                    >
-                      <CheckIcon />
-                    </Button>
-                  </Tooltip>
-                  <Modal
-                    title='Tolak Publikasi'
-                    Icon={XIcon}
-                    tooltipContent='Tolak Publikasi'
-                    variant='destructive'
-                    size='icon'
-                    description='Berikan keterangan penolakan publikasi'
-                  >
-                    <Textarea onChange={e => setKeterangan(e.target.value)} />
-
-                    <Button
-                      onClick={() =>
-                        reject({ id: row.original.id, keterangan })
-                      }
-                    >
-                      Simpan
-                    </Button>
-                  </Modal>
-                </>
-              ))}
+            {[
+              row.original.status.kaprodi,
+              row.original.status.dppm,
+              row.original.status.keuangan,
+            ].includes("pending") && (
+              <Tooltip contentText='Setuju'>
+                <Button
+                  variant='ghost'
+                  size='icon'
+                  className='bg-green-500/30 text-green-500 hover:bg-green-500 hover:text-primary-foreground'
+                  onClick={() => approved({ id: row.original.id })}
+                >
+                  <CheckIcon />
+                </Button>
+              </Tooltip>
+            )}
           </span>
         )
       },
+    },
+    {
+      accessorKey: "judul",
+      header: "Judul Pengabdian",
+    },
+    {
+      accessorKey: "author",
+      header: "Penulis",
+    },
+    {
+      accessorKey: "tanggal_publikasi",
+      header: "Tanggal Publikasi",
+      cell: ({ row }) => {
+        const date = new Date(row.original.tanggal_publikasi)
+        return <span>{format(date, "PPP", { locale: id })}</span>
+      },
+    },
+    {
+      accessorKey: "tahun",
+      header: "Tahun",
+    },
+    {
+      accessorKey: "jurnal",
+      header: "Jurnal",
+    },
+    {
+      accessorKey: "status",
+      header: "status",
+      columns: [
+        {
+          id: "status_kaprodi",
+          accessorKey: "status_kaprodi",
+          header: "Kaprodi",
+          cell: ({ row }) => (
+            <StatusBadge status={row.original.status.kaprodi} />
+          ),
+        },
+        {
+          id: "status_dppm",
+          accessorKey: "status_dppm",
+          header: "Dppm",
+          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
+        },
+        {
+          id: "status_keuangan",
+          accessorKey: "status_keuangan",
+          header: "Keuangan",
+          cell: ({ row }) => (
+            <StatusBadge status={row.original.status.keuangan} />
+          ),
+        },
+      ],
     },
   ]
 }

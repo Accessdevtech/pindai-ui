@@ -46,7 +46,7 @@ export default function PengabdianKeuanganPage() {
           <DataTable
             search
             filtering={{
-              tahunAkademik: Boolean(tahunAkademik),
+              tahunAkademik: true,
             }}
             role={user?.role}
             columns={columns}

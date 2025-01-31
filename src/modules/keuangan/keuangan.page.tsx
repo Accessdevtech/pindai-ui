@@ -1,8 +1,10 @@
 "use client"
 import DashboardLoader from "@/components/atom/dashboard-loader"
 import { Breadcrumb, BreadcrumbPage } from "@/components/ui/breadcrumb"
+import { cn } from "@/lib/utils"
 import InfoPenelitian from "./components/info-penelitian"
 import InfoPengabdian from "./components/info-pengabdian"
+import InfoPublikasi from "./components/info-publikasi"
 import { useGetDashboard } from "./hooks/use-dashboard"
 
 export default function KeuanganPage() {
@@ -19,16 +21,28 @@ export default function KeuanganPage() {
           </BreadcrumbPage>
         </Breadcrumb>
       </section>
-      <section className='flex flex-col gap-4 xl:flex-row xl:items-start'>
+      <section
+        className={cn({
+          "grid gap-4 xl:grid-cols-3 xl:items-start":
+            data?.penelitian && data?.pengabdian && data?.publikasi,
+          "grid gap-4 xl:grid-cols-2 xl:items-start":
+            data?.penelitian && data?.pengabdian && !data?.publikasi,
+          "grid gap-4":
+            data?.penelitian && !data?.pengabdian && !data?.publikasi,
+        })}
+      >
         <InfoPenelitian
           status={data?.penelitian.status || []}
           news={data?.penelitian.news || []}
         />
         <InfoPengabdian
-          status={data?.penelitian.status || []}
-          news={data?.penelitian.news || []}
+          status={data?.pengabdian.status || []}
+          news={data?.pengabdian.news || []}
         />
-        {/* <InfoPublikasi publikasi={data?.publikasi || {} as Publikasi} /> */}
+        <InfoPublikasi
+          status={data?.publikasi.status || []}
+          news={data?.publikasi.news || []}
+        />
       </section>
     </div>
   )

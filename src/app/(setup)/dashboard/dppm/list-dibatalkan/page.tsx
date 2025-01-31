@@ -1,5 +1,5 @@
-import DitolakPage from "@/modules/dppm/feature/ditolak/ditolak-page"
+import DibatalkanPage from "@/modules/dppm/feature/dibatalkan/dibatalkan-page"
 
 export default function DashboardListDibatalkan() {
-  return <DitolakPage />
+  return <DibatalkanPage />
 }

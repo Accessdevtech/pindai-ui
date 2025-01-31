@@ -24,58 +24,6 @@ export const columnPublikasi = ({
 }: columnPublikasiProps): ColumnDef<PublikasiKeuangan>[] => {
   return [
     {
-      accessorKey: "judul",
-      header: "Judul Pengabdian",
-    },
-    {
-      accessorKey: "author",
-      header: "Penulis",
-    },
-    {
-      accessorKey: "tanggal_publikasi",
-      header: "Tanggal Publikasi",
-      cell: ({ row }) => {
-        const date = new Date(row.original.tanggal_publikasi)
-        return <span>{format(date, "PPP", { locale: id })}</span>
-      },
-    },
-    {
-      accessorKey: "tahun",
-      header: "Tahun",
-    },
-    {
-      accessorKey: "jurnal",
-      header: "Jurnal",
-    },
-    {
-      accessorKey: "status",
-      header: "status",
-      columns: [
-        {
-          id: "status.kaprodi",
-          accessorKey: "status.kaprodi",
-          header: "Kaprodi",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.kaprodi} />
-          ),
-        },
-        {
-          id: "status.dppm",
-          accessorKey: "status.dppm",
-          header: "Dppm",
-          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
-        },
-        {
-          id: "status.keuangan",
-          accessorKey: "status.keuangan",
-          header: "Keuangan",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.keuangan} />
-          ),
-        },
-      ],
-    },
-    {
       id: "action",
       accessorKey: "action",
       header: "aksi",
@@ -209,6 +157,58 @@ export const columnPublikasi = ({
           </span>
         )
       },
+    },
+    {
+      accessorKey: "judul",
+      header: "Judul Pengabdian",
+    },
+    {
+      accessorKey: "author",
+      header: "Penulis",
+    },
+    {
+      accessorKey: "tanggal_publikasi",
+      header: "Tanggal Publikasi",
+      cell: ({ row }) => {
+        const date = new Date(row.original.tanggal_publikasi)
+        return <span>{format(date, "PPP", { locale: id })}</span>
+      },
+    },
+    {
+      accessorKey: "tahun",
+      header: "Tahun",
+    },
+    {
+      accessorKey: "jurnal",
+      header: "Jurnal",
+    },
+    {
+      accessorKey: "status",
+      header: "status",
+      columns: [
+        {
+          id: "status_kaprodi",
+          accessorKey: "status_kaprodi",
+          header: "Kaprodi",
+          cell: ({ row }) => (
+            <StatusBadge status={row.original.status.kaprodi} />
+          ),
+        },
+        {
+          id: "status_dppm",
+          accessorKey: "status_dppm",
+          header: "Dppm",
+          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
+        },
+        {
+          id: "status_keuangan",
+          accessorKey: "status_keuangan",
+          header: "Keuangan",
+          cell: ({ row }) => (
+            <StatusBadge status={row.original.status.keuangan} />
+          ),
+        },
+      ],
     },
   ]
 }

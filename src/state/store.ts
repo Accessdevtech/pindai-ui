@@ -1,4 +1,5 @@
 import { Kriteria } from "@/modules/listdata/pengabdian.list.interface"
+import { VisibilityState } from "@tanstack/react-table"
 import { atom } from "jotai"
 
 export const dosenSearch = atom("")
@@ -18,3 +19,5 @@ export const kontrakPengabdianAtom = atom<File | null>(null)
 export const suratKeteranganSelesaiAtom = atom<File | null>(null)
 export const laporanKemajuanAtom = atom<File | null>(null)
 export const laporanAtom = atom<File | null>(null)
+
+export const columnVisibilityAtom = atom<VisibilityState>({})

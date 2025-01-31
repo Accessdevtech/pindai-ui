@@ -1,6 +1,6 @@
 import { Response, Status } from "@/interface/type"
 
-export interface KeuanganResponse<T> extends Response {
+export interface KeuanganResponse<T = any> extends Response {
   data: T
 }
 

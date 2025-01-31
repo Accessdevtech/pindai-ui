@@ -15,3 +15,8 @@ export interface KaprodiResponse<T = any> extends Response {
 export interface ProfileKaprodi {
   user: string
 }
+
+export interface ResponseDownload extends Response {
+  base64: string
+  file_name: string
+}

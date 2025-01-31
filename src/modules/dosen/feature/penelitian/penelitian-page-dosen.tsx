@@ -94,7 +94,7 @@ export default function PenelitianDosenPage() {
           <DataTable
             search
             filtering={{
-              tahunAkademik: Boolean(tahunAkademik),
+              tahunAkademik: true,
               status: Boolean(statusKaprodi || statusDppm || statusKeuangan),
             }}
             role={user?.role}

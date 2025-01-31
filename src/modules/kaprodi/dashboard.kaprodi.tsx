@@ -53,6 +53,20 @@ export default function KaprodiDashboard({ role }: KaprodiDashboardProps) {
               />
             )}
           />
+          {/* <EachUtil
+            of={data?.publikasi || []}
+            render={(publikasi: any, index) => (
+              <CardStatus
+                data={publikasi}
+                message={
+                  publikasi.status === "rejected"
+                    ? "publikasi ditolak"
+                    : "publikasi disetujui"
+                }
+                key={index}
+              />
+            )}
+          /> */}
         </div>
       </section>
 

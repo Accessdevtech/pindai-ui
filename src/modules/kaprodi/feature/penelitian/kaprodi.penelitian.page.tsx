@@ -10,8 +10,9 @@ import {
   statusKeuanganAtom,
   tahunAkademikAtom,
 } from "@/modules/dosen/feature/penelitian/state/store"
-import { useAtomValue } from "jotai"
-import { useState } from "react"
+import { columnVisibilityAtom } from "@/state/store"
+import { useAtomValue, useSetAtom } from "jotai"
+import { useEffect, useState } from "react"
 import { useDebounce } from "use-debounce"
 import { columnPenelitian } from "./components/column-penelitian"
 import { useGetPenelitian } from "./hooks/use-penelitian/get-penelitian"
@@ -26,6 +27,7 @@ export default function PenelitianKaprodiPage() {
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
   const [search] = useDebounce(value, 1000)
+  const setColumnVisibility = useSetAtom(columnVisibilityAtom)
   const { data, refetch, isFetching } = useGetPenelitian(
     currentPage,
     perPage,
@@ -37,6 +39,13 @@ export default function PenelitianKaprodiPage() {
   )
 
   const columns = columnPenelitian()
+  useEffect(() => {
+    setColumnVisibility({
+      status_kaprodi: true,
+      status_dppm: true,
+      status_keuangan: true,
+    })
+  })
 
   return (
     <div className='flex flex-col gap-4'>
@@ -46,7 +55,7 @@ export default function PenelitianKaprodiPage() {
           <DataTable
             search
             filtering={{
-              tahunAkademik: Boolean(tahunAkademik),
+              tahunAkademik: true,
             }}
             role={user?.role}
             columns={columns}

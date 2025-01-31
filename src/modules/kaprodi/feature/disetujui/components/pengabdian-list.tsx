@@ -1,24 +1,59 @@
+import DataTable from "@/components/molecules/data-table"
 import { Card, CardContent } from "@/components/ui/card"
+import { tahunAkademikAtom } from "@/modules/dosen/feature/penelitian/state/store"
+import { Kaprodi } from "@/modules/kaprodi/kaprodi.interface"
+import { columnVisibilityAtom } from "@/state/store"
+import { useAtomValue, useSetAtom } from "jotai"
+import { useEffect, useState } from "react"
+import { useDebounce } from "use-debounce"
+import { columnPengabdian } from "../../pengabdian/components/column-pengabdian"
+import { useGetPengabdian } from "../../pengabdian/hooks/use-pengabdian/get-pengabdian"
 
-export default function PengabdianList() {
+export default function PengabdianList({ user }: { user: Kaprodi }) {
+  const tahunAkademik = useAtomValue(tahunAkademikAtom)
+  const [value, setValue] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const [perPage, setPerPage] = useState(10)
+  const [search] = useDebounce(value, 1000)
+  const setColumnVisibility = useSetAtom(columnVisibilityAtom)
+  const { data, refetch, isFetching } = useGetPengabdian(
+    currentPage,
+    perPage,
+    search,
+    tahunAkademik,
+    "accepted",
+  )
+
+  const columns = columnPengabdian()
+
+  useEffect(() => {
+    setColumnVisibility({
+      status_kaprodi: false,
+      status_dppm: false,
+      status_keuangan: false,
+    })
+  }, [])
   return (
     <Card>
       <CardContent className='py-6'>
-        Pengabdian List Di setujui
-        {/* <DataTable
-            search
-            filtering
-            role={user?.role}
-            columns={columns}
-            data={data?.penelitian || []}
-            meta={data?.meta}
-            value={value}
-            refetch={refetch}
-            isLoading={isFetching}
-            setValue={setValue}
-            currentPage={currentPage}
-            onPaginationChange={(page: number) => setCurrentPage(page)}
-          /> */}
+        <DataTable
+          search
+          filtering={{
+            tahunAkademik: true,
+          }}
+          role={user?.role}
+          columns={columns}
+          data={data?.pengabdian || []}
+          meta={data?.meta}
+          value={value}
+          refetch={refetch}
+          isLoading={isFetching}
+          setValue={setValue}
+          perPage={perPage}
+          setPerPage={setPerPage}
+          currentPage={currentPage}
+          onPaginationChange={(page: number) => setCurrentPage(page)}
+        />
       </CardContent>
     </Card>
   )

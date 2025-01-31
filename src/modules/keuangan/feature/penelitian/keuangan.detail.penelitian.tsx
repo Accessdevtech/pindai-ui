@@ -9,18 +9,29 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
+import { User } from "@/interface/type"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
+import { downloadDocxFile } from "@/utils/files"
 import { CheckIcon } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
+import { useDownload } from "../../hooks/use-download"
+import { columnsDokumen } from "./components/column-dokumen"
+import DokumenTable from "./components/dokumen-table"
 import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian"
 import { useCanclePenelitian } from "./hooks/use-penelitian/cancle-penelitian"
 import { useGetDetailPenelitian } from "./hooks/use-penelitian/get-detail-penelitian"
 
-export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
+export default function DetailPenelitianKeuanganPage({
+  id,
+  user,
+}: {
+  id: string
+  user: User
+}) {
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPenelitian(id)
   const { mutate: approved } = useApprovePenelitian({
@@ -57,6 +68,32 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
     },
   })
 
+  const { mutate: download } = useDownload({
+    onSuccess(res) {
+      downloadDocxFile(res.base64, res.file_name)
+      toast.dismiss()
+    },
+    onError(err) {
+      toast.error(err.response?.data.message)
+      toast.dismiss()
+    },
+  })
+
+  const handleDownload = (jenis_Dokumen: string) => {
+    download({
+      id,
+      jenis_dokumen: jenis_Dokumen.split(" ").join("_"),
+      category: "penelitian",
+    })
+  }
+
+  const columnsDocuments = columnsDokumen({
+    isLeader: data?.anggota.some(
+      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
+    ),
+    status: data?.status,
+    handleDownload,
+  })
   const columnsIdentity = columnsIdentitas({ status: data?.status })
 
   return (
@@ -170,6 +207,24 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
             data={data?.anggota || []}
             columns={columnsIdentity}
           />
+        </CardContent>
+      </Card>
+
+      {/* Dokumen Penelitian */}
+      <Card>
+        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+          <CardTitle className='capitalize tracking-wide'>
+            dokumen penelitian
+          </CardTitle>
+          <CardDescription>
+            Tabel berisi dokumen penelitian yang harus dilengkapi.
+          </CardDescription>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+          <DokumenTable columns={columnsDocuments} />
         </CardContent>
       </Card>
     </div>

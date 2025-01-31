@@ -43,6 +43,6 @@ export interface Fakultas {
   dosen_count?: number
 }
 
-export interface DppmResponse<T> extends Response {
+export interface DppmResponse<T = any> extends Response {
   data: T
 }
