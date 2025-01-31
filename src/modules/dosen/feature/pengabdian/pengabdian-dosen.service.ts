@@ -1,5 +1,5 @@
 import { API_ENDPOINTS, API_ENDPOINTS_DOSEN } from "@/services/api/api-config"
-import { getData, postData } from "@/services/api/http"
+import { deleteData, getData, postData } from "@/services/api/http"
 import { DosenData, DosenResponse } from "../../dosen.interface"
 import {
   DetailPengabdian,
@@ -45,6 +45,13 @@ export async function createPengabdianDosen(data: PengabdianType) {
   const response: PengabdianDosenResponse = await postData(
     API_ENDPOINTS_DOSEN.PENGABDIAN,
     data,
+  )
+  return response
+}
+
+export async function deletePengabdian(id: string) {
+  const response: PengabdianDosenResponse = await deleteData(
+    `${API_ENDPOINTS_DOSEN.PENGABDIAN}/${id}`,
   )
   return response
 }

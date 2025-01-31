@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
 import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
-import { EditIcon, InfoIcon, TrashIcon } from "lucide-react"
+import { InfoIcon, TrashIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -105,14 +105,14 @@ export const columnPenelitian = ({
             </Tooltip>
             {isStatusPending && (
               <>
-                <Tooltip contentText='Edit penelitian'>
+                {/* <Tooltip contentText='Edit penelitian'>
                   <Link
                     href={`${ROUTE.DASHBOARD}/dosen/penelitian/edit/${row.original.id}`}
                     className={cn(buttonVariants({ size: "icon" }))}
                   >
                     <EditIcon />
                   </Link>
-                </Tooltip>
+                </Tooltip> */}
                 <Alert
                   Icon={TrashIcon}
                   open={alert}
