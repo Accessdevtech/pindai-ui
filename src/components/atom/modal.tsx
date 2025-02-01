@@ -1,5 +1,6 @@
 import { cn } from "@/lib/utils"
 import { LucideIcon } from "lucide-react"
+import Image, { StaticImageData } from "next/image"
 import { useState } from "react"
 import Tooltip from "../atom/tooltip"
 import { Button } from "../ui/button"
@@ -26,6 +27,7 @@ interface ModalProps {
   title: string
   description?: string
   open?: boolean
+  image?: string | StaticImageData
   btnStyle?: string
   tooltipContent?: string
   setOpen?: React.Dispatch<React.SetStateAction<boolean>>
@@ -47,6 +49,7 @@ export default function Modal({
   open,
   tooltipContent,
   setOpen,
+  image,
   btnStyle,
   className,
   disabled,
@@ -90,6 +93,15 @@ export default function Modal({
         </DialogTrigger>
       )}
       <DialogContent {...props} className={cn("max-w-2xl", className)}>
+        {image && (
+          <Image
+            src={image}
+            width={100}
+            height={100}
+            alt='Logo'
+            className='mx-auto'
+          />
+        )}
         <DialogTitle className='capitalize'>{title}</DialogTitle>
         <DialogDescription className='capitalize'>
           {description}

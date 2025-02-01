@@ -1,4 +1,5 @@
 "use client"
+import Logo from "@/assets/logo.png"
 import Modal from "@/components/atom/modal"
 import { useState } from "react"
 import RegisterForm from "./register-form"
@@ -13,6 +14,7 @@ export function Register() {
       title='daftar dosen'
       description='daftar dosen baru di sini'
       btnStyle='capitalize p-0 ml-2'
+      image={Logo}
       open={open}
       setOpen={setOpen}
     >
