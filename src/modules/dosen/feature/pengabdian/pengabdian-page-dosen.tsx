@@ -42,7 +42,9 @@ export default function PengabdianDosenPage() {
     statusKeuangan,
   )
 
-  const columns = columnPengabdian()
+  const columns = columnPengabdian({
+    refetch,
+  })
 
   if (!user) return null
 
