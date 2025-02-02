@@ -7,6 +7,6 @@ import { useParams } from "next/navigation"
 export default function PengabdianDetail() {
   const { id } = useParams()
   const { user } = useAuthContext()
-  if (!id) return null
+  if (!id || !user) return null
   return <DetailPengabdianKeuanganPage id={id as string} user={user!} />
 }

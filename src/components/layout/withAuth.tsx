@@ -35,11 +35,6 @@ function withAuth<T extends React.JSX.IntrinsicAttributes>(
 
     if (isLoading) return <LoadingPage />
 
-    // if (!user) {
-    //   return null // Optionally render a loading spinner or fallback UI
-    //   //   return <div>Loading...</div>;
-    // }
-
     return <WrappedComponent {...props} />
   }
 

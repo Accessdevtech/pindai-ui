@@ -111,21 +111,26 @@ export const columnPublikasi = ({
               <div className='flex flex-col gap-4 tracking-wide'>
                 <span>
                   <p className='flex justify-between text-sm capitalize'>
-                    <span className='font-medium'>Judul:</span> {data?.judul}
+                    <span className='font-medium'>Judul:</span>
+                    <span className='max-w-sm text-end'>{data?.judul}</span>
                   </p>
                   <Separator />
                 </span>
                 <span>
                   <p className='flex justify-between text-sm capitalize'>
                     <span className='font-medium'>Jenis Publikasi:</span>
-                    {data?.jenis_publikasi_label}
+                    <span className='max-w-sm text-end'>
+                      {data?.jenis_publikasi_label}
+                    </span>
                   </p>
                   <Separator />
                 </span>
                 <span>
                   <p className='flex justify-between text-sm capitalize'>
                     <span className='font-medium'>Indeksasi:</span>
-                    {data?.luaran_kriteria_label}
+                    <span className='max-w-sm text-end'>
+                      {data?.luaran_kriteria_label}
+                    </span>
                   </p>
                   <Separator />
                 </span>

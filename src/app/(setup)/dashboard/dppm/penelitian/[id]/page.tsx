@@ -8,7 +8,7 @@ export default function DashboardPenelitianDppm() {
 
   const { user } = useAuthContext()
 
-  if (!id) return null
+  if (!id || !user) return null
 
   return <DetailPenelitianDppmPage id={id as string} user={user!} />
 }

@@ -65,6 +65,7 @@ export function useAuth() {
   const checkAuth = useCallback(async () => {
     setIsLoading(true) // Mulai loading
     const token = await getCookie("token")
+    if (!token) router.push("/")
     if (token) {
       try {
         const currentUser = await getCurrentUser()

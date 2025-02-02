@@ -1,3 +1,4 @@
+import { UserType } from "@/schema/user"
 import {
   API_ENDPOINTS,
   API_ENDPOINTS_KEUANGAN,
@@ -11,6 +12,14 @@ export async function getDashboard() {
     API_ENDPOINTS_KEUANGAN.DASHBOARD,
   )
   return response.data
+}
+
+export async function updateProfile(data: UserType) {
+  const response: KeuanganResponse<UserType> = await postData(
+    API_ENDPOINTS.PROFILE,
+    data,
+  )
+  return response
 }
 
 export async function downloadDokumen(

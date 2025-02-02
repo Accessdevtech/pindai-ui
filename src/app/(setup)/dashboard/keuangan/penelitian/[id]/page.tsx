@@ -7,7 +7,7 @@ export default function DashboardPenelitianKeuangan() {
   const { id } = useParams()
   const { user } = useAuthContext()
 
-  if (!id) return null
+  if (!id || !user) return null
 
   return <DetailPenelitianKeuanganPage id={id as string} user={user!} />
 }

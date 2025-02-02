@@ -44,7 +44,21 @@ export default function ProfileButton() {
           </div>
         </DropdownMenuItem>
         <DropdownMenuSeparator className='bg-gray-300' />
-        {user?.role !== "dppm" && user?.role !== "keuangan" ? (
+        <Link
+          href={`/dashboard/${user?.role}/akun-saya`}
+          className={cn(
+            buttonVariants({ variant: "ghost" }),
+            "w-full justify-start",
+          )}
+        >
+          <DropdownMenuItem className='flex flex-row gap-4'>
+            <UserIcon className='text-muted-foreground' />
+            <span className='font-bold capitalize text-muted-foreground'>
+              akun saya
+            </span>
+          </DropdownMenuItem>
+        </Link>
+        {/* {user?.role !== "dppm" && user?.role !== "keuangan" ? (
           <Link
             href={`/dashboard/${user?.role}/akun-saya`}
             className={cn(
@@ -74,7 +88,7 @@ export default function ProfileButton() {
               </span>
             </DropdownMenuItem>
           </Link>
-        )}
+        )} */}
         <DropdownMenuSeparator className='bg-gray-300' />
         <Button
           variant={"ghost"}

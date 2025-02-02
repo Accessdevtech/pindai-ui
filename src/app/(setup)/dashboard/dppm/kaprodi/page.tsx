@@ -4,5 +4,6 @@ import KaprodiPage from "@/modules/dppm/feature/kaprodi/kaprodi.page"
 
 export default function DashboardKaprodi() {
   const { user } = useAuthContext()
-  return <KaprodiPage role={user?.role} />
+  if (!user) return null
+  return <KaprodiPage role={user.role} />
 }

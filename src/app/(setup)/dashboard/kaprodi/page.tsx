@@ -4,5 +4,6 @@ import KaprodiDashboard from "@/modules/kaprodi/dashboard.kaprodi"
 
 export default function Dashboard() {
   const { user } = useAuthContext()
-  return <KaprodiDashboard role={user?.role} />
+  if (!user) return null
+  return <KaprodiDashboard role={user.role} />
 }

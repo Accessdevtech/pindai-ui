@@ -2,15 +2,8 @@
 import InputField from "@/components/atom/input-field"
 import SelectField from "@/components/atom/select-field"
 import Form from "@/components/molecules/form"
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { removeCookie } from "@/services/storage/cookie-storage-service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtomValue } from "jotai"
@@ -91,16 +84,10 @@ export default function ProfileDosen({
 
   return (
     <div className='flex flex-col gap-4'>
-      <Breadcrumb>
-        <BreadcrumbList className='text-base capitalize'>
-          <BreadcrumbItem>Seting akun</BreadcrumbItem>
-          <BreadcrumbSeparator />
-          <BreadcrumbItem>
-            <BreadcrumbPage>akun</BreadcrumbPage>
-          </BreadcrumbItem>
-        </BreadcrumbList>
-      </Breadcrumb>
       <Card>
+        <CardHeader>
+          <h1 className='text-lg font-semibold uppercase'>Ubah Profile</h1>
+        </CardHeader>
         <CardContent className='p-6'>
           <Form form={form} onSubmit={onSubmit}>
             <InputField label='NIDN' name='nidn' control={form.control} />

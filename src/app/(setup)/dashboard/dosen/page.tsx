@@ -4,5 +4,6 @@ import DosenPage from "@/modules/dosen/dosen.page"
 
 export default function DashboardDosen() {
   const { user } = useAuthContext()
-  return <DosenPage role={user?.role} />
+  if (!user) return null
+  return <DosenPage role={user.role} />
 }

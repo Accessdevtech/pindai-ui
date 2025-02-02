@@ -4,5 +4,6 @@ import FakultasPage from "@/modules/dppm/feature/fakultas/fakultas.page"
 
 export default function DashboardFakultas() {
   const { user } = useAuthContext()
-  return <FakultasPage role={user?.role} />
+  if (!user) return null
+  return <FakultasPage role={user.role} />
 }
