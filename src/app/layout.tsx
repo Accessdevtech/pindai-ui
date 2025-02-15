@@ -2,6 +2,7 @@ import QueryProvider from "@/components/provider/query-provider"
 import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
+import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
 import { Poppins } from "next/font/google"
 import "./globals.css"
@@ -26,6 +27,7 @@ export default function RootLayout({
       <body className={cn(poppins.className)}>
         <AuthProvider>
           <QueryProvider>
+            <SpeedInsights />
             <Toaster
               position='top-center'
               toastOptions={{
