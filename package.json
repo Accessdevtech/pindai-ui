@@ -2,10 +2,11 @@
   "name": "pindaiapp-ui",
   "version": "0.1.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "dev": "next dev --turbopack",
     "build": "next build",
-    "start": "next start",
+    "start": "NODE_ENV=production node server.js",
     "lint": "next lint",
     "format": "prettier --write \"**/*.{js,jsx,ts,tsx}\""
   },
