@@ -132,6 +132,8 @@ export default function DataTable<TData, TValue>({
     setTahunAkademik(akademikYears)
   }, [])
 
+  const category = pathname?.split("/")[3]
+
   return (
     <div className='space-y-4'>
       <div className='flex items-end justify-between xl:items-center'>
@@ -210,18 +212,19 @@ export default function DataTable<TData, TValue>({
                 </Button>
               )}
             </Tooltip>
-            {["dppm", "kaprodi"].includes(role as string) && (
-              <Tooltip contentText='Export Excel'>
-                <Button
-                  size='icon'
-                  variant='outline'
-                  className='border-green-500 p-4 text-green-500 hover:bg-green-500 hover:text-white'
-                  onClick={() => mutate({ category: pathname.split("/")[3] })}
-                >
-                  <UploadIcon className='h-4 w-4' />
-                </Button>
-              </Tooltip>
-            )}
+            {["dppm", "kaprodi"].includes(role as string) &&
+              !["list-disetujui", "list-dibatalkan"].includes(category) && (
+                <Tooltip contentText='Export Excel'>
+                  <Button
+                    size='icon'
+                    variant='outline'
+                    className='border-green-500 p-4 text-green-500 hover:bg-green-500 hover:text-white'
+                    onClick={() => mutate({ category })}
+                  >
+                    <UploadIcon className='h-4 w-4' />
+                  </Button>
+                </Tooltip>
+              )}
           </div>
         </div>
       </div>
