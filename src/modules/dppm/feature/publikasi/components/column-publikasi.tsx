@@ -143,22 +143,20 @@ export const columnPublikasi = ({
                 </Link>
               </div>
             </Modal>
-            {[
-              row.original.status.kaprodi,
-              row.original.status.dppm,
-              row.original.status.keuangan,
-            ].includes("pending") && (
-              <Tooltip contentText='Setuju'>
-                <Button
-                  variant='ghost'
-                  size='icon'
-                  className='bg-green-500/30 text-green-500 hover:bg-green-500 hover:text-primary-foreground'
-                  onClick={() => approved({ id: row.original.id })}
-                >
-                  <CheckIcon />
-                </Button>
-              </Tooltip>
-            )}
+            {row.original.status.kaprodi === "pending" &&
+              row.original.status.dppm === "pending" &&
+              row.original.status.keuangan === "pending" && (
+                <Tooltip contentText='Setuju'>
+                  <Button
+                    variant='ghost'
+                    size='icon'
+                    className='bg-green-500/30 text-green-500 hover:bg-green-500 hover:text-primary-foreground'
+                    onClick={() => approved({ id: row.original.id })}
+                  >
+                    <CheckIcon />
+                  </Button>
+                </Tooltip>
+              )}
           </span>
         )
       },
