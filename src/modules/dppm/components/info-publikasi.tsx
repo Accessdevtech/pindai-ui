@@ -90,7 +90,7 @@ export default function InfoPublikasi({
           </CardContent>
           <CardFooter>
             <Link
-              href={`dppm/penelitian`}
+              href={`dppm/publikasi`}
               className={cn(
                 buttonVariants({ variant: "outline" }),
                 "border-primary text-primary hover:bg-accent",

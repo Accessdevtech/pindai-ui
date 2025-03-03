@@ -75,6 +75,7 @@ export const columnsViewMasterLuaran = ({
               title='Ubah Master Luaran'
               size='icon'
               description='Ubah Master Luaran dan Nominal'
+              className='max-h-screen overflow-auto'
             >
               <FormMasterLuaran
                 refetch={refetch}

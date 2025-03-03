@@ -13,8 +13,9 @@ import type { ColumnDef } from "@tanstack/react-table"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 import type { UseFormReturn } from "react-hook-form"
+import { Kriteria } from "../luaran.interface"
 
-export function createEditableColumns<TData>(
+export function createEditableColumns<TData extends Kriteria>(
   form: UseFormReturn<any>,
   name: string,
   fields: (keyof TData & string)[],
@@ -23,7 +24,9 @@ export function createEditableColumns<TData>(
     accessorKey: field,
     header: field.charAt(0).toUpperCase() + field.slice(1),
     cell: ({ row }) => {
-      return (
+      return field === "id" ? (
+        <div>{row.index + 1}</div>
+      ) : (
         <FormField
           control={form.control}
           name={`${name}.${row.index}.${field}`}

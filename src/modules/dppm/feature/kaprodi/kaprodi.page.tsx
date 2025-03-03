@@ -3,6 +3,7 @@ import InputField from "@/components/atom/input-field"
 import Modal from "@/components/atom/modal"
 import RadioField from "@/components/atom/radio-field"
 import SelectField from "@/components/atom/select-field"
+import Tooltip from "@/components/atom/tooltip"
 import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
@@ -13,6 +14,7 @@ import { useGetFakultasList } from "@/modules/listdata/hooks/use-fakultas/get-fa
 import { kaprodiSearch } from "@/state/store"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom } from "jotai"
+import { EyeIcon, EyeOffIcon } from "lucide-react"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -24,6 +26,7 @@ import { kaprodiSchema, KaprodiType } from "./kaprodi.schema"
 
 export default function KaprodiPage({ role }: { role: Role | undefined }) {
   const [value, setValue] = useAtom(kaprodiSearch)
+  const [show, setShow] = useState(false)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
   const [perPage, setPerPage] = useState(10)
@@ -65,6 +68,7 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
     defaultValues: {
       name: "",
       email: "",
+      password: "",
       nidn: "",
       address: "",
       fakultas_id: "",
@@ -82,6 +86,8 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
     fakultas: fakultasList?.data || [],
     refetch,
   })
+
+  const showPassword = () => setShow(!show)
 
   return (
     <Card>
@@ -106,6 +112,29 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
               label='email'
               type='email'
             />
+            <div className='relative flex'>
+              <InputField
+                control={form.control}
+                name='password'
+                label='password'
+                type={!show ? "password" : "text"}
+              />
+              <Tooltip contentText={!show ? "tampilkan" : "sembunyikan"}>
+                <Button
+                  variant='ghost'
+                  size='icon'
+                  type='button'
+                  className='absolute right-1 top-8'
+                  onClick={showPassword}
+                >
+                  {!show ? (
+                    <EyeOffIcon className='size-4' />
+                  ) : (
+                    <EyeIcon className='size-4' />
+                  )}
+                </Button>
+              </Tooltip>
+            </div>
             <InputField control={form.control} name='nidn' label='nidn' />
             <InputField control={form.control} name='address' label='address' />
             <SelectField

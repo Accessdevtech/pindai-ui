@@ -3,7 +3,12 @@ import InputField from "@/components/atom/input-field"
 import SelectField from "@/components/atom/select-field"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent, CardHeader } from "@/components/ui/card"
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+} from "@/components/ui/card"
 import { setCookie } from "@/services/storage/cookie-storage-service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
@@ -62,6 +67,9 @@ export default function ProfileKaprodi({ user }: { user: IKaprodiProfile }) {
       <Card>
         <CardHeader>
           <h1 className='text-lg font-semibold uppercase'>Ubah Profile</h1>
+          <CardDescription>
+            Semua field bersifat wajib di isi(*)
+          </CardDescription>
         </CardHeader>
         <CardContent className='p-6'>
           <Form form={form} onSubmit={onSubmit}>

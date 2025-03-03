@@ -11,6 +11,7 @@ import {
   useReactTable,
 } from "@tanstack/react-table"
 
+import { useDownloadExcel } from "@/hooks/use-download-excel"
 import { Meta, Role } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import {
@@ -20,10 +21,13 @@ import {
 } from "@/modules/dosen/feature/penelitian/state/store"
 import { columnVisibilityAtom } from "@/state/store"
 import { EachUtil } from "@/utils/each-utils"
+import { downloadExcelFile } from "@/utils/files"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { useAtom } from "jotai"
-import { RefreshCcwIcon } from "lucide-react"
+import { RefreshCcwIcon, UploadIcon } from "lucide-react"
+import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
+import { toast } from "sonner"
 import { Combobox } from "../atom/combobox"
 import Tooltip from "../atom/tooltip"
 import { Button } from "../ui/button"
@@ -76,6 +80,7 @@ export default function DataTable<TData, TValue>({
   setValue,
   onPaginationChange,
 }: DataTableProps<TData, TValue>) {
+  const pathname = usePathname()
   const [sorting, setSorting] = useState<SortingState>([])
   const [rowSelection, setRowSelection] = useState({})
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
@@ -83,6 +88,16 @@ export default function DataTable<TData, TValue>({
   const [statusDppm, setStatusDppm] = useAtom(statusDppmAtom)
   const [statusKeuangan, setStatusKeuangan] = useAtom(statusKeuanganAtom)
   const [columnVisibility, setColumnVisibility] = useAtom(columnVisibilityAtom)
+
+  const { mutate } = useDownloadExcel({
+    onSuccess: res => {
+      downloadExcelFile(res.base64, res.file_name)
+      toast.success("Data berhasil diexport")
+    },
+    onError: error => {
+      toast.error(error.message)
+    },
+  })
 
   const table = useReactTable({
     data,
@@ -195,17 +210,18 @@ export default function DataTable<TData, TValue>({
                 </Button>
               )}
             </Tooltip>
-            {/* {["dppm", "kaprodi"].includes(role as string) && (
+            {["dppm", "kaprodi"].includes(role as string) && (
               <Tooltip contentText='Export Excel'>
                 <Button
                   size='icon'
                   variant='outline'
                   className='border-green-500 p-4 text-green-500 hover:bg-green-500 hover:text-white'
+                  onClick={() => mutate({ category: pathname.split("/")[3] })}
                 >
                   <UploadIcon className='h-4 w-4' />
                 </Button>
               </Tooltip>
-            )} */}
+            )}
           </div>
         </div>
       </div>
@@ -263,7 +279,7 @@ export default function DataTable<TData, TValue>({
                       render={cell => (
                         <TableCell
                           key={cell.id}
-                          className='max-w-xs text-wrap border-r capitalize'
+                          className='max-w-xs text-wrap border-r'
                         >
                           {flexRender(
                             cell.column.columnDef.cell,

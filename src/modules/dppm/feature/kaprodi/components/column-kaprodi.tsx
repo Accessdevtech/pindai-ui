@@ -50,6 +50,12 @@ export const columnKaprodi = ({
       header: "Nama Kaprodi",
     },
     {
+      id: "email",
+      accessorKey: "email",
+      header: "Email",
+      cell: ({ row }) => row.original.email,
+    },
+    {
       id: "fakultas",
       accessorKey: "fakultas",
       header: "Fakultas",

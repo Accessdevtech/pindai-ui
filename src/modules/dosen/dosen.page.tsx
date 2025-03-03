@@ -49,7 +49,7 @@ export default function DosenPage({ role }: { role: Role | undefined }) {
               />
             )}
           />
-          {/* <EachUtil
+          <EachUtil
             of={data?.publikasi || []}
             render={(publikasi: any, index) => (
               <CardStatus
@@ -62,7 +62,7 @@ export default function DosenPage({ role }: { role: Role | undefined }) {
                 key={index}
               />
             )}
-          /> */}
+          />
         </div>
       </section>
 

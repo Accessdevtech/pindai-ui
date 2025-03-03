@@ -53,7 +53,7 @@ export default function KaprodiDashboard({ role }: KaprodiDashboardProps) {
               />
             )}
           />
-          {/* <EachUtil
+          <EachUtil
             of={data?.publikasi || []}
             render={(publikasi: any, index) => (
               <CardStatus
@@ -66,7 +66,7 @@ export default function KaprodiDashboard({ role }: KaprodiDashboardProps) {
                 key={index}
               />
             )}
-          /> */}
+          />
         </div>
       </section>
 

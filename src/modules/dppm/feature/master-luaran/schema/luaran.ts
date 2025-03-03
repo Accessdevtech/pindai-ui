@@ -1,6 +1,7 @@
 import { z } from "zod"
 
 export const kriteriaSchema = z.object({
+  id: z.string().optional(),
   name: z.string(),
   nominal: z.number(),
   keterangan: z.string(),

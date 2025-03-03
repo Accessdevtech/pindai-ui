@@ -12,6 +12,7 @@ export const API_ENDPOINTS = {
   CURRENT_USER: "/me",
   ANGGOTA: "/list/dosen",
 
+  DOWNLOAD_EXCEL: "/download/excel",
   DOWNLOAD_DOKUMEN: "/download/dokumen",
 
   LIST_PRODI: "/list/prodi",

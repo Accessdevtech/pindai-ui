@@ -11,7 +11,7 @@ export const getData = async (url: string, params = {}) => {
   }
 }
 
-export const postData = async (url: string, data: any) => {
+export const postData = async <T>(url: string, data: T) => {
   try {
     const response: AxiosResponse = await axiosInstance.post(url, data)
     return response.data
@@ -21,7 +21,7 @@ export const postData = async (url: string, data: any) => {
   }
 }
 
-export const putData = async (url: string, data: any) => {
+export const putData = async <T>(url: string, data: T) => {
   try {
     const response: AxiosResponse = await axiosInstance.put(url, data)
     return response.data

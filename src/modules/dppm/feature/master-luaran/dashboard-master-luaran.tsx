@@ -60,7 +60,7 @@ export default function MasterLuaranPage() {
             title='Tambah Master Luaran'
             btnStyle='w-fit'
             description='Tambahkan Master Luaran dan Nominal'
-            className='max-w-2xl'
+            className='max-h-screen overflow-auto'
           >
             <FormMasterLuaran
               refetch={refetch}

@@ -53,52 +53,54 @@ export default function InfoPengabdian({
           </div>
         </CardContent>
       </Card>
-      <Card className='grow gap-4 text-muted-foreground'>
-        <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
-          <h5 className='font-semibold capitalize'>Pengabdian Terbaru</h5>
-        </CardHeader>
-        <CardContent>
-          <EachUtil
-            of={news}
-            render={(item, index) => (
-              <div className='flex items-center justify-between' key={index}>
-                <div className='flex items-center gap-3'>
-                  <Badge
-                    variant='outline'
-                    className='flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/30 font-bold text-cyan-500'
-                  >
-                    {index + 1}
-                  </Badge>
-                  <div className='flex max-w-md flex-col capitalize text-muted-foreground'>
-                    <p className='text-xs'>{item.leader}</p>
-                    <p className='font-bold'>{item.title}</p>
+      {news.length > 0 && (
+        <Card className='grow gap-4 text-muted-foreground'>
+          <CardHeader className='flex flex-row items-center justify-between space-y-0 pb-2'>
+            <h5 className='font-semibold capitalize'>Pengabdian Terbaru</h5>
+          </CardHeader>
+          <CardContent>
+            <EachUtil
+              of={news}
+              render={(item, index) => (
+                <div className='flex items-center justify-between' key={index}>
+                  <div className='flex items-center gap-3'>
+                    <Badge
+                      variant='outline'
+                      className='flex h-8 w-8 items-center justify-center rounded-lg bg-cyan-500/30 font-bold text-cyan-500'
+                    >
+                      {index + 1}
+                    </Badge>
+                    <div className='flex max-w-md flex-col capitalize text-muted-foreground'>
+                      <p className='text-xs'>{item.leader}</p>
+                      <p className='font-bold'>{item.title}</p>
+                    </div>
                   </div>
+                  <Link
+                    href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${item.id}`}
+                    className={cn(
+                      buttonVariants({ variant: "outline", size: "icon" }),
+                      "border-primary text-primary hover:bg-primary hover:text-primary-foreground",
+                    )}
+                  >
+                    <ExternalLinkIcon />
+                  </Link>
                 </div>
-                <Link
-                  href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${item.id}`}
-                  className={cn(
-                    buttonVariants({ variant: "outline", size: "icon" }),
-                    "border-primary text-primary hover:bg-primary hover:text-primary-foreground",
-                  )}
-                >
-                  <ExternalLinkIcon />
-                </Link>
-              </div>
-            )}
-          />
-        </CardContent>
-        <CardFooter>
-          <Link
-            href={`dppm/penelitian`}
-            className={cn(
-              buttonVariants({ variant: "outline" }),
-              "border-primary text-primary hover:bg-accent",
-            )}
-          >
-            Lihat Semua
-          </Link>
-        </CardFooter>
-      </Card>
+              )}
+            />
+          </CardContent>
+          <CardFooter>
+            <Link
+              href={`dppm/pengabdian`}
+              className={cn(
+                buttonVariants({ variant: "outline" }),
+                "border-primary text-primary hover:bg-accent",
+              )}
+            >
+              Lihat Semua
+            </Link>
+          </CardFooter>
+        </Card>
+      )}
     </div>
   )
 }

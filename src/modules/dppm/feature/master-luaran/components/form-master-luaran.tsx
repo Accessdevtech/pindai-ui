@@ -56,6 +56,7 @@ export default function FormMasterLuaran({
 
   const { mutate: updateLuaran } = useUpdateLuaran({
     onSuccess: res => {
+      console.log(res)
       toast.success(res.message)
       onClose()
       refetch()
@@ -76,6 +77,7 @@ export default function FormMasterLuaran({
     if (!luaran) {
       return createLuaran(data)
     } else {
+      console.log(data)
       return updateLuaran({ id: luaran.id, data })
     }
   }
@@ -83,7 +85,7 @@ export default function FormMasterLuaran({
   const kriteriaColumns = createEditableColumns<KriteriaType>(
     form,
     "kriteria",
-    ["name", "nominal", "keterangan"],
+    ["id", "name", "nominal", "keterangan"],
   )
 
   return (
@@ -113,9 +115,8 @@ export default function FormMasterLuaran({
         form={form}
         name='kriteria'
         columns={kriteriaColumns}
-        defaultRow={{ name: "", nominal: 0, keterangan: "" }}
+        defaultRow={{ id: "", name: "", nominal: 0, keterangan: "" }}
       />
-
       {/* <MoneyField
         label='Biaya Luaran'
         name=''

@@ -4,18 +4,16 @@ import { Register } from "./components/register"
 
 export default function AuthPage() {
   return (
-    <div className='w-full max-w-sm'>
-      <AuthCard
-        title='Login'
-        description='Silahkan login untuk melanjutkan'
-        footer={
-          <p className='space-x-2 text-sm capitalize text-muted-foreground'>
-            tidak memiliki akun ?<Register />
-          </p>
-        }
-      >
-        <LoginForm />
-      </AuthCard>
-    </div>
+    <AuthCard
+      title='Login'
+      description='Silahkan login untuk melanjutkan'
+      footer={
+        <p className='space-x-2 text-sm capitalize text-muted-foreground'>
+          tidak memiliki akun ?<Register />
+        </p>
+      }
+    >
+      <LoginForm />
+    </AuthCard>
   )
 }

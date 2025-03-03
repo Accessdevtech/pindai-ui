@@ -38,6 +38,7 @@ export default function AppSidebar() {
         <Image src={Logo} width={25} height={25} alt='Logo' />
         <span className='text-2xl font-bold uppercase'>Simlitabmas</span>
       </SidebarHeader>
+
       <SidebarContent className='space-y-2 p-0'>
         <SidebarMenu className='w-full space-y-2 px-2'>
           <SidebarMenuButton

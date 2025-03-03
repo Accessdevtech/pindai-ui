@@ -33,3 +33,8 @@ export interface StatusData {
   dppm: Status
   keuangan: Status
 }
+
+export interface ResponseDownloadExcel extends Response {
+  base64: string
+  file_name: string
+}
