@@ -56,7 +56,6 @@ export default function FormMasterLuaran({
 
   const { mutate: updateLuaran } = useUpdateLuaran({
     onSuccess: res => {
-      console.log(res)
       toast.success(res.message)
       onClose()
       refetch()
@@ -77,7 +76,6 @@ export default function FormMasterLuaran({
     if (!luaran) {
       return createLuaran(data)
     } else {
-      console.log(data)
       return updateLuaran({ id: luaran.id, data })
     }
   }
