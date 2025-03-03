@@ -76,7 +76,7 @@ export default function InfoPengabdian({
                     </div>
                   </div>
                   <Link
-                    href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${item.id}`}
+                    href={`${ROUTE.DASHBOARD}/keuangan/pengabdian/${item.id}`}
                     className={cn(
                       buttonVariants({ variant: "outline", size: "icon" }),
                       "border-primary text-primary hover:bg-primary hover:text-primary-foreground",

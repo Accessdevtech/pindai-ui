@@ -76,7 +76,7 @@ export default function InfoPenelitian({
                     </div>
                   </div>
                   <Link
-                    href={`${ROUTE.DASHBOARD}/dppm/penelitian/${item.id}`}
+                    href={`${ROUTE.DASHBOARD}/keuangan/penelitian/${item.id}`}
                     className={cn(
                       buttonVariants({ variant: "outline", size: "icon" }),
                       "border-primary text-primary hover:bg-primary hover:text-primary-foreground",
