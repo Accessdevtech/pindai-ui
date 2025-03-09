@@ -1,5 +1,5 @@
 const API_BASE_URL =
-  process.env.NEXT_PUBLIC_API_URL || "http://pindai-be.test/api/v1"
+  process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api/v1"
 
 export const API_ENDPOINTS = {
   LOGIN: "/auth/login",
@@ -68,6 +68,7 @@ export const API_ENDPOINTS_DPPM = {
   FAKULTAS: "/dppm/fakultas",
   KAPRODI: "/dppm/kaprodi",
   LUARAN: "/dppm/luaran",
+  PRODI: "/dppm/prodi",
   DOSEN: "/dppm/dosen",
 }
 

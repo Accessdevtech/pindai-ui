@@ -11,6 +11,10 @@ export const navData = {
       roles: ["dppm"],
     },
     {
+      name: "prodi",
+      roles: ["dppm"],
+    },
+    {
       name: "kaprodi",
       roles: ["dppm"],
     },

@@ -11,9 +11,15 @@ export type UserType = z.infer<typeof userSchema>
 
 export const changePasswordSchema = z
   .object({
-    old_password: z.string().min(8),
-    new_password: z.string().min(8),
-    new_password_confirmation: z.string().min(8),
+    old_password: z.string().min(8, {
+      message: "Password minimal 8 karakter",
+    }),
+    new_password: z.string().min(8, {
+      message: "Password minimal 8 karakter",
+    }),
+    new_password_confirmation: z.string().min(8, {
+      message: "Password minimal 8 karakter",
+    }),
   })
   .refine(
     ({ new_password, new_password_confirmation }) =>
