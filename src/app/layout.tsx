@@ -1,8 +1,4 @@
-import QueryProvider from "@/components/provider/query-provider"
-import { Toaster } from "@/components/ui/sonner"
-import { AuthProvider } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
-import { SpeedInsights } from "@vercel/speed-insights/next"
 import type { Metadata } from "next"
 import { Poppins } from "next/font/google"
 import "./globals.css"
@@ -25,7 +21,10 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={cn(poppins.className)}>
-        <AuthProvider>
+        <div className='flex h-screen w-full items-center justify-center'>
+          <h1 className='text-2xl capitalize tracking-wider'>Offline ....</h1>
+        </div>
+        {/* <AuthProvider>
           <QueryProvider>
             <SpeedInsights />
             <Toaster
@@ -42,7 +41,7 @@ export default function RootLayout({
             />
             {children}
           </QueryProvider>
-        </AuthProvider>
+        </AuthProvider> */}
       </body>
     </html>
   )
