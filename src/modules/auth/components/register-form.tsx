@@ -1,7 +1,12 @@
 "use client"
 import InputField from "@/components/atom/input-field"
+import SelectField from "@/components/atom/select-field"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
+import { IProdi } from "@/modules/dosen/dosen.interface"
+import { IFakultas } from "@/modules/listdata/fakultas.interface"
+import { useGetFakultasList } from "@/modules/listdata/hooks/use-fakultas/get-fakultas-list"
+import { useGetProdiList } from "@/modules/listdata/hooks/use-prodi/use-prodi-list"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
@@ -19,6 +24,8 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
       name: "",
       email: "",
       password: "",
+      fakultas_id: "",
+      prodi_id: "",
     },
   })
 
@@ -43,6 +50,10 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
     },
   })
 
+  const { data: fakultas } = useGetFakultasList()
+  const watchFakultas = form.watch("fakultas_id")
+  const { data: prodi } = useGetProdiList(watchFakultas)
+
   const onSubmit = async (data: RegisterType) => {
     mutate(data)
   }
@@ -54,6 +65,18 @@ export default function RegisterForm({ onClose }: RegisterFormProps) {
         label='Email'
         name='email'
         type='email'
+        control={form.control}
+      />
+      <SelectField
+        label='fakultas'
+        name='fakultas_id'
+        options={(fakultas?.data as IFakultas[]) || []}
+        control={form.control}
+      />
+      <SelectField
+        label='program studi'
+        name='prodi_id'
+        options={(prodi?.data as IProdi[]) || []}
         control={form.control}
       />
       <InputField

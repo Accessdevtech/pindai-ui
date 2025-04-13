@@ -60,7 +60,7 @@ export default function ChangePassword() {
           <div className='flex justify-end'>
             <Button
               type='submit'
-              disabled={form.formState.isSubmitting}
+              disabled={!form.formState.isValid || form.formState.isSubmitting}
               className='px-8'
             >
               Simpan

@@ -92,7 +92,7 @@ export default function ProfileKaprodi({ user }: { user: IKaprodiProfile }) {
             <div className='flex justify-end'>
               <Button
                 type='submit'
-                disabled={form.formState.isSubmitting}
+                disabled={!form.formState.isDirty}
                 className='px-8'
               >
                 Simpan
