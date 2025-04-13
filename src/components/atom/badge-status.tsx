@@ -14,6 +14,8 @@ export default function BadgeStatus({
       className={cn(
         status === "accepted" &&
           "bg-green-500/30 text-green-500 hover:bg-green-500 hover:text-primary-foreground",
+        status === "returned" &&
+          "bg-yellow-500/30 text-yellow-500 hover:bg-yellow-500 hover:text-primary-foreground",
         status === "rejected" &&
           "bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground",
       )}

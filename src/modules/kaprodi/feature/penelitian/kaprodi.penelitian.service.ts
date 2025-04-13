@@ -51,3 +51,11 @@ export async function canclePenelitian(id: string, keterangan: string) {
   )
   return response
 }
+
+export async function returnedPenelitian(id: string, keterangan: string) {
+  const response = await postData(
+    `${API_ENDPOINTS_KAPRODI.RETURNED_PENELITIAN}/${id}`,
+    { keterangan },
+  )
+  return response
+}

@@ -42,23 +42,29 @@ export const API_ENDPOINTS_KEUANGAN = {
 
   APPROVED_PENELITIAN: "/keuangan/approved/penelitian",
   CANCELED_PENELITIAN: "/keuangan/canceled/penelitian",
+  RETURNED_PENELITIAN: "/keuangan/returned/penelitian",
 
   APPROVED_PENGABDIAN: "/keuangan/approved/pengabdian",
   CANCELED_PENGABDIAN: "/keuangan/canceled/pengabdian",
+  RETURNED_PENGABDIAN: "/keuangan/returned/pengabdian",
 
   APPROVED_PUBLIKASI: "/keuangan/approved/publikasi",
   CANCELED_PUBLIKASI: "/keuangan/canceled/publikasi",
+  RETURNED_PUBLIKASI: "/keuangan/returned/publikasi",
 }
 
 export const API_ENDPOINTS_DPPM = {
   APPROVED_PENELITIAN: "/dppm/approved/penelitian",
   CANCELED_PENELITIAN: "/dppm/canceled/penelitian",
+  RETURNED_PENELITIAN: "/dppm/returned/penelitian",
 
   APPROVED_PENGABDIAN: "/dppm/approved/pengabdian",
   CANCELED_PENGABDIAN: "/dppm/canceled/pengabdian",
+  RETURNED_PENGABDIAN: "/dppm/returned/pengabdian",
 
   APPROVED_PUBLIKASI: "/dppm/approved/publikasi",
   CANCELED_PUBLIKASI: "/dppm/canceled/publikasi",
+  RETURNED_PUBLIKASI: "/dppm/returned/publikasi",
 
   PENELITIAN: "/dppm/penelitian",
   PENGABDIAN: "/dppm/pengabdian",
@@ -84,12 +90,15 @@ export const API_ENDPOINTS_KAPRODI = {
 
   APPROVED_PENELITIAN: "/kaprodi/approved/penelitian",
   CANCELED_PENELITIAN: "/kaprodi/canceled/penelitian",
+  RETURNED_PENELITIAN: "/kaprodi/returned/penelitian",
 
   APPROVED_PENGABDIAN: "/kaprodi/approved/pengabdian",
   CANCELED_PENGABDIAN: "/kaprodi/canceled/pengabdian",
+  RETURNED_PENGABDIAN: "/kaprodi/returned/pengabdian",
 
   APPROVED_PUBLIKASI: "/kaprodi/approved/publikasi",
   CANCELED_PUBLIKASI: "/kaprodi/canceled/publikasi",
+  RETURNED_PUBLIKASI: "/kaprodi/returned/publikasi",
 }
 
 export const API_ENDPOINTS_DOSEN = {

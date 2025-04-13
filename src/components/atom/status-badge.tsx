@@ -2,7 +2,7 @@ import Tooltip from "@/components/atom/tooltip"
 import { Badge } from "@/components/ui/badge"
 import { Status } from "@/interface/type"
 import { cn } from "@/lib/utils"
-import { CheckIcon, ClockIcon, X } from "lucide-react"
+import { CheckIcon, ClockIcon, Undo2Icon, X } from "lucide-react"
 
 export default function StatusBadge({ status }: { status: Status }) {
   return (
@@ -12,18 +12,22 @@ export default function StatusBadge({ status }: { status: Status }) {
           ? "Disetujui"
           : status === "pending"
             ? "Diproses"
-            : "Ditolak"
+            : status === "returned"
+              ? "Dikembalikan"
+              : "Ditolak"
       }
     >
       <Badge
         variant='outline'
         className={cn("h-9 w-9", {
           "border-green-500 text-green-500": status === "accepted",
+          "border-yellow-500 text-yellow-500": status === "returned",
           "border-amber-500 text-amber-500": status === "pending",
           "border-red-500 text-red-500": status === "rejected",
         })}
       >
         {status === "accepted" && <CheckIcon />}
+        {status === "returned" && <Undo2Icon />}
         {status === "pending" && <ClockIcon />}
         {status === "rejected" && <X />}
       </Badge>

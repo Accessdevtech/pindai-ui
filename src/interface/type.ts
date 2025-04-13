@@ -26,7 +26,7 @@ export interface User {
   role: Role
 }
 
-export type Status = "accepted" | "rejected" | "pending"
+export type Status = "accepted" | "returned" | "rejected" | "pending"
 
 export interface StatusData {
   kaprodi: Status
