@@ -24,6 +24,7 @@ export interface DetailPenelitian {
   bidang: string
   jenis_penelitian: string
   semester: string
+  deskripsi: string
   keterangan: string
   jenis_kriteria: string
   academic_year: string

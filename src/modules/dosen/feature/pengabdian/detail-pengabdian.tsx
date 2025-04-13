@@ -9,6 +9,7 @@ import { downloadDocxFile, uploadPdfFile } from "@/utils/files"
 
 import Breadcrumb from "@/components/atom/bradcrumb"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
+import { Button } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { ROUTE } from "@/services/route"
@@ -149,6 +150,7 @@ export default function DetailPengabdianPage({
               { label: "Jenis Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
+              { label: "Abstrak", value: data?.deskripsi },
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>
@@ -159,6 +161,7 @@ export default function DetailPengabdianPage({
               </div>
             )}
           />
+          <Button type='button'>Lihat Proposal</Button>
         </CardContent>
       </Card>
 

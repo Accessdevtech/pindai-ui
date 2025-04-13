@@ -199,6 +199,7 @@ export default function DetailPengabdianKaprodiPage({
               { label: "Jenis Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
+              { label: "Abstrak", value: data?.deskripsi },
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>
@@ -209,6 +210,7 @@ export default function DetailPengabdianKaprodiPage({
               </div>
             )}
           />
+          <Button type='button'>Lihat Proposal</Button>
         </CardContent>
       </Card>
 

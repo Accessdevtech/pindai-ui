@@ -140,7 +140,7 @@ export default function CreatePenelitian() {
               <InputField name='judul' label='judul' control={form.control} />
               <TextAreaField
                 name='deskripsi'
-                label='deskripsi'
+                label='abstrak'
                 control={form.control}
               />
               <ModalJenisPenelitian

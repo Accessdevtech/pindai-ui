@@ -139,7 +139,7 @@ export default function CreatePengabdian() {
               <InputField name='judul' label='judul' control={form.control} />
               <TextAreaField
                 name='deskripsi'
-                label='deskripsi'
+                label='abstrak'
                 control={form.control}
               />
               <ModalJenisPengabdian

@@ -24,6 +24,7 @@ export interface DetailPengabdian {
   bidang: string
   jenis_pengabdian: string
   semester: string
+  deskripsi: string
   keterangan: string
   jenis_kriteria: string
   academic_year: string
