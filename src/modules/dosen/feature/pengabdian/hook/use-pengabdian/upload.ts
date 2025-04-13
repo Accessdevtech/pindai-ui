@@ -12,10 +12,10 @@ export const useUploadPengabdian = ({ onSuccess, onError }: Props) => {
   return useMutation<
     ResponseUploadPengabdian,
     AxiosError<ResponseUploadPengabdian>,
-    { id: string; file: string; category: string }
+    { id: string; file: string; category: string; jenis_dokumen?: string }
   >({
-    mutationFn: async ({ id, file, category }) =>
-      await uploadPengabdian(id, file, category),
+    mutationFn: async ({ id, file, category, jenis_dokumen }) =>
+      await uploadPengabdian(id, file, category, jenis_dokumen),
     onSuccess,
     onError,
   })

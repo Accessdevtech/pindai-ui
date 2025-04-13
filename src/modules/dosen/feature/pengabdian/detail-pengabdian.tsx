@@ -8,18 +8,23 @@ import {
 import { downloadDocxFile, uploadPdfFile } from "@/utils/files"
 
 import Breadcrumb from "@/components/atom/bradcrumb"
+import { FileInput } from "@/components/atom/file-input"
+import Modal from "@/components/atom/modal"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
-import { fileAtom } from "@/state/store"
+import { proposalAtom } from "@/state/store"
 import { EachUtil } from "@/utils/each-utils"
-import { useSetAtom } from "jotai"
+import { useAtom } from "jotai"
+import { UploadIcon } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { useEffect } from "react"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
-import { columnsDokumenManual } from "./components/column-dokumen-manual"
 import { columnsIdentitas } from "./components/column-identitas"
 import DokumenTable from "./components/dokumen-table"
 import { IdentitasTable } from "./components/identitas-table"
@@ -34,8 +39,20 @@ export default function DetailPengabdianPage({
   id: string
   user: Dosen
 }) {
-  const setFile = useSetAtom(fileAtom)
+  const [proposal, setProposal] = useAtom(proposalAtom)
   const { data } = useGetDetailPengabdian(id)
+
+  const searchParams = useSearchParams().get("new")
+  const isNew = searchParams === "true"
+
+  useEffect(() => {
+    isNew === true
+      ? toast.info("Data berhasil disubmit", {
+          description: "Silahkan unggah proposal pengabdian anda",
+          duration: 5000,
+        })
+      : toast.dismiss()
+  }, [isNew])
 
   const { mutate, isPending } = useDownloadPengabdian({
     onSuccess(res) {
@@ -50,40 +67,39 @@ export default function DetailPengabdianPage({
 
   const { mutate: upload } = useUploadPengabdian({
     onSuccess(res) {
-      toast.success("Berhasil Mengunggah Dokumen")
-      setFile(null)
+      toast.success(res.message)
+      setProposal(null)
     },
     onError(err) {
       toast.error(err.response?.data.message)
     },
   })
 
-  const handleFileUpload = async (file: File) => {
+  const handleFileUpload = async (file: File, jenis_dokumen?: string) => {
     const fileEncode = await uploadPdfFile(file)
 
-    upload({ id, file: fileEncode, category: "pengabdian" })
+    upload({
+      id,
+      file: fileEncode,
+      category: "pengabdian",
+      jenis_dokumen: jenis_dokumen?.split(" ").join("_"),
+    })
   }
 
   const handleDownload = (jenis_Dokumen: string) => {
     mutate({ id, jenis_dokumen: jenis_Dokumen, category: "pengabdian" })
   }
 
+  const isLeader = data?.anggota.some(
+    anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
+  )
+
   const columnsIdentity = columnsIdentitas({ status: data?.status })
   const columnsDocuments = columnsDokumen({
-    isLeader: data?.anggota.some(
-      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
-    ),
+    isLeader,
     status: data?.status,
     handleFileUpload,
     handleDownload,
-  })
-
-  const columnsDocumentsManual = columnsDokumenManual({
-    isLeader: data?.anggota.some(
-      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
-    ),
-    status: data?.status,
-    handleFileUpload,
   })
 
   if (isPending) toast.loading("Sedang Mengunduh Dokumen")
@@ -161,7 +177,33 @@ export default function DetailPengabdianPage({
               </div>
             )}
           />
-          <Button type='button'>Lihat Proposal</Button>
+          <Modal
+            name='Unggah Proposal Pengabdian'
+            Icon={UploadIcon}
+            size='sm'
+            title='Unggah Proposal Pengabdian'
+            disabled={!isLeader}
+            description='Unggah pengabdian Anda dalam format PDF menggunakan form ini.'
+            className={cn({
+              "max-h-fit max-w-2xl": proposal,
+            })}
+          >
+            <ScrollArea className='max-h-[70vh]'>
+              <FileInput
+                file={proposal as File}
+                setFile={setProposal}
+                accept='.pdf'
+                variant='outline'
+                size='sm'
+              />
+            </ScrollArea>
+            <Button
+              onClick={() => handleFileUpload(proposal as File, "proposal")}
+              disabled={!proposal}
+            >
+              Simpan
+            </Button>
+          </Modal>
         </CardContent>
       </Card>
 
@@ -177,7 +219,12 @@ export default function DetailPengabdianPage({
         </CardContent>
       </Card>
 
-      <Tabs defaultValue='manual'>
+      <Card>
+        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+          <DokumenTable columns={columnsDocuments} />
+        </CardContent>
+      </Card>
+      {/* <Tabs defaultValue='manual'>
         <TabsList>
           <TabsTrigger value='generate'>Generate</TabsTrigger>
           <TabsTrigger value='manual'>Manual</TabsTrigger>
@@ -196,7 +243,7 @@ export default function DetailPengabdianPage({
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
 
       {/* Identitas Kelompok */}
       <Card>

@@ -54,7 +54,7 @@ export default function CreatePenelitian() {
       toast.success(res.message)
       setAnggota([])
       form.reset()
-      router.push(`${ROUTE.DASHBOARD}/dosen/penelitian/${res.data.id}`)
+      router.push(`${ROUTE.DASHBOARD}/dosen/penelitian/${res.data.id}?new=true`)
     },
     onError: err => {
       if (err.response?.data?.errors) {
@@ -158,6 +158,23 @@ export default function CreatePenelitian() {
                 />
               )}
             </div>
+
+            {/* <div className='mt-4 flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
+              <Button
+                type='button'
+                className='grow capitalize'
+                onClick={() => {}}
+              >
+                unduh template proposal
+              </Button>
+              <Button
+                type='button'
+                className='grow capitalize'
+                onClick={() => {}}
+              >
+                unggah proposal
+              </Button>
+            </div> */}
 
             <DataKetuaPenelitian />
 

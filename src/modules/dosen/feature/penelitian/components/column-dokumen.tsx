@@ -43,6 +43,21 @@ export const columnsDokumen = ({
       ),
     },
     {
+      accessorKey: "proposal",
+      header: "PROPOSAL",
+      cell: ({ row }) => (
+        <Button
+          variant='outline'
+          size='sm'
+          disabled={!isLeader}
+          onClick={() => handleDownload(row.original.proposal)}
+        >
+          <FileOutput />
+          Unduh Template Proposal
+        </Button>
+      ),
+    },
+    {
       accessorKey: "suratPengajuan",
       header: "SURAT PENGAJUAN",
       cell: ({ row }) => (
@@ -75,21 +90,6 @@ export const columnsDokumen = ({
       },
     },
     {
-      accessorKey: "proposal",
-      header: "PROPOSAL",
-      cell: ({ row }) => (
-        <Button
-          variant='outline'
-          size='sm'
-          disabled={!isLeader || status?.kaprodi !== "accepted"}
-          onClick={() => handleDownload(row.original.proposal)}
-        >
-          <FileOutput />
-          Unduh Proposal
-        </Button>
-      ),
-    },
-    {
       accessorKey: "kontrakPenelitian",
       header: "KONTRAK PENELITIAN",
       cell: ({ row }) => (
@@ -101,25 +101,6 @@ export const columnsDokumen = ({
         >
           <FileOutput />
           Unduh {row.original.kontrakPenelitian}
-        </Button>
-      ),
-    },
-    {
-      accessorKey: "suratKeteranganSelesai",
-      header: "SURAT KETERANGAN SELESAI",
-      cell: ({ row }) => (
-        <Button
-          size='sm'
-          variant='outline'
-          disabled={
-            !isLeader ||
-            status?.keuangan !== "accepted" ||
-            status?.dppm !== "accepted"
-          }
-          onClick={() => handleDownload(row.original.suratKeteranganSelesai)}
-        >
-          <FileOutput />
-          Unduh {row.original.suratKeteranganSelesai}
         </Button>
       ),
     },
@@ -178,6 +159,25 @@ export const columnsDokumen = ({
           </Modal>
         )
       },
+    },
+    {
+      accessorKey: "suratKeteranganSelesai",
+      header: "SURAT KETERANGAN SELESAI",
+      cell: ({ row }) => (
+        <Button
+          size='sm'
+          variant='outline'
+          disabled={
+            !isLeader ||
+            status?.keuangan !== "accepted" ||
+            status?.dppm !== "accepted"
+          }
+          onClick={() => handleDownload(row.original.suratKeteranganSelesai)}
+        >
+          <FileOutput />
+          Unduh {row.original.suratKeteranganSelesai}
+        </Button>
+      ),
     },
     {
       accessorKey: "laporan",

@@ -9,18 +9,23 @@ import {
 import { downloadDocxFile, uploadPdfFile } from "@/utils/files"
 
 import Breadcrumb from "@/components/atom/bradcrumb"
+import { FileInput } from "@/components/atom/file-input"
+import Modal from "@/components/atom/modal"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Button } from "@/components/ui/button"
+import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
+import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
-import { fileAtom } from "@/state/store"
+import { proposalAtom } from "@/state/store"
 import { EachUtil, Every, Reduce } from "@/utils/each-utils"
-import { useSetAtom } from "jotai"
+import { useAtom } from "jotai"
+import { UploadIcon } from "lucide-react"
+import { useSearchParams } from "next/navigation"
+import { useEffect } from "react"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
-import { columnsDokumenManual } from "./components/column-dokumen-manual"
 import { columnsIdentitas } from "./components/column-identitas"
 import DokumenTable from "./components/dokumen-table"
 import { IdentitasTable } from "./components/identitas-table"
@@ -35,8 +40,19 @@ export default function DetailPenelitianPage({
   id: string
   user: Dosen
 }) {
-  const setFile = useSetAtom(fileAtom)
+  const [proposal, setProposal] = useAtom(proposalAtom)
   const { data } = useGetDetailPenelitian(id)
+  const searchParams = useSearchParams().get("new")
+  const isNew = searchParams === "true"
+
+  useEffect(() => {
+    isNew === true
+      ? toast.info("Data berhasil disubmit", {
+          description: "Silahkan unggah proposal penelitian anda",
+          duration: 5000,
+        })
+      : toast.dismiss()
+  }, [isNew])
 
   const { mutate, isPending } = useDownloadPenelitian({
     onSuccess(res) {
@@ -52,7 +68,7 @@ export default function DetailPenelitianPage({
   const { mutate: upload } = useUploadPenelitian({
     onSuccess(res) {
       toast.success(res.message)
-      setFile(null)
+      setProposal(null)
     },
     onError(err) {
       toast.error(err.response?.data.message)
@@ -61,6 +77,8 @@ export default function DetailPenelitianPage({
 
   const handleFileUpload = async (file: File, jenis_dokumen?: string) => {
     const fileEncode = await uploadPdfFile(file)
+
+    console.log("fileEncode", jenis_dokumen)
 
     upload({
       id,
@@ -78,22 +96,16 @@ export default function DetailPenelitianPage({
     })
   }
 
+  const isLeader = data?.anggota.some(
+    anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
+  )
+
   const columnsIdentity = columnsIdentitas({ status: data?.status })
   const columnsDocuments = columnsDokumen({
-    isLeader: data?.anggota.some(
-      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
-    ),
+    isLeader,
     status: data?.status,
     handleFileUpload,
     handleDownload,
-  })
-
-  const columnsDocumentsManual = columnsDokumenManual({
-    isLeader: data?.anggota.some(
-      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
-    ),
-    status: data?.status,
-    handleFileUpload,
   })
 
   if (isPending) toast.loading("Sedang Mengunduh Dokumen")
@@ -170,7 +182,33 @@ export default function DetailPenelitianPage({
               </div>
             )}
           />
-          <Button type='button'>Lihat Proposal</Button>
+          <Modal
+            name='Unggah Proposal Penelitian'
+            Icon={UploadIcon}
+            size='sm'
+            title='Unggah Proposal Penelitian'
+            disabled={!isLeader}
+            description='Unggah penelitian Anda dalam format PDF menggunakan form ini.'
+            className={cn({
+              "max-h-fit max-w-2xl": proposal,
+            })}
+          >
+            <ScrollArea className='max-h-[70vh]'>
+              <FileInput
+                file={proposal as File}
+                setFile={setProposal}
+                accept='.pdf'
+                variant='outline'
+                size='sm'
+              />
+            </ScrollArea>
+            <Button
+              onClick={() => handleFileUpload(proposal as File, "proposal")}
+              disabled={!proposal}
+            >
+              Simpan
+            </Button>
+          </Modal>
         </CardContent>
       </Card>
 
@@ -186,7 +224,13 @@ export default function DetailPenelitianPage({
         </CardContent>
       </Card>
 
-      <Tabs defaultValue='manual'>
+      <Card>
+        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+          <DokumenTable columns={columnsDocuments} />
+        </CardContent>
+      </Card>
+
+      {/* <Tabs defaultValue='manual'>
         <TabsList>
           <TabsTrigger value='generate'>Generate</TabsTrigger>
           <TabsTrigger value='manual'>Manual</TabsTrigger>
@@ -205,7 +249,7 @@ export default function DetailPenelitianPage({
             </CardContent>
           </Card>
         </TabsContent>
-      </Tabs>
+      </Tabs> */}
 
       {/* Identitas Kelompok */}
       <Card>

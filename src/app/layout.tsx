@@ -35,6 +35,7 @@ export default function RootLayout({
               position='top-center'
               toastOptions={{
                 classNames: {
+                  info: "text-blue-600 border-blue-600 capitalize bg-background",
                   success:
                     "text-green-600 border-green-600 capitalize bg-background",
                   error: "text-red-600 border-red-600 capitalize bg-background",

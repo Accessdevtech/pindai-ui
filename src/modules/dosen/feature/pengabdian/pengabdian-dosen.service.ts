@@ -94,10 +94,11 @@ export async function uploadPengabdian(
   id: string,
   file: string,
   category: string,
+  jenis_dokumen?: string,
 ) {
   const response: ResponseDownloadPengabdian = await postData(
     `${API_ENDPOINTS_DOSEN.UPLOAD_PENGABDIAN}/${id}`,
-    { file, category },
+    { file, category, jenis_dokumen },
   )
   return response
 }
