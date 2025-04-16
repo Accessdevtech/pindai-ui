@@ -7,25 +7,28 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
 import { User } from "@/interface/type"
+import { cn } from "@/lib/utils"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
 import { downloadDocxFile } from "@/utils/files"
-import { CheckIcon, X } from "lucide-react"
+import { CheckIcon, Undo2Icon, X } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { useDownload } from "../../hooks/use-download"
 import { columnsDokumen } from "./components/column-dokumen"
-import DokumenTable from "./components/dokumen-table"
 import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian"
 import { useCanclePenelitian } from "./hooks/use-penelitian/cancle-penelitian"
 import { useGetDetailPenelitian } from "./hooks/use-penelitian/get-detail-penelitian"
+import { useReturnedPenelitian } from "./hooks/use-penelitian/returned-penelitian"
 
 export default function DetailPenelitianDppmPage({
   id,
@@ -54,6 +57,23 @@ export default function DetailPenelitianDppmPage({
   })
 
   const { mutate: reject } = useCanclePenelitian({
+    onSuccess(res) {
+      if (res.status) {
+        toast.success(res.message)
+      }
+
+      if (!res.status) {
+        toast.error(res.message)
+      }
+      refetch()
+    },
+
+    onError(error) {
+      toast.error(error.response?.data.message)
+    },
+  })
+
+  const { mutate: returned } = useReturnedPenelitian({
     onSuccess(res) {
       if (res.status) {
         toast.success(res.message)
@@ -152,7 +172,7 @@ export default function DetailPenelitianDppmPage({
           </CardContent>
         </Card>
 
-        {data?.status.dppm === "pending" && (
+        {data?.status.dppm === "returned" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
               <Button
@@ -180,6 +200,38 @@ export default function DetailPenelitianDppmPage({
                 />
 
                 <Button onClick={() => reject({ id, keterangan })}>
+                  Simpan
+                </Button>
+              </Modal>
+            </CardContent>
+          </Card>
+        )}
+
+        {data?.status.dppm === "pending" && (
+          <Card>
+            <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
+              <Button
+                variant='outline'
+                className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
+                onClick={() => approved({ id })}
+              >
+                <CheckIcon />
+                Setuju
+              </Button>
+              <Modal
+                title='Kembalikan Penelitian'
+                name='Kembalikan'
+                Icon={Undo2Icon}
+                tooltipContent='Kembalikan Penelitian'
+                btnStyle={cn(
+                  "grow border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-primary-foreground lg:w-fit",
+                )}
+                variant='outline'
+                description='Berikan keterangan pengembalian penelitian'
+              >
+                <Textarea onChange={e => setKeterangan(e.target.value)} />
+
+                <Button onClick={() => returned({ id, keterangan })}>
                   Simpan
                 </Button>
               </Modal>
@@ -249,8 +301,26 @@ export default function DetailPenelitianDppmPage({
       </Card>
 
       <Card>
+        <CardHeader className='flex items-center justify-between p-6'>
+          <CardTitle className='capitalize tracking-wide'>
+            Laporan Kemajuan
+          </CardTitle>
+        </CardHeader>
         <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <DokumenTable columns={columnsDocuments} />
+          (Dokumen Laporan Kemajuan Penelitian)
+          {/* <DokumenTable columns={columnsDocuments} /> */}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className='flex items-center justify-between p-6'>
+          <CardTitle className='capitalize tracking-wide'>
+            Laporan Akhir
+          </CardTitle>
+        </CardHeader>
+        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+          (Dokumen Laporan Akhir Penelitian)
+          {/* <DokumenTable columns={columnsDocuments} /> */}
         </CardContent>
       </Card>
     </div>

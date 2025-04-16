@@ -7,6 +7,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -22,7 +23,6 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { useDownload } from "../../hooks/use-download"
 import { columnsDokumen } from "./components/column-dokumen"
-import DokumenTable from "./components/dokumen-table"
 import { useApprovePengabdian } from "./hooks/use-pengabdian/approved-pengabdian"
 import { useCanclePengabdian } from "./hooks/use-pengabdian/cancle-pengabdian"
 import { useGetDetailPengabdian } from "./hooks/use-pengabdian/get-detail-pengabdian"
@@ -248,8 +248,26 @@ export default function DetailPengabdianKeuanganPage({
       </Card>
 
       <Card>
+        <CardHeader className='flex items-center justify-between p-6'>
+          <CardTitle className='capitalize tracking-wide'>
+            Laporan Kemajuan
+          </CardTitle>
+        </CardHeader>
         <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <DokumenTable columns={columnsDocuments} />
+          (Dokumen Laporan Kemajuan Penelitian)
+          {/* <DokumenTable columns={columnsDocuments} /> */}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className='flex items-center justify-between p-6'>
+          <CardTitle className='capitalize tracking-wide'>
+            Laporan Akhir
+          </CardTitle>
+        </CardHeader>
+        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+          (Dokumen Laporan Akhir Penelitian)
+          {/* <DokumenTable columns={columnsDocuments} /> */}
         </CardContent>
       </Card>
     </div>

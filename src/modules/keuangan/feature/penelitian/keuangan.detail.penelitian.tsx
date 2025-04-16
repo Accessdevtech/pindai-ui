@@ -6,6 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -20,7 +21,6 @@ import { useState } from "react"
 import { toast } from "sonner"
 import { useDownload } from "../../hooks/use-download"
 import { columnsDokumen } from "./components/column-dokumen"
-import DokumenTable from "./components/dokumen-table"
 import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian"
 import { useCanclePenelitian } from "./hooks/use-penelitian/cancle-penelitian"
 import { useGetDetailPenelitian } from "./hooks/use-penelitian/get-detail-penelitian"
@@ -225,8 +225,26 @@ export default function DetailPenelitianKeuanganPage({
       </Card>
 
       <Card>
+        <CardHeader className='flex items-center justify-between p-6'>
+          <CardTitle className='capitalize tracking-wide'>
+            Laporan Kemajuan
+          </CardTitle>
+        </CardHeader>
         <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <DokumenTable columns={columnsDocuments} />
+          (Dokumen Laporan Kemajuan Penelitian)
+          {/* <DokumenTable columns={columnsDocuments} /> */}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader className='flex items-center justify-between p-6'>
+          <CardTitle className='capitalize tracking-wide'>
+            Laporan Akhir
+          </CardTitle>
+        </CardHeader>
+        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+          (Dokumen Laporan Akhir Penelitian)
+          {/* <DokumenTable columns={columnsDocuments} /> */}
         </CardContent>
       </Card>
     </div>
