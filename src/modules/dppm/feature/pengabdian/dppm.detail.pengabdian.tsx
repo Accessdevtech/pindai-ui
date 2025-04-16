@@ -1,5 +1,6 @@
 "use client"
 import Breadcrumb from "@/components/atom/bradcrumb"
+import FileView from "@/components/atom/file-view"
 import Modal from "@/components/atom/modal"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Button } from "@/components/ui/button"
@@ -12,29 +13,26 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { User } from "@/interface/type"
+import { useViewDocs } from "@/hooks/use-view-docs"
+import { ResponseViewDocs } from "@/interface/type"
 import { columnsIdentitas } from "@/modules/dosen/feature/pengabdian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/pengabdian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { downloadDocxFile } from "@/utils/files"
-import { CheckIcon, Undo2Icon, X } from "lucide-react"
-import { useState } from "react"
+import { CheckIcon, LoaderIcon, Undo2Icon, X } from "lucide-react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
-import { useDownload } from "../../hooks/use-download"
-import { columnsDokumen } from "./components/column-dokumen"
 import { useApprovePengabdian } from "./hooks/use-pengabdian/approved-pengabdian"
 import { useCanclePengabdian } from "./hooks/use-pengabdian/cancle-pengabdian"
 import { useGetDetailPengabdian } from "./hooks/use-pengabdian/get-detail-pengabdian"
 import { useReturnedPengabdian } from "./hooks/use-pengabdian/returned-pengabdian"
 
-export default function DetailPengabdianDppmPage({
-  id,
-  user,
-}: {
-  id: string
-  user: User
-}) {
+export default function DetailPengabdianDppmPage({ id }: { id: string }) {
+  const [resDocs, setResDocs] = useState<{
+    proposal: ResponseViewDocs
+    laporanKemajuan: ResponseViewDocs
+    laporan: ResponseViewDocs
+  }>()
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPengabdian(id)
   const { mutate: approved } = useApprovePengabdian({
@@ -87,34 +85,29 @@ export default function DetailPengabdianDppmPage({
     },
   })
 
-  const { mutate: download } = useDownload({
-    onSuccess(res) {
-      downloadDocxFile(res.base64, res.file_name)
-      toast.dismiss()
-    },
-    onError(err) {
-      toast.error(err.response?.data.message)
-      toast.dismiss()
-    },
-  })
+  const { mutateAsync: viewDocs, isPending } = useViewDocs()
 
-  const handleDownload = (jenis_Dokumen: string) => {
-    download({
+  const viewFile = async (jenis_dokument: string) => {
+    const response = await viewDocs({
       id,
-      jenis_dokumen: jenis_Dokumen.split(" ").join("_"),
-      category: "penelitian",
+      category: "pengabdian",
+      jenis_dokumen: jenis_dokument.split(" ").join("_"),
     })
+    return response
   }
 
-  const columnsDocuments = columnsDokumen({
-    isLeader: data?.anggota.some(
-      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
-    ),
-    status: data?.status,
-    handleDownload,
-  })
-  const columnsIdentity = columnsIdentitas({ status: data?.status })
+  useEffect(() => {
+    Promise.all([
+      viewFile("proposal"),
+      viewFile("laporan_kemajuan"),
+      viewFile("laporan"),
+    ]).then(response => {
+      const [proposal, laporanKemajuan, laporan] = response
+      setResDocs({ proposal, laporanKemajuan, laporan })
+    })
+  }, [])
 
+  const columnsIdentity = columnsIdentitas({ status: data?.status })
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -256,7 +249,24 @@ export default function DetailPengabdianDppmPage({
               </div>
             )}
           />
-          <Button type='button'>Lihat Proposal</Button>
+          <Modal
+            title={`${resDocs?.proposal ? resDocs?.proposal.file_name.split("-").join(" ").replace(".pdf", "") : "Sedang Mendapatkan File Proposal"}`}
+            name='Lihat Proposal'
+            tooltipContent='Lihat Proposal'
+          >
+            {isPending ? (
+              <LoaderIcon className='animate-spin' />
+            ) : resDocs?.laporanKemajuan ? (
+              <FileView
+                resDocs={resDocs?.proposal as ResponseViewDocs}
+                scale={1}
+              />
+            ) : (
+              <div className='capitalize'>
+                File tidak tersedia / belum di unggah
+              </div>
+            )}
+          </Modal>
         </CardContent>
       </Card>
 
@@ -293,29 +303,45 @@ export default function DetailPengabdianDppmPage({
         </CardContent>
       </Card>
 
-      <Card>
-        <CardHeader className='flex items-center justify-between p-6'>
-          <CardTitle className='capitalize tracking-wide'>
-            Laporan Kemajuan
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          (Dokumen Laporan Kemajuan Penelitian)
-          {/* <DokumenTable columns={columnsDocuments} /> */}
-        </CardContent>
-      </Card>
+      <div className='flex gap-4'>
+        <Card>
+          <CardHeader className='flex items-center justify-between p-6'>
+            <CardTitle className='capitalize tracking-wide'>
+              Laporan Kemajuan
+            </CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+            {isPending ? (
+              <LoaderIcon className='animate-spin' />
+            ) : resDocs?.laporanKemajuan ? (
+              <FileView
+                resDocs={resDocs?.laporanKemajuan as ResponseViewDocs}
+              />
+            ) : (
+              <div className='capitalize'>
+                File tidak tersedia / belum di unggah
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-      <Card>
-        <CardHeader className='flex items-center justify-between p-6'>
-          <CardTitle className='capitalize tracking-wide'>
-            Laporan Akhir
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          (Dokumen Laporan Akhir Penelitian)
-          {/* <DokumenTable columns={columnsDocuments} /> */}
-        </CardContent>
-      </Card>
+        <Card>
+          <CardHeader className='flex items-center justify-between p-6'>
+            <CardTitle className='capitalize tracking-wide'>Laporan</CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+            {isPending ? (
+              <LoaderIcon className='animate-spin' />
+            ) : resDocs?.laporan ? (
+              <FileView resDocs={resDocs?.laporan as ResponseViewDocs} />
+            ) : (
+              <div className='capitalize'>
+                File tidak tersedia / belum di unggah
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }

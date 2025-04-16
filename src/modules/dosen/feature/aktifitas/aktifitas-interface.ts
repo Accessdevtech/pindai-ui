@@ -3,7 +3,6 @@ import { Meta } from "@/interface/type"
 export interface AktifitasList {
   id: string
   title: string
-  status: string
   date: string
 }
 
@@ -18,8 +17,7 @@ export interface AktifitasData {
 
 export interface Step {
   name: string
-  completed: boolean
-  canceled: boolean
+  description: string
   date: string
   time: string
 }

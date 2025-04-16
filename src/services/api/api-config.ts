@@ -14,6 +14,7 @@ export const API_ENDPOINTS = {
 
   DOWNLOAD_EXCEL: "/download/excel",
   DOWNLOAD_DOKUMEN: "/download/dokumen",
+  VIEW_DOKUMEN: "/view/dokumen",
 
   LIST_PRODI: "/list/prodi",
   LIST_FAKULTAS: "/list/fakultas",

@@ -1,40 +1,25 @@
 "use client"
 import Breadcrumb from "@/components/atom/bradcrumb"
-import Modal from "@/components/atom/modal"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
-import { User } from "@/interface/type"
 import { columnsIdentitas } from "@/modules/dosen/feature/pengabdian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/pengabdian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { downloadDocxFile } from "@/utils/files"
-import { CheckIcon, X } from "lucide-react"
-import { useState } from "react"
+import { CheckIcon } from "lucide-react"
 import { toast } from "sonner"
-import { useDownload } from "../../hooks/use-download"
-import { columnsDokumen } from "./components/column-dokumen"
 import { useApprovePengabdian } from "./hooks/use-pengabdian/approved-pengabdian"
 import { useCanclePengabdian } from "./hooks/use-pengabdian/cancle-pengabdian"
 import { useGetDetailPengabdian } from "./hooks/use-pengabdian/get-detail-pengabdian"
 
-export default function DetailPengabdianKeuanganPage({
-  id,
-  user,
-}: {
-  id: string
-  user: User
-}) {
-  const [keterangan, setKeterangan] = useState("")
+export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
   const { data, refetch } = useGetDetailPengabdian(id)
   const { mutate: approved } = useApprovePengabdian({
     onSuccess(res) {
@@ -68,33 +53,6 @@ export default function DetailPengabdianKeuanganPage({
     onError(error) {
       toast.error(error.response?.data.message)
     },
-  })
-
-  const { mutate: download } = useDownload({
-    onSuccess(res) {
-      downloadDocxFile(res.base64, res.file_name)
-      toast.dismiss()
-    },
-    onError(err) {
-      toast.error(err.response?.data.message)
-      toast.dismiss()
-    },
-  })
-
-  const handleDownload = (jenis_Dokumen: string) => {
-    download({
-      id,
-      jenis_dokumen: jenis_Dokumen.split(" ").join("_"),
-      category: "penelitian",
-    })
-  }
-
-  const columnsDocuments = columnsDokumen({
-    isLeader: data?.anggota.some(
-      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
-    ),
-    status: data?.status,
-    handleDownload,
   })
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
@@ -163,26 +121,6 @@ export default function DetailPengabdianKeuanganPage({
                 <CheckIcon />
                 Setuju
               </Button>
-              <Modal
-                title='Tolak Pengabdian'
-                name='Tolak'
-                Icon={X}
-                tooltipContent='Tolak Pengabdian'
-                btnStyle='grow border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground lg:w-fit'
-                variant='outline'
-                description='Berikan keterangan penolakan pengabdian'
-              >
-                <Input
-                  defaultValue={
-                    data?.keterangan === null ? "" : data?.keterangan
-                  }
-                  onChange={e => setKeterangan(e.target.value)}
-                />
-
-                <Button onClick={() => reject({ id, keterangan })}>
-                  Simpan
-                </Button>
-              </Modal>
             </CardContent>
           </Card>
         )}
@@ -210,7 +148,6 @@ export default function DetailPengabdianKeuanganPage({
               </div>
             )}
           />
-          <Button type='button'>Lihat Proposal</Button>
         </CardContent>
       </Card>
 
@@ -232,42 +169,6 @@ export default function DetailPengabdianKeuanganPage({
             data={data?.anggota || []}
             columns={columnsIdentity}
           />
-        </CardContent>
-      </Card>
-
-      {/* Dokumen Penelitian */}
-      <Card>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <CardTitle className='capitalize tracking-wide'>
-            dokumen penelitian
-          </CardTitle>
-          <CardDescription>
-            Tabel berisi dokumen penelitian yang harus dilengkapi.
-          </CardDescription>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className='flex items-center justify-between p-6'>
-          <CardTitle className='capitalize tracking-wide'>
-            Laporan Kemajuan
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          (Dokumen Laporan Kemajuan Penelitian)
-          {/* <DokumenTable columns={columnsDocuments} /> */}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className='flex items-center justify-between p-6'>
-          <CardTitle className='capitalize tracking-wide'>
-            Laporan Akhir
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          (Dokumen Laporan Akhir Penelitian)
-          {/* <DokumenTable columns={columnsDocuments} /> */}
         </CardContent>
       </Card>
     </div>

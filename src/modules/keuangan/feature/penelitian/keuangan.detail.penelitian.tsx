@@ -6,7 +6,6 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
@@ -15,12 +14,8 @@ import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { downloadDocxFile } from "@/utils/files"
 import { CheckIcon } from "lucide-react"
-import { useState } from "react"
 import { toast } from "sonner"
-import { useDownload } from "../../hooks/use-download"
-import { columnsDokumen } from "./components/column-dokumen"
 import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian"
 import { useCanclePenelitian } from "./hooks/use-penelitian/cancle-penelitian"
 import { useGetDetailPenelitian } from "./hooks/use-penelitian/get-detail-penelitian"
@@ -32,7 +27,6 @@ export default function DetailPenelitianKeuanganPage({
   id: string
   user: User
 }) {
-  const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPenelitian(id)
   const { mutate: approved } = useApprovePenelitian({
     onSuccess(res) {
@@ -68,32 +62,6 @@ export default function DetailPenelitianKeuanganPage({
     },
   })
 
-  const { mutate: download } = useDownload({
-    onSuccess(res) {
-      downloadDocxFile(res.base64, res.file_name)
-      toast.dismiss()
-    },
-    onError(err) {
-      toast.error(err.response?.data.message)
-      toast.dismiss()
-    },
-  })
-
-  const handleDownload = (jenis_Dokumen: string) => {
-    download({
-      id,
-      jenis_dokumen: jenis_Dokumen.split(" ").join("_"),
-      category: "penelitian",
-    })
-  }
-
-  const columnsDocuments = columnsDokumen({
-    isLeader: data?.anggota.some(
-      anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
-    ),
-    status: data?.status,
-    handleDownload,
-  })
   const columnsIdentity = columnsIdentitas({ status: data?.status })
 
   return (
@@ -187,7 +155,6 @@ export default function DetailPenelitianKeuanganPage({
               </div>
             )}
           />
-          <Button type='button'>Lihat Proposal</Button>
         </CardContent>
       </Card>
 
@@ -209,42 +176,6 @@ export default function DetailPenelitianKeuanganPage({
             data={data?.anggota || []}
             columns={columnsIdentity}
           />
-        </CardContent>
-      </Card>
-
-      {/* Dokumen Penelitian */}
-      <Card>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          <CardTitle className='capitalize tracking-wide'>
-            dokumen penelitian
-          </CardTitle>
-          <CardDescription>
-            Tabel berisi dokumen penelitian yang harus dilengkapi.
-          </CardDescription>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className='flex items-center justify-between p-6'>
-          <CardTitle className='capitalize tracking-wide'>
-            Laporan Kemajuan
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          (Dokumen Laporan Kemajuan Penelitian)
-          {/* <DokumenTable columns={columnsDocuments} /> */}
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader className='flex items-center justify-between p-6'>
-          <CardTitle className='capitalize tracking-wide'>
-            Laporan Akhir
-          </CardTitle>
-        </CardHeader>
-        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-          (Dokumen Laporan Akhir Penelitian)
-          {/* <DokumenTable columns={columnsDocuments} /> */}
         </CardContent>
       </Card>
     </div>

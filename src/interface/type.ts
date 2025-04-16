@@ -38,3 +38,8 @@ export interface ResponseDownloadExcel extends Response {
   base64: string
   file_name: string
 }
+
+export interface ResponseViewDocs extends Response {
+  base64: string
+  file_name: string
+}
