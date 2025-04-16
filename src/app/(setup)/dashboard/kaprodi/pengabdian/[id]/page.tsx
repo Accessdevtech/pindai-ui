@@ -2,7 +2,6 @@
 
 import { useAuthContext } from "@/contexts/auth-context"
 import DetailPengabdianKaprodiPage from "@/modules/kaprodi/feature/pengabdian/kaprodi.detail.pengabdian"
-import { Kaprodi } from "@/modules/kaprodi/kaprodi.interface"
 import { useParams } from "next/navigation"
 
 export default function PengabdianDetail() {
@@ -11,7 +10,5 @@ export default function PengabdianDetail() {
 
   if (!id || !user) return null
 
-  return (
-    <DetailPengabdianKaprodiPage id={id as string} user={user as Kaprodi} />
-  )
+  return <DetailPengabdianKaprodiPage id={id as string} />
 }

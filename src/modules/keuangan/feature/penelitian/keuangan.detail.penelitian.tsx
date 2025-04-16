@@ -9,7 +9,6 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
-import { User } from "@/interface/type"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
 import { ROUTE } from "@/services/route"
@@ -20,13 +19,7 @@ import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian
 import { useCanclePenelitian } from "./hooks/use-penelitian/cancle-penelitian"
 import { useGetDetailPenelitian } from "./hooks/use-penelitian/get-detail-penelitian"
 
-export default function DetailPenelitianKeuanganPage({
-  id,
-  user,
-}: {
-  id: string
-  user: User
-}) {
+export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
   const { data, refetch } = useGetDetailPenelitian(id)
   const { mutate: approved } = useApprovePenelitian({
     onSuccess(res) {

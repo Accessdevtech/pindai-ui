@@ -7,5 +7,5 @@ export default function PengabdianDetail() {
   const { id } = useParams()
   const { user } = useAuthContext()
   if (!id || !user) return null
-  return <DetailPengabdianDppmPage id={id as string} user={user!} />
+  return <DetailPengabdianDppmPage id={id as string} />
 }
