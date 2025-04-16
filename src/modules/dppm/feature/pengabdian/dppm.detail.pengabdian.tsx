@@ -19,7 +19,7 @@ import { columnsIdentitas } from "@/modules/dosen/feature/pengabdian/components/
 import { IdentitasTable } from "@/modules/dosen/feature/pengabdian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { CheckIcon, LoaderIcon, Undo2Icon, X } from "lucide-react"
+import { CheckIcon, Loader2Icon, Undo2Icon, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { useApprovePengabdian } from "./hooks/use-pengabdian/approved-pengabdian"
@@ -255,7 +255,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
             tooltipContent='Lihat Proposal'
           >
             {isPending ? (
-              <LoaderIcon className='animate-spin' />
+              <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporanKemajuan ? (
               <FileView
                 resDocs={resDocs?.proposal as ResponseViewDocs}
@@ -312,7 +312,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
           </CardHeader>
           <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
             {isPending ? (
-              <LoaderIcon className='animate-spin' />
+              <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporanKemajuan ? (
               <FileView
                 resDocs={resDocs?.laporanKemajuan as ResponseViewDocs}
@@ -331,7 +331,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
           </CardHeader>
           <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
             {isPending ? (
-              <LoaderIcon className='animate-spin' />
+              <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporan ? (
               <FileView resDocs={resDocs?.laporan as ResponseViewDocs} />
             ) : (

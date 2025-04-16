@@ -20,7 +20,7 @@ import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { CheckIcon, LoaderIcon, Undo2Icon, X } from "lucide-react"
+import { CheckIcon, Loader2Icon, Undo2Icon, X } from "lucide-react"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian"
@@ -256,7 +256,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
             tooltipContent='Lihat Proposal'
           >
             {isPending ? (
-              <LoaderIcon className='animate-spin' />
+              <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporanKemajuan ? (
               <FileView
                 resDocs={resDocs?.proposal as ResponseViewDocs}
@@ -313,7 +313,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
           </CardHeader>
           <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
             {isPending ? (
-              <LoaderIcon className='animate-spin' />
+              <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporanKemajuan ? (
               <FileView
                 resDocs={resDocs?.laporanKemajuan as ResponseViewDocs}
@@ -332,7 +332,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
           </CardHeader>
           <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
             {isPending ? (
-              <LoaderIcon className='animate-spin' />
+              <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporan ? (
               <FileView resDocs={resDocs?.laporan as ResponseViewDocs} />
             ) : (
