@@ -102,7 +102,7 @@ export default function Modal({
             className='mx-auto'
           />
         )}
-        <DialogTitle className='capitalize'>{title}</DialogTitle>
+        <DialogTitle className='mt-4 capitalize'>{title}</DialogTitle>
         <DialogDescription className='capitalize'>
           {description}
         </DialogDescription>

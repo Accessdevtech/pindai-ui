@@ -51,3 +51,11 @@ export async function canclePengabdian(id: string, keterangan: string) {
   )
   return response
 }
+
+export async function returnedPengabdian(id: string, keterangan: string) {
+  const response = await postData(
+    `${API_ENDPOINTS_DPPM.RETURNED_PENGABDIAN}/${id}`,
+    { keterangan },
+  )
+  return response
+}
