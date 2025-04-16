@@ -29,9 +29,9 @@ import { useReturnedPengabdian } from "./hooks/use-pengabdian/returned-pengabdia
 
 export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
   const [resDocs, setResDocs] = useState<{
-    proposal: ResponseViewDocs
-    laporanKemajuan: ResponseViewDocs
-    laporan: ResponseViewDocs
+    proposal?: ResponseViewDocs
+    laporanKemajuan?: ResponseViewDocs
+    laporan?: ResponseViewDocs
   }>()
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPengabdian(id)
@@ -98,13 +98,20 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
   }
 
   useEffect(() => {
-    Promise.all([
+    Promise.allSettled([
       viewFile("proposal"),
       viewFile("laporan_kemajuan"),
       viewFile("laporan"),
     ]).then(response => {
       const [proposal, laporanKemajuan, laporan] = response
-      setResDocs({ proposal, laporanKemajuan, laporan })
+      setResDocs({
+        proposal: proposal.status === "fulfilled" ? proposal.value : undefined,
+        laporanKemajuan:
+          laporanKemajuan.status === "fulfilled"
+            ? laporanKemajuan.value
+            : undefined,
+        laporan: laporan.status === "fulfilled" ? laporan.value : undefined,
+      })
     })
   }, [])
 
@@ -258,7 +265,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
           >
             {isPending ? (
               <Loader2Icon className='animate-spin' />
-            ) : resDocs?.laporanKemajuan ? (
+            ) : resDocs?.proposal ? (
               <FileView
                 resDocs={resDocs?.proposal as ResponseViewDocs}
                 scale={1}
