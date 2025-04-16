@@ -9,5 +9,5 @@ export default function DashboardPenelitianKeuangan() {
 
   if (!id || !user) return null
 
-  return <DetailPenelitianKeuanganPage id={id as string} user={user!} />
+  return <DetailPenelitianKeuanganPage id={id as string} />
 }

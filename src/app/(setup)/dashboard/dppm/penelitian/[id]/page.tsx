@@ -10,5 +10,5 @@ export default function DashboardPenelitianDppm() {
 
   if (!id || !user) return null
 
-  return <DetailPenelitianDppmPage id={id as string} user={user!} />
+  return <DetailPenelitianDppmPage id={id as string} />
 }

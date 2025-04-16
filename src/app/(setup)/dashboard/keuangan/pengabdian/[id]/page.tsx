@@ -8,5 +8,5 @@ export default function PengabdianDetail() {
   const { id } = useParams()
   const { user } = useAuthContext()
   if (!id || !user) return null
-  return <DetailPengabdianKeuanganPage id={id as string} user={user!} />
+  return <DetailPengabdianKeuanganPage id={id as string} />
 }
