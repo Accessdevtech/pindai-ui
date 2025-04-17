@@ -17,9 +17,9 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
-import { proposalAtom } from "@/state/store"
+import { laporanAtom, laporanKemajuanAtom, proposalAtom } from "@/state/store"
 import { EachUtil, Every, Reduce } from "@/utils/each-utils"
-import { useAtom } from "jotai"
+import { useAtom, useSetAtom } from "jotai"
 import { UploadIcon } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { useEffect } from "react"
@@ -40,6 +40,8 @@ export default function DetailPenelitianPage({
   id: string
   user: Dosen
 }) {
+  const setLaporanKemajuan = useSetAtom(laporanKemajuanAtom)
+  const setLaporan = useSetAtom(laporanAtom)
   const [proposal, setProposal] = useAtom(proposalAtom)
   const { data } = useGetDetailPenelitian(id)
   const searchParams = useSearchParams().get("new")
@@ -69,6 +71,8 @@ export default function DetailPenelitianPage({
     onSuccess(res) {
       toast.success(res.message)
       setProposal(null)
+      setLaporanKemajuan(null)
+      setLaporan(null)
     },
     onError(err) {
       toast.error(err.response?.data.message)
@@ -191,9 +195,7 @@ export default function DetailPenelitianPage({
               name='Unggah Proposal Penelitian'
               Icon={UploadIcon}
               title='Unggah Proposal Penelitian'
-              disabled={
-                !isLeader || (data?.existFile === true && isNotReturned)
-              }
+              disabled={!isLeader || data?.existFile === true || isNotReturned}
               btnStyle='w-full'
               description='Unggah penelitian Anda dalam format PDF menggunakan form ini.'
               className={cn({

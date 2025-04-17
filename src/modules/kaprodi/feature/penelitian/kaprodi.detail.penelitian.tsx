@@ -117,6 +117,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
   }, [])
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
+  console.log(resDocs?.laporanKemajuan?.file_name)
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb

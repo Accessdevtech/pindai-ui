@@ -43,3 +43,11 @@ export interface ResponseViewDocs extends Response {
   base64: string
   file_name: string
 }
+
+export interface LaporanKemajuan {
+  date: Date
+  view: {
+    base64: string
+    file_name: string
+  }
+}

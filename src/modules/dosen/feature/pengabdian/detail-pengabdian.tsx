@@ -16,9 +16,9 @@ import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
-import { proposalAtom } from "@/state/store"
+import { laporanAtom, laporanKemajuanAtom, proposalAtom } from "@/state/store"
 import { EachUtil, Every, Reduce } from "@/utils/each-utils"
-import { useAtom } from "jotai"
+import { useAtom, useSetAtom } from "jotai"
 import { UploadIcon } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { useEffect } from "react"
@@ -39,6 +39,8 @@ export default function DetailPengabdianPage({
   id: string
   user: Dosen
 }) {
+  const setLaporanKemajuan = useSetAtom(laporanKemajuanAtom)
+  const setLaporan = useSetAtom(laporanAtom)
   const [proposal, setProposal] = useAtom(proposalAtom)
   const { data } = useGetDetailPengabdian(id)
 
@@ -69,6 +71,8 @@ export default function DetailPengabdianPage({
     onSuccess(res) {
       toast.success(res.message)
       setProposal(null)
+      setLaporanKemajuan(null)
+      setLaporan(null)
     },
     onError(err) {
       toast.error(err.response?.data.message)
@@ -187,7 +191,7 @@ export default function DetailPengabdianPage({
             Icon={UploadIcon}
             title='Unggah Proposal Pengabdian'
             btnStyle='w-full'
-            disabled={!isLeader || (data?.existFile === true && isNotReturned)}
+            disabled={!isLeader || data?.existFile === true || isNotReturned}
             description='Unggah pengabdian Anda dalam format PDF menggunakan form ini.'
             className={cn({
               "max-h-fit max-w-2xl": proposal,
