@@ -30,6 +30,7 @@ export interface DetailPenelitian {
   academic_year: string
   status: StatusData
   anggota: Anggota[]
+  existFile: boolean
 }
 
 export interface Leader {

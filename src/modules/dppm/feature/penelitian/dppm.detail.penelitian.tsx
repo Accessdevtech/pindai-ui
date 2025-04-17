@@ -184,41 +184,6 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        {data?.status.dppm === "returned" && (
-          <Card>
-            <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
-              <Button
-                variant='outline'
-                className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
-                onClick={() => approved({ id })}
-              >
-                <CheckIcon />
-                Setuju
-              </Button>
-              <Modal
-                title='Tolak Penelitian'
-                name='Tolak'
-                Icon={X}
-                tooltipContent='Tolak Penelitian'
-                btnStyle='grow border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground lg:w-fit'
-                variant='outline'
-                description='Berikan keterangan penolakan penelitian'
-              >
-                <Input
-                  defaultValue={
-                    data?.keterangan === null ? "" : data?.keterangan
-                  }
-                  onChange={e => setKeterangan(e.target.value)}
-                />
-
-                <Button onClick={() => reject({ id, keterangan })}>
-                  Simpan
-                </Button>
-              </Modal>
-            </CardContent>
-          </Card>
-        )}
-
         {data?.status.dppm === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
@@ -244,6 +209,27 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
                 <Textarea onChange={e => setKeterangan(e.target.value)} />
 
                 <Button onClick={() => returned({ id, keterangan })}>
+                  Simpan
+                </Button>
+              </Modal>
+
+              <Modal
+                title='Tolak Penelitian'
+                name='Tolak'
+                Icon={X}
+                tooltipContent='Tolak Penelitian'
+                btnStyle='grow border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground lg:w-fit'
+                variant='outline'
+                description='Berikan keterangan penolakan penelitian'
+              >
+                <Input
+                  defaultValue={
+                    data?.keterangan === null ? "" : data?.keterangan
+                  }
+                  onChange={e => setKeterangan(e.target.value)}
+                />
+
+                <Button onClick={() => reject({ id, keterangan })}>
                   Simpan
                 </Button>
               </Modal>
@@ -278,6 +264,7 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
           <Modal
             title={`${resDocs?.proposal ? resDocs?.proposal.file_name.split("-").join(" ").replace(".pdf", "") : "Sedang Mendapatkan File Proposal"}`}
             name='Lihat Proposal'
+            btnStyle='w-full'
             tooltipContent='Lihat Proposal'
           >
             {isPending ? (

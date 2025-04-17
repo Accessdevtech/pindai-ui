@@ -196,20 +196,6 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
                   Simpan
                 </Button>
               </Modal>
-            </CardContent>
-          </Card>
-        )}
-        {data?.status.kaprodi === "returned" && (
-          <Card>
-            <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
-              <Button
-                variant='outline'
-                className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
-                onClick={() => approved({ id })}
-              >
-                <CheckIcon />
-                Setuju
-              </Button>
 
               <Modal
                 title='Tolak Pengabdian'
@@ -261,6 +247,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
           <Modal
             title={`${resDocs?.proposal ? resDocs?.proposal.file_name.split("-").join(" ").replace(".pdf", "") : "Sedang Mendapatkan File Proposal"}`}
             name='Lihat Proposal'
+            btnStyle='w-full'
             tooltipContent='Lihat Proposal'
           >
             {isPending ? (

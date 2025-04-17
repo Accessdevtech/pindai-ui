@@ -78,8 +78,6 @@ export default function DetailPenelitianPage({
   const handleFileUpload = async (file: File, jenis_dokumen?: string) => {
     const fileEncode = await uploadPdfFile(file)
 
-    console.log("fileEncode", jenis_dokumen)
-
     upload({
       id,
       file: fileEncode,
@@ -119,6 +117,12 @@ export default function DetailPenelitianPage({
   const isRejectedDppm = Reduce(statusArray, status => status === "rejected")
 
   const isRejectedKaprodi = Every(statusArray, status => status === "rejected")
+
+  const isNotReturned =
+    (data?.status.kaprodi === "pending" ||
+      data?.status.kaprodi === "accepted") &&
+    data.status.dppm === "pending"
+
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -182,33 +186,40 @@ export default function DetailPenelitianPage({
               </div>
             )}
           />
-          <Modal
-            name='Unggah Proposal Penelitian'
-            Icon={UploadIcon}
-            size='sm'
-            title='Unggah Proposal Penelitian'
-            disabled={!isLeader}
-            description='Unggah penelitian Anda dalam format PDF menggunakan form ini.'
-            className={cn({
-              "max-h-fit max-w-2xl": proposal,
-            })}
-          >
-            <ScrollArea className='max-h-[70vh]'>
-              <FileInput
-                file={proposal as File}
-                setFile={setProposal}
-                accept='.pdf'
-                variant='outline'
-                size='sm'
-              />
-            </ScrollArea>
-            <Button
-              onClick={() => handleFileUpload(proposal as File, "proposal")}
-              disabled={!proposal}
+          <div className='flex items-center gap-2'>
+            <Modal
+              name='Unggah Proposal Penelitian'
+              Icon={UploadIcon}
+              title='Unggah Proposal Penelitian'
+              disabled={
+                !isLeader || (data?.existFile === true && isNotReturned)
+              }
+              btnStyle='w-full'
+              description='Unggah penelitian Anda dalam format PDF menggunakan form ini.'
+              className={cn({
+                "max-h-fit max-w-2xl": proposal,
+              })}
             >
-              Simpan
-            </Button>
-          </Modal>
+              <ScrollArea className='max-h-[70vh]'>
+                <FileInput
+                  file={proposal as File}
+                  setFile={setProposal}
+                  accept='.pdf'
+                  variant='outline'
+                  size='sm'
+                />
+              </ScrollArea>
+              <Button
+                onClick={() => handleFileUpload(proposal as File, "proposal")}
+                disabled={!proposal}
+              >
+                Simpan
+              </Button>
+            </Modal>
+            <p className='text-sm font-semibold text-muted-foreground'>
+              <span className='text-red-500'>*</span>Silahkan upload proposal
+            </p>
+          </div>
         </CardContent>
       </Card>
 
@@ -229,27 +240,6 @@ export default function DetailPenelitianPage({
           <DokumenTable columns={columnsDocuments} />
         </CardContent>
       </Card>
-
-      {/* <Tabs defaultValue='manual'>
-        <TabsList>
-          <TabsTrigger value='generate'>Generate</TabsTrigger>
-          <TabsTrigger value='manual'>Manual</TabsTrigger>
-        </TabsList>
-        <TabsContent value='generate'>
-          <Card>
-            <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-              <DokumenTable columns={columnsDocuments} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-        <TabsContent value='manual'>
-          <Card>
-            <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
-              <DokumenTable columns={columnsDocumentsManual} />
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs> */}
 
       {/* Identitas Kelompok */}
       <Card>

@@ -17,7 +17,7 @@ import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
 import { proposalAtom } from "@/state/store"
-import { EachUtil } from "@/utils/each-utils"
+import { EachUtil, Every, Reduce } from "@/utils/each-utils"
 import { useAtom } from "jotai"
 import { UploadIcon } from "lucide-react"
 import { useSearchParams } from "next/navigation"
@@ -103,6 +103,22 @@ export default function DetailPengabdianPage({
   })
 
   if (isPending) toast.loading("Sedang Mengunduh Dokumen")
+
+  const statusArray = [
+    data?.status.kaprodi,
+    data?.status.dppm,
+    data?.status.keuangan,
+  ]
+
+  const isRejectedDppm = Reduce(statusArray, status => status === "rejected")
+
+  const isRejectedKaprodi = Every(statusArray, status => status === "rejected")
+
+  const isNotReturned =
+    (data?.status.kaprodi === "pending" ||
+      data?.status.kaprodi === "accepted") &&
+    data.status.dppm === "pending"
+
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -119,29 +135,18 @@ export default function DetailPengabdianPage({
       >
         {data?.title}
       </Breadcrumb>
-      {data?.status.kaprodi === "rejected" &&
-        data?.status.dppm === "rejected" &&
-        data?.status.keuangan === "rejected" && (
-          <KeteranganDitolak title='Pengabdian ditolak oleh kaprodi'>
-            {data.keterangan}
-          </KeteranganDitolak>
-        )}
 
-      {data?.status.kaprodi === "accepted" &&
-        data?.status.dppm === "rejected" &&
-        data?.status.keuangan === "rejected" && (
-          <KeteranganDitolak title='Pengabdian ditolak oleh dppm'>
-            {data.keterangan}
-          </KeteranganDitolak>
-        )}
+      {isRejectedKaprodi && (
+        <KeteranganDitolak title='Pengabdian ditolak oleh kaprodi'>
+          {data?.keterangan}
+        </KeteranganDitolak>
+      )}
 
-      {data?.status.kaprodi === "accepted" &&
-        data?.status.dppm === "accepted" &&
-        data?.status.keuangan === "rejected" && (
-          <KeteranganDitolak title='Pengabdian ditolak oleh keuangan'>
-            {data.keterangan}
-          </KeteranganDitolak>
-        )}
+      {isRejectedDppm && (
+        <KeteranganDitolak title='Pengabdian ditolak oleh dppm'>
+          {data?.keterangan}
+        </KeteranganDitolak>
+      )}
 
       <Card>
         <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
@@ -180,9 +185,9 @@ export default function DetailPengabdianPage({
           <Modal
             name='Unggah Proposal Pengabdian'
             Icon={UploadIcon}
-            size='sm'
             title='Unggah Proposal Pengabdian'
-            disabled={!isLeader}
+            btnStyle='w-full'
+            disabled={!isLeader || (data?.existFile === true && isNotReturned)}
             description='Unggah pengabdian Anda dalam format PDF menggunakan form ini.'
             className={cn({
               "max-h-fit max-w-2xl": proposal,
