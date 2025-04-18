@@ -13,8 +13,8 @@ import {
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { useViewDocs } from "@/hooks/use-view-docs"
-import { ResponseViewDocs } from "@/interface/type"
+import { useViewDocs, useViewLaporanKemajuan } from "@/hooks/use-view-docs"
+import { LaporanKemajuan, ViewDocs } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
@@ -30,9 +30,9 @@ import { useReturnedPenelitian } from "./hooks/use-penelitian/returned-penelitia
 
 export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
   const [resDocs, setResDocs] = useState<{
-    proposal?: ResponseViewDocs
-    laporanKemajuan?: ResponseViewDocs
-    laporan?: ResponseViewDocs
+    proposal?: ViewDocs
+    laporanKemajuan?: LaporanKemajuan[]
+    laporan?: ViewDocs
   }>()
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPenelitian(id)
@@ -88,6 +88,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
   })
 
   const { mutateAsync: viewDocs, isPending } = useViewDocs()
+  const { mutateAsync: viewLaporanKemajuan } = useViewLaporanKemajuan()
 
   const viewFile = async (jenis_dokument: string) => {
     const response = await viewDocs({
@@ -98,10 +99,19 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
     return response
   }
 
+  const viewFileLaporanKemajuan = async () => {
+    const response = await viewLaporanKemajuan({
+      id,
+      category: "penelitian",
+    })
+
+    return response
+  }
+
   useEffect(() => {
     Promise.allSettled([
       viewFile("proposal"),
-      viewFile("laporan_kemajuan"),
+      viewFileLaporanKemajuan(),
       viewFile("laporan"),
     ]).then(response => {
       const [proposal, laporanKemajuan, laporan] = response
@@ -109,7 +119,9 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
         proposal: proposal.status === "fulfilled" ? proposal.value : undefined,
         laporanKemajuan:
           laporanKemajuan.status === "fulfilled"
-            ? laporanKemajuan.value
+            ? Array.isArray(laporanKemajuan.value)
+              ? laporanKemajuan.value
+              : [laporanKemajuan.value]
             : undefined,
         laporan: laporan.status === "fulfilled" ? laporan.value : undefined,
       })
@@ -117,7 +129,6 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
   }, [])
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
-  console.log(resDocs?.laporanKemajuan?.file_name)
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -253,10 +264,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
             {isPending ? (
               <Loader2Icon className='animate-spin' />
             ) : resDocs?.proposal ? (
-              <FileView
-                resDocs={resDocs?.proposal as ResponseViewDocs}
-                scale={1}
-              />
+              <FileView resDocs={resDocs?.proposal as ViewDocs} scale={1} />
             ) : (
               <div className='capitalize'>
                 File tidak tersedia / belum di unggah
@@ -299,8 +307,8 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
         </CardContent>
       </Card>
 
-      <div className='flex gap-4'>
-        <Card>
+      <div className='flex items-start gap-4'>
+        <Card className='shrink-0 grow'>
           <CardHeader className='flex items-center justify-between p-6'>
             <CardTitle className='capitalize tracking-wide'>
               Laporan Kemajuan
@@ -310,8 +318,39 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
             {isPending ? (
               <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporanKemajuan ? (
-              <FileView
-                resDocs={resDocs?.laporanKemajuan as ResponseViewDocs}
+              <EachUtil
+                of={resDocs.laporanKemajuan}
+                render={(laporanKemajuan, index) => (
+                  <div key={index}>
+                    <div className='flex items-center justify-between'>
+                      <span>
+                        <h1 className='font-semibold'>
+                          {laporanKemajuan.file_name
+                            .split("-")
+                            .join(" ")
+                            .replace(".pdf", "")}
+                        </h1>
+                        <p>{laporanKemajuan.date}</p>
+                      </span>
+
+                      <Modal
+                        title={laporanKemajuan.file_name
+                          .split("-")
+                          .join(" ")
+                          .replace(".pdf", "")}
+                        description={laporanKemajuan.date}
+                        name='Lihat Laporan Kemajuan'
+                        tooltipContent='Lihat Laporan Kemajuan'
+                      >
+                        <FileView
+                          resDocs={laporanKemajuan as LaporanKemajuan}
+                          scale={1}
+                        />
+                      </Modal>
+                    </div>
+                    <Separator />
+                  </div>
+                )}
               />
             ) : (
               <div className='capitalize'>
@@ -321,7 +360,11 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card
+          className={cn({
+            grow: !resDocs?.laporan,
+          })}
+        >
           <CardHeader className='flex items-center justify-between p-6'>
             <CardTitle className='capitalize tracking-wide'>Laporan</CardTitle>
           </CardHeader>
@@ -329,7 +372,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
             {isPending ? (
               <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporan ? (
-              <FileView resDocs={resDocs?.laporan as ResponseViewDocs} />
+              <FileView resDocs={resDocs?.laporan as ViewDocs} />
             ) : (
               <div className='capitalize'>
                 File tidak tersedia / belum di unggah
