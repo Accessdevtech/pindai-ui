@@ -118,11 +118,18 @@ export default function DetailPengabdianPage({
 
   const isRejectedKaprodi = Every(statusArray, status => status === "rejected")
 
-  const isNotReturned =
-    (data?.status.kaprodi === "pending" ||
-      data?.status.kaprodi === "accepted") &&
-    data.status.dppm === "pending"
-
+  const isFileExist = data?.existFile === true
+  const isDisabled = !(
+    (!isFileExist &&
+      data?.status.kaprodi === "pending" &&
+      data.status.dppm === "pending") ||
+    (isFileExist &&
+      data?.status.kaprodi === "accepted" &&
+      data.status.dppm === "returned") ||
+    (isFileExist &&
+      data.status.kaprodi === "returned" &&
+      data.status.dppm === "pending")
+  )
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -191,7 +198,7 @@ export default function DetailPengabdianPage({
             Icon={UploadIcon}
             title='Unggah Proposal Pengabdian'
             btnStyle='w-full'
-            disabled={!isLeader || data?.existFile === true || isNotReturned}
+            disabled={!isLeader || isDisabled}
             description='Unggah pengabdian Anda dalam format PDF menggunakan form ini.'
             className={cn({
               "max-h-fit max-w-2xl": proposal,

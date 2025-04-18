@@ -122,10 +122,18 @@ export default function DetailPenelitianPage({
 
   const isRejectedKaprodi = Every(statusArray, status => status === "rejected")
 
-  const isNotReturned =
-    (data?.status.kaprodi === "pending" ||
-      data?.status.kaprodi === "accepted") &&
-    data.status.dppm === "pending"
+  const isFileExist = data?.existFile === true
+  const isDisabled = !(
+    (!isFileExist &&
+      data?.status.kaprodi === "pending" &&
+      data.status.dppm === "pending") ||
+    (isFileExist &&
+      data?.status.kaprodi === "accepted" &&
+      data.status.dppm === "returned") ||
+    (isFileExist &&
+      data.status.kaprodi === "returned" &&
+      data.status.dppm === "pending")
+  )
 
   return (
     <div className='flex flex-col gap-4'>
@@ -195,7 +203,7 @@ export default function DetailPenelitianPage({
               name='Unggah Proposal Penelitian'
               Icon={UploadIcon}
               title='Unggah Proposal Penelitian'
-              disabled={!isLeader || data?.existFile === true || isNotReturned}
+              disabled={!isLeader || isDisabled}
               btnStyle='w-full'
               description='Unggah penelitian Anda dalam format PDF menggunakan form ini.'
               className={cn({
