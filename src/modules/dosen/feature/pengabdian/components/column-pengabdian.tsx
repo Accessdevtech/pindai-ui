@@ -112,19 +112,21 @@ export const columnPengabdian = ({
                     <EditIcon />
                   </Link>
                 </Tooltip> */}
-                <Alert
-                  Icon={TrashIcon}
-                  open={alert}
-                  setOpen={setAlert}
-                  title='Hapus Penelitian'
-                  size='icon'
-                  variant='destructive'
-                  tooltipContentText='Hapus Penelitian'
-                  description='Apakah anda yakin ingin menghapus penelitian ini?'
-                  onClick={() => {
-                    deletePengabdian({ id: row.original.id })
-                  }}
-                />
+                {!row.original.existFile && (
+                  <Alert
+                    Icon={TrashIcon}
+                    open={alert}
+                    setOpen={setAlert}
+                    title='Hapus Penelitian'
+                    size='icon'
+                    variant='destructive'
+                    tooltipContentText='Hapus Penelitian'
+                    description='Apakah anda yakin ingin menghapus penelitian ini?'
+                    onClick={() => {
+                      deletePengabdian({ id: row.original.id })
+                    }}
+                  />
+                )}
               </>
             )}
           </span>

@@ -12,6 +12,7 @@ export interface PenelitianDosen {
   academic_year: string
   created_date: Date
   status: StatusData
+  existFile: boolean
 }
 
 export interface PenelitianDosenResponse extends Response {

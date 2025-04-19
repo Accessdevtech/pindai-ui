@@ -9,6 +9,7 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card"
+import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { removeCookie } from "@/services/storage/cookie-storage-service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtomValue } from "jotai"
@@ -117,11 +118,17 @@ export default function ProfileDosen({
               control={form.control}
             />
             <InputField label='alamat' name='address' control={form.control} />
-            <InputField
+            <SelectField
+              control={form.control}
+              name='job_functional'
+              label='Jabatan fungsional'
+              options={jabatanFungsional}
+            />
+            {/* <InputField
               label='Jabatan fungsional'
               name='job_functional'
               control={form.control}
-            />
+            /> */}
             <InputField
               label='kampus afiliasi'
               name='affiliate_campus'
