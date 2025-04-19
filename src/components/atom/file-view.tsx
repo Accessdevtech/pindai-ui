@@ -1,4 +1,4 @@
-import { ResponseViewDocs } from "@/interface/type"
+import { LaporanKemajuan, ViewDocs } from "@/interface/type"
 import { useState } from "react"
 import { Document, Page, pdfjs } from "react-pdf"
 import { Button } from "../ui/button"
@@ -9,7 +9,7 @@ export default function FileView({
   resDocs,
   scale = 1.24,
 }: {
-  resDocs: ResponseViewDocs
+  resDocs: ViewDocs | LaporanKemajuan
   scale?: number
 }) {
   const [numPages, setNumPages] = useState<number | null>(null)

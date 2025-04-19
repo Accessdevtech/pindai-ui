@@ -14,8 +14,8 @@ import {
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
-import { useViewDocs } from "@/hooks/use-view-docs"
-import { ResponseViewDocs } from "@/interface/type"
+import { useViewDocs, useViewLaporanKemajuan } from "@/hooks/use-view-docs"
+import { LaporanKemajuan, ViewDocs } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
@@ -33,9 +33,9 @@ import { useReturnedPenelitian } from "./hooks/use-penelitian/returned-penelitia
 
 export default function DetailPenelitianDppmPage({ id }: { id: string }) {
   const [resDocs, setResDocs] = useState<{
-    proposal?: ResponseViewDocs
-    laporanKemajuan?: ResponseViewDocs
-    laporan?: ResponseViewDocs
+    proposal?: ViewDocs
+    laporanKemajuan?: LaporanKemajuan[]
+    laporan?: ViewDocs
   }>()
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPenelitian(id)
@@ -102,6 +102,7 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
   })
 
   const { mutateAsync: viewDocs, isPending } = useViewDocs()
+  const { mutateAsync: viewLaporanKemajuan } = useViewLaporanKemajuan()
 
   const viewFile = async (jenis_dokument: string) => {
     const response = await viewDocs({
@@ -112,10 +113,19 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
     return response
   }
 
+  const viewFileLaporanKemajuan = async () => {
+    const response = await viewLaporanKemajuan({
+      id,
+      category: "penelitian",
+    })
+
+    return response
+  }
+
   useEffect(() => {
     Promise.allSettled([
       viewFile("proposal"),
-      viewFile("laporan_kemajuan"),
+      viewFileLaporanKemajuan(),
       viewFile("laporan"),
     ]).then(response => {
       const [proposal, laporanKemajuan, laporan] = response
@@ -123,7 +133,9 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
         proposal: proposal.status === "fulfilled" ? proposal.value : undefined,
         laporanKemajuan:
           laporanKemajuan.status === "fulfilled"
-            ? laporanKemajuan.value
+            ? Array.isArray(laporanKemajuan.value)
+              ? laporanKemajuan.value
+              : [laporanKemajuan.value]
             : undefined,
         laporan: laporan.status === "fulfilled" ? laporan.value : undefined,
       })
@@ -184,41 +196,6 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        {data?.status.dppm === "returned" && (
-          <Card>
-            <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
-              <Button
-                variant='outline'
-                className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
-                onClick={() => approved({ id })}
-              >
-                <CheckIcon />
-                Setuju
-              </Button>
-              <Modal
-                title='Tolak Penelitian'
-                name='Tolak'
-                Icon={X}
-                tooltipContent='Tolak Penelitian'
-                btnStyle='grow border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground lg:w-fit'
-                variant='outline'
-                description='Berikan keterangan penolakan penelitian'
-              >
-                <Input
-                  defaultValue={
-                    data?.keterangan === null ? "" : data?.keterangan
-                  }
-                  onChange={e => setKeterangan(e.target.value)}
-                />
-
-                <Button onClick={() => reject({ id, keterangan })}>
-                  Simpan
-                </Button>
-              </Modal>
-            </CardContent>
-          </Card>
-        )}
-
         {data?.status.dppm === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
@@ -244,6 +221,27 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
                 <Textarea onChange={e => setKeterangan(e.target.value)} />
 
                 <Button onClick={() => returned({ id, keterangan })}>
+                  Simpan
+                </Button>
+              </Modal>
+
+              <Modal
+                title='Tolak Penelitian'
+                name='Tolak'
+                Icon={X}
+                tooltipContent='Tolak Penelitian'
+                btnStyle='grow border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground lg:w-fit'
+                variant='outline'
+                description='Berikan keterangan penolakan penelitian'
+              >
+                <Input
+                  defaultValue={
+                    data?.keterangan === null ? "" : data?.keterangan
+                  }
+                  onChange={e => setKeterangan(e.target.value)}
+                />
+
+                <Button onClick={() => reject({ id, keterangan })}>
                   Simpan
                 </Button>
               </Modal>
@@ -278,15 +276,13 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
           <Modal
             title={`${resDocs?.proposal ? resDocs?.proposal.file_name.split("-").join(" ").replace(".pdf", "") : "Sedang Mendapatkan File Proposal"}`}
             name='Lihat Proposal'
+            btnStyle='w-full'
             tooltipContent='Lihat Proposal'
           >
             {isPending ? (
               <Loader2Icon className='animate-spin' />
             ) : resDocs?.proposal ? (
-              <FileView
-                resDocs={resDocs?.proposal as ResponseViewDocs}
-                scale={1}
-              />
+              <FileView resDocs={resDocs?.proposal as ViewDocs} scale={1} />
             ) : (
               <div className='capitalize'>
                 File tidak tersedia / belum di unggah
@@ -329,8 +325,8 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
         </CardContent>
       </Card>
 
-      <div className='flex gap-4'>
-        <Card>
+      <div className='flex items-start gap-4'>
+        <Card className='shrink-0 grow'>
           <CardHeader className='flex items-center justify-between p-6'>
             <CardTitle className='capitalize tracking-wide'>
               Laporan Kemajuan
@@ -340,8 +336,39 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
             {isPending ? (
               <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporanKemajuan ? (
-              <FileView
-                resDocs={resDocs?.laporanKemajuan as ResponseViewDocs}
+              <EachUtil
+                of={resDocs.laporanKemajuan}
+                render={(laporanKemajuan, index) => (
+                  <div key={index}>
+                    <div className='flex items-center justify-between'>
+                      <span>
+                        <h1 className='font-semibold'>
+                          {laporanKemajuan.file_name
+                            .split("-")
+                            .join(" ")
+                            .replace(".pdf", "")}
+                        </h1>
+                        <p>{laporanKemajuan.date}</p>
+                      </span>
+
+                      <Modal
+                        title={laporanKemajuan.file_name
+                          .split("-")
+                          .join(" ")
+                          .replace(".pdf", "")}
+                        description={laporanKemajuan.date}
+                        name='Lihat Laporan Kemajuan'
+                        tooltipContent='Lihat Laporan Kemajuan'
+                      >
+                        <FileView
+                          resDocs={laporanKemajuan as LaporanKemajuan}
+                          scale={1}
+                        />
+                      </Modal>
+                    </div>
+                    <Separator />
+                  </div>
+                )}
               />
             ) : (
               <div className='capitalize'>
@@ -351,7 +378,11 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        <Card>
+        <Card
+          className={cn({
+            grow: !resDocs?.laporan,
+          })}
+        >
           <CardHeader className='flex items-center justify-between p-6'>
             <CardTitle className='capitalize tracking-wide'>Laporan</CardTitle>
           </CardHeader>
@@ -359,7 +390,7 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
             {isPending ? (
               <Loader2Icon className='animate-spin' />
             ) : resDocs?.laporan ? (
-              <FileView resDocs={resDocs?.laporan as ResponseViewDocs} />
+              <FileView resDocs={resDocs?.laporan as ViewDocs} />
             ) : (
               <div className='capitalize'>
                 File tidak tersedia / belum di unggah

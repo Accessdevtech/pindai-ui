@@ -12,6 +12,7 @@ export interface PengabdianDosen {
   academic_year: string
   created_date: Date
   status: StatusData
+  existFile: boolean
 }
 
 export interface PengabdianDosenResponse extends Response {
@@ -30,6 +31,7 @@ export interface DetailPengabdian {
   academic_year: string
   status: StatusData
   anggota: Anggota[]
+  existFile: boolean
 }
 
 export interface Leader {

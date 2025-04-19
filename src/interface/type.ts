@@ -39,7 +39,13 @@ export interface ResponseDownloadExcel extends Response {
   file_name: string
 }
 
-export interface ResponseViewDocs extends Response {
+export interface ViewDocs {
+  base64: string
+  file_name: string
+}
+
+export interface LaporanKemajuan {
+  date: string
   base64: string
   file_name: string
 }

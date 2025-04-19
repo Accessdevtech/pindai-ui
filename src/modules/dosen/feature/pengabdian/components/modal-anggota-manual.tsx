@@ -1,7 +1,9 @@
 import InputField from "@/components/atom/input-field"
 import Modal from "@/components/atom/modal"
+import SelectField from "@/components/atom/select-field"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
+import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom, useSetAtom } from "jotai"
 import { useForm } from "react-hook-form"
@@ -86,11 +88,17 @@ export default function ModalAnggotaManual() {
             name='scopus_id'
             control={formAnggotaManual.control}
           />
-          <InputField
+          <SelectField
+            control={formAnggotaManual.control}
+            name='job_functional'
+            label='Jabatan fungsional'
+            options={jabatanFungsional}
+          />
+          {/* <InputField
             label='Jabatan funsional'
             name='job_functional'
             control={formAnggotaManual.control}
-          />
+          /> */}
           <InputField
             label='Affiliasi kampus'
             name='affiliate_campus'
