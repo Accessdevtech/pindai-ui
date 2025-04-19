@@ -184,7 +184,7 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
         )}
 
       <div className='flex flex-col gap-4 lg:flex-row'>
-        <Card>
+        <Card className='grow'>
           <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
             <CardTitle className='capitalize tracking-wide'>
               Informasi Penelitian: {data?.title}

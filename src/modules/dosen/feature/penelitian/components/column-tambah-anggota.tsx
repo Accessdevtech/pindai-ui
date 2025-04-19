@@ -22,6 +22,7 @@ export const columnTambahAnggota = ({
         const isSlected = anggota.some(item => item.nidn === row.original.nidn)
         return (
           <Checkbox
+            className='flex items-center justify-center'
             checked={selectedAnggota.includes(row.original.nidn) || isSlected}
             onCheckedChange={() => handleCheckboxChange(row.original.nidn)}
             disabled={selectedAnggota.includes(row.original.nidn) || isSlected}
