@@ -27,13 +27,7 @@ import { scholarSearchAtom } from "./feature/scholar/state/store"
 import { useUpdateProfile } from "./hooks/use-profile/update-profile"
 import { profileSchema, ProfileType } from "./profile.schema"
 
-export default function ProfileDosen({
-  user,
-  refetch,
-}: {
-  user: IProfileDosen
-  refetch: () => void
-}) {
+export default function ProfileDosen({ user }: { user: IProfileDosen }) {
   const form = useForm<ProfileType>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -65,7 +59,6 @@ export default function ProfileDosen({
       }
       removeCookie("user")
       removeCookie("token")
-      refetch()
       toast.success(res.message)
     },
     onError: err => {
@@ -124,11 +117,6 @@ export default function ProfileDosen({
               label='Jabatan fungsional'
               options={jabatanFungsional}
             />
-            {/* <InputField
-              label='Jabatan fungsional'
-              name='job_functional'
-              control={form.control}
-            /> */}
             <InputField
               label='kampus afiliasi'
               name='affiliate_campus'

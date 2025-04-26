@@ -16,13 +16,7 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { useUpdateProfile } from "./hooks/use-profile"
 
-export default function ProfileDppm({
-  user,
-  refetch,
-}: {
-  user: User
-  refetch: () => void
-}) {
+export default function ProfileDppm({ user }: { user: User }) {
   const form = useForm<UserType>({
     resolver: zodResolver(userSchema),
     defaultValues: {
@@ -42,7 +36,6 @@ export default function ProfileDppm({
         toast.success(res.message)
       }
       form.reset()
-      refetch()
       removeCookie("token")
       removeCookie("user")
     },

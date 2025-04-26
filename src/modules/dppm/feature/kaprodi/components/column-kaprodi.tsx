@@ -10,6 +10,7 @@ import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { IFakultas } from "@/modules/listdata/fakultas.interface"
+import { useGetProdiList } from "@/modules/listdata/hooks/use-prodi/use-prodi-list"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ColumnDef } from "@tanstack/react-table"
 import { Check, EditIcon, TrashIcon, X } from "lucide-react"
@@ -20,7 +21,6 @@ import { useDeleteKaprodi } from "../hooks/use-kaprodi/delete-kaprodi"
 import { useUpdateKaprodi } from "../hooks/use-kaprodi/update-kaprodi"
 import { IKaprodi } from "../kaprodi.interface"
 import { kaprodiSchema, KaprodiType } from "../kaprodi.schema"
-
 interface ColumnKaprodiProps {
   fakultas: IFakultas[]
   refetch: () => void
@@ -106,11 +106,15 @@ export const columnKaprodi = ({
             nidn: item.nidn,
             name: item.name,
             fakultas_id: item.fakultas_id,
+            prodi_id: item.prodi_id,
             email: item.email,
             address: item.address,
             status: item.status === "true" ? "true" : "false",
           },
         })
+
+        const watch = form.watch("fakultas_id")
+        const { data: prodi } = useGetProdiList(watch)
 
         const { mutate: updateData } = useUpdateKaprodi({
           onSuccess: () => {
@@ -189,6 +193,12 @@ export const columnKaprodi = ({
                   name='fakultas_id'
                   label='fakultas'
                   options={fakultas}
+                />
+                <SelectField
+                  control={form.control}
+                  name='prodi_id'
+                  label='prodi'
+                  options={prodi?.data || []}
                 />
                 <RadioField
                   control={form.control}

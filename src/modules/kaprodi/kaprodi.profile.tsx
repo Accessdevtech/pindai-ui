@@ -9,12 +9,14 @@ import {
   CardDescription,
   CardHeader,
 } from "@/components/ui/card"
-import { setCookie } from "@/services/storage/cookie-storage-service"
+import { removeCookie } from "@/services/storage/cookie-storage-service"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
+import { IProdi } from "../dosen/dosen.interface"
 import { IFakultas } from "../listdata/fakultas.interface"
 import { useGetFakultasList } from "../listdata/hooks/use-fakultas/get-fakultas-list"
+import { useGetProdiList } from "../listdata/hooks/use-prodi/use-prodi-list"
 import { useUpdateProfile } from "./hooks/use-profile/update-profile"
 import { IKaprodiProfile } from "./kaprodi.interface"
 import { profileSchema, ProfileType } from "./kaprodi.profile.schema"
@@ -28,18 +30,21 @@ export default function ProfileKaprodi({ user }: { user: IKaprodiProfile }) {
       email: user.email,
       address: user.address,
       fakultas_id: user.fakultas_id === null ? "" : user.fakultas_id,
+      prodi_id: user.prodi_id === null ? "" : user.prodi_id,
     },
   })
 
   const { data: fakultas } = useGetFakultasList()
+  const watchFakultas = form.watch("fakultas_id")
+  const { data: prodi } = useGetProdiList(watchFakultas)
 
   const { mutate, isError } = useUpdateProfile({
     onSuccess: res => {
       if (!res.status) {
         return toast.error(res.message)
       }
-
-      setCookie("user", res.data.user)
+      removeCookie("user")
+      removeCookie("token")
       toast.success(res.message)
     },
     onError: err => {
@@ -59,6 +64,7 @@ export default function ProfileKaprodi({ user }: { user: IKaprodiProfile }) {
   }
 
   const onSubmit = (data: ProfileType) => {
+    // console.log(data)
     mutate(data)
   }
 
@@ -86,6 +92,12 @@ export default function ProfileKaprodi({ user }: { user: IKaprodiProfile }) {
               label='fakultas'
               name='fakultas_id'
               options={(fakultas?.data as IFakultas[]) || []}
+              control={form.control}
+            />
+            <SelectField
+              label='prodi'
+              name='prodi_id'
+              options={(prodi?.data as IProdi[]) || []}
               control={form.control}
             />
 
