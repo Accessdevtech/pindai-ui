@@ -64,7 +64,6 @@ export default function ProfileKaprodi({ user }: { user: IKaprodiProfile }) {
   }
 
   const onSubmit = (data: ProfileType) => {
-    // console.log(data)
     mutate(data)
   }
 
