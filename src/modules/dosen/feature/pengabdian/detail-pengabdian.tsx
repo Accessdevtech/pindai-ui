@@ -19,7 +19,7 @@ import { ROUTE } from "@/services/route"
 import { laporanAtom, laporanKemajuanAtom, proposalAtom } from "@/state/store"
 import { EachUtil, Every, Reduce } from "@/utils/each-utils"
 import { useAtom, useSetAtom } from "jotai"
-import { UploadIcon } from "lucide-react"
+import { FileOutput, UploadIcon } from "lucide-react"
 import { useSearchParams } from "next/navigation"
 import { useEffect } from "react"
 import { toast } from "sonner"
@@ -193,33 +193,49 @@ export default function DetailPengabdianPage({
               </div>
             )}
           />
-          <Modal
-            name='Unggah Proposal Pengabdian'
-            Icon={UploadIcon}
-            title='Unggah Proposal Pengabdian'
-            btnStyle='w-full'
-            disabled={!isLeader || isDisabled}
-            description='Unggah pengabdian Anda dalam format PDF menggunakan form ini.'
-            className={cn({
-              "max-h-fit max-w-2xl": proposal,
-            })}
-          >
-            <ScrollArea className='max-h-[70vh]'>
-              <FileInput
-                file={proposal as File}
-                setFile={setProposal}
-                accept='.pdf'
-                variant='outline'
-                size='sm'
-              />
-            </ScrollArea>
+          <div className='flex gap-4'>
+            <div className='flex w-full flex-col gap-2'>
+              <Modal
+                name='Unggah Proposal Pengabdian'
+                Icon={UploadIcon}
+                title='Unggah Proposal Pengabdian'
+                btnStyle='w-full'
+                disabled={!isLeader || isDisabled}
+                description='Unggah pengabdian Anda dalam format PDF menggunakan form ini.'
+                className={cn({
+                  "max-h-fit max-w-2xl": proposal,
+                })}
+              >
+                <ScrollArea className='max-h-[70vh]'>
+                  <FileInput
+                    file={proposal as File}
+                    setFile={setProposal}
+                    accept='.pdf'
+                    variant='outline'
+                    size='sm'
+                  />
+                </ScrollArea>
+                <Button
+                  onClick={() => handleFileUpload(proposal as File, "proposal")}
+                  disabled={!proposal}
+                >
+                  Simpan
+                </Button>
+              </Modal>
+              <p className='text-sm font-semibold text-muted-foreground'>
+                <span className='text-red-500'>*</span>Silahkan upload proposal
+              </p>
+            </div>
             <Button
-              onClick={() => handleFileUpload(proposal as File, "proposal")}
-              disabled={!proposal}
+              variant='outline'
+              disabled={!isLeader}
+              className='w-full border-primary text-primary hover:bg-primary hover:text-primary-foreground'
+              onClick={() => handleDownload("proposal")}
             >
-              Simpan
+              <FileOutput />
+              Unduh Template Proposal
             </Button>
-          </Modal>
+          </div>
         </CardContent>
       </Card>
 

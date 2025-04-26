@@ -19,7 +19,7 @@ export type Document = {
   cover: string
   suratPengajuan: string
   suratRekomendasi: string
-  proposal: string
+  // proposal: string
   kontrakPengabdian: string
   suratKeteranganSelesai: string
   laporanKemajuan: string
@@ -31,7 +31,7 @@ const data: Document[] = [
     cover: "cover",
     suratPengajuan: "surat pengajuan",
     suratRekomendasi: "surat rekomendasi",
-    proposal: "proposal",
+    // proposal: "proposal",
     kontrakPengabdian: "kontrak pengabdian",
     suratKeteranganSelesai: "surat keterangan selesai",
     laporanKemajuan: "laporan kemajuan",
