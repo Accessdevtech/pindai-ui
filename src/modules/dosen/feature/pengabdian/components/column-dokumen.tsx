@@ -8,7 +8,11 @@ import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { StatusData } from "@/interface/type"
 import { cn } from "@/lib/utils"
-import { laporanAtom, laporanKemajuanAtom } from "@/state/store"
+import {
+  laporanAtom,
+  laporanKemajuanAtom,
+  suratKeteranganSelesaiAtom,
+} from "@/state/store"
 import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
@@ -162,21 +166,80 @@ export const columnsDokumen = ({
     {
       accessorKey: "suratKeteranganSelesai",
       header: "SURAT KETERANGAN SELESAI",
-      cell: ({ row }) => (
-        <Button
-          size='sm'
-          variant='outline'
-          disabled={
-            !isLeader ||
-            status?.keuangan !== "accepted" ||
-            status?.dppm !== "accepted"
+      cell: ({ row }) => {
+        const [suratKeteranganSelesai, setSuratKeteranganSelesai] = useAtom(
+          suratKeteranganSelesaiAtom,
+        )
+
+        const onFileUpload = async (file: File, jenis_dokumen?: string) => {
+          try {
+            handleFileUpload(file, jenis_dokumen)
+          } catch (error) {
+            toast.error(`Error uploading file ${error}`)
           }
-          onClick={() => handleDownload(row.original.suratKeteranganSelesai)}
-        >
-          <FileOutput />
-          Unduh {row.original.suratKeteranganSelesai}
-        </Button>
-      ),
+        }
+
+        const isStatusNotAccepted = Every(
+          [status?.kaprodi, status?.dppm, status?.keuangan],
+          status => status !== "accepted",
+        )
+        return (
+          <div className='space-y-2'>
+            <Modal
+              name={`Unggah ${row.original.suratKeteranganSelesai}`}
+              Icon={UploadIcon}
+              variant='outline'
+              size='sm'
+              title={`Unggah ${row.original.suratKeteranganSelesai}`}
+              disabled={!isLeader || isStatusNotAccepted}
+              description={`Unggah ${row.original.suratKeteranganSelesai} pengabdian Anda dalam format PDF menggunakan form ini.`}
+              className={cn({
+                "max-w-2xl": suratKeteranganSelesai,
+              })}
+            >
+              <ScrollArea className='max-h-[70vh]'>
+                <FileInput
+                  file={suratKeteranganSelesai as File}
+                  setFile={setSuratKeteranganSelesai}
+                  accept='.pdf'
+                  variant='outline'
+                  size='sm'
+                />
+              </ScrollArea>
+              <Button
+                disabled={
+                  !isLeader ||
+                  status?.keuangan !== "accepted" ||
+                  status?.dppm !== "accepted"
+                }
+                onClick={() =>
+                  onFileUpload(
+                    suratKeteranganSelesai as File,
+                    row.original.suratKeteranganSelesai,
+                  )
+                }
+              >
+                simpan
+              </Button>
+            </Modal>
+            <Button
+              size='sm'
+              variant='ghost'
+              onClick={() =>
+                handleDownload(row.original.suratKeteranganSelesai)
+              }
+              disabled={
+                !isLeader ||
+                status?.keuangan !== "accepted" ||
+                status?.dppm !== "accepted"
+              }
+            >
+              <FileOutput />
+              Unduh {row.original.suratKeteranganSelesai}
+            </Button>
+          </div>
+        )
+      },
     },
     {
       accessorKey: "laporan",
