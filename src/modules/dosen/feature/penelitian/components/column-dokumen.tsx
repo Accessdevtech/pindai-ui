@@ -42,21 +42,21 @@ export const columnsDokumen = ({
         </Button>
       ),
     },
-    {
-      accessorKey: "proposal",
-      header: "PROPOSAL",
-      cell: ({ row }) => (
-        <Button
-          variant='outline'
-          size='sm'
-          disabled={!isLeader}
-          onClick={() => handleDownload(row.original.proposal)}
-        >
-          <FileOutput />
-          Unduh Template Proposal
-        </Button>
-      ),
-    },
+    // {
+    //   accessorKey: "proposal",
+    //   header: "PROPOSAL",
+    //   cell: ({ row }) => (
+    //     <Button
+    //       variant='outline'
+    //       size='sm'
+    //       disabled={!isLeader}
+    //       onClick={() => handleDownload(row.original.proposal)}
+    //     >
+    //       <FileOutput />
+    //       Unduh Template Proposal
+    //     </Button>
+    //   ),
+    // },
     {
       accessorKey: "suratPengajuan",
       header: "SURAT PENGAJUAN",
