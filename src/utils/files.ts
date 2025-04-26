@@ -10,6 +10,18 @@ export const downloadDocxFile = (base64String: string, fileName: string) => {
   document.body.removeChild(link)
 }
 
+export const downloadPdfFile = (base64String: string, fileName: string) => {
+  const link = document.createElement("a")
+  link.href = `data:application/pdf;base64,${base64String}`
+  link.setAttribute("download", `${fileName}`)
+  link.style.display = "none"
+  document.body.appendChild(link)
+
+  link.click()
+
+  document.body.removeChild(link)
+}
+
 export const downloadExcelFile = (base64String: string, fileName: string) => {
   const link = document.createElement("a")
   link.href = `data:application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;base64,${base64String}`
