@@ -6,6 +6,7 @@ export const profileSchema = z.object({
   email: z.string().email(),
   address: z.string().optional(),
   fakultas_id: z.string(),
+  prodi_id: z.string(),
 })
 
 export type ProfileType = z.infer<typeof profileSchema>

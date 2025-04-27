@@ -15,7 +15,6 @@ import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
 import { useViewDocs, useViewLaporanKemajuan } from "@/hooks/use-view-docs"
 import { LaporanKemajuan, ViewDocs } from "@/interface/type"
-import { cn } from "@/lib/utils"
 import { columnsIdentitas } from "@/modules/dosen/feature/pengabdian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/pengabdian/components/identitas-table"
 import { ROUTE } from "@/services/route"
@@ -32,6 +31,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
   const [resDocs, setResDocs] = useState<{
     proposal?: ViewDocs
     laporanKemajuan?: LaporanKemajuan[]
+    suratKeteranganSelesai?: ViewDocs
     laporan?: ViewDocs
   }>()
   const [keterangan, setKeterangan] = useState("")
@@ -111,9 +111,11 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
     Promise.allSettled([
       viewFile("proposal"),
       viewFileLaporanKemajuan(),
+      viewFile("surat_keterangan_selesai"),
       viewFile("laporan"),
     ]).then(response => {
-      const [proposal, laporanKemajuan, laporan] = response
+      const [proposal, laporanKemajuan, suratKeteranganSelesai, laporan] =
+        response
       setResDocs({
         proposal: proposal.status === "fulfilled" ? proposal.value : undefined,
         laporanKemajuan:
@@ -121,6 +123,10 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
             ? Array.isArray(laporanKemajuan.value)
               ? laporanKemajuan.value
               : [laporanKemajuan.value]
+            : undefined,
+        suratKeteranganSelesai:
+          suratKeteranganSelesai.status === "fulfilled"
+            ? suratKeteranganSelesai.value
             : undefined,
         laporan: laporan.status === "fulfilled" ? laporan.value : undefined,
       })
@@ -307,8 +313,8 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
         </CardContent>
       </Card>
 
-      <div className='flex items-start gap-4'>
-        <Card className='shrink-0 grow'>
+      <div className='grid grid-cols-2 items-start gap-4'>
+        <Card>
           <CardHeader className='flex items-center justify-between p-6'>
             <CardTitle className='capitalize tracking-wide'>
               Laporan Kemajuan
@@ -360,11 +366,26 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        <Card
-          className={cn({
-            grow: !resDocs?.laporan,
-          })}
-        >
+        <Card>
+          <CardHeader className='flex items-center justify-between p-6'>
+            <CardTitle className='capitalize tracking-wide'>
+              Surat Keterangan Selesai
+            </CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+            {isPending ? (
+              <Loader2Icon className='animate-spin' />
+            ) : resDocs?.suratKeteranganSelesai ? (
+              <FileView resDocs={resDocs?.suratKeteranganSelesai as ViewDocs} />
+            ) : (
+              <div className='capitalize'>
+                File tidak tersedia / belum di unggah
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
           <CardHeader className='flex items-center justify-between p-6'>
             <CardTitle className='capitalize tracking-wide'>Laporan</CardTitle>
           </CardHeader>

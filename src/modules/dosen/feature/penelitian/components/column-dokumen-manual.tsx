@@ -12,7 +12,6 @@ import {
   kontrakPenelitianAtom,
   laporanAtom,
   laporanKemajuanAtom,
-  proposalAtom,
   suratKeteranganSelesaiAtom,
   suratPengajuanAtom,
   suratRekomendasiAtom,
@@ -81,58 +80,58 @@ export const columnsDokumenManual = ({
         )
       },
     },
-    {
-      accessorKey: "proposal",
-      header: "PROPOSAL",
-      cell: ({ row }) => {
-        const [proposal, setProposal] = useAtom(proposalAtom)
+    // {
+    //   accessorKey: "proposal",
+    //   header: "PROPOSAL",
+    //   cell: ({ row }) => {
+    //     const [proposal, setProposal] = useAtom(proposalAtom)
 
-        const onFileUpload = async (file: File, jenis_dokumen?: string) => {
-          try {
-            handleFileUpload(file, jenis_dokumen)
-          } catch (error) {
-            toast.error(`Error uploading file ${error}`)
-          }
-        }
+    //     const onFileUpload = async (file: File, jenis_dokumen?: string) => {
+    //       try {
+    //         handleFileUpload(file, jenis_dokumen)
+    //       } catch (error) {
+    //         toast.error(`Error uploading file ${error}`)
+    //       }
+    //     }
 
-        const isStatusNotAccepted = Every(
-          [status?.kaprodi, status?.dppm, status?.keuangan],
-          status => status !== "accepted",
-        )
-        return (
-          <Modal
-            name={`Unggah ${row.original.proposal}`}
-            Icon={UploadIcon}
-            variant='outline'
-            size='sm'
-            title={`Unggah ${row.original.proposal}`}
-            disabled={!isLeader || isStatusNotAccepted}
-            description={`Unggah ${row.original.proposal} penelitian Anda dalam format PDF menggunakan form ini.`}
-            className={cn({
-              "max-w-2xl": proposal,
-            })}
-          >
-            <ScrollArea className='max-h-[70vh]'>
-              <FileInput
-                file={proposal as File}
-                setFile={setProposal}
-                accept='.pdf'
-                variant='outline'
-                size='sm'
-              />
-            </ScrollArea>
-            <Button
-              onClick={() =>
-                onFileUpload(proposal as File, row.original.proposal)
-              }
-              disabled={!proposal}
-            >
-              Simpan
-            </Button>
-          </Modal>
-        )
-      },
-    },
+    //     const isStatusNotAccepted = Every(
+    //       [status?.kaprodi, status?.dppm, status?.keuangan],
+    //       status => status !== "accepted",
+    //     )
+    //     return (
+    //       <Modal
+    //         name={`Unggah ${row.original.proposal}`}
+    //         Icon={UploadIcon}
+    //         variant='outline'
+    //         size='sm'
+    //         title={`Unggah ${row.original.proposal}`}
+    //         disabled={!isLeader || isStatusNotAccepted}
+    //         description={`Unggah ${row.original.proposal} penelitian Anda dalam format PDF menggunakan form ini.`}
+    //         className={cn({
+    //           "max-w-2xl": proposal,
+    //         })}
+    //       >
+    //         <ScrollArea className='max-h-[70vh]'>
+    //           <FileInput
+    //             file={proposal as File}
+    //             setFile={setProposal}
+    //             accept='.pdf'
+    //             variant='outline'
+    //             size='sm'
+    //           />
+    //         </ScrollArea>
+    //         <Button
+    //           onClick={() =>
+    //             onFileUpload(proposal as File, row.original.proposal)
+    //           }
+    //           disabled={!proposal}
+    //         >
+    //           Simpan
+    //         </Button>
+    //       </Modal>
+    //     )
+    //   },
+    // },
     {
       accessorKey: "suratPengajuan",
       header: "SURAT PENGAJUAN",

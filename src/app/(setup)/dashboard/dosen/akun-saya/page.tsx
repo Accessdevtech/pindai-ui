@@ -12,7 +12,7 @@ import ProfileDosen from "@/modules/dosen/dosen.profile"
 import { useUserProfile } from "@/modules/dosen/hooks/use-profile/get-profile"
 
 export default function Profile() {
-  const { data: user, refetch } = useUserProfile()
+  const { data: user } = useUserProfile()
   if (!user) return null
   return (
     <div className='flex flex-col gap-4'>
@@ -26,7 +26,7 @@ export default function Profile() {
         </BreadcrumbList>
       </Breadcrumb>
       <div className='grid grid-cols-1 items-start gap-4 xl:grid-cols-2'>
-        <ProfileDosen user={user as IProfileDosen} refetch={refetch} />
+        <ProfileDosen user={user as IProfileDosen} />
         <ChangePassword />
       </div>
     </div>

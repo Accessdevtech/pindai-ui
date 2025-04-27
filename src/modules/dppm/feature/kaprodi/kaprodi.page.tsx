@@ -11,6 +11,7 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useDialog } from "@/hooks/use-dialog"
 import { Meta, Role } from "@/interface/type"
 import { useGetFakultasList } from "@/modules/listdata/hooks/use-fakultas/get-fakultas-list"
+import { useGetProdiList } from "@/modules/listdata/hooks/use-prodi/use-prodi-list"
 import { kaprodiSearch } from "@/state/store"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom } from "jotai"
@@ -35,7 +36,6 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
     perPage,
     search,
   )
-  const { data: fakultasList } = useGetFakultasList()
 
   const { isOpen, closeDialog, toggleDialog } = useDialog(data?.kaprodi || [])
   const { mutate, isError, error } = useAddKaprodi({
@@ -72,6 +72,7 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
       nidn: "",
       address: "",
       fakultas_id: "",
+      prodi_id: "",
       status: "true",
     },
   })
@@ -81,6 +82,10 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
   }
 
   if (isError) toast.error(error?.message)
+
+  const { data: fakultasList } = useGetFakultasList()
+  const watchFakultas = form.watch("fakultas_id")
+  const { data: prodiList } = useGetProdiList(watchFakultas)
 
   const columns = columnKaprodi({
     fakultas: fakultasList?.data || [],
@@ -142,6 +147,12 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
               name='fakultas_id'
               label='fakultas'
               options={fakultasList?.data || []}
+            />
+            <SelectField
+              control={form.control}
+              name='prodi_id'
+              label='prodi'
+              options={prodiList?.data || []}
             />
             <RadioField
               control={form.control}
