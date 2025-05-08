@@ -74,7 +74,7 @@ export default function SelectScholar<TFieldValues extends FieldValues>({
             <PopoverContent className='w-full p-0' align='start'>
               <Command>
                 <CommandInput
-                  placeholder={`Cari ${label}...`}
+                  placeholder={`Cari Nama Scholar...`}
                   onValueChange={v => setValue(v)}
                 />
                 <CommandList>
