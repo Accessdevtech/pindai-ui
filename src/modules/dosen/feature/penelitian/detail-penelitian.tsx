@@ -228,7 +228,9 @@ export default function DetailPenelitianPage({
                 </Button>
               </Modal>
               <p className='text-sm font-semibold text-muted-foreground'>
-                <span className='text-red-500'>*</span>Silahkan upload proposal
+                {isFileExist
+                  ? `Anda telah mengunggah proposal penelitian: ${data.title}`
+                  : "Anda belum mengunggah proposal penelitian"}
               </p>
             </div>
             <Button
