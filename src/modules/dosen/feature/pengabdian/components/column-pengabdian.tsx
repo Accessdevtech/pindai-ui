@@ -20,6 +20,11 @@ export const columnPengabdian = ({
 }): ColumnDef<PengabdianDosen>[] => {
   return [
     {
+      id: "no",
+      header: "No",
+      cell: ({ row }) => <div>{row.index + 1}</div>,
+    },
+    {
       id: "title",
       accessorKey: "title",
       header: "Judul Pengabdian",
