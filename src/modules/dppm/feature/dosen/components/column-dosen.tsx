@@ -31,6 +31,11 @@ export const columnDosen = ({
       header: "Nama",
     },
     {
+      id: "name_with_title",
+      accessorKey: "name_with_title",
+      header: "Nama dengan Gelar",
+    },
+    {
       id: "email",
       accessorKey: "email",
       header: "Email",

@@ -26,6 +26,11 @@ export const columnPublikasi = ({
 }: columnPublikasiProps): ColumnDef<PublikasiDosen>[] => {
   return [
     {
+      id: "no",
+      header: "No",
+      cell: ({ row }) => <div>{row.index + 1}</div>,
+    },
+    {
       accessorKey: "judul",
       header: "Judul Pengabdian",
     },

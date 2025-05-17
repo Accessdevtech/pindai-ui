@@ -11,6 +11,11 @@ import Link from "next/link"
 export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
   return [
     {
+      id: "no",
+      header: "No",
+      cell: ({ row }) => <div>{row.index + 1}</div>,
+    },
+    {
       id: "action",
       accessorKey: "action",
       header: "aksi",
