@@ -40,7 +40,7 @@ export default function DetailDosen({ dosen }: { dosen: IDosen }) {
           <TableCell>{dosen?.job_functional}</TableCell>
         </TableRow>
         <TableRow>
-          <TableHead className='border-r'>Shrolar ID </TableHead>
+          <TableHead className='border-r'>Scholar ID </TableHead>
           <TableCell>{dosen?.scholar_id}</TableCell>
         </TableRow>
         <TableRow>
