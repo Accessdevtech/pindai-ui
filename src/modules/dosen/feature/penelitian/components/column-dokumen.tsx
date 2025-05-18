@@ -26,7 +26,7 @@ export const columnsDokumen = ({
   handleFileUpload,
 }: {
   handleDownload: (jenis_Dokumen: string) => void
-  handleFileUpload: (file: File, jenis_dokumen?: string) => void
+  handleFileUpload: (file: File, jenis_dokumen?: string) => Promise<void>
   status?: StatusData
   isLeader?: boolean
 }): ColumnDef<Document>[] => {

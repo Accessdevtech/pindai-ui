@@ -10,6 +10,7 @@ import { downloadDocxFile, uploadPdfFile } from "@/utils/files"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import { FileInput } from "@/components/atom/file-input"
 import Modal from "@/components/atom/modal"
+import KeteranganDikembalikan from "@/components/molecules/keterangan-dikembalikan"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Button } from "@/components/ui/button"
 import { ScrollArea } from "@/components/ui/scroll-area"
@@ -20,7 +21,7 @@ import { laporanAtom, laporanKemajuanAtom, proposalAtom } from "@/state/store"
 import { EachUtil, Every, Reduce } from "@/utils/each-utils"
 import { useAtom, useSetAtom } from "jotai"
 import { FileOutput, UploadIcon } from "lucide-react"
-import { useSearchParams } from "next/navigation"
+import { useRouter, useSearchParams } from "next/navigation"
 import { useEffect } from "react"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
@@ -39,6 +40,7 @@ export default function DetailPengabdianPage({
   id: string
   user: Dosen
 }) {
+  const { refresh } = useRouter()
   const setLaporanKemajuan = useSetAtom(laporanKemajuanAtom)
   const setLaporan = useSetAtom(laporanAtom)
   const [proposal, setProposal] = useAtom(proposalAtom)
@@ -73,6 +75,7 @@ export default function DetailPengabdianPage({
       setProposal(null)
       setLaporanKemajuan(null)
       setLaporan(null)
+      refresh()
     },
     onError(err) {
       toast.error(err.response?.data.message)
@@ -118,6 +121,10 @@ export default function DetailPengabdianPage({
 
   const isRejectedKaprodi = Every(statusArray, status => status === "rejected")
 
+  const isReturnedKaprodi = Every(statusArray, status => status === "returned")
+
+  const isReturnedDppm = Reduce(statusArray, status => status === "returned")
+
   const isFileExist = data?.existFile === true
   const isDisabled = !(
     (!isFileExist &&
@@ -153,10 +160,22 @@ export default function DetailPengabdianPage({
         </KeteranganDitolak>
       )}
 
+      {isReturnedKaprodi && (
+        <KeteranganDitolak title='Penelitian dikembalikan oleh kaprodi'>
+          {data?.keterangan}
+        </KeteranganDitolak>
+      )}
+
       {isRejectedDppm && (
         <KeteranganDitolak title='Pengabdian ditolak oleh dppm'>
           {data?.keterangan}
         </KeteranganDitolak>
+      )}
+
+      {isReturnedDppm && (
+        <KeteranganDikembalikan title='Penelitian dikembalikan oleh dppm'>
+          {data?.keterangan}
+        </KeteranganDikembalikan>
       )}
 
       <Card>
