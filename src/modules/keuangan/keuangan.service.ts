@@ -3,7 +3,7 @@ import {
   API_ENDPOINTS,
   API_ENDPOINTS_KEUANGAN,
 } from "@/services/api/api-config"
-import { getData, postData } from "@/services/api/http"
+import { getData, postData, putData } from "@/services/api/http"
 import { ResponseDownload } from "../kaprodi/kaprodi.interface"
 import { KeuanganDashboard, KeuanganResponse } from "./keuangan.interface"
 
@@ -15,7 +15,7 @@ export async function getDashboard() {
 }
 
 export async function updateProfile(data: UserType) {
-  const response: KeuanganResponse<UserType> = await postData(
+  const response: KeuanganResponse<UserType> = await putData(
     API_ENDPOINTS.PROFILE,
     data,
   )

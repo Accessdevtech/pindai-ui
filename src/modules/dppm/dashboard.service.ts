@@ -1,6 +1,6 @@
 import { UserType } from "@/schema/user"
 import { API_ENDPOINTS, API_ENDPOINTS_DPPM } from "@/services/api/api-config"
-import { getData, postData } from "@/services/api/http"
+import { getData, postData, putData } from "@/services/api/http"
 import { ResponseDownload } from "../kaprodi/kaprodi.interface"
 import { DppmDashboardResopnse, DppmResponse } from "./dashboard.interface"
 
@@ -12,7 +12,7 @@ export async function getDashboard() {
 }
 
 export async function updateProfile(data: UserType) {
-  const response: DppmResponse<UserType> = await postData(
+  const response: DppmResponse<UserType> = await putData(
     API_ENDPOINTS.PROFILE,
     data,
   )
