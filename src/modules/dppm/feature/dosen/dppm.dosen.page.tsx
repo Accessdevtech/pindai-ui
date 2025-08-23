@@ -20,6 +20,7 @@ export default function DosenPageDppm() {
     perPage,
     search,
   )
+
   const column = columnDosen({
     refetch,
   })

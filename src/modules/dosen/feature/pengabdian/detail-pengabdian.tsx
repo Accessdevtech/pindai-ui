@@ -94,7 +94,11 @@ export default function DetailPengabdianPage({
   }
 
   const handleDownload = (jenis_Dokumen: string) => {
-    mutate({ id, jenis_dokumen: jenis_Dokumen, category: "pengabdian" })
+    mutate({
+      id,
+      jenis_dokumen: jenis_Dokumen?.split(" ").join("_"),
+      category: "pengabdian",
+    })
   }
 
   const isLeader = data?.anggota.some(

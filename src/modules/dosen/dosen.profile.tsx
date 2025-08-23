@@ -12,19 +12,25 @@ import {
 import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { removeCookie } from "@/services/storage/cookie-storage-service"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAtomValue } from "jotai"
+// import { useAtomValue } from "jotai"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-import { useDebounce } from "use-debounce"
+// import { useDebounce } from "use-debounce"
 import { IFakultas } from "../listdata/fakultas.interface"
 import { useGetFakultasList } from "../listdata/hooks/use-fakultas/get-fakultas-list"
 import { useGetProdiList } from "../listdata/hooks/use-prodi/use-prodi-list"
 import { IProdi, IProfileDosen } from "./dosen.interface"
-import { scholarSearchAtom } from "./feature/scholar/state/store"
+// import { scholarSearchAtom } from "./feature/scholar/state/store"
 import { useUpdateProfile } from "./hooks/use-profile/update-profile"
 import { profileSchema, ProfileType } from "./profile.schema"
 
-export default function ProfileDosen({ user }: { user: IProfileDosen }) {
+export default function ProfileDosen({
+  user,
+  refetch,
+}: {
+  user: IProfileDosen
+  refetch: () => void
+}) {
   const form = useForm<ProfileType>({
     resolver: zodResolver(profileSchema),
     defaultValues: {
@@ -57,6 +63,7 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
       removeCookie("user")
       removeCookie("token")
       toast.success(res.message)
+      refetch()
     },
     onError: err => {
       if (err.response?.data.errors) {
@@ -74,8 +81,8 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
     mutate(data)
   }
 
-  const valueScholar = useAtomValue(scholarSearchAtom)
-  const [searchScholar] = useDebounce(valueScholar, 2000)
+  // const valueScholar = useAtomValue(scholarSearchAtom)
+  // const [searchScholar] = useDebounce(valueScholar, 2000)
   // const { data: scholar } = useListScholarId(searchScholar)
 
   return (
