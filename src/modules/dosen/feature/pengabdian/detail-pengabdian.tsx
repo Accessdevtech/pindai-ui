@@ -245,7 +245,12 @@ export default function DetailPengabdianPage({
                   Simpan
                 </Button>
               </Modal>
-              <p className='text-sm font-semibold text-muted-foreground'>
+              <p
+                className={cn(
+                  "text-sm font-semibold text-muted-foreground",
+                  isFileExist && "text-green-500",
+                )}
+              >
                 {isFileExist
                   ? `Anda telah mengunggah proposal pengabdian: ${data.title}`
                   : "Anda belum mengunggah proposal pengabdian"}
