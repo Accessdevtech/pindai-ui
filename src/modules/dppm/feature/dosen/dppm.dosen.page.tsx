@@ -21,8 +21,6 @@ export default function DosenPageDppm() {
     search,
   )
 
-  console.log(data?.dosen)
-
   const column = columnDosen({
     refetch,
   })
