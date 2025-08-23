@@ -20,6 +20,9 @@ export default function DosenPageDppm() {
     perPage,
     search,
   )
+
+  console.log(data?.dosen)
+
   const column = columnDosen({
     refetch,
   })
