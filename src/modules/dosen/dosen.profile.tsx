@@ -20,9 +20,6 @@ import { IFakultas } from "../listdata/fakultas.interface"
 import { useGetFakultasList } from "../listdata/hooks/use-fakultas/get-fakultas-list"
 import { useGetProdiList } from "../listdata/hooks/use-prodi/use-prodi-list"
 import { IProdi, IProfileDosen } from "./dosen.interface"
-import SelectScholar from "./feature/scholar/components/select-scholar"
-import { useListScholarId } from "./feature/scholar/hooks/use-scholar"
-import { ScholarData } from "./feature/scholar/scholar.interface"
 import { scholarSearchAtom } from "./feature/scholar/state/store"
 import { useUpdateProfile } from "./hooks/use-profile/update-profile"
 import { profileSchema, ProfileType } from "./profile.schema"
@@ -43,7 +40,7 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
         user?.affiliate_campus === null ? "" : user?.affiliate_campus,
       fakultas_id: user?.fakultas_id === null ? "" : user?.fakultas_id,
       prodi_id: user?.prodi_id === null ? "" : user?.prodi_id,
-      scholar_id: user?.scholar_id === null ? "" : user?.scholar_id,
+      // scholar_id: user?.scholar_id === null ? "" : user?.scholar_id,
       scopus_id: user?.scopus_id === null ? "" : user?.scopus_id,
     },
   })
@@ -79,7 +76,7 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
 
   const valueScholar = useAtomValue(scholarSearchAtom)
   const [searchScholar] = useDebounce(valueScholar, 2000)
-  const { data: scholar } = useListScholarId(searchScholar)
+  // const { data: scholar } = useListScholarId(searchScholar)
 
   return (
     <div className='flex flex-col gap-4'>
@@ -134,12 +131,12 @@ export default function ProfileDosen({ user }: { user: IProfileDosen }) {
               options={(prodi?.data as IProdi[]) || []}
               control={form.control}
             />
-            <SelectScholar
+            {/* <SelectScholar
               label='scholar ID'
               name='scholar_id'
               options={(scholar?.data as ScholarData[]) || []}
               control={form.control}
-            />
+            /> */}
             <InputField
               label='scopus ID'
               name='scopus_id'
