@@ -49,10 +49,9 @@ export default function PengabdianDosenPage() {
   if (!user) return null
 
   const isNull = Object.fromEntries(
-    Object.entries(user as Dosen).map(([key, value]) => [
-      key,
-      value === null || value === "",
-    ]),
+    Object.entries(user as Dosen)
+      .filter(([key]) => key !== "scholar_id" && key !== "scopus_id")
+      .map(([key, value]) => [key, value === null || value === ""]),
   )
 
   return (

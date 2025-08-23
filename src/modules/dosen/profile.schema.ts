@@ -11,7 +11,7 @@ export const profileSchema = z.object({
   affiliate_campus: z.string().optional(),
   fakultas_id: z.string(),
   prodi_id: z.string(),
-  scholar_id: z.string().optional(),
+  // scholar_id: z.string().optional(),
   scopus_id: z.string().optional(),
 })
 
