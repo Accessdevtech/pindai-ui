@@ -246,7 +246,12 @@ export default function DetailPenelitianPage({
                   Simpan
                 </Button>
               </Modal>
-              <p className='text-sm font-semibold text-muted-foreground'>
+              <p
+                className={cn(
+                  "text-sm font-semibold text-muted-foreground",
+                  isFileExist && "text-green-500",
+                )}
+              >
                 {isFileExist
                   ? `Anda telah mengunggah proposal penelitian: ${data.title}`
                   : "Anda belum mengunggah proposal penelitian"}
