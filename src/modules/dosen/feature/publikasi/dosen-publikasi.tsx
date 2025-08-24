@@ -42,10 +42,9 @@ export default function DosenPublikasi() {
     statusKeuangan,
   )
   const isNull = Object.fromEntries(
-    Object.entries(user as Dosen).map(([key, value]) => [
-      key,
-      value === null || value === "",
-    ]),
+    Object.entries(user as Dosen)
+      .filter(([key]) => key !== "scholar_id" && key !== "scopus_id")
+      .map(([key, value]) => [key, value === null || value === ""]),
   )
 
   const columns = columnPublikasi({

@@ -66,7 +66,7 @@ export default function ModalAnggota() {
       tooltipContent='Klik untuk melihat detail anggota penelitian'
       className='max-w-3xl'
     >
-      <div className='flex-1 overflow-auto'>
+      <div className='max-h-[calc(100vh-200px)] flex-1 overflow-auto'>
         <DataTable
           search
           columns={columnTambah}
