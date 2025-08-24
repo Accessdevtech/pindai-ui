@@ -50,12 +50,14 @@ export default function DetailPenelitianPage({
   const isNew = searchParams === "true"
 
   useEffect(() => {
-    isNew === true
-      ? toast.info("Data berhasil disubmit", {
-          description: "Silahkan unggah proposal penelitian anda",
-          duration: 5000,
-        })
-      : toast.dismiss()
+    if (isNew === true) {
+      toast.info("Data berhasil disubmit", {
+        description: "Silahkan unggah proposal penelitian anda",
+        duration: 5000,
+      })
+    }
+
+    toast.dismiss()
   }, [isNew])
 
   const { mutate, isPending } = useDownloadPenelitian({
@@ -206,6 +208,7 @@ export default function DetailPenelitianPage({
               { label: "Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
+              { label: "Dibuat pada", value: data?.created_date },
               { label: "Abstrak", value: data?.deskripsi },
             ]}
             render={(item, index) => (

@@ -32,6 +32,7 @@ export interface DetailPenelitian {
   status: StatusData
   anggota: Anggota[]
   existFile: boolean
+  created_date: string
 }
 
 export interface Leader {
