@@ -47,7 +47,7 @@ export default function ModalAnggotaManual() {
       <Form form={formAnggotaManual}>
         <div className='flex flex-wrap gap-4'>
           <InputField
-            label='nidn'
+            label='NIDN/NIM'
             name='nidn'
             control={formAnggotaManual.control}
           />
@@ -94,11 +94,6 @@ export default function ModalAnggotaManual() {
             label='Jabatan fungsional'
             options={jabatanFungsional}
           />
-          {/* <InputField
-            label='Jabatan funsional'
-            name='job_functional'
-            control={formAnggotaManual.control}
-          /> */}
           <InputField
             label='Affiliasi kampus'
             name='affiliate_campus'
