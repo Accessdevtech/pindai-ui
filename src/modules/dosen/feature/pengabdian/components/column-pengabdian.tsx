@@ -94,9 +94,20 @@ export const columnPengabdian = ({
           status => status === "pending",
         )
 
+        const isStatusReturn = [
+          row.original.status.kaprodi,
+          row.original.status.dppm,
+        ].some(status => status === "returned")
+
         return (
           <span className='flex items-center justify-center gap-2'>
-            <Tooltip contentText='Detail Pengabdian'>
+            <Tooltip
+              contentText={
+                isStatusReturn
+                  ? "Unggah ulang proposal pengabdian"
+                  : "Detail Pengabdian"
+              }
+            >
               <Link
                 href={`${ROUTE.DASHBOARD}/dosen/pengabdian/${row.original.id}`}
                 className={cn(
