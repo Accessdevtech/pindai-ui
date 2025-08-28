@@ -1,7 +1,7 @@
 "use client"
 
-import { PropsWithChildren } from "react"
+import { PropsWithChildren, Suspense } from "react"
 
 export default function Layout({ children }: PropsWithChildren) {
-  return children
+  return <Suspense>{children}</Suspense>
 }
