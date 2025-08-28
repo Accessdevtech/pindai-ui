@@ -14,7 +14,7 @@ import { useDeletePenelitian } from "../hook/use-penelitian/delete-penelitian"
 import { PenelitianDosen } from "../penelitian-dosen.interface"
 
 export const columnPenelitian = ({
-  refetch,
+  refetch
 }: {
   refetch: () => void
 }): ColumnDef<PenelitianDosen>[] => {
@@ -22,55 +22,7 @@ export const columnPenelitian = ({
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>,
-    },
-    {
-      id: "title",
-      accessorKey: "title",
-      header: "Judul Penelitian",
-    },
-    {
-      id: "leader",
-      accessorKey: "leader",
-      header: "Penanggung Jawab",
-    },
-    {
-      id: "academic_year",
-      accessorKey: "academic_year",
-      header: "Tahun Akademik",
-    },
-    {
-      id: "created_date",
-      accessorKey: "created_date",
-      header: "tanggal dibuat",
-    },
-    {
-      accessorKey: "status",
-      header: "status",
-      columns: [
-        {
-          id: "status_kaprodi",
-          accessorKey: "status_kaprodi",
-          header: "Kaprodi",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.kaprodi} />
-          ),
-        },
-        {
-          id: "status_dppm",
-          accessorKey: "status_dppm",
-          header: "Dppm",
-          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
-        },
-        {
-          id: "status_keuangan",
-          accessorKey: "status_keuangan",
-          header: "Keuangan",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.keuangan} />
-          ),
-        },
-      ],
+      cell: ({ row }) => <div>{row.index + 1}</div>
     },
     {
       id: "action",
@@ -87,17 +39,17 @@ export const columnPenelitian = ({
           },
           onError: err => {
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const isStatusPending = Every(
           [row.original.status.kaprodi, row.original.status.dppm],
-          status => status === "pending",
+          status => status === "pending"
         )
 
         const isStatusReturn = [
           row.original.status.kaprodi,
-          row.original.status.dppm,
+          row.original.status.dppm
         ].some(status => status === "returned")
 
         return (
@@ -113,7 +65,7 @@ export const columnPenelitian = ({
                 href={`${ROUTE.DASHBOARD}/dosen/penelitian/${row.original.id}`}
                 className={cn(
                   buttonVariants({ variant: "outline", size: "icon" }),
-                  "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
+                  "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
                 )}
               >
                 <InfoIcon />
@@ -148,7 +100,55 @@ export const columnPenelitian = ({
             )}
           </span>
         )
-      },
+      }
     },
+    {
+      id: "title",
+      accessorKey: "title",
+      header: "Judul Penelitian"
+    },
+    {
+      id: "leader",
+      accessorKey: "leader",
+      header: "Penanggung Jawab"
+    },
+    {
+      id: "academic_year",
+      accessorKey: "academic_year",
+      header: "Tahun Akademik"
+    },
+    {
+      id: "created_date",
+      accessorKey: "created_date",
+      header: "tanggal dibuat"
+    },
+    {
+      accessorKey: "status",
+      header: "status",
+      columns: [
+        {
+          id: "status_kaprodi",
+          accessorKey: "status_kaprodi",
+          header: "Kaprodi",
+          cell: ({ row }) => (
+            <StatusBadge status={row.original.status.kaprodi} />
+          )
+        },
+        {
+          id: "status_dppm",
+          accessorKey: "status_dppm",
+          header: "Dppm",
+          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />
+        },
+        {
+          id: "status_keuangan",
+          accessorKey: "status_keuangan",
+          header: "Keuangan",
+          cell: ({ row }) => (
+            <StatusBadge status={row.original.status.keuangan} />
+          )
+        }
+      ]
+    }
   ]
 }

@@ -22,65 +22,13 @@ interface columnPublikasiProps {
 
 export const columnPublikasi = ({
   pubilkasi,
-  refetch,
+  refetch
 }: columnPublikasiProps): ColumnDef<PublikasiDosen>[] => {
   return [
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>,
-    },
-    {
-      accessorKey: "judul",
-      header: "Judul Pengabdian",
-    },
-    {
-      accessorKey: "author",
-      header: "Penulis",
-    },
-    {
-      accessorKey: "tanggal_publikasi",
-      header: "Tanggal Publikasi",
-      cell: ({ row }) => {
-        const date = new Date(row.original.tanggal_publikasi)
-        return <span>{format(date, "PPP", { locale: id })}</span>
-      },
-    },
-    {
-      accessorKey: "tahun",
-      header: "Tahun",
-    },
-    {
-      accessorKey: "jurnal",
-      header: "Jurnal",
-    },
-    {
-      accessorKey: "status",
-      header: "status",
-      columns: [
-        {
-          id: "status_kaprodi",
-          accessorKey: "status_kaprodi",
-          header: "Kaprodi",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.kaprodi} />
-          ),
-        },
-        {
-          id: "status_dppm",
-          accessorKey: "status_dppm",
-          header: "Dppm",
-          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
-        },
-        {
-          id: "status_keuangan",
-          accessorKey: "status_keuangan",
-          header: "Keuangan",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.keuangan} />
-          ),
-        },
-      ],
+      cell: ({ row }) => <div>{row.index + 1}</div>
     },
     {
       id: "action",
@@ -91,7 +39,7 @@ export const columnPublikasi = ({
         const [alert, setAlert] = useState(false)
 
         const data = pubilkasi.find(
-          publikasi => publikasi.id === row.original.id,
+          publikasi => publikasi.id === row.original.id
         )
         const { mutate } = useDeletePublikasi({
           onSuccess: res => {
@@ -100,7 +48,7 @@ export const columnPublikasi = ({
           },
           onError: err => {
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         return (
@@ -150,7 +98,7 @@ export const columnPublikasi = ({
                     <span className='font-medium'>Tanggal Publikasi:</span>
                     {data?.tanggal_publikasi
                       ? format(new Date(data?.tanggal_publikasi), "PPP", {
-                          locale: id,
+                          locale: id
                         })
                       : "-"}
                   </p>
@@ -173,7 +121,7 @@ export const columnPublikasi = ({
                   href={data?.link_publikasi as string}
                   className={cn(
                     buttonVariants({ variant: "default" }),
-                    "capitalize",
+                    "capitalize"
                   )}
                   target='_blank'
                 >
@@ -218,7 +166,59 @@ export const columnPublikasi = ({
               )}
           </span>
         )
-      },
+      }
     },
+    {
+      accessorKey: "judul",
+      header: "Judul Pengabdian"
+    },
+    {
+      accessorKey: "author",
+      header: "Penulis"
+    },
+    {
+      accessorKey: "tanggal_publikasi",
+      header: "Tanggal Publikasi",
+      cell: ({ row }) => {
+        const date = new Date(row.original.tanggal_publikasi)
+        return <span>{format(date, "PPP", { locale: id })}</span>
+      }
+    },
+    {
+      accessorKey: "tahun",
+      header: "Tahun"
+    },
+    {
+      accessorKey: "jurnal",
+      header: "Jurnal"
+    },
+    {
+      accessorKey: "status",
+      header: "status",
+      columns: [
+        {
+          id: "status_kaprodi",
+          accessorKey: "status_kaprodi",
+          header: "Kaprodi",
+          cell: ({ row }) => (
+            <StatusBadge status={row.original.status.kaprodi} />
+          )
+        },
+        {
+          id: "status_dppm",
+          accessorKey: "status_dppm",
+          header: "Dppm",
+          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />
+        },
+        {
+          id: "status_keuangan",
+          accessorKey: "status_keuangan",
+          header: "Keuangan",
+          cell: ({ row }) => (
+            <StatusBadge status={row.original.status.keuangan} />
+          )
+        }
+      ]
+    }
   ]
 }
