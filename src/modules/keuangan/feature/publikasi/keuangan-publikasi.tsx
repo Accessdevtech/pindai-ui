@@ -4,11 +4,12 @@ import DataTable from "@/components/molecules/data-table"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuthContext } from "@/contexts/auth-context"
 import {
+  columnVisibilityAtom,
+  publikasiSearch,
   statusDppmAtom,
   statusKaprodiAtom,
-  statusKeuanganAtom,
-} from "@/modules/dosen/feature/penelitian/state/store"
-import { columnVisibilityAtom, publikasiSearch } from "@/state/store"
+  statusKeuanganAtom
+} from "@/state/store"
 import { useAtom, useAtomValue, useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { useDebounce } from "use-debounce"
@@ -31,19 +32,19 @@ export default function KeuanganPublikasi() {
     search,
     statusKaprodi,
     statusDppm,
-    statusKeuangan,
+    statusKeuangan
   )
 
   const columns = columnPublikasi({
     pubilkasi: data?.publikasi || [],
-    refetch,
+    refetch
   })
 
   useEffect(() => {
     setColumnVisibility({
       status_kaprodi: true,
       status_dppm: true,
-      status_keuangan: true,
+      status_keuangan: true
     })
   }, [])
   return (

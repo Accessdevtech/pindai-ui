@@ -22,8 +22,8 @@ export default function StatusBadge({ status }: { status: Status }) {
         className={cn("h-9 w-9", {
           "border-green-500 text-green-500": status === "accepted",
           "border-yellow-500 text-yellow-500": status === "returned",
-          "border-amber-500 text-amber-500": status === "pending",
-          "border-red-500 text-red-500": status === "rejected",
+          "border-gray-600 text-gray-600": status === "pending",
+          "border-red-500 text-red-500": status === "rejected"
         })}
       >
         {status === "accepted" && <CheckIcon />}

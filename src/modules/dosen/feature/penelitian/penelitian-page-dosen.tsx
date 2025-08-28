@@ -6,6 +6,12 @@ import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
+import {
+  statusDppmAtom,
+  statusKaprodiAtom,
+  statusKeuanganAtom,
+  tahunAkademikAtom
+} from "@/state/store"
 import { useAtomValue } from "jotai"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
@@ -15,12 +21,6 @@ import { Dosen } from "../../dosen.interface"
 import { useUserProfile } from "../../hooks/use-profile/get-profile"
 import { columnPenelitian } from "./components/column-penelitian"
 import { useGetPenelitian } from "./hook/use-penelitian/get-penelitian"
-import {
-  statusDppmAtom,
-  statusKaprodiAtom,
-  statusKeuanganAtom,
-  tahunAkademikAtom,
-} from "./state/store"
 
 export default function PenelitianDosenPage() {
   const tahunAkademik = useAtomValue(tahunAkademikAtom)
@@ -39,9 +39,9 @@ export default function PenelitianDosenPage() {
     tahunAkademik,
     statusKaprodi,
     statusDppm,
-    statusKeuangan,
+    statusKeuangan
   )
-
+  console.log(tahunAkademik)
   const columns = columnPenelitian({ refetch })
 
   if (!user) return null
@@ -49,10 +49,7 @@ export default function PenelitianDosenPage() {
   const isNull = Object.fromEntries(
     Object.entries(user as Dosen)
       .filter(([key]) => key !== "scholar_id" && key !== "scopus_id")
-      .map(([key, value]) => [
-        key,
-        value === null || value === "",
-      ]),
+      .map(([key, value]) => [key, value === null || value === ""])
   )
 
   return (
@@ -73,7 +70,7 @@ export default function PenelitianDosenPage() {
                 href={`${ROUTE.DASHBOARD}/${user?.role}/akun-saya`}
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "w-fit capitalize",
+                  "w-fit capitalize"
                 )}
               >
                 <span>update data diri</span>
@@ -84,7 +81,7 @@ export default function PenelitianDosenPage() {
               href={`${ROUTE.DASHBOARD}/${user?.role}/penelitian/create`}
               className={cn(
                 buttonVariants({ variant: "default" }),
-                "w-fit capitalize",
+                "w-fit capitalize"
               )}
             >
               <PlusIcon className='h-4 w-4' />
@@ -97,7 +94,7 @@ export default function PenelitianDosenPage() {
             search
             filtering={{
               tahunAkademik: true,
-              status: Boolean(statusKaprodi || statusDppm || statusKeuangan),
+              status: Boolean(statusKaprodi || statusDppm || statusKeuangan)
             }}
             role={user?.role}
             columns={columns}

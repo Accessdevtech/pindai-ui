@@ -5,7 +5,7 @@ import {
   DetailPenelitian,
   PenelitianDosenData,
   PenelitianDosenResponse,
-  ResponseDownloadPenelitian,
+  ResponseDownloadPenelitian
 } from "./penelitian-dosen.interface"
 
 import { ListPenelitianResponse } from "@/modules/listdata/penelitian.list.interface"
@@ -18,25 +18,25 @@ export async function getPenelitianDosen(
   tahun_akademik?: string,
   status_kaprodi?: string,
   status_dppm?: string,
-  status_keuangan?: string,
+  status_keuangan?: string
 ) {
   const params: Record<string, string | number> = { page }
   if (status_keuangan) params.status_keuangan = status_keuangan
   if (status_kaprodi) params.status_kaprodi = status_kaprodi
-  if (tahun_akademik) params.tahun_akademik = tahun_akademik
+  if (tahun_akademik !== undefined) params.tahun_akademik = tahun_akademik
   if (status_dppm) params.status_dppm = status_dppm
   if (perPage) params.per_page = perPage
   if (search) params.search = search
   const response: DosenResponse<PenelitianDosenData> = await getData(
     API_ENDPOINTS_DOSEN.PENELITIAN,
-    params,
+    params
   )
   return response.data
 }
 
 export async function getDetailPenelitianDosen(id: string) {
   const response: DosenResponse<DetailPenelitian> = await getData(
-    `${API_ENDPOINTS_DOSEN.PENELITIAN}/${id}`,
+    `${API_ENDPOINTS_DOSEN.PENELITIAN}/${id}`
   )
   return response.data
 }
@@ -44,7 +44,7 @@ export async function getDetailPenelitianDosen(id: string) {
 export async function createPenelitianDosen(data: PenelitianType) {
   const response: PenelitianDosenResponse = await postData(
     API_ENDPOINTS_DOSEN.PENELITIAN,
-    data,
+    data
   )
   return response
 }
@@ -52,14 +52,14 @@ export async function createPenelitianDosen(data: PenelitianType) {
 export async function updatePenelitianDosen(id: string, data: PenelitianType) {
   const response: PenelitianDosenResponse = await putData(
     `${API_ENDPOINTS_DOSEN.PENELITIAN}/${id}`,
-    data,
+    data
   )
   return response
 }
 
 export async function deletePenelitian(id: string) {
   const response: PenelitianDosenResponse = await deleteData(
-    `${API_ENDPOINTS_DOSEN.PENELITIAN}/${id}`,
+    `${API_ENDPOINTS_DOSEN.PENELITIAN}/${id}`
   )
   return response
 }
@@ -67,21 +67,21 @@ export async function deletePenelitian(id: string) {
 export async function getAnggota(
   page: number,
   perPage?: number,
-  search?: string,
+  search?: string
 ) {
   const params: Record<string, string | number> = { page }
   if (perPage) params.per_page = perPage
   if (search) params.search = search
   const response: DosenResponse<DosenData> = await getData(
     API_ENDPOINTS.ANGGOTA,
-    params,
+    params
   )
   return response.data
 }
 
 export async function getListPenelitian() {
   const response: ListPenelitianResponse = await getData(
-    API_ENDPOINTS.LIST_PENELITIAN,
+    API_ENDPOINTS.LIST_PENELITIAN
   )
   return response
 }
@@ -89,11 +89,11 @@ export async function getListPenelitian() {
 export async function downloadPenelitian(
   id: string,
   jenis_dokumen: string,
-  category: string,
+  category: string
 ) {
   const response: ResponseDownloadPenelitian = await postData(
     `${API_ENDPOINTS_DOSEN.DOWNLOAD_PENELITIAN}/${id}`,
-    { jenis_dokumen, category },
+    { jenis_dokumen, category }
   )
   return response
 }
@@ -102,11 +102,11 @@ export async function uploadPenelitian(
   id: string,
   file: string,
   category: string,
-  jenis_dokumen?: string,
+  jenis_dokumen?: string
 ) {
   const response: ResponseDownloadPenelitian = await postData(
     `${API_ENDPOINTS_DOSEN.UPLOAD_PENELITIAN}/${id}`,
-    { file, category, jenis_dokumen },
+    { file, category, jenis_dokumen }
   )
   return response
 }

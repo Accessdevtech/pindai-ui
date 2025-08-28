@@ -5,7 +5,7 @@ import {
   DetailPengabdian,
   PengabdianDosenData,
   PengabdianDosenResponse,
-  ResponseDownloadPengabdian,
+  ResponseDownloadPengabdian
 } from "./pengabdian-dosen.interface"
 
 import { ListPengabdianResponse } from "@/modules/listdata/pengabdian.list.interface"
@@ -18,25 +18,25 @@ export async function getPengabdianDosen(
   tahun_akademik?: string,
   status_kaprodi?: string,
   status_dppm?: string,
-  status_keuangan?: string,
+  status_keuangan?: string
 ) {
   const params: Record<string, string | number> = { page }
   if (status_keuangan) params.status_keuangan = status_keuangan
   if (status_kaprodi) params.status_kaprodi = status_kaprodi
-  if (tahun_akademik) params.tahun_akademik = tahun_akademik
+  if (tahun_akademik !== undefined) params.tahun_akademik = tahun_akademik
   if (status_dppm) params.status_dppm = status_dppm
   if (perPage) params.per_page = perPage
   if (search) params.search = search
   const response: DosenResponse<PengabdianDosenData> = await getData(
     API_ENDPOINTS_DOSEN.PENGABDIAN,
-    params,
+    params
   )
   return response.data
 }
 
 export async function getDetailPengabdianDosen(id: string) {
   const response: DosenResponse<DetailPengabdian> = await getData(
-    `${API_ENDPOINTS_DOSEN.PENGABDIAN}/${id}`,
+    `${API_ENDPOINTS_DOSEN.PENGABDIAN}/${id}`
   )
   return response.data
 }
@@ -44,14 +44,14 @@ export async function getDetailPengabdianDosen(id: string) {
 export async function createPengabdianDosen(data: PengabdianType) {
   const response: PengabdianDosenResponse = await postData(
     API_ENDPOINTS_DOSEN.PENGABDIAN,
-    data,
+    data
   )
   return response
 }
 
 export async function deletePengabdian(id: string) {
   const response: PengabdianDosenResponse = await deleteData(
-    `${API_ENDPOINTS_DOSEN.PENGABDIAN}/${id}`,
+    `${API_ENDPOINTS_DOSEN.PENGABDIAN}/${id}`
   )
   return response
 }
@@ -59,21 +59,21 @@ export async function deletePengabdian(id: string) {
 export async function getAnggota(
   page: number,
   perPage?: number,
-  search?: string,
+  search?: string
 ) {
   const params: Record<string, string | number> = { page }
   if (perPage) params.per_page = perPage
   if (search) params.search = search
   const response: DosenResponse<DosenData> = await getData(
     API_ENDPOINTS.ANGGOTA,
-    params,
+    params
   )
   return response.data
 }
 
 export async function getListPengabdian() {
   const response: ListPengabdianResponse = await getData(
-    API_ENDPOINTS.LIST_PENGABDIAN,
+    API_ENDPOINTS.LIST_PENGABDIAN
   )
   return response
 }
@@ -81,11 +81,11 @@ export async function getListPengabdian() {
 export async function downloadPengabdian(
   id: string,
   jenis_dokumen: string,
-  category: string,
+  category: string
 ) {
   const response: ResponseDownloadPengabdian = await postData(
     `${API_ENDPOINTS_DOSEN.DOWNLOAD_PENGABDIAN}/${id}`,
-    { jenis_dokumen, category },
+    { jenis_dokumen, category }
   )
   return response
 }
@@ -94,11 +94,11 @@ export async function uploadPengabdian(
   id: string,
   file: string,
   category: string,
-  jenis_dokumen?: string,
+  jenis_dokumen?: string
 ) {
   const response: ResponseDownloadPengabdian = await postData(
     `${API_ENDPOINTS_DOSEN.UPLOAD_PENGABDIAN}/${id}`,
-    { file, category, jenis_dokumen },
+    { file, category, jenis_dokumen }
   )
   return response
 }

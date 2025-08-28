@@ -22,3 +22,8 @@ export const laporanKemajuanAtom = atom<File | null>(null)
 export const laporanAtom = atom<File | null>(null)
 
 export const columnVisibilityAtom = atom<VisibilityState>({})
+
+export const tahunAkademikAtom = atom<string>("")
+export const statusKaprodiAtom = atom<string>("")
+export const statusDppmAtom = atom<string>("")
+export const statusKeuanganAtom = atom<string>("")

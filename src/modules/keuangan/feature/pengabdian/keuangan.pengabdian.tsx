@@ -8,8 +8,8 @@ import {
   statusDppmAtom,
   statusKaprodiAtom,
   statusKeuanganAtom,
-  tahunAkademikAtom,
-} from "@/modules/dosen/feature/pengabdian/state/store"
+  tahunAkademikAtom
+} from "@/state/store"
 import { useAtomValue } from "jotai"
 import { useState } from "react"
 import { useDebounce } from "use-debounce"
@@ -33,7 +33,7 @@ export default function PengabdianKeuanganPage() {
     tahunAkademik,
     statusKaprodi,
     statusDppm,
-    statusKeuangan,
+    statusKeuangan
   )
 
   const columns = columnPengabdian()
@@ -46,7 +46,7 @@ export default function PengabdianKeuanganPage() {
           <DataTable
             search
             filtering={{
-              tahunAkademik: true,
+              tahunAkademik: true
             }}
             role={user?.role}
             columns={columns}

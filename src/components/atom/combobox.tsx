@@ -10,19 +10,19 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList,
+  CommandList
 } from "@/components/ui/command"
 import {
   Popover,
   PopoverContent,
-  PopoverTrigger,
+  PopoverTrigger
 } from "@/components/ui/popover"
 import { cn } from "@/lib/utils"
-import { tahunAkademikAtom } from "@/modules/dosen/feature/penelitian/state/store"
+import { tahunAkademikAtom } from "@/state/store"
 import { useAtom } from "jotai"
 
 export function Combobox({
-  options,
+  options
 }: {
   options: { id: string; name: string }[]
 }) {
@@ -46,7 +46,7 @@ export function Combobox({
       </PopoverTrigger>
       <PopoverContent className='w-[200px] p-0'>
         <Command>
-          <CommandInput placeholder='Search framework...' className='h-9' />
+          <CommandInput placeholder='Cari Tahun Akademik...' className='h-9' />
           <CommandList>
             <CommandEmpty>No framework found.</CommandEmpty>
             <CommandGroup>
@@ -56,7 +56,7 @@ export function Combobox({
                   value={item.id}
                   onSelect={currentValue => {
                     setTahunAkademik(
-                      currentValue === tahunAkademik ? "" : currentValue,
+                      currentValue === tahunAkademik ? "" : currentValue
                     )
                     setOpen(false)
                   }}
@@ -65,7 +65,7 @@ export function Combobox({
                   <Check
                     className={cn(
                       "ml-auto",
-                      tahunAkademik === item.id ? "opacity-100" : "opacity-0",
+                      tahunAkademik === item.id ? "opacity-100" : "opacity-0"
                     )}
                   />
                 </CommandItem>

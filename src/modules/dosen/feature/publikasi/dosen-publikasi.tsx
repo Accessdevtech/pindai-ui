@@ -7,18 +7,18 @@ import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { useAuthContext } from "@/contexts/auth-context"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
-import { publikasiSearch } from "@/state/store"
+import {
+  publikasiSearch,
+  statusDppmAtom,
+  statusKaprodiAtom,
+  statusKeuanganAtom
+} from "@/state/store"
 import { useAtom, useAtomValue } from "jotai"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { useDebounce } from "use-debounce"
 import { Dosen } from "../../dosen.interface"
-import {
-  statusDppmAtom,
-  statusKaprodiAtom,
-  statusKeuanganAtom,
-} from "../penelitian/state/store"
 import { columnPublikasi } from "./components/column-publikasi"
 import FormPublikasi from "./components/form-publikasi"
 import { useGetPublikasi } from "./hooks/use-publikasi/get-publikasi"
@@ -39,17 +39,17 @@ export default function DosenPublikasi() {
     search,
     statusKaprodi,
     statusDppm,
-    statusKeuangan,
+    statusKeuangan
   )
   const isNull = Object.fromEntries(
     Object.entries(user as Dosen)
       .filter(([key]) => key !== "scholar_id" && key !== "scopus_id")
-      .map(([key, value]) => [key, value === null || value === ""]),
+      .map(([key, value]) => [key, value === null || value === ""])
   )
 
   const columns = columnPublikasi({
     pubilkasi: data?.publikasi || [],
-    refetch,
+    refetch
   })
   return (
     <div className='flex flex-col gap-4'>
@@ -69,7 +69,7 @@ export default function DosenPublikasi() {
                 href={`${ROUTE.DASHBOARD}/${user?.role}/akun-saya`}
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "w-fit capitalize",
+                  "w-fit capitalize"
                 )}
               >
                 <span>update data diri</span>
@@ -99,7 +99,7 @@ export default function DosenPublikasi() {
           <DataTable
             search
             filtering={{
-              status: Boolean(statusKaprodi || statusDppm || statusKeuangan),
+              status: Boolean(statusKaprodi || statusDppm || statusKeuangan)
             }}
             role={user?.role}
             columns={columns}

@@ -5,12 +5,12 @@ import DataTable from "@/components/molecules/data-table"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuthContext } from "@/contexts/auth-context"
 import {
+  columnVisibilityAtom,
   statusDppmAtom,
   statusKaprodiAtom,
   statusKeuanganAtom,
-  tahunAkademikAtom,
-} from "@/modules/dosen/feature/penelitian/state/store"
-import { columnVisibilityAtom } from "@/state/store"
+  tahunAkademikAtom
+} from "@/state/store"
 import { useAtomValue, useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { useDebounce } from "use-debounce"
@@ -35,7 +35,7 @@ export default function PenelitianKaprodiPage() {
     tahunAkademik,
     statusKaprodi,
     statusDppm,
-    statusKeuangan,
+    statusKeuangan
   )
 
   const columns = columnPenelitian()
@@ -43,7 +43,7 @@ export default function PenelitianKaprodiPage() {
     setColumnVisibility({
       status_kaprodi: true,
       status_dppm: true,
-      status_keuangan: true,
+      status_keuangan: true
     })
   })
 
@@ -55,7 +55,7 @@ export default function PenelitianKaprodiPage() {
           <DataTable
             search
             filtering={{
-              tahunAkademik: true,
+              tahunAkademik: true
             }}
             role={user?.role}
             columns={columns}

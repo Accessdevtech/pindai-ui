@@ -1,7 +1,7 @@
 import axios, { AxiosResponse } from "axios"
 import axiosInstance from "./axios-instance"
 
-export const getData = async (url: string, params = {}) => {
+export const getData = async (url: string, params?: Record<string, string | number>) => {
   try {
     const response: AxiosResponse = await axiosInstance.get(url, { params })
     return response.data
