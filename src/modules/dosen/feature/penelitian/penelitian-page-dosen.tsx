@@ -41,7 +41,6 @@ export default function PenelitianDosenPage() {
     statusDppm,
     statusKeuangan
   )
-  console.log(tahunAkademik)
   const columns = columnPenelitian({ refetch })
 
   if (!user) return null
