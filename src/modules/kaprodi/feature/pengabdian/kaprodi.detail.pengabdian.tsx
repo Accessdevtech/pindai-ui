@@ -9,7 +9,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
@@ -50,7 +50,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutate: reject } = useCanclePengabdian({
@@ -67,7 +67,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutate: returned } = useReturnedPengabdian({
@@ -84,7 +84,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutateAsync: viewDocs, isPending } = useViewDocs()
@@ -94,7 +94,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
     const response = await viewDocs({
       id,
       category: "pengabdian",
-      jenis_dokumen: jenis_dokument.split(" ").join("_"),
+      jenis_dokumen: jenis_dokument.split(" ").join("_")
     })
     return response
   }
@@ -102,7 +102,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
   const viewFileLaporanKemajuan = async () => {
     const response = await viewLaporanKemajuan({
       id,
-      category: "pengabdian",
+      category: "pengabdian"
     })
 
     return response
@@ -113,7 +113,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
       viewFile("proposal"),
       viewFileLaporanKemajuan(),
       viewFile("surat_keterangan_selesai"),
-      viewFile("laporan"),
+      viewFile("laporan")
     ]).then(response => {
       const [proposal, laporanKemajuan, suratKeteranganSelesai, laporan] =
         response
@@ -129,7 +129,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
           suratKeteranganSelesai.status === "fulfilled"
             ? suratKeteranganSelesai.value
             : undefined,
-        laporan: laporan.status === "fulfilled" ? laporan.value : undefined,
+        laporan: laporan.status === "fulfilled" ? laporan.value : undefined
       })
     })
   }, [])
@@ -142,11 +142,11 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
         data={[
           {
             name: "Pengabdian",
-            href: `${ROUTE.DASHBOARD}/kaprodi/pengabdian`,
+            href: `${ROUTE.DASHBOARD}/kaprodi/pengabdian`
           },
           {
-            name: "Detail",
-          },
+            name: "Detail"
+          }
         ]}
       >
         {data?.title}
@@ -189,7 +189,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        {data?.status.kaprodi === "pending" && (
+        {data?.existFile && data?.status.kaprodi === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
               <Button
@@ -252,7 +252,7 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
               { label: "Jenis Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
-              { label: "Abstrak", value: data?.deskripsi },
+              { label: "Abstrak", value: data?.deskripsi }
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>

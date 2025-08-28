@@ -37,6 +37,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
   }>()
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPenelitian(id)
+  console.log(data)
   const { mutate: approved } = useApprovePenelitian({
     onSuccess(res) {
       if (res.status) {
@@ -190,7 +191,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        {data?.status.kaprodi === "pending" && (
+        {data?.existFile && data?.status.kaprodi === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
               <Button
