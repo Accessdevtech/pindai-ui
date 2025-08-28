@@ -9,7 +9,7 @@ export function useRequiredAuth() {
 
   useEffect(() => {
     if (!isAuthenticated && user === null) {
-      router.push("/login")
+      router.push("/")
     }
   }, [isAuthenticated, user, router])
 

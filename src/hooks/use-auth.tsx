@@ -3,7 +3,7 @@
 import {
   getCookie,
   removeCookie,
-  setCookie,
+  setCookie
 } from "@/services/storage/cookie-storage-service"
 import { useCallback, useEffect, useState } from "react"
 
@@ -13,13 +13,14 @@ import { getCurrentUser } from "@/modules/auth/auth.service"
 import { LoginType } from "@/modules/auth/schema/login.schema"
 import { API_ENDPOINTS } from "@/services/api/api-config"
 import { postData } from "@/services/api/http"
-import { useRouter } from "next/navigation"
+import { usePathname, useRouter } from "next/navigation"
 import { toast } from "sonner"
 
 export function useAuth() {
   const [isLoading, setIsLoading] = useState(true) // State loadig
   const [user, setUser] = useState<User | null>(null)
   const isAuthenticated = !!user
+  const pathname = usePathname()
   const router = useRouter()
 
   const login = useCallback(
@@ -43,7 +44,7 @@ export function useAuth() {
         toast.error(err.response?.data?.message || "Login failed.")
       }
     },
-    [router],
+    [router]
   )
 
   const logout = useCallback(async () => {
@@ -65,7 +66,7 @@ export function useAuth() {
   const checkAuth = useCallback(async () => {
     setIsLoading(true) // Mulai loading
     const token = await getCookie("token")
-    if (!token) router.push("/")
+    if (!token && pathname !== "/forgot-password") router.push("/")
     if (token) {
       try {
         const currentUser = await getCurrentUser()
@@ -76,7 +77,7 @@ export function useAuth() {
       }
     }
     setIsLoading(false) // Selesai loading
-  }, [logout])
+  }, [logout, pathname])
 
   useEffect(() => {
     const initAuth = async () => {
@@ -96,6 +97,6 @@ export function useAuth() {
     isAuthenticated,
     isLoading,
     login,
-    logout,
+    logout
   }
 }

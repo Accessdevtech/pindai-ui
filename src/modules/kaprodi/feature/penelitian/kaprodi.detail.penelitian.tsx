@@ -9,7 +9,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
@@ -51,7 +51,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutate: reject } = useCanclePenelitian({
@@ -68,7 +68,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutate: returned } = useReturnedPenelitian({
@@ -85,7 +85,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutateAsync: viewDocs, isPending } = useViewDocs()
@@ -95,7 +95,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
     const response = await viewDocs({
       id,
       category: "penelitian",
-      jenis_dokumen: jenis_dokument.split(" ").join("_"),
+      jenis_dokumen: jenis_dokument.split(" ").join("_")
     })
     return response
   }
@@ -103,7 +103,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
   const viewFileLaporanKemajuan = async () => {
     const response = await viewLaporanKemajuan({
       id,
-      category: "penelitian",
+      category: "penelitian"
     })
 
     return response
@@ -114,7 +114,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
       viewFile("proposal"),
       viewFileLaporanKemajuan(),
       viewFile("surat_keterangan_selesai"),
-      viewFile("laporan"),
+      viewFile("laporan")
     ]).then(response => {
       const [proposal, laporanKemajuan, suratKeteranganSelesai, laporan] =
         response
@@ -130,7 +130,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
           suratKeteranganSelesai.status === "fulfilled"
             ? suratKeteranganSelesai.value
             : undefined,
-        laporan: laporan.status === "fulfilled" ? laporan.value : undefined,
+        laporan: laporan.status === "fulfilled" ? laporan.value : undefined
       })
     })
   }, [])
@@ -143,11 +143,11 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
         data={[
           {
             name: "Penelitian",
-            href: `${ROUTE.DASHBOARD}/kaprodi/penelitian`,
+            href: `${ROUTE.DASHBOARD}/kaprodi/penelitian`
           },
           {
-            name: "Detail",
-          },
+            name: "Detail"
+          }
         ]}
       >
         {data?.title}
@@ -207,7 +207,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
                 Icon={Undo2Icon}
                 tooltipContent='Kembalikan Penelitian'
                 btnStyle={cn(
-                  "grow border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-primary-foreground lg:w-fit",
+                  "grow border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-primary-foreground lg:w-fit"
                 )}
                 variant='outline'
                 description='Berikan keterangan pengembalian penelitian'
@@ -250,7 +250,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
               { label: "Jenis Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
-              { label: "Abstrak", value: data?.deskripsi },
+              { label: "Abstrak", value: data?.deskripsi }
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>
