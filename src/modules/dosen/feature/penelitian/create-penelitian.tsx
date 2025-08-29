@@ -82,11 +82,16 @@ export default function CreatePenelitian() {
 
   const watchJenisPenelitian = form.watch("jenis_penelitian")
 
-  const kriteria = listPenelitian?.data.filter(
+  const kriteria = listPenelitian?.data.find(
     item => item.id === watchJenisPenelitian
-  )[0]?.kriteria
+  )?.kriteria
 
   const columnsView = columnAnggotaView()
+
+  const handleReset = () => {
+    form.reset()
+    setAnggota([])
+  }
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
@@ -195,14 +200,33 @@ export default function CreatePenelitian() {
               </div>
             </div>
 
-            <Button
-              type='submit'
-              className='mt-4 w-full capitalize'
-              disabled={isPending}
-            >
-              simpan
-              {isPending && <Loader2Icon className='ml-2 animate-spin' />}
-            </Button>
+            <div className='flex items-center gap-4'>
+              {/* <Button
+                type='submit'
+                variant='outline'
+                className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
+                disabled={isPending}
+              >
+                Simpan Draft
+                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+              </Button> */}
+              <Button
+                type='submit'
+                className='mt-4 w-full capitalize'
+                disabled={isPending}
+              >
+                Submit Penelitian
+                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+              </Button>
+              <Button
+                type='submit'
+                variant='secondary'
+                className='mt-4 w-full border border-muted-foreground capitalize'
+                onClick={handleReset}
+              >
+                Reset Form
+              </Button>
+            </div>
           </Form>
         </CardContent>
       </Card>

@@ -42,8 +42,8 @@ export default function CreatePengabdian() {
       bidang: "",
       deskripsi: "",
       jenis_pengabdian: "",
-      luaran_kriteria: "",
-    },
+      luaran_kriteria: ""
+    }
   })
 
   const { mutate, isPending } = useCreatePengabdian({
@@ -61,17 +61,17 @@ export default function CreatePengabdian() {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof PengabdianType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
-    },
+    }
   })
 
   const onSubmit = async (data: PengabdianType) => {
     const datas = {
       ...data,
-      anggota,
+      anggota
     }
 
     mutate(datas)
@@ -83,17 +83,22 @@ export default function CreatePengabdian() {
   const watchJenisPengabdian = form.watch("jenis_pengabdian")
 
   const kriteria = listPengabdian?.data.filter(
-    item => item.id === watchJenisPengabdian,
+    item => item.id === watchJenisPengabdian
   )[0]?.kriteria
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
     const akademikYears = generateAcademicYears(
       currentYear - 5,
-      currentYear + 5,
+      currentYear + 5
     )
     setTahunAkademik(akademikYears)
   }, [])
+
+  const handleReset = () => {
+    form.reset()
+    setAnggota([])
+  }
 
   return (
     <div>
@@ -115,7 +120,7 @@ export default function CreatePengabdian() {
                   control={form.control}
                   options={tahunAkademik.map(item => ({
                     id: item.split("/").join(""),
-                    name: item,
+                    name: item
                   }))}
                 />
                 <SelectField
@@ -125,12 +130,12 @@ export default function CreatePengabdian() {
                   options={[
                     {
                       id: "ganjil",
-                      name: "ganjil",
+                      name: "ganjil"
                     },
                     {
                       id: "genap",
-                      name: "genap",
-                    },
+                      name: "genap"
+                    }
                   ]}
                 />
               </div>
@@ -175,14 +180,33 @@ export default function CreatePengabdian() {
               </div>
             </div>
 
-            <Button
-              type='submit'
-              className='mt-4 w-full capitalize'
-              disabled={isPending}
-            >
-              simpan{" "}
-              {isPending && <Loader2Icon className='ml-2 animate-spin' />}
-            </Button>
+            <div className='flex items-center gap-4'>
+              {/* <Button
+                type='submit'
+                variant='outline'
+                className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
+                disabled={isPending}
+              >
+                Simpan Draft
+                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+              </Button> */}
+              <Button
+                type='submit'
+                className='mt-4 w-full capitalize'
+                disabled={isPending}
+              >
+                Submit Pengabdian
+                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+              </Button>
+              <Button
+                type='submit'
+                variant='secondary'
+                className='mt-4 w-full border border-muted-foreground capitalize'
+                onClick={handleReset}
+              >
+                Reset Form
+              </Button>
+            </div>
           </Form>
         </CardContent>
       </Card>
