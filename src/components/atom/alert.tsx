@@ -18,6 +18,7 @@ interface AlertProps {
   triggerContent?: string
   tooltipContentText?: string
   title?: string
+  triggerAction: string
   description?: string
   side?: "top" | "right" | "bottom" | "left"
   Icon?: LucideIcon
@@ -40,6 +41,7 @@ export default function Alert({
   description,
   side,
   Icon,
+  triggerAction,
   onClick,
   className,
   variant,
@@ -64,7 +66,7 @@ export default function Alert({
         </AlertDialogDescription>
         <div className='flex justify-end gap-2'>
           <AlertDialogAction onClick={onClick}>
-            {triggerContent}
+            {triggerAction}
           </AlertDialogAction>
           <AlertDialogCancel className='border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground'>
             Batal

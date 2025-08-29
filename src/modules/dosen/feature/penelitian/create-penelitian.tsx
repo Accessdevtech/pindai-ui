@@ -22,6 +22,7 @@ import DataKetuaPenelitian from "./components/data-ketua-penelitian"
 import ModalDosen from "./components/modal-dosen"
 import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
+import { useCreateDraftPenelitian } from "./hook/use-penelitian/create-draft-penelitian"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
@@ -67,6 +68,39 @@ export default function CreatePenelitian() {
       }
     }
   })
+
+  const { mutate: mutateDraft, isPending: isPendingDraft } =
+    useCreateDraftPenelitian({
+      onSuccess: res => {
+        if (!res.status) {
+          return toast.error(res.message)
+        }
+        toast.success(res.message)
+        setAnggota([])
+        form.reset()
+        router.push(`${ROUTE.DASHBOARD}/dosen/penelitian`)
+      },
+      onError: err => {
+        if (err.response?.data?.errors) {
+          for (const [key, value] of Object.entries(err.response.data.errors)) {
+            form.setError(key as keyof PenelitianType, {
+              message: value as string,
+              type: "manual"
+            })
+          }
+        }
+      }
+    })
+
+  const onDraft = async (data: PenelitianType) => {
+    const datas = {
+      ...data,
+      is_draft: true,
+      anggota
+    }
+    // console.log(datas)
+    mutateDraft(datas)
+  }
 
   const onSubmit = async (data: PenelitianType) => {
     const datas = {
@@ -200,15 +234,16 @@ export default function CreatePenelitian() {
             </div>
 
             <div className='flex items-center gap-4'>
-              {/* <Button
-                type='submit'
+              <Button
+                type='button'
                 variant='outline'
                 className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
                 disabled={isPending}
+                onClick={() => onDraft(form.getValues())}
               >
                 Simpan Draft
                 {isPending && <Loader2Icon className='ml-2 animate-spin' />}
-              </Button> */}
+              </Button>
               <Button
                 type='submit'
                 className='mt-4 w-full capitalize'

@@ -42,7 +42,6 @@ export default function PenelitianDosenPage() {
     statusKeuangan
   )
   const columns = columnPenelitian({ refetch })
-
   if (!user) return null
 
   const isNull = Object.fromEntries(

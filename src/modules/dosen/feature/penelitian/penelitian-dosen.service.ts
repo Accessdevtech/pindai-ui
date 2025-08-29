@@ -41,6 +41,20 @@ export async function getDetailPenelitianDosen(id: string) {
   return response.data
 }
 
+export async function getDraftPenelitian(id: string) {
+  const response: DosenResponse<DetailPenelitian> = await getData(
+    `${API_ENDPOINTS_DOSEN.DRAFT_PENELITIAN}/${id}`
+  )
+  return response.data
+}
+export async function createDraftPenelitian(data: PenelitianType) {
+  const response: PenelitianDosenResponse = await postData(
+    API_ENDPOINTS_DOSEN.DRAFT_PENELITIAN,
+    data
+  )
+  return response
+}
+
 export async function createPenelitianDosen(data: PenelitianType) {
   const response: PenelitianDosenResponse = await postData(
     API_ENDPOINTS_DOSEN.PENELITIAN,

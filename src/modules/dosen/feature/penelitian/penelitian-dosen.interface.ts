@@ -9,6 +9,7 @@ export interface PenelitianDosen {
   id: string
   title: string
   leader: string
+  is_draft: boolean
   academic_year: string
   created_date: Date
   status: StatusData
