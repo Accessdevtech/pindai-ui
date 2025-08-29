@@ -118,6 +118,24 @@ export const columnPengabdian = ({
       header: "Tahun Akademik"
     },
     {
+      id: "proposal",
+      accessorKey: "proposal",
+      header: "Proposal",
+      cell: ({ row }) => {
+        const isFileExist = row.original.existFile
+        return isFileExist ? (
+          "Telah diunggah"
+        ) : (
+          <Link
+            href={`${ROUTE.DASHBOARD}/dosen/pengabdian/${row.original.id}`}
+            className={buttonVariants({ variant: "link" })}
+          >
+            Silahkan unggah
+          </Link>
+        )
+      }
+    },
+    {
       id: "created_date",
       accessorKey: "created_date",
       header: "tanggal dibuat"
