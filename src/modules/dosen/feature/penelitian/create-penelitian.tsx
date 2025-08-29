@@ -19,19 +19,20 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { columnAnggotaView } from "./components/column-anggota-view"
 import DataKetuaPenelitian from "./components/data-ketua-penelitian"
-import ModalAnggota from "./components/modal-anggota"
-import ModalAnggotaManual from "./components/modal-anggota-manual"
+import ModalDosen from "./components/modal-dosen"
+import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
+import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
-import { anggotaAtom } from "./state/store"
+import { dosenAtom } from "./state/store"
 
 export default function CreatePenelitian() {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
 
-  const [anggota, setAnggota] = useAtom(anggotaAtom)
+  const [anggota, setAnggota] = useAtom(dosenAtom)
 
   const form = useForm<PenelitianType>({
     resolver: zodResolver(penelitianSchema),
@@ -42,8 +43,8 @@ export default function CreatePenelitian() {
       bidang: "",
       deskripsi: "",
       jenis_penelitian: "",
-      luaran_kriteria: "",
-    },
+      luaran_kriteria: ""
+    }
   })
 
   const { mutate, isPending } = useCreatePenelitian({
@@ -61,17 +62,17 @@ export default function CreatePenelitian() {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof PenelitianType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
-    },
+    }
   })
 
   const onSubmit = async (data: PenelitianType) => {
     const datas = {
       ...data,
-      anggota,
+      anggota
     }
 
     mutate(datas)
@@ -82,7 +83,7 @@ export default function CreatePenelitian() {
   const watchJenisPenelitian = form.watch("jenis_penelitian")
 
   const kriteria = listPenelitian?.data.filter(
-    item => item.id === watchJenisPenelitian,
+    item => item.id === watchJenisPenelitian
   )[0]?.kriteria
 
   const columnsView = columnAnggotaView()
@@ -91,7 +92,7 @@ export default function CreatePenelitian() {
     const currentYear = new Date().getFullYear()
     const akademikYears = generateAcademicYears(
       currentYear - 5,
-      currentYear + 5,
+      currentYear + 5
     )
     setTahunAkademik(akademikYears)
   }, [])
@@ -116,7 +117,7 @@ export default function CreatePenelitian() {
                   control={form.control}
                   options={tahunAkademik.map(item => ({
                     id: item.split("/").join(""),
-                    name: item,
+                    name: item
                   }))}
                 />
                 <SelectField
@@ -126,12 +127,12 @@ export default function CreatePenelitian() {
                   options={[
                     {
                       id: "ganjil",
-                      name: "ganjil",
+                      name: "ganjil"
                     },
                     {
                       id: "genap",
-                      name: "genap",
-                    },
+                      name: "genap"
+                    }
                   ]}
                 />
               </div>
@@ -184,8 +185,9 @@ export default function CreatePenelitian() {
                 className='w-[17.5%] lg:w-[36%]'
               />
               <div className='flex flex-col gap-2 lg:flex-row'>
-                <ModalAnggota />
-                <ModalAnggotaManual />
+                <ModalDosen />
+                <ModalDosenManual />
+                <ModalMahasiswaManual />
               </div>
 
               <div>

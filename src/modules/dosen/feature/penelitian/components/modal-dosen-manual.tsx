@@ -7,14 +7,14 @@ import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom, useSetAtom } from "jotai"
 import { useForm } from "react-hook-form"
-import { anggotaSchema, AnggotaType } from "../schema/anggota-schema"
-import { anggotaAtom, isDialogOpenManualAtom } from "../state/store"
+import { DosenSchemaType, dosenSchema } from "../schema/dosen-schema"
+import { dosenAtom, isDialogOpenManualAtom } from "../state/store"
 
-export default function ModalAnggotaManual() {
-  const setAnggota = useSetAtom(anggotaAtom)
+export default function ModalDosenManual() {
+  const setAnggota = useSetAtom(dosenAtom)
   const [openModalManual, setOpenModalManual] = useAtom(isDialogOpenManualAtom)
-  const formAnggotaManual = useForm<AnggotaType>({
-    resolver: zodResolver(anggotaSchema),
+  const formAnggotaManual = useForm<DosenSchemaType>({
+    resolver: zodResolver(dosenSchema),
     defaultValues: {
       nidn: "",
       name: "",
@@ -25,21 +25,21 @@ export default function ModalAnggotaManual() {
       scholar_id: "",
       scopus_id: "",
       job_functional: "",
-      affiliate_campus: "",
-    },
+      affiliate_campus: ""
+    }
   })
-  const onSubmitAnggotaManual = (data: AnggotaType) => {
+  const onSubmitAnggotaManual = (data: DosenSchemaType) => {
     setAnggota(prevAnggota => [...prevAnggota, data])
     setOpenModalManual(false)
   }
   return (
     <Modal
-      title='Daftar anggota penelitian manual'
+      title='Daftar dosen penelitian manual'
       open={openModalManual}
       setOpen={setOpenModalManual}
-      name='tambah anggota manual'
-      description='Tambahkan anggota penelitian secara manual dengan mengisi form yang tersedia'
-      tooltipContent='Detail anggota penelitian'
+      name='tambah dosen manual'
+      description='Tambahkan dosen penelitian secara manual dengan mengisi form yang tersedia'
+      tooltipContent='Detail dosen penelitian'
       variant='outline'
       btnStyle='border-primary text-primary hover:bg-primary hover:text-primary-foreground'
       className='max-w-2xl'
@@ -47,7 +47,7 @@ export default function ModalAnggotaManual() {
       <Form form={formAnggotaManual}>
         <div className='flex flex-wrap gap-4'>
           <InputField
-            label='NIDN/NIM'
+            label='NIDN'
             name='nidn'
             control={formAnggotaManual.control}
           />

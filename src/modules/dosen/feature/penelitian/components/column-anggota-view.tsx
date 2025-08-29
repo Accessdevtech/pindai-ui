@@ -3,67 +3,67 @@ import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
-import { AnggotaType } from "../schema/anggota-schema"
-import { anggotaAtom } from "../state/store"
+import { DosenSchemaType } from "../schema/dosen-schema"
+import { dosenAtom } from "../state/store"
 
-export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
+export const columnAnggotaView = (): ColumnDef<DosenSchemaType>[] => {
   return [
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <span>{row.index + 1}</span>,
+      cell: ({ row }) => <span>{row.index + 1}</span>
     },
     {
       accessorKey: "nidn",
-      header: "NIDN",
+      header: "NIDN"
     },
     {
       accessorKey: "name",
-      header: "Nama",
+      header: "Nama"
     },
     {
       accessorKey: "name_with_title",
-      header: "Nama Dengan Gelar",
+      header: "Nama Dengan Gelar"
     },
     {
       accessorKey: "prodi",
-      header: "Prodi",
+      header: "Prodi"
     },
     {
       accessorKey: "phone_number",
-      header: "Nomor Telepon",
+      header: "Nomor Telepon"
     },
     {
       accessorKey: "email",
-      header: "Email",
+      header: "Email"
     },
     {
       accessorKey: "scholar_id",
-      header: "Scholar ID",
+      header: "Scholar ID"
     },
     {
       accessorKey: "scopus_id",
-      header: "Scopus ID",
+      header: "Scopus ID"
     },
     {
       accessorKey: "job_functional",
-      header: "Jabatan Fungsional",
+      header: "Jabatan Fungsional"
     },
     {
       accessorKey: "affiliate_campus",
-      header: "Kapus afiliasi",
+      header: "Kapus afiliasi"
     },
     {
       id: "action",
       header: "Aksi",
       cell: ({ row }) => {
-        const [anggotaValue, setAnggotaValue] = useAtom(anggotaAtom)
+        const [anggotaValue, setAnggotaValue] = useAtom(dosenAtom)
         const item = row.original
         const [open, setOpen] = useState(false)
 
         const handleClick = () => {
           const newValue = anggotaValue.filter(
-            item => item.nidn !== row.original.nidn,
+            item => item.nidn !== row.original.nidn
           )
           setAnggotaValue(newValue)
         }
@@ -82,7 +82,7 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
             side='right'
           />
         )
-      },
-    },
+      }
+    }
   ]
 }

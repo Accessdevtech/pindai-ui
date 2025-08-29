@@ -59,6 +59,7 @@ interface DataTableProps<TData, TValue> {
   filtering?: {
     status?: boolean
     tahunAkademik?: boolean
+    reset?: boolean
   }
   refetch?: () => void
   setValue?: (value: string) => void
@@ -74,7 +75,7 @@ export default function DataTable<TData, TValue>({
   role,
   isLoading,
   search = false,
-  filtering = { status: false, tahunAkademik: false },
+  filtering = { status: false, tahunAkademik: false, reset: false },
   perPage,
   setPerPage,
   refetch,
@@ -150,16 +151,18 @@ export default function DataTable<TData, TValue>({
           </div>
         )}
         <div className='flex flex-col-reverse items-end gap-4 xl:flex-row xl:items-center'>
-          <Button
-            variant='ghost'
-            className='border border-muted-foreground bg-muted text-muted-foreground'
-            onClick={() => {
-              setValue && setValue("")
-              setSelectTahunAkademik("")
-            }}
-          >
-            Reset Filter
-          </Button>
+          {filtering.reset && (
+            <Button
+              variant='ghost'
+              className='border border-muted-foreground bg-muted text-muted-foreground'
+              onClick={() => {
+                setValue && setValue("")
+                setSelectTahunAkademik("")
+              }}
+            >
+              Reset Filter
+            </Button>
+          )}
           {filtering.tahunAkademik && (
             <div className='flex flex-1 items-center space-x-2'>
               <Combobox

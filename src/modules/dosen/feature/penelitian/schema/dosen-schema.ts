@@ -1,6 +1,6 @@
 import { z } from "zod"
 
-export const anggotaSchema = z.object({
+export const dosenSchema = z.object({
   nidn: z.string().refine(nidn => nidn.length > 0, "NIDN harus diisi"),
   name: z.string().refine(name => name.length > 0, "Nama harus diisi"),
   name_with_title: z
@@ -18,7 +18,7 @@ export const anggotaSchema = z.object({
     .refine(job => job.length > 0, "Jabatan fungsional harus diisi"),
   affiliate_campus: z
     .string()
-    .refine(affiliate => affiliate.length > 0, "Affiliate harus diisi"),
+    .refine(affiliate => affiliate.length > 0, "Affiliate harus diisi")
 })
 
-export type AnggotaType = z.infer<typeof anggotaSchema>
+export type DosenSchemaType = z.infer<typeof dosenSchema>

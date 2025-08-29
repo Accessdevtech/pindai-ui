@@ -2,21 +2,21 @@
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtomValue } from "jotai"
-import { AnggotaType } from "../schema/anggota-schema"
-import { anggotaAtom, selectedAnggotaAtom } from "../state/store"
+import { DosenSchemaType } from "../schema/dosen-schema"
+import { dosenAtom, selectedAnggotaAtom } from "../state/store"
 
 interface FormFieldProps {
   handleCheckboxChange: (nidn: string) => void
 }
 
 export const columnTambahAnggota = ({
-  handleCheckboxChange,
-}: FormFieldProps): ColumnDef<AnggotaType>[] => {
+  handleCheckboxChange
+}: FormFieldProps): ColumnDef<DosenSchemaType>[] => {
   return [
     {
       id: "select",
       cell: ({ row }) => {
-        const anggota = useAtomValue(anggotaAtom)
+        const anggota = useAtomValue(dosenAtom)
         const selectedAnggota = useAtomValue(selectedAnggotaAtom)
 
         const isSlected = anggota.some(item => item.nidn === row.original.nidn)
@@ -31,47 +31,47 @@ export const columnTambahAnggota = ({
         )
       },
       enableSorting: false,
-      enableHiding: false,
+      enableHiding: false
     },
     {
       accessorKey: "nidn",
-      header: "NIDN",
+      header: "NIDN"
     },
     {
       accessorKey: "name",
-      header: "Nama",
+      header: "Nama"
     },
     {
       accessorKey: "name_with_title",
-      header: "Nama Dengan Gelar",
+      header: "Nama Dengan Gelar"
     },
     {
       accessorKey: "prodi",
-      header: "Prodi",
+      header: "Prodi"
     },
     {
       accessorKey: "phone_number",
-      header: "Nomor Telepon",
+      header: "Nomor Telepon"
     },
     {
       accessorKey: "email",
-      header: "Email",
+      header: "Email"
     },
     {
       accessorKey: "scholar_id",
-      header: "Scholar ID",
+      header: "Scholar ID"
     },
     {
       accessorKey: "scopus_id",
-      header: "Scopus ID",
+      header: "Scopus ID"
     },
     {
       accessorKey: "job_functional",
-      header: "Job Functional",
+      header: "Job Functional"
     },
     {
       accessorKey: "affiliate_campus",
-      header: "Affiliate Campus",
-    },
+      header: "Affiliate Campus"
+    }
   ]
 }
