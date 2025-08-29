@@ -5,7 +5,7 @@ import {
   AlertDialogContent,
   AlertDialogDescription,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
@@ -45,14 +45,15 @@ export default function Alert({
   variant,
   size,
   open,
-  setOpen,
+  setOpen
 }: AlertProps) {
   return (
     <AlertDialog open={open} onOpenChange={setOpen}>
       <Tooltips contentText={tooltipContentText || ""} side={side}>
         <AlertDialogTrigger asChild>
           <Button variant={variant} size={size} className={cn(className)}>
-            {triggerContent ? triggerContent : Icon && <Icon />}
+            {Icon && <Icon />}
+            {triggerContent}
           </Button>
         </AlertDialogTrigger>
       </Tooltips>
@@ -62,7 +63,9 @@ export default function Alert({
           {description}
         </AlertDialogDescription>
         <div className='flex justify-end gap-2'>
-          <AlertDialogAction onClick={onClick}>Hapus</AlertDialogAction>
+          <AlertDialogAction onClick={onClick}>
+            {triggerContent}
+          </AlertDialogAction>
           <AlertDialogCancel className='border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground'>
             Batal
           </AlertDialogCancel>

@@ -1,4 +1,5 @@
 "use client"
+import Alert from "@/components/atom/alert"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import FileView from "@/components/atom/file-view"
 import Modal from "@/components/atom/modal"
@@ -28,6 +29,7 @@ import { useGetDetailPengabdian } from "./hooks/use-pengabdian/get-detail-pengab
 import { useReturnedPengabdian } from "./hooks/use-pengabdian/returned-pengabdian"
 
 export default function DetailPengabdianDppmPage({ id }: { id: string }) {
+  const [alert, setAlert] = useState(false)
   const [resDocs, setResDocs] = useState<{
     proposal?: ViewDocs
     laporanKemajuan?: LaporanKemajuan[]
@@ -190,14 +192,18 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
         {data?.existFile && data?.status.dppm === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
-              <Button
+              <Alert
+                open={alert}
+                setOpen={setAlert}
+                title='Setujui Pengabdian'
                 variant='outline'
+                Icon={CheckIcon}
+                tooltipContentText='Setujui Pengabdian'
+                triggerContent='Setuju'
                 className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
+                description='Apakah anda yakin ingin menyetujui pengabdian ini?'
                 onClick={() => approved({ id })}
-              >
-                <CheckIcon />
-                Setuju
-              </Button>
+              />
               <Modal
                 title='Kembalikan Pengabdian'
                 name='Kembalikan'

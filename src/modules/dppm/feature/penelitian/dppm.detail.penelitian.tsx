@@ -1,4 +1,5 @@
 "use client"
+import Alert from "@/components/atom/alert"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import FileView from "@/components/atom/file-view"
 import Modal from "@/components/atom/modal"
@@ -32,6 +33,7 @@ import { useGetDetailPenelitian } from "./hooks/use-penelitian/get-detail-peneli
 import { useReturnedPenelitian } from "./hooks/use-penelitian/returned-penelitian"
 
 export default function DetailPenelitianDppmPage({ id }: { id: string }) {
+  const [alert, setAlert] = useState(false)
   const [resDocs, setResDocs] = useState<{
     proposal?: ViewDocs
     laporanKemajuan?: LaporanKemajuan[]
@@ -206,14 +208,18 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
         {data?.existFile && data?.status.dppm === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
-              <Button
+              <Alert
+                open={alert}
+                setOpen={setAlert}
+                title='Setujui Penelitian'
                 variant='outline'
+                Icon={CheckIcon}
+                tooltipContentText='Setujui Penelitian'
+                triggerContent='Setuju'
                 className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
+                description='Apakah anda yakin ingin menyetujui penelitian ini?'
                 onClick={() => approved({ id })}
-              >
-                <CheckIcon />
-                Setuju
-              </Button>
+              />
               <Modal
                 title='Kembalikan Penelitian'
                 name='Kembalikan'

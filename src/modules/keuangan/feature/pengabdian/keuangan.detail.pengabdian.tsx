@@ -1,7 +1,7 @@
 "use client"
+import Alert from "@/components/atom/alert"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
@@ -14,12 +14,14 @@ import { IdentitasTable } from "@/modules/dosen/feature/pengabdian/components/id
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
 import { CheckIcon } from "lucide-react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useApprovePengabdian } from "./hooks/use-pengabdian/approved-pengabdian"
 import { useCanclePengabdian } from "./hooks/use-pengabdian/cancle-pengabdian"
 import { useGetDetailPengabdian } from "./hooks/use-pengabdian/get-detail-pengabdian"
 
 export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
+  const [alert, setAlert] = useState(false)
   const { data, refetch } = useGetDetailPengabdian(id)
   const { mutate: approved } = useApprovePengabdian({
     onSuccess(res) {
@@ -113,14 +115,18 @@ export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
         {data?.existFile && data?.status.keuangan === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
-              <Button
+              <Alert
+                open={alert}
+                setOpen={setAlert}
+                title='Setujui Pengabdian'
                 variant='outline'
+                Icon={CheckIcon}
+                tooltipContentText='Setujui Pengabdian'
+                triggerContent='Setuju'
                 className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
+                description='Apakah anda yakin ingin menyetujui pengabdian ini?'
                 onClick={() => approved({ id })}
-              >
-                <CheckIcon />
-                Setuju
-              </Button>
+              />
             </CardContent>
           </Card>
         )}
