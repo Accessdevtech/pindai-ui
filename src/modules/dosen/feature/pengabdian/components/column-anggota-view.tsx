@@ -77,7 +77,8 @@ export const columnAnggotaView = (): ColumnDef<DosenSchemaType>[] => {
             description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
             className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
             onClick={handleClick}
-            tooltipContentText='hapus kaprodi'
+            tooltipContentText='hapus'
+            triggerAction='Hapus'
             size='icon'
             side='right'
           />

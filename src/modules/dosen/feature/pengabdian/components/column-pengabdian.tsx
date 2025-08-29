@@ -86,6 +86,7 @@ export const columnPengabdian = ({
                     open={alert}
                     setOpen={setAlert}
                     title='Hapus Penelitian'
+                    triggerAction='Hapus'
                     size='icon'
                     variant='destructive'
                     tooltipContentText='Hapus Penelitian'

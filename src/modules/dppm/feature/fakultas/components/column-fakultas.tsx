@@ -27,12 +27,12 @@ export const columnFakultas = ({ refetch }: Props): ColumnDef<IFakultas>[] => {
       cell: ({ row }) => {
         const index = row.index + 1
         return <span>{index}</span>
-      },
+      }
     },
     {
       id: "name",
       accessorKey: "name",
-      header: "Nama Fakultas",
+      header: "Nama Fakultas"
     },
     {
       id: "action",
@@ -45,8 +45,8 @@ export const columnFakultas = ({ refetch }: Props): ColumnDef<IFakultas>[] => {
         const form = useForm<FakultasType>({
           resolver: zodResolver(fakultasSchema),
           defaultValues: {
-            name: item.name,
-          },
+            name: item.name
+          }
         })
 
         const { mutate: updateData } = useUpdateFakultas({
@@ -64,16 +64,16 @@ export const columnFakultas = ({ refetch }: Props): ColumnDef<IFakultas>[] => {
           onError: err => {
             if (err.response?.data.errors) {
               for (const [key, value] of Object.entries(
-                err.response.data.errors,
+                err.response.data.errors
               )) {
                 form.setError(key as keyof FakultasType, {
                   message: value as string,
-                  type: "manual",
+                  type: "manual"
                 })
               }
             }
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const { mutate: deleteData } = useDeleteFakultas({
@@ -89,7 +89,7 @@ export const columnFakultas = ({ refetch }: Props): ColumnDef<IFakultas>[] => {
           },
           onError: err => {
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const onSubmit = async (data: FakultasType) => {
@@ -133,12 +133,13 @@ export const columnFakultas = ({ refetch }: Props): ColumnDef<IFakultas>[] => {
               className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
               onClick={onDelete}
               tooltipContentText='hapus fakultas'
+              triggerAction='Hapus'
               size='icon'
               side='right'
             />
           </span>
         )
-      },
-    },
+      }
+    }
   ]
 }

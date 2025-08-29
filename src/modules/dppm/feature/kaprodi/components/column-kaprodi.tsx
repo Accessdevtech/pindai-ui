@@ -28,7 +28,7 @@ interface ColumnKaprodiProps {
 
 export const columnKaprodi = ({
   fakultas,
-  refetch,
+  refetch
 }: ColumnKaprodiProps): ColumnDef<IKaprodi>[] => {
   return [
     {
@@ -37,28 +37,28 @@ export const columnKaprodi = ({
       cell: ({ row }) => {
         const index = row.index + 1
         return <span>{index}</span>
-      },
+      }
     },
     {
       id: "nidn",
       accessorKey: "nidn",
-      header: "NIDN",
+      header: "NIDN"
     },
     {
       id: "name",
       accessorKey: "name",
-      header: "Nama Kaprodi",
+      header: "Nama Kaprodi"
     },
     {
       id: "email",
       accessorKey: "email",
       header: "Email",
-      cell: ({ row }) => row.original.email,
+      cell: ({ row }) => row.original.email
     },
     {
       id: "fakultas",
       accessorKey: "fakultas",
-      header: "Fakultas",
+      header: "Fakultas"
     },
     {
       id: "status",
@@ -80,7 +80,7 @@ export const columnKaprodi = ({
                 "border-green-500 text-green-500 hover:bg-green-500":
                   item.status === "true",
                 "border-red-500 text-red-500 hover:bg-red-500":
-                  item.status !== "true",
+                  item.status !== "true"
               })}
             >
               {item.status === "true" ? (
@@ -91,7 +91,7 @@ export const columnKaprodi = ({
             </Badge>
           </Tooltip>
         )
-      },
+      }
     },
     {
       id: "action",
@@ -109,8 +109,8 @@ export const columnKaprodi = ({
             prodi_id: item.prodi_id,
             email: item.email,
             address: item.address,
-            status: item.status === "true" ? "true" : "false",
-          },
+            status: item.status === "true" ? "true" : "false"
+          }
         })
 
         const watch = form.watch("fakultas_id")
@@ -124,16 +124,16 @@ export const columnKaprodi = ({
           onError: err => {
             if (err.response?.data.errors) {
               for (const [key, value] of Object.entries(
-                err.response.data.errors,
+                err.response.data.errors
               )) {
                 form.setError(key as keyof KaprodiType, {
                   message: value as string,
-                  type: "manual",
+                  type: "manual"
                 })
               }
             }
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const { mutate: deleteData } = useDeleteKaprodi({
@@ -143,13 +143,13 @@ export const columnKaprodi = ({
           },
           onError: err => {
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const onSubmit = async (data: KaprodiType) => {
           updateData({
             id: item.id,
-            data,
+            data
           })
         }
 
@@ -206,7 +206,7 @@ export const columnKaprodi = ({
                   label='status'
                   options={[
                     { label: "aktif", value: "true" },
-                    { label: "tidak aktif", value: "false" },
+                    { label: "tidak aktif", value: "false" }
                   ]}
                 />
                 <Button type='submit' disabled={form.formState.isSubmitting}>
@@ -223,12 +223,13 @@ export const columnKaprodi = ({
               className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
               onClick={onDelete}
               tooltipContentText='hapus kaprodi'
+              triggerAction='Hapus'
               size='icon'
               side='right'
             />
           </span>
         )
-      },
-    },
+      }
+    }
   ]
 }

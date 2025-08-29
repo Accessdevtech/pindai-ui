@@ -4,7 +4,7 @@ import {
   FormControl,
   FormField,
   FormItem,
-  FormMessage,
+  FormMessage
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
@@ -18,7 +18,7 @@ import { Kriteria } from "../luaran.interface"
 export function createEditableColumns<TData extends Kriteria>(
   form: UseFormReturn<any>,
   name: string,
-  fields: (keyof TData & string)[],
+  fields: (keyof TData & string)[]
 ): ColumnDef<TData>[] {
   const columns: ColumnDef<TData>[] = fields.map(field => ({
     accessorKey: field,
@@ -63,7 +63,7 @@ export function createEditableColumns<TData extends Kriteria>(
           )}
         />
       )
-    },
+    }
   }))
 
   columns.push({
@@ -81,12 +81,13 @@ export function createEditableColumns<TData extends Kriteria>(
           title='Hapus Kriteria'
           description='Apakah anda yakin ingin menghapus data ini?'
           tooltipContentText='hapus kriteria'
+          triggerAction='Hapus'
           onClick={() => meta?.removeRow(row.index)}
           open={open}
           setOpen={setOpen}
         />
       )
-    },
+    }
   })
 
   return columns

@@ -155,6 +155,7 @@ export const columnPublikasi = ({
                     open={alert}
                     setOpen={setAlert}
                     title='Hapus Publikasi'
+                    triggerAction='Hapus'
                     size='icon'
                     variant='destructive'
                     description='Apakah anda yakin ingin menghapus publikasi ini?'

@@ -216,6 +216,7 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
                 Icon={CheckIcon}
                 tooltipContentText='Setujui Penelitian'
                 triggerContent='Setuju'
+                triggerAction='Setuju'
                 className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
                 description='Apakah anda yakin ingin menyetujui penelitian ini?'
                 onClick={() => approved({ id })}

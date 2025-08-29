@@ -19,16 +19,16 @@ interface Props {
 export const columnsViewMasterLuaran = ({
   perPage,
   refetch,
-  setPerPage,
+  setPerPage
 }: Props): ColumnDef<Luaran>[] => {
   return [
     {
       accessorKey: "category",
-      header: "Kategori",
+      header: "Kategori"
     },
     {
       accessorKey: "name",
-      header: "Nama Luaran",
+      header: "Nama Luaran"
     },
     {
       accessorKey: "action",
@@ -45,7 +45,7 @@ export const columnsViewMasterLuaran = ({
           },
           onError: err => {
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         return (
@@ -87,6 +87,7 @@ export const columnsViewMasterLuaran = ({
               Icon={TrashIcon}
               title='Hapus Master Luaran'
               description='Apakah anda yakin ingin menghapus master luaran ini ?'
+              triggerAction='Hapus'
               size='icon'
               variant='destructive'
               onClick={() => mutate({ id: row.original.id })}
@@ -95,7 +96,7 @@ export const columnsViewMasterLuaran = ({
             />
           </div>
         )
-      },
-    },
+      }
+    }
   ]
 }
