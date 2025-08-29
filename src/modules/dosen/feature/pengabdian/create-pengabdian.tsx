@@ -200,7 +200,7 @@ export default function CreatePengabdian() {
                 {isPending && <Loader2Icon className='ml-2 animate-spin' />}
               </Button>
               <Button
-                type='submit'
+                type='reset'
                 variant='secondary'
                 className='mt-4 w-full border border-muted-foreground capitalize'
                 onClick={handleReset}

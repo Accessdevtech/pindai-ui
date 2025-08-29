@@ -34,12 +34,12 @@ export default function ModalDosenManual() {
   }
   return (
     <Modal
-      title='Daftar dosen penelitian manual'
+      title='Daftar anggota penelitian manual'
       open={openModalManual}
       setOpen={setOpenModalManual}
-      name='tambah dosen manual'
-      description='Tambahkan dosen penelitian secara manual dengan mengisi form yang tersedia'
-      tooltipContent='Detail dosen penelitian'
+      name='tambah anggota manual'
+      description='Tambahkan anggota penelitian secara manual dengan mengisi form yang tersedia'
+      tooltipContent='Detail anggota penelitian'
       variant='outline'
       btnStyle='border-primary text-primary hover:bg-primary hover:text-primary-foreground'
       className='max-w-2xl'
@@ -47,7 +47,7 @@ export default function ModalDosenManual() {
       <Form form={formAnggotaManual}>
         <div className='flex flex-wrap gap-4'>
           <InputField
-            label='NIDN'
+            label='NIDN/NIM'
             name='nidn'
             control={formAnggotaManual.control}
           />
