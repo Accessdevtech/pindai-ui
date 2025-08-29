@@ -114,6 +114,8 @@ export const API_ENDPOINTS_DOSEN = {
   PUBLIKASI: "/dosen/publikasi",
   PENELITIAN: "/dosen/penelitian",
   PENGABDIAN: "/dosen/pengabdian",
+  DRAFT_PENELITIAN: "/dosen/penelitian/draft",
+  DRAFT_PENGABDIAN: "/dosen/pengabdian/draft",
 
   TRACKING_PENELITIAN: "/dosen/tracking/penelitian",
   TRACKING_PENGABDIAN: "/dosen/tracking/pengabdian",
