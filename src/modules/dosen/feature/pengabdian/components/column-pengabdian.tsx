@@ -10,7 +10,7 @@ import { InfoIcon, TrashIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { toast } from "sonner"
-import { useDeletePengabdian } from "../hook/use-pengabdian/delete-penelitian"
+import { useDeletePengabdian } from "../hook/use-pengabdian/delete-pengabdian"
 import { PengabdianDosen } from "../pengabdian-dosen.interface"
 
 export const columnPengabdian = ({
