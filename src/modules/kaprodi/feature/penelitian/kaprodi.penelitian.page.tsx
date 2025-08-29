@@ -55,7 +55,8 @@ export default function PenelitianKaprodiPage() {
           <DataTable
             search
             filtering={{
-              tahunAkademik: true
+              tahunAkademik: true,
+              reset: true
             }}
             role={user?.role}
             columns={columns}

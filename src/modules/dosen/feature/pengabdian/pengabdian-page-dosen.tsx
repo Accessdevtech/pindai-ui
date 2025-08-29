@@ -94,7 +94,8 @@ export default function PengabdianDosenPage() {
             search
             filtering={{
               tahunAkademik: true,
-              status: Boolean(statusKaprodi || statusDppm || statusKeuangan)
+              status: Boolean(statusKaprodi || statusDppm || statusKeuangan),
+              reset: true
             }}
             role={user?.role}
             columns={columns}

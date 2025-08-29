@@ -46,7 +46,8 @@ export default function PenelitianDppmPage() {
           <DataTable
             search
             filtering={{
-              tahunAkademik: true
+              tahunAkademik: true,
+              reset: true
             }}
             role={user?.role}
             columns={columns}
