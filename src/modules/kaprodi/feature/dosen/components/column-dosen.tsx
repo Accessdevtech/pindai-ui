@@ -1,16 +1,16 @@
 import Modal from "@/components/atom/modal"
 import Tooltip from "@/components/atom/tooltip"
-import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
+import { Switch } from "@/components/ui/switch"
 import { cn } from "@/lib/utils"
 import {
   DosenResponse,
-  IDosen,
+  IDosen
 } from "@/modules/dppm/feature/dosen/dosen.interface"
 import { UseMutateFunction } from "@tanstack/react-query"
 import { ColumnDef } from "@tanstack/react-table"
 import { AxiosError } from "axios"
-import { Check, InfoIcon, X } from "lucide-react"
+import { Check, InfoIcon } from "lucide-react"
 import DetailDosen from "./detail-dosen"
 
 interface ColumnDosenProps {
@@ -30,43 +30,43 @@ interface ColumnDosenProps {
 export const columnDosen = ({
   refetch,
   onApprove,
-  onActive,
+  onActive
 }: ColumnDosenProps): ColumnDef<IDosen>[] => {
   return [
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>,
+      cell: ({ row }) => <div>{row.index + 1}</div>
     },
     {
       id: "nidn",
       accessorKey: "nidn",
-      header: "NIDN",
+      header: "NIDN"
     },
     {
       id: "name",
       accessorKey: "name",
-      header: "Nama",
+      header: "Nama"
     },
     {
       id: "name_with_title",
       accessorKey: "name_with_title",
-      header: "Nama dengan Gelar",
+      header: "Nama dengan Gelar"
     },
     {
       id: "email",
       accessorKey: "email",
-      header: "Email",
+      header: "Email"
     },
     {
       id: "prodi",
       accessorKey: "prodi",
-      header: "Prodi",
+      header: "Prodi"
     },
     {
       id: "affiliate_campus",
       accessorKey: "affiliate_campus",
-      header: "Afiliasi",
+      header: "Afiliasi"
     },
     {
       id: "is_active",
@@ -82,24 +82,17 @@ export const columnDosen = ({
             contentText={item.is_active ? "Dosen Aktif" : "Dosen Tidak Aktif"}
             side='left'
           >
-            <Badge
-              variant='outline'
-              className={cn("p-2 hover:text-primary-foreground", {
-                "border-green-500 text-green-500 hover:bg-green-500":
-                  item.is_active,
-                "border-red-500 text-red-500 hover:bg-red-500": !item.is_active,
+            <Switch
+              checked={item.is_active}
+              onCheckedChange={handleActive}
+              className={cn("rounded-full", {
+                "bg-green-500": item.is_active,
+                "bg-red-500": !item.is_active
               })}
-              onClick={() => handleActive()}
-            >
-              {item.is_active ? (
-                <Check className='h-4 w-4' />
-              ) : (
-                <X className='h-4 w-4' />
-              )}
-            </Badge>
+            />
           </Tooltip>
         )
-      },
+      }
     },
     {
       id: "action",
@@ -139,7 +132,7 @@ export const columnDosen = ({
             )}
           </span>
         )
-      },
-    },
+      }
+    }
   ]
 }
