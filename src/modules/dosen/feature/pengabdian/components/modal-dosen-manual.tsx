@@ -7,14 +7,14 @@ import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom, useSetAtom } from "jotai"
 import { useForm } from "react-hook-form"
-import { anggotaSchema, AnggotaType } from "../schema/anggota-schema"
+import { DosenSchemaType, dosenSchema } from "../schema/dosen-schema"
 import { anggotaAtom, isDialogOpenManualAtom } from "../state/store"
 
-export default function ModalAnggotaManual() {
+export default function ModalDosenManual() {
   const setAnggota = useSetAtom(anggotaAtom)
   const [openModalManual, setOpenModalManual] = useAtom(isDialogOpenManualAtom)
-  const formAnggotaManual = useForm<AnggotaType>({
-    resolver: zodResolver(anggotaSchema),
+  const formAnggotaManual = useForm<DosenSchemaType>({
+    resolver: zodResolver(dosenSchema),
     defaultValues: {
       nidn: "",
       name: "",
@@ -25,10 +25,10 @@ export default function ModalAnggotaManual() {
       scholar_id: "",
       scopus_id: "",
       job_functional: "",
-      affiliate_campus: "",
-    },
+      affiliate_campus: ""
+    }
   })
-  const onSubmitAnggotaManual = (data: AnggotaType) => {
+  const onSubmitAnggotaManual = (data: DosenSchemaType) => {
     setAnggota(prevAnggota => [...prevAnggota, data])
     setOpenModalManual(false)
   }

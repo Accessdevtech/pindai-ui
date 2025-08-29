@@ -19,8 +19,8 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { columnAnggotaView } from "./components/column-anggota-view"
 import DataKetuaPengabdian from "./components/data-ketua-pengabdian"
-import ModalAnggota from "./components/modal-anggota"
-import ModalAnggotaManual from "./components/modal-anggota-manual"
+import ModalDosen from "./components/modal-dosen"
+import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPengabdian from "./components/modal-jenis-pengabdian"
 import { useCreatePengabdian } from "./hook/use-pengabdian/create-pengabdian"
 import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
@@ -171,8 +171,9 @@ export default function CreatePengabdian() {
                 className='w-[17.5%] lg:w-[36%]'
               />
               <div className='flex flex-col gap-2 lg:flex-row'>
-                <ModalAnggota />
-                <ModalAnggotaManual />
+                <ModalDosen />
+                <ModalDosenManual />
+                {/* <ModalMahasiswaManual /> */}
               </div>
 
               <div>

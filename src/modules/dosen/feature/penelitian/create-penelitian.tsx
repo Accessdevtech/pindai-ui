@@ -22,7 +22,6 @@ import DataKetuaPenelitian from "./components/data-ketua-penelitian"
 import ModalDosen from "./components/modal-dosen"
 import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
-import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
@@ -192,7 +191,7 @@ export default function CreatePenelitian() {
               <div className='flex flex-col gap-2 lg:flex-row'>
                 <ModalDosen />
                 <ModalDosenManual />
-                <ModalMahasiswaManual />
+                {/* <ModalMahasiswaManual /> */}
               </div>
 
               <div>
