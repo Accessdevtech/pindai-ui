@@ -132,6 +132,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
   const onDraft = async (data: PenelitianType) => {
     const datas = {
       ...data,
+      is_draft: true,
       anggota
     }
     // console.log(datas)
