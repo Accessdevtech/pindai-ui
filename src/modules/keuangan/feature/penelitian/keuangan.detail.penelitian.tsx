@@ -6,7 +6,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
@@ -35,7 +35,7 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutate: reject } = useCanclePenelitian({
@@ -52,7 +52,7 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
@@ -64,11 +64,11 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
         data={[
           {
             name: "Penelitian",
-            href: `${ROUTE.DASHBOARD}/keuangan/penelitian`,
+            href: `${ROUTE.DASHBOARD}/keuangan/penelitian`
           },
           {
-            name: "Detail",
-          },
+            name: "Detail"
+          }
         ]}
       >
         {data?.title}
@@ -110,7 +110,7 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        {data?.status.keuangan === "pending" && (
+        {data?.existFile && data?.status.keuangan === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
               <Button
@@ -137,7 +137,7 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
               { label: "Jenis Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
-              { label: "Abstrak", value: data?.deskripsi },
+              { label: "Abstrak", value: data?.deskripsi }
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>
