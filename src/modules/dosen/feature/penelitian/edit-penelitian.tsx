@@ -129,18 +129,29 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
     }
   }, [data?.anggota, setAnggota])
 
+  const onDraft = async (data: PenelitianType) => {
+    const datas = {
+      ...data,
+      anggota
+    }
+    // console.log(datas)
+    mutate({ id, data: datas })
+  }
+
   const onSubmit = async (data: PenelitianType) => {
     const datas = {
       ...data,
+      is_draft: false,
       anggota
     }
 
     mutate({ id, data: datas })
   }
+
   return (
     <div>
       <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/penelitian`}>
-        Buat Penelitian
+        Edit Penelitian
       </Breadcrumb>
       <Card className='max-w-full'>
         <CardContent className='py-6'>
@@ -217,14 +228,26 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
               </div>
             </div>
 
-            <Button
-              type='submit'
-              className='mt-4 w-full capitalize'
-              disabled={isPending}
-            >
-              update penelitian
-              {isPending && <Loader2Icon className='ml-2 animate-spin' />}
-            </Button>
+            <div className='flex items-center gap-4'>
+              <Button
+                type='button'
+                variant='outline'
+                className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
+                disabled={isPending}
+                onClick={() => onDraft(form.getValues())}
+              >
+                Draft as form
+                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+              </Button>
+              <Button
+                type='submit'
+                className='mt-4 w-full capitalize'
+                disabled={isPending}
+              >
+                Submit & upload proposal
+                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+              </Button>
+            </div>
           </Form>
         </CardContent>
       </Card>

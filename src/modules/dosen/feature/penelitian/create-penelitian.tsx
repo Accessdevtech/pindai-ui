@@ -138,7 +138,7 @@ export default function CreatePenelitian() {
   return (
     <div>
       <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/penelitian`}>
-        Buat Penelitian
+        Create Penelitian
       </Breadcrumb>
       <Card className='max-w-full'>
         <CardContent className='py-6'>
@@ -241,7 +241,7 @@ export default function CreatePenelitian() {
                 disabled={isPending}
                 onClick={() => onDraft(form.getValues())}
               >
-                Simpan Draft
+                Draft as form
                 {isPending && <Loader2Icon className='ml-2 animate-spin' />}
               </Button>
               <Button
@@ -249,7 +249,7 @@ export default function CreatePenelitian() {
                 className='mt-4 w-full capitalize'
                 disabled={isPending}
               >
-                Submit Penelitian
+                Submit & upload proposal
                 {isPending && <Loader2Icon className='ml-2 animate-spin' />}
               </Button>
               <Button
