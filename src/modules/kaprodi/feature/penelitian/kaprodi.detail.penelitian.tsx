@@ -274,16 +274,19 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
             name='Lihat Proposal'
             btnStyle='w-full'
             tooltipContent='Lihat Proposal'
+            className='max-w-fit'
           >
-            {isPending ? (
-              <Loader2Icon className='animate-spin' />
-            ) : resDocs?.proposal ? (
-              <FileView resDocs={resDocs?.proposal as ViewDocs} scale={1} />
-            ) : (
-              <div className='capitalize'>
-                File tidak tersedia / belum di unggah
-              </div>
-            )}
+            <div className='max-h-[calc(100vh-200px)] flex-1 overflow-auto'>
+              {isPending ? (
+                <Loader2Icon className='animate-spin' />
+              ) : resDocs?.proposal ? (
+                <FileView resDocs={resDocs?.proposal as ViewDocs} scale={1} />
+              ) : (
+                <div className='capitalize'>
+                  File tidak tersedia / belum di unggah
+                </div>
+              )}
+            </div>
           </Modal>
         </CardContent>
       </Card>
