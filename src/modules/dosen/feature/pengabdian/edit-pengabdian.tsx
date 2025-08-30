@@ -18,36 +18,55 @@ import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { columnAnggotaView } from "./components/column-anggota-view"
-import DataKetuaPenelitian from "./components/data-ketua-penelitian"
+import DataKetuaPengabdian from "./components/data-ketua-pengabdian"
 import ModalDosen from "./components/modal-dosen"
 import ModalDosenManual from "./components/modal-dosen-manual"
-import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
-import { useCreateDraftPenelitian } from "./hook/use-penelitian/create-draft-penelitian"
-import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
-import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
-import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
+import ModalJenisPengabdian from "./components/modal-jenis-pengabdian"
+import { useGetDraftPengabdian } from "./hook/use-pengabdian/get-draft"
+import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
+import { useUpdatePengabdian } from "./hook/use-pengabdian/update-pengabdian"
+import { pengabdianSchema, PengabdianType } from "./schema/pengabdian-schema"
 import { dosenAtom } from "./state/store"
 
-export default function CreatePenelitian() {
+interface EditPengabdianProps {
+  id: string
+}
+
+export default function EditPengabdian({ id }: EditPengabdianProps) {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
-
+  const { data } = useGetDraftPengabdian(id)
   const [anggota, setAnggota] = useAtom(dosenAtom)
 
-  const form = useForm<PenelitianType>({
-    resolver: zodResolver(penelitianSchema),
+  const form = useForm<PengabdianType>({
+    resolver: zodResolver(pengabdianSchema),
     defaultValues: {
       tahun_akademik: "",
       semester: "",
       judul: "",
       bidang: "",
       deskripsi: "",
-      jenis_penelitian: "",
+      jenis_pengabdian: "",
       luaran_kriteria: ""
     }
   })
 
-  const { mutate, isPending } = useCreatePenelitian({
+  // Reset form values when data is loaded
+  useEffect(() => {
+    if (data) {
+      form.reset({
+        tahun_akademik: data.academic_year || "",
+        semester: data.semester || "",
+        judul: data.title || "",
+        bidang: data.bidang || "",
+        deskripsi: data.deskripsi || "",
+        jenis_pengabdian: data.jenis_pengabdian || "",
+        luaran_kriteria: data.jenis_kriteria || ""
+      })
+    }
+  }, [data, form])
+
+  const { mutate, isPending } = useUpdatePengabdian({
     onSuccess: res => {
       if (!res.status) {
         return toast.error(res.message)
@@ -55,12 +74,12 @@ export default function CreatePenelitian() {
       toast.success(res.message)
       setAnggota([])
       form.reset()
-      router.push(`${ROUTE.DASHBOARD}/dosen/penelitian/${res.data.id}?new=true`)
+      router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian/${res.data.id}`)
     },
     onError: err => {
       if (err.response?.data?.errors) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
-          form.setError(key as keyof PenelitianType, {
+          form.setError(key as keyof PengabdianType, {
             message: value as string,
             type: "manual"
           })
@@ -70,7 +89,7 @@ export default function CreatePenelitian() {
   })
 
   const { mutate: mutateDraft, isPending: isPendingDraft } =
-    useCreateDraftPenelitian({
+    useUpdatePengabdian({
       onSuccess: res => {
         if (!res.status) {
           return toast.error(res.message)
@@ -78,12 +97,12 @@ export default function CreatePenelitian() {
         toast.success(res.message)
         setAnggota([])
         form.reset()
-        router.push(`${ROUTE.DASHBOARD}/dosen/penelitian`)
+        router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian`)
       },
       onError: err => {
         if (err.response?.data?.errors) {
           for (const [key, value] of Object.entries(err.response.data.errors)) {
-            form.setError(key as keyof PenelitianType, {
+            form.setError(key as keyof PengabdianType, {
               message: value as string,
               type: "manual"
             })
@@ -92,38 +111,15 @@ export default function CreatePenelitian() {
       }
     })
 
-  const onDraft = async (data: PenelitianType) => {
-    const datas = {
-      ...data,
-      is_draft: true,
-      anggota
-    }
-    mutateDraft(datas)
-  }
+  const { data: listPengabdian, isFetching } = useGetListPengabdian()
 
-  const onSubmit = async (data: PenelitianType) => {
-    const datas = {
-      ...data,
-      anggota
-    }
+  const watchJenisPengabdian = form.watch("jenis_pengabdian")
 
-    mutate(datas)
-  }
-
-  const { data: listPenelitian, isFetching } = useGetListPenelitian()
-
-  const watchJenisPenelitian = form.watch("jenis_penelitian")
-
-  const kriteria = listPenelitian?.data.find(
-    item => item.id === watchJenisPenelitian
-  )?.kriteria
+  const kriteria = listPengabdian?.data.filter(
+    item => item.id === watchJenisPengabdian
+  )[0]?.kriteria
 
   const columnsView = columnAnggotaView()
-
-  const handleReset = () => {
-    form.reset()
-    setAnggota([])
-  }
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
@@ -134,17 +130,58 @@ export default function CreatePenelitian() {
     setTahunAkademik(akademikYears)
   }, [])
 
+  // Set anggota data when draft pengabdian data is loaded
+  useEffect(() => {
+    if (data?.anggota) {
+      // Filter out the leader (is_leader = 1) and map to DosenSchemaType format
+      const anggotaData = data.anggota
+        .filter(member => member.is_leader !== 1)
+        .map(member => ({
+          nidn: member.nidn || "",
+          name: member.name,
+          name_with_title: member.name_with_title || "",
+          prodi: member.prodi,
+          phone_number: member.phone_number,
+          email: member.email,
+          scholar_id: member.scholar_id,
+          scopus_id: member.scopus_id,
+          job_functional: member.job_functional,
+          affiliate_campus: member.affiliate_campus
+        }))
+      setAnggota(anggotaData)
+    }
+  }, [data?.anggota, setAnggota])
+
+  const onDraft = async (data: PengabdianType) => {
+    const datas = {
+      ...data,
+      is_draft: true,
+      anggota
+    }
+    mutateDraft({ id, data: datas })
+  }
+
+  const onSubmit = async (data: PengabdianType) => {
+    const datas = {
+      ...data,
+      is_draft: false,
+      anggota
+    }
+
+    mutate({ id, data: datas })
+  }
+
   return (
     <div>
-      <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/penelitian`}>
-        Create Penelitian
+      <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/pengabdian`}>
+        Edit Pengabdian
       </Breadcrumb>
       <Card className='max-w-full'>
         <CardContent className='py-6'>
           <Form form={form} onSubmit={onSubmit}>
             <div className='flex w-full flex-col gap-4'>
               <Divider
-                text='data penelitian-tahap 1'
+                text='data pengabdian-tahap 1'
                 className='w-[34%] lg:w-[43%]'
               />
               <div className='flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
@@ -181,11 +218,11 @@ export default function CreatePenelitian() {
                 label='abstrak'
                 control={form.control}
               />
-              <ModalJenisPenelitian
-                data={listPenelitian?.data || []}
+              <ModalJenisPengabdian
+                data={listPengabdian?.data || []}
                 isFetching={isFetching}
                 control={form.control}
-                name='jenis_penelitian'
+                name='jenis_pengabdian'
               />
               {kriteria && (
                 <SelectField
@@ -197,34 +234,16 @@ export default function CreatePenelitian() {
               )}
             </div>
 
-            {/* <div className='mt-4 flex w-full flex-col gap-4 lg:flex-row lg:items-center'>
-              <Button
-                type='button'
-                className='grow capitalize'
-                onClick={() => {}}
-              >
-                unduh template proposal
-              </Button>
-              <Button
-                type='button'
-                className='grow capitalize'
-                onClick={() => {}}
-              >
-                unggah proposal
-              </Button>
-            </div> */}
-
-            <DataKetuaPenelitian />
+            <DataKetuaPengabdian />
 
             <div className='mt-4 flex w-full flex-col gap-4'>
               <Divider
-                text='data anggota (tahap pilih anggota) penelitian-tahap 2.2'
+                text='data anggota (tahap pilih anggota) pengabdian-tahap 2.2'
                 className='w-[17.5%] lg:w-[36%]'
               />
               <div className='flex flex-col gap-2 lg:flex-row'>
                 <ModalDosen />
                 <ModalDosenManual />
-                {/* <ModalMahasiswaManual /> */}
               </div>
 
               <div>
@@ -252,14 +271,6 @@ export default function CreatePenelitian() {
               >
                 Submit & upload proposal
                 {isPending && <Loader2Icon className='ml-2 animate-spin' />}
-              </Button>
-              <Button
-                type='reset'
-                variant='secondary'
-                className='mt-4 w-full border border-muted-foreground capitalize'
-                onClick={handleReset}
-              >
-                Reset Form
               </Button>
             </div>
           </Form>

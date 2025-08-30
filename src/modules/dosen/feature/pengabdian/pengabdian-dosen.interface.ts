@@ -10,6 +10,7 @@ export interface PengabdianDosen {
   title: string
   leader: string
   academic_year: string
+  is_draft: boolean
   created_date: Date
   status: StatusData
   existFile: boolean

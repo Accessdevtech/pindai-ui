@@ -10,7 +10,7 @@ import { useState } from "react"
 import { useDebounce } from "use-debounce"
 import { useGetAnggota } from "../hook/use-pengabdian/get-anggota"
 import {
-  anggotaAtom,
+  dosenAtom,
   isDialogOpenAtom,
   selectedAnggotaAtom
 } from "../state/store"
@@ -23,7 +23,7 @@ export default function ModalDosen() {
   const [perPage, setPerPage] = useState(10)
   const [openModal, setOpenModal] = useAtom(isDialogOpenAtom)
 
-  const setAnggota = useSetAtom(anggotaAtom)
+  const setAnggota = useSetAtom(dosenAtom)
   const { data, refetch, isFetching } = useGetAnggota(
     currentPage,
     perPage,

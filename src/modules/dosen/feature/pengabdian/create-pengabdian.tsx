@@ -22,16 +22,17 @@ import DataKetuaPengabdian from "./components/data-ketua-pengabdian"
 import ModalDosen from "./components/modal-dosen"
 import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPengabdian from "./components/modal-jenis-pengabdian"
+import { useCreateDraftPengabdian } from "./hook/use-pengabdian/create-draft-pengabdian"
 import { useCreatePengabdian } from "./hook/use-pengabdian/create-pengabdian"
 import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
 import { PengabdianType, pengabdianSchema } from "./schema/pengabdian-schema"
-import { anggotaAtom } from "./state/store"
+import { dosenAtom } from "./state/store"
 
 export default function CreatePengabdian() {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
 
-  const [anggota, setAnggota] = useAtom(anggotaAtom)
+  const [anggota, setAnggota] = useAtom(dosenAtom)
 
   const form = useForm<PengabdianType>({
     resolver: zodResolver(pengabdianSchema),
@@ -67,6 +68,38 @@ export default function CreatePengabdian() {
       }
     }
   })
+
+  const { mutate: mutateDraft, isPending: isPendingDraft } =
+    useCreateDraftPengabdian({
+      onSuccess: res => {
+        if (!res.status) {
+          return toast.error(res.message)
+        }
+        toast.success(res.message)
+        setAnggota([])
+        form.reset()
+        router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian`)
+      },
+      onError: err => {
+        if (err.response?.data?.errors) {
+          for (const [key, value] of Object.entries(err.response.data.errors)) {
+            form.setError(key as keyof PengabdianType, {
+              message: value as string,
+              type: "manual"
+            })
+          }
+        }
+      }
+    })
+
+  const onDraft = async (data: PengabdianType) => {
+    const datas = {
+      ...data,
+      is_draft: true,
+      anggota
+    }
+    mutateDraft(datas)
+  }
 
   const onSubmit = async (data: PengabdianType) => {
     const datas = {
@@ -183,13 +216,16 @@ export default function CreatePengabdian() {
 
             <div className='flex items-center gap-4'>
               <Button
-                type='submit'
+                type='button'
                 variant='outline'
                 className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
-                disabled={isPending}
+                disabled={isPendingDraft}
+                onClick={() => onDraft(form.getValues())}
               >
-                Simpan Draft
-                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+                Draft as form
+                {isPendingDraft && (
+                  <Loader2Icon className='ml-2 animate-spin' />
+                )}
               </Button>
               <Button
                 type='submit'

@@ -88,6 +88,29 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
     }
   })
 
+  const { mutate: mutateDraft, isPending: isPendingDraft } =
+    useUpdatePenelitian({
+      onSuccess: res => {
+        if (!res.status) {
+          return toast.error(res.message)
+        }
+        toast.success(res.message)
+        setAnggota([])
+        form.reset()
+        router.push(`${ROUTE.DASHBOARD}/dosen/penelitian`)
+      },
+      onError: err => {
+        if (err.response?.data?.errors) {
+          for (const [key, value] of Object.entries(err.response.data.errors)) {
+            form.setError(key as keyof PenelitianType, {
+              message: value as string,
+              type: "manual"
+            })
+          }
+        }
+      }
+    })
+
   const { data: listPenelitian, isFetching } = useGetListPenelitian()
 
   const watchJenisPenelitian = form.watch("jenis_penelitian")
@@ -135,8 +158,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
       is_draft: true,
       anggota
     }
-    // console.log(datas)
-    mutate({ id, data: datas })
+    mutateDraft({ id, data: datas })
   }
 
   const onSubmit = async (data: PenelitianType) => {
@@ -234,11 +256,13 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
                 type='button'
                 variant='outline'
                 className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
-                disabled={isPending}
+                disabled={isPendingDraft}
                 onClick={() => onDraft(form.getValues())}
               >
                 Draft as form
-                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+                {isPendingDraft && (
+                  <Loader2Icon className='ml-2 animate-spin' />
+                )}
               </Button>
               <Button
                 type='submit'

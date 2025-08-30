@@ -3,7 +3,7 @@ import { atom } from "jotai"
 import { DosenSchemaType } from "../schema/dosen-schema"
 import { MahasiswaSchemaType } from "../schema/mahasiswa-schema"
 
-export const anggotaAtom = atom<DosenSchemaType[]>([])
+export const dosenAtom = atom<DosenSchemaType[]>([])
 export const mahasiswaAtom = atom<MahasiswaSchemaType[]>([])
 export const selectedAnggotaAtom = atom<string[]>([])
 export const isDialogOpenAtom = atom<boolean>(false)

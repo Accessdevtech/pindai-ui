@@ -8,10 +8,10 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom, useSetAtom } from "jotai"
 import { useForm } from "react-hook-form"
 import { DosenSchemaType, dosenSchema } from "../schema/dosen-schema"
-import { anggotaAtom, isDialogOpenManualAtom } from "../state/store"
+import { dosenAtom, isDialogOpenManualAtom } from "../state/store"
 
 export default function ModalDosenManual() {
-  const setAnggota = useSetAtom(anggotaAtom)
+  const setAnggota = useSetAtom(dosenAtom)
   const [openModalManual, setOpenModalManual] = useAtom(isDialogOpenManualAtom)
   const formAnggotaManual = useForm<DosenSchemaType>({
     resolver: zodResolver(dosenSchema),

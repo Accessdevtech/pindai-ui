@@ -90,7 +90,7 @@ export const columnPenelitian = ({
             ) : null}
             {isStatusPending && (
               <>
-                {/* {!isDraft && (
+                {!isDraft && (
                   <Tooltip contentText='Edit penelitian'>
                     <Link
                       href={`${ROUTE.DASHBOARD}/dosen/penelitian/edit/${row.original.id}`}
@@ -99,7 +99,7 @@ export const columnPenelitian = ({
                       <EditIcon />
                     </Link>
                   </Tooltip>
-                )} */}
+                )}
                 {!row.original.existFile && (
                   <Alert
                     Icon={TrashIcon}

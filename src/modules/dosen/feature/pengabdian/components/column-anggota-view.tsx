@@ -4,7 +4,7 @@ import { useAtom } from "jotai"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 import { DosenSchemaType } from "../schema/dosen-schema"
-import { anggotaAtom } from "../state/store"
+import { dosenAtom } from "../state/store"
 
 export const columnAnggotaView = (): ColumnDef<DosenSchemaType>[] => {
   return [
@@ -57,7 +57,7 @@ export const columnAnggotaView = (): ColumnDef<DosenSchemaType>[] => {
       id: "action",
       header: "Aksi",
       cell: ({ row }) => {
-        const [anggotaValue, setAnggotaValue] = useAtom(anggotaAtom)
+        const [anggotaValue, setAnggotaValue] = useAtom(dosenAtom)
         const item = row.original
         const [open, setOpen] = useState(false)
 
