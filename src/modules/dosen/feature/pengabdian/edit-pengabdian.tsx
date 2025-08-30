@@ -22,11 +22,12 @@ import DataKetuaPengabdian from "./components/data-ketua-pengabdian"
 import ModalDosen from "./components/modal-dosen"
 import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPengabdian from "./components/modal-jenis-pengabdian"
+import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useGetDraftPengabdian } from "./hook/use-pengabdian/get-draft"
 import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
 import { useUpdatePengabdian } from "./hook/use-pengabdian/update-pengabdian"
 import { pengabdianSchema, PengabdianType } from "./schema/pengabdian-schema"
-import { dosenAtom } from "./state/store"
+import { anggotaAtom } from "./state/store"
 
 interface EditPengabdianProps {
   id: string
@@ -36,7 +37,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
   const { data } = useGetDraftPengabdian(id)
-  const [anggota, setAnggota] = useAtom(dosenAtom)
+  const [anggota, setAnggota] = useAtom(anggotaAtom)
 
   const form = useForm<PengabdianType>({
     resolver: zodResolver(pengabdianSchema),
@@ -140,6 +141,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
           nidn: member.nidn || "",
           name: member.name,
           name_with_title: member.name_with_title || "",
+          fakultas: member.fakultas,
           prodi: member.prodi,
           phone_number: member.phone_number,
           email: member.email,
@@ -244,6 +246,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
               <div className='flex flex-col gap-2 lg:flex-row'>
                 <ModalDosen />
                 <ModalDosenManual />
+                <ModalMahasiswaManual />
               </div>
 
               <div>

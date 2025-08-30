@@ -45,6 +45,7 @@ export interface Anggota {
   nidn?: string
   name: string
   name_with_title?: string
+  fakultas: string
   prodi: string
   phone_number: string
   email: string

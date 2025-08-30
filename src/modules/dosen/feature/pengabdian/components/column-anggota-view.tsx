@@ -3,10 +3,10 @@ import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
-import { DosenSchemaType } from "../schema/dosen-schema"
-import { dosenAtom } from "../state/store"
+import { AnggotaSchemaType } from "../schema/dosen-schema"
+import { anggotaAtom } from "../state/store"
 
-export const columnAnggotaView = (): ColumnDef<DosenSchemaType>[] => {
+export const columnAnggotaView = (): ColumnDef<AnggotaSchemaType>[] => {
   return [
     {
       id: "no",
@@ -24,6 +24,10 @@ export const columnAnggotaView = (): ColumnDef<DosenSchemaType>[] => {
     {
       accessorKey: "name_with_title",
       header: "Nama Dengan Gelar"
+    },
+    {
+      accessorKey: "fakultas",
+      header: "Fakultas"
     },
     {
       accessorKey: "prodi",
@@ -57,7 +61,7 @@ export const columnAnggotaView = (): ColumnDef<DosenSchemaType>[] => {
       id: "action",
       header: "Aksi",
       cell: ({ row }) => {
-        const [anggotaValue, setAnggotaValue] = useAtom(dosenAtom)
+        const [anggotaValue, setAnggotaValue] = useAtom(anggotaAtom)
         const item = row.original
         const [open, setOpen] = useState(false)
 

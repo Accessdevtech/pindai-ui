@@ -6,26 +6,30 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { useSetAtom } from "jotai"
 import { useState } from "react"
 import { useForm } from "react-hook-form"
-import {
-  mahasiswaSchema,
-  MahasiswaSchemaType
-} from "../schema/mahasiswa-schema"
-import { mahasiswaAtom } from "../state/store"
+import { anggotaSchema, AnggotaSchemaType } from "../schema/dosen-schema"
+import { anggotaAtom } from "../state/store"
 
 export default function ModalMahasiswaManual() {
-  const setMahasiswa = useSetAtom(mahasiswaAtom)
+  const setAnggota = useSetAtom(anggotaAtom)
   const [open, setOpen] = useState(false)
-  const formMahasiswaManual = useForm<MahasiswaSchemaType>({
-    resolver: zodResolver(mahasiswaSchema),
+  const formMahasiswaManual = useForm<AnggotaSchemaType>({
+    resolver: zodResolver(anggotaSchema),
     defaultValues: {
-      nim: "",
+      nidn: "",
       name: "",
+      name_with_title: "-",
       fakultas: "",
-      prodi: ""
+      prodi: "",
+      phone_number: "-",
+      email: "-",
+      scholar_id: "-",
+      scopus_id: "-",
+      job_functional: "Mahasiswa",
+      affiliate_campus: "-"
     }
   })
-  const onSubmitMahasiswaManual = (data: MahasiswaSchemaType) => {
-    setMahasiswa(prevMahasiswa => [...prevMahasiswa, data])
+  const onSubmitMahasiswaManual = (data: AnggotaSchemaType) => {
+    setAnggota(prevMahasiswa => [...prevMahasiswa, data])
     setOpen(false)
   }
   return (
@@ -43,7 +47,7 @@ export default function ModalMahasiswaManual() {
       <Form form={formMahasiswaManual}>
         <InputField
           label='nim'
-          name='nim'
+          name='nidn'
           control={formMahasiswaManual.control}
         />
         <InputField

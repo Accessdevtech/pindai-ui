@@ -22,17 +22,18 @@ import DataKetuaPengabdian from "./components/data-ketua-pengabdian"
 import ModalDosen from "./components/modal-dosen"
 import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPengabdian from "./components/modal-jenis-pengabdian"
+import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useCreateDraftPengabdian } from "./hook/use-pengabdian/create-draft-pengabdian"
 import { useCreatePengabdian } from "./hook/use-pengabdian/create-pengabdian"
 import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
 import { PengabdianType, pengabdianSchema } from "./schema/pengabdian-schema"
-import { dosenAtom } from "./state/store"
+import { anggotaAtom } from "./state/store"
 
 export default function CreatePengabdian() {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
 
-  const [anggota, setAnggota] = useAtom(dosenAtom)
+  const [anggota, setAnggota] = useAtom(anggotaAtom)
 
   const form = useForm<PengabdianType>({
     resolver: zodResolver(pengabdianSchema),
@@ -133,6 +134,8 @@ export default function CreatePengabdian() {
     setAnggota([])
   }
 
+  console.log(anggota)
+
   return (
     <div>
       <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/pengabdian`}>
@@ -206,7 +209,7 @@ export default function CreatePengabdian() {
               <div className='flex flex-col gap-2 lg:flex-row'>
                 <ModalDosen />
                 <ModalDosenManual />
-                {/* <ModalMahasiswaManual /> */}
+                <ModalMahasiswaManual />
               </div>
 
               <div>

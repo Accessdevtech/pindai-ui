@@ -70,8 +70,6 @@ export default function CreatePenelitian() {
     }
   })
 
-  console.log(anggota)
-
   const { mutate: mutateDraft, isPending: isPendingDraft } =
     useCreateDraftPenelitian({
       onSuccess: res => {

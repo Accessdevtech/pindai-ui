@@ -7,18 +7,19 @@ import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom, useSetAtom } from "jotai"
 import { useForm } from "react-hook-form"
-import { DosenSchemaType, dosenSchema } from "../schema/dosen-schema"
-import { dosenAtom, isDialogOpenManualAtom } from "../state/store"
+import { AnggotaSchemaType, anggotaSchema } from "../schema/dosen-schema"
+import { anggotaAtom, isDialogOpenManualAtom } from "../state/store"
 
 export default function ModalDosenManual() {
-  const setAnggota = useSetAtom(dosenAtom)
+  const setAnggota = useSetAtom(anggotaAtom)
   const [openModalManual, setOpenModalManual] = useAtom(isDialogOpenManualAtom)
-  const formAnggotaManual = useForm<DosenSchemaType>({
-    resolver: zodResolver(dosenSchema),
+  const formAnggotaManual = useForm<AnggotaSchemaType>({
+    resolver: zodResolver(anggotaSchema),
     defaultValues: {
       nidn: "",
       name: "",
       name_with_title: "",
+      fakultas: "",
       prodi: "",
       phone_number: "",
       email: "",
@@ -28,24 +29,24 @@ export default function ModalDosenManual() {
       affiliate_campus: ""
     }
   })
-  const onSubmitAnggotaManual = (data: DosenSchemaType) => {
+  const onSubmitAnggotaManual = (data: AnggotaSchemaType) => {
     setAnggota(prevAnggota => [...prevAnggota, data])
     setOpenModalManual(false)
   }
   return (
     <Modal
-      title='Daftar anggota pengabdian manual'
+      title='Daftar dosen pengabdian manual'
       open={openModalManual}
       setOpen={setOpenModalManual}
-      name='tambah anggota manual'
-      description='Tambahkan anggota pengabdian secara manual dengan mengisi form yang tersedia'
-      tooltipContent='Detail anggota pengabdian'
+      name='tambah dosen manual'
+      description='Tambahkan dosen pengabdian secara manual dengan mengisi form yang tersedia'
+      tooltipContent='Detail dosen pengabdian'
       variant='outline'
       btnStyle='border-primary text-primary hover:bg-primary hover:text-primary-foreground'
       className='max-w-2xl'
     >
       <Form form={formAnggotaManual}>
-        <div className='flex flex-wrap gap-4'>
+        <div className='grid grid-cols-2 place-content-center content-center gap-4'>
           <InputField
             label='NIDN/NIM'
             name='nidn'
@@ -60,6 +61,11 @@ export default function ModalDosenManual() {
           <InputField
             label='nama dengan gelar'
             name='name_with_title'
+            control={formAnggotaManual.control}
+          />
+          <InputField
+            label='fakultas'
+            name='fakultas'
             control={formAnggotaManual.control}
           />
           <InputField
@@ -88,16 +94,16 @@ export default function ModalDosenManual() {
             name='scopus_id'
             control={formAnggotaManual.control}
           />
+          <InputField
+            label='Affiliasi kampus'
+            name='affiliate_campus'
+            control={formAnggotaManual.control}
+          />
           <SelectField
             control={formAnggotaManual.control}
             name='job_functional'
             label='Jabatan fungsional'
             options={jabatanFungsional}
-          />
-          <InputField
-            label='Affiliasi kampus'
-            name='affiliate_campus'
-            control={formAnggotaManual.control}
           />
         </div>
         <Button

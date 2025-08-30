@@ -1,10 +1,8 @@
 import { StatusData } from "@/interface/type"
 import { atom } from "jotai"
-import { DosenSchemaType } from "../schema/dosen-schema"
-import { MahasiswaSchemaType } from "../schema/mahasiswa-schema"
+import { AnggotaSchemaType } from "../schema/dosen-schema"
 
-export const dosenAtom = atom<DosenSchemaType[]>([])
-export const mahasiswaAtom = atom<MahasiswaSchemaType[]>([])
+export const anggotaAtom = atom<AnggotaSchemaType[]>([])
 export const selectedAnggotaAtom = atom<string[]>([])
 export const isDialogOpenAtom = atom<boolean>(false)
 export const isDialogOpenManualAtom = atom<boolean>(false)

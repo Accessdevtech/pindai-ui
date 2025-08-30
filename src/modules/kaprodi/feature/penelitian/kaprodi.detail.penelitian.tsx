@@ -39,7 +39,6 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
   }>()
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPenelitian(id)
-  console.log(data)
   const { mutate: approved } = useApprovePenelitian({
     onSuccess(res) {
       if (res.status) {
