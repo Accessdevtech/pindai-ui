@@ -7,27 +7,27 @@ import {
 } from "./validation-utils"
 
 /**
- * Base penelitian schema containing common validation logic
+ * Base pengabdian schema containing common validation logic
  * This schema serves as the foundation for both draft and final submission validations
  */
 
 // Common field definitions that are shared between draft and final schemas
-export const penelitianBaseFields = {
+export const pengabdianBaseFields = {
   // Required fields that are always needed
   tahun_akademik: academicYearValidation,
   semester: semesterValidation,
 
-  // Core penelitian fields with proper validation
-  judul: createRequiredString("Judul penelitian", 10),
-  bidang: createRequiredString("Bidang penelitian"),
-  jenis_penelitian: createRequiredString("Jenis penelitian"),
-  deskripsi: createTextAreaValidation("Deskripsi penelitian", 2000),
+  // Core pengabdian fields with proper validation
+  judul: createRequiredString("Judul pengabdian", 10),
+  bidang: createRequiredString("Bidang pengabdian"),
+  jenis_pengabdian: createRequiredString("Jenis pengabdian"),
+  deskripsi: createTextAreaValidation("Deskripsi pengabdian", 2000),
   luaran_kriteria: createRequiredString("Luaran kriteria")
 } as const
 
 // Optional field definitions for draft scenarios
 // Only tahun_akademik and semester are required for drafts
-export const penelitianOptionalFields = {
+export const pengabdianOptionalFields = {
   // Required fields for drafts - only academic year and semester
   tahun_akademik: academicYearValidation,
   semester: semesterValidation,
@@ -35,7 +35,7 @@ export const penelitianOptionalFields = {
   // All other fields are completely optional for drafts
   judul: z.string().optional(),
   bidang: z.string().optional(),
-  jenis_penelitian: z.string().optional(),
+  jenis_pengabdian: z.string().optional(),
   deskripsi: z.string().optional(),
   luaran_kriteria: z.string().optional()
 } as const
@@ -43,61 +43,61 @@ export const penelitianOptionalFields = {
 /**
  * Final submission schema - all fields are required
  */
-export const penelitianFinalSchema = z.object(penelitianBaseFields)
+export const pengabdianFinalSchema = z.object(pengabdianBaseFields)
 
 /**
  * Draft submission schema - most fields are optional
  */
-export const penelitianDraftSchema = z.object(penelitianOptionalFields)
+export const pengabdianDraftSchema = z.object(pengabdianOptionalFields)
 
 /**
  * Union type for handling both draft and final submissions
  */
-export const penelitianUnionSchema = z.union([
-  penelitianFinalSchema.extend({ is_draft: z.literal(false) }),
-  penelitianDraftSchema.extend({ is_draft: z.literal(true) })
+export const pengabdianUnionSchema = z.union([
+  pengabdianFinalSchema.extend({ is_draft: z.literal(false) }),
+  pengabdianDraftSchema.extend({ is_draft: z.literal(true) })
 ])
 
 /**
  * Discriminated union schema that automatically validates based on draft status
  */
-export const penelitianDiscriminatedSchema = z.discriminatedUnion("is_draft", [
+export const pengabdianDiscriminatedSchema = z.discriminatedUnion("is_draft", [
   z.object({
     is_draft: z.literal(false),
-    ...penelitianBaseFields
+    ...pengabdianBaseFields
   }),
   z.object({
     is_draft: z.literal(true),
-    ...penelitianOptionalFields
+    ...pengabdianOptionalFields
   })
 ])
 
 /**
  * Type definitions
  */
-export type PenelitianFinalType = z.infer<typeof penelitianFinalSchema>
-export type PenelitianDraftType = z.infer<typeof penelitianDraftSchema>
-export type PenelitianUnionType = z.infer<typeof penelitianUnionSchema>
-export type PenelitianDiscriminatedType = z.infer<
-  typeof penelitianDiscriminatedSchema
+export type PengabdianFinalType = z.infer<typeof pengabdianFinalSchema>
+export type PengabdianDraftType = z.infer<typeof pengabdianDraftSchema>
+export type PengabdianUnionType = z.infer<typeof pengabdianUnionSchema>
+export type PengabdianDiscriminatedType = z.infer<
+  typeof pengabdianDiscriminatedSchema
 >
 
 /**
- * Utility function to create a penelitian schema based on draft status
+ * Utility function to create a pengabdian schema based on draft status
  * @param isDraft - Boolean indicating if this is a draft submission
  * @returns Appropriate schema for the submission type
  */
-export const createPenelitianSchema = (isDraft: boolean) => {
-  return isDraft ? penelitianDraftSchema : penelitianFinalSchema
+export const createPengabdianSchema = (isDraft: boolean) => {
+  return isDraft ? pengabdianDraftSchema : pengabdianFinalSchema
 }
 
 /**
- * Validation helper to check if penelitian data is valid for final submission
- * @param data - Penelitian data to validate
+ * Validation helper to check if pengabdian data is valid for final submission
+ * @param data - Pengabdian data to validate
  * @returns Validation result with detailed error information
  */
-export const validatePenelitianForFinalSubmission = (data: unknown) => {
-  const result = penelitianFinalSchema.safeParse(data)
+export const validatePengabdianForFinalSubmission = (data: unknown) => {
+  const result = pengabdianFinalSchema.safeParse(data)
 
   if (!result.success) {
     const missingFields = result.error.issues
@@ -133,11 +133,11 @@ export const validatePenelitianForFinalSubmission = (data: unknown) => {
 
 /**
  * Validation helper for draft submissions with completion percentage
- * @param data - Draft penelitian data to validate
+ * @param data - Draft pengabdian data to validate
  * @returns Validation result with completion information
  */
-export const validatePenelitianDraft = (data: unknown) => {
-  const draftResult = penelitianDraftSchema.safeParse(data)
+export const validatePengabdianDraft = (data: unknown) => {
+  const draftResult = pengabdianDraftSchema.safeParse(data)
 
   if (!draftResult.success) {
     return {
@@ -148,7 +148,7 @@ export const validatePenelitianDraft = (data: unknown) => {
   }
 
   // Calculate completion percentage based on filled fields
-  const totalFields = Object.keys(penelitianBaseFields).length
+  const totalFields = Object.keys(pengabdianBaseFields).length
   const filledFields = Object.entries(draftResult.data).filter(
     ([_, value]) => value && value.toString().trim() !== ""
   ).length
@@ -156,7 +156,7 @@ export const validatePenelitianDraft = (data: unknown) => {
   const completionPercentage = Math.round((filledFields / totalFields) * 100)
 
   // Check if ready for final submission
-  const finalValidation = validatePenelitianForFinalSubmission(data)
+  const finalValidation = validatePengabdianForFinalSubmission(data)
 
   return {
     isValid: true,

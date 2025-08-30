@@ -72,8 +72,8 @@ export const formatAcademicYearForDisplay = (backendFormat: string): string => {
 
 export const formatAcademicYearForBackend = (displayFormat: string): string => {
   // Convert "2024/2025" to "20242025"
-  if (displayFormat.includes('/')) {
-    return displayFormat.replace('/', '')
+  if (displayFormat.includes("/")) {
+    return displayFormat.replace("/", "")
   }
   return displayFormat
 }
@@ -82,24 +82,25 @@ export const formatAcademicYearForBackend = (displayFormat: string): string => {
 export const academicYearValidation = z
   .string()
   .refine(
-    (value) => {
+    value => {
       // Accept display format: 2024/2025
       const displayFormatRegex = /^[0-9]{4}\/[0-9]{4}$/
       // Accept backend format: 20242025
       const backendFormatRegex = /^[0-9]{8}$/
-      
+
       return displayFormatRegex.test(value) || backendFormatRegex.test(value)
     },
     {
-      message: "Format tahun akademik tidak valid (contoh: 2024/2025 atau 20242025)"
+      message:
+        "Format tahun akademik tidak valid (contoh: 2024/2025 atau 20242025)"
     }
   )
-  .transform((value) => {
+  .transform(value => {
     // Always transform to backend format for consistent storage
     return formatAcademicYearForBackend(value)
   })
   .refine(
-    (value) => {
+    value => {
       // Validate that the years are consecutive
       if (value.length === 8) {
         const startYear = parseInt(value.substring(0, 4))
@@ -112,12 +113,9 @@ export const academicYearValidation = z
       message: "Tahun akademik harus berurutan (contoh: 2024/2025)"
     }
   )
-  .refine(
-    (value) => value.length > 0,
-    {
-      message: "Tahun akademik harus diisi"
-    }
-  )
+  .refine(value => value.length > 0, {
+    message: "Tahun akademik harus diisi"
+  })
 
 // Semester validation
 export const semesterValidation = z
@@ -198,7 +196,7 @@ export const validateDraftBeforeSave = (data: {
   const errors: string[] = []
   const warnings: string[] = []
   const missingCriticalFields: string[] = []
-  
+
   // Critical field validation - these should be filled even for drafts
   if (!data.judul || data.judul.trim().length === 0) {
     errors.push("Judul penelitian harus diisi")
@@ -206,38 +204,40 @@ export const validateDraftBeforeSave = (data: {
   } else if (data.judul.trim().length < 10) {
     errors.push("Judul penelitian minimal 10 karakter")
   }
-  
+
   if (!data.deskripsi || data.deskripsi.trim().length === 0) {
     errors.push("Abstrak penelitian harus diisi")
     missingCriticalFields.push("deskripsi")
   } else if (data.deskripsi.trim().length < 50) {
-    warnings.push("Abstrak penelitian sebaiknya lebih dari 50 karakter untuk memberikan deskripsi yang memadai")
+    warnings.push(
+      "Abstrak penelitian sebaiknya lebih dari 50 karakter untuk memberikan deskripsi yang memadai"
+    )
   }
-  
+
   // Important field warnings
   if (!data.tahun_akademik || data.tahun_akademik.trim().length === 0) {
     warnings.push("Tahun akademik belum dipilih")
   }
-  
+
   if (!data.semester || data.semester.trim().length === 0) {
     warnings.push("Semester belum dipilih")
   }
-  
+
   if (!data.bidang || data.bidang.trim().length === 0) {
     warnings.push("Bidang penelitian belum diisi")
   }
-  
+
   if (!data.jenis_penelitian || data.jenis_penelitian.trim().length === 0) {
     warnings.push("Jenis penelitian belum dipilih")
   }
-  
+
   // Calculate completion percentage
   const totalFields = 6 // judul, deskripsi, tahun_akademik, semester, bidang, jenis_penelitian
-  const filledFields = Object.values(data).filter(value => 
-    value && value.toString().trim().length > 0
+  const filledFields = Object.values(data).filter(
+    value => value && value.toString().trim().length > 0
   ).length
   const completionPercentage = Math.round((filledFields / totalFields) * 100)
-  
+
   return {
     isValid: errors.length === 0,
     errors,
@@ -252,19 +252,21 @@ export const validateDraftBeforeSave = (data: {
  * @param title - Title to validate
  * @returns Validation result for title
  */
-export const validateTitle = (title: string): { isValid: boolean; message?: string } => {
+export const validateTitle = (
+  title: string
+): { isValid: boolean; message?: string } => {
   if (!title || title.trim().length === 0) {
     return { isValid: false, message: "Judul penelitian harus diisi" }
   }
-  
+
   if (title.trim().length < 10) {
     return { isValid: false, message: "Judul penelitian minimal 10 karakter" }
   }
-  
+
   if (title.trim().length > 200) {
     return { isValid: false, message: "Judul penelitian maksimal 200 karakter" }
   }
-  
+
   return { isValid: true }
 }
 
@@ -273,22 +275,28 @@ export const validateTitle = (title: string): { isValid: boolean; message?: stri
  * @param abstract - Abstract to validate
  * @returns Validation result for abstract
  */
-export const validateAbstract = (abstract: string): { isValid: boolean; message?: string; warning?: string } => {
+export const validateAbstract = (
+  abstract: string
+): { isValid: boolean; message?: string; warning?: string } => {
   if (!abstract || abstract.trim().length === 0) {
     return { isValid: false, message: "Abstrak penelitian harus diisi" }
   }
-  
+
   if (abstract.trim().length < 50) {
-    return { 
-      isValid: true, 
-      warning: "Abstrak sebaiknya lebih dari 50 karakter untuk memberikan deskripsi yang memadai" 
+    return {
+      isValid: true,
+      warning:
+        "Abstrak sebaiknya lebih dari 50 karakter untuk memberikan deskripsi yang memadai"
     }
   }
-  
+
   if (abstract.trim().length > 2000) {
-    return { isValid: false, message: "Abstrak penelitian maksimal 2000 karakter" }
+    return {
+      isValid: false,
+      message: "Abstrak penelitian maksimal 2000 karakter"
+    }
   }
-  
+
   return { isValid: true }
 }
 
@@ -309,7 +317,8 @@ export const ValidationMessages = {
   MIN_LENGTH: (field: string, length: number) =>
     `${field} minimal ${length} karakter`,
   DRAFT_SAVE_SUCCESS: "Draft berhasil disimpan",
-  DRAFT_VALIDATION_FAILED: "Validasi draft gagal. Periksa field yang wajib diisi.",
+  DRAFT_VALIDATION_FAILED:
+    "Validasi draft gagal. Periksa field yang wajib diisi.",
   TITLE_REQUIRED: "Judul penelitian harus diisi sebelum menyimpan draft",
   ABSTRACT_REQUIRED: "Abstrak penelitian harus diisi sebelum menyimpan draft"
 } as const

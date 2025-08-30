@@ -46,15 +46,6 @@ interface EditPenelitianProps {
 export default function EditPenelitian({ id }: EditPenelitianProps) {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
-  const [titleValidation, setTitleValidation] = useState<{
-    isValid: boolean
-    message?: string
-  }>()
-  const [abstractValidation, setAbstractValidation] = useState<{
-    isValid: boolean
-    message?: string
-    warning?: string
-  }>()
   const { data } = useGetDraftPenelitian(id)
   const [anggota, setAnggota] = useAtom(anggotaAtom)
 
@@ -80,19 +71,19 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
 
   // Reset form values when data is loaded
   useEffect(() => {
-    if (data) {
-      const resetData = {
-        tahun_akademik: data.academic_year || "",
-        semester: data.semester || "",
-        judul: data.title || "",
-        bidang: data.bidang || "",
-        deskripsi: data.deskripsi || "",
-        jenis_penelitian: data.jenis_penelitian || "",
-        luaran_kriteria: data.jenis_kriteria || ""
-      }
-      formSubmit.reset(resetData)
-      formDraft.reset(resetData)
+    if (!data) return
+
+    const resetData = {
+      tahun_akademik: data.academic_year || "",
+      semester: data.semester || "",
+      judul: data.title || "",
+      bidang: data.bidang || "",
+      deskripsi: data.deskripsi || "",
+      jenis_penelitian: data.jenis_penelitian || "",
+      luaran_kriteria: data.jenis_kriteria || ""
     }
+    formSubmit.reset(resetData)
+    formDraft.reset(resetData)
   }, [data, formSubmit, formDraft])
 
   const { mutate, isPending } = useUpdatePenelitian({
@@ -125,7 +116,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
         }
         toast.success(res.message)
         setAnggota([])
-        formSubmit.reset()
+        formDraft.reset()
         router.push(`${ROUTE.DASHBOARD}/dosen/penelitian`)
       },
       onError: err => {
@@ -144,9 +135,9 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
 
   const watchJenisPenelitian = formSubmit.watch("jenis_penelitian")
 
-  const kriteria = listPenelitian?.data.filter(
+  const kriteria = listPenelitian?.data.find(
     item => item.id === watchJenisPenelitian
-  )[0]?.kriteria
+  )?.kriteria
 
   const columnsView = columnAnggotaView()
 

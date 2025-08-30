@@ -97,7 +97,7 @@ export default function CreatePenelitian() {
         }
         toast.success(res.message)
         setAnggota([])
-        formSumbit.reset()
+        formDraft.reset()
         router.push(`${ROUTE.DASHBOARD}/dosen/penelitian`)
       },
       onError: err => {

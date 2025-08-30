@@ -8,9 +8,19 @@ import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  PengabdianDraftType,
+  PengabdianFinalType,
+  pengabdianDraftSchema,
+  pengabdianFinalSchema
+} from "@/schema/pengabdian-base"
+import {
+  PengabdianCompleteDraftType,
+  PengabdianCompleteFinalType
+} from "@/schema/pengabdian-comprehensive"
+import { formatAcademicYearForBackend } from "@/schema/validation-utils"
 import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
-import { formatAcademicYearForBackend } from "@/schema/validation-utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom } from "jotai"
 import { Loader2Icon } from "lucide-react"
@@ -27,7 +37,6 @@ import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useCreateDraftPengabdian } from "./hook/use-pengabdian/create-draft-pengabdian"
 import { useCreatePengabdian } from "./hook/use-pengabdian/create-pengabdian"
 import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
-import { PengabdianType, pengabdianSchema } from "./schema/pengabdian-schema"
 import { anggotaAtom } from "./state/store"
 
 export default function CreatePengabdian() {
@@ -36,17 +45,24 @@ export default function CreatePengabdian() {
 
   const [anggota, setAnggota] = useAtom(anggotaAtom)
 
-  const form = useForm<PengabdianType>({
-    resolver: zodResolver(pengabdianSchema),
-    defaultValues: {
-      tahun_akademik: "",
-      semester: "",
-      judul: "",
-      bidang: "",
-      deskripsi: "",
-      jenis_pengabdian: "",
-      luaran_kriteria: ""
-    }
+  const defaultValues = {
+    tahun_akademik: "",
+    semester: "",
+    judul: "",
+    bidang: "",
+    deskripsi: "",
+    jenis_pengabdian: "",
+    luaran_kriteria: ""
+  }
+
+  const formSubmit = useForm<PengabdianFinalType>({
+    resolver: zodResolver(pengabdianFinalSchema),
+    defaultValues
+  })
+
+  const formDraft = useForm<PengabdianDraftType>({
+    resolver: zodResolver(pengabdianDraftSchema),
+    defaultValues
   })
 
   const { mutate, isPending } = useCreatePengabdian({
@@ -56,13 +72,13 @@ export default function CreatePengabdian() {
       }
       toast.success(res.message)
       setAnggota([])
-      form.reset()
+      formSubmit.reset()
       router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian/${res.data.id}`)
     },
     onError: err => {
       if (err.response?.data?.errors) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
-          form.setError(key as keyof PengabdianType, {
+          formSubmit.setError(key as keyof PengabdianFinalType, {
             message: value as string,
             type: "manual"
           })
@@ -79,13 +95,13 @@ export default function CreatePengabdian() {
         }
         toast.success(res.message)
         setAnggota([])
-        form.reset()
+        formDraft.reset()
         router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian`)
       },
       onError: err => {
         if (err.response?.data?.errors) {
           for (const [key, value] of Object.entries(err.response.data.errors)) {
-            form.setError(key as keyof PengabdianType, {
+            formSubmit.setError(key as keyof PengabdianDraftType, {
               message: value as string,
               type: "manual"
             })
@@ -94,17 +110,16 @@ export default function CreatePengabdian() {
       }
     })
 
-  const onDraft = async (data: PengabdianType) => {
-    const datas = {
+  const onDraft = async (data: PengabdianDraftType) => {
+    const datas: PengabdianCompleteDraftType = {
       ...data,
-      is_draft: true,
       anggota
     }
     mutateDraft(datas)
   }
 
-  const onSubmit = async (data: PengabdianType) => {
-    const datas = {
+  const onSubmit = async (data: PengabdianFinalType) => {
+    const datas: PengabdianCompleteFinalType = {
       ...data,
       anggota
     }
@@ -115,11 +130,11 @@ export default function CreatePengabdian() {
   const columnsView = columnAnggotaView()
 
   const { data: listPengabdian, isFetching } = useGetListPengabdian()
-  const watchJenisPengabdian = form.watch("jenis_pengabdian")
+  const watchJenisPengabdian = formSubmit.watch("jenis_pengabdian")
 
-  const kriteria = listPengabdian?.data.filter(
+  const kriteria = listPengabdian?.data.find(
     item => item.id === watchJenisPengabdian
-  )[0]?.kriteria
+  )?.kriteria
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
@@ -131,7 +146,7 @@ export default function CreatePengabdian() {
   }, [])
 
   const handleReset = () => {
-    form.reset()
+    formSubmit.reset()
     setAnggota([])
   }
 
@@ -142,7 +157,7 @@ export default function CreatePengabdian() {
       </Breadcrumb>
       <Card className='max-w-full'>
         <CardContent className='py-6'>
-          <Form form={form} onSubmit={onSubmit}>
+          <Form form={formSubmit} onSubmit={onSubmit}>
             <div className='flex w-full flex-col gap-4'>
               <Divider
                 text='data pengabdian-tahap 1'
@@ -152,7 +167,7 @@ export default function CreatePengabdian() {
                 <SelectField
                   name='tahun_akademik'
                   label='Tahun Akademik'
-                  control={form.control}
+                  control={formSubmit.control}
                   options={tahunAkademik.map(item => ({
                     id: formatAcademicYearForBackend(item),
                     name: item
@@ -161,7 +176,7 @@ export default function CreatePengabdian() {
                 <SelectField
                   name='semester'
                   label='Semester'
-                  control={form.control}
+                  control={formSubmit.control}
                   options={[
                     {
                       id: "ganjil",
@@ -175,17 +190,25 @@ export default function CreatePengabdian() {
                 />
               </div>
 
-              <InputField name='bidang' label='bidang' control={form.control} />
-              <InputField name='judul' label='judul' control={form.control} />
+              <InputField
+                name='bidang'
+                label='bidang'
+                control={formSubmit.control}
+              />
+              <InputField
+                name='judul'
+                label='judul'
+                control={formSubmit.control}
+              />
               <TextAreaField
                 name='deskripsi'
                 label='abstrak'
-                control={form.control}
+                control={formSubmit.control}
               />
               <ModalJenisPengabdian
                 data={listPengabdian?.data || []}
                 isFetching={isFetching}
-                control={form.control}
+                control={formSubmit.control}
                 name='jenis_pengabdian'
               />
               {kriteria && (
@@ -193,7 +216,7 @@ export default function CreatePengabdian() {
                   name='luaran_kriteria'
                   label='jenis luaran'
                   options={kriteria}
-                  control={form.control}
+                  control={formSubmit.control}
                 />
               )}
             </div>
@@ -222,7 +245,7 @@ export default function CreatePengabdian() {
                 variant='outline'
                 className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
                 disabled={isPendingDraft}
-                onClick={() => onDraft(form.getValues())}
+                onClick={() => onDraft(formSubmit.getValues())}
               >
                 Draft as form
                 {isPendingDraft && (
