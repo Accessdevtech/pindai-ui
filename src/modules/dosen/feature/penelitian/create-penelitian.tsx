@@ -19,9 +19,11 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { columnAnggotaView } from "./components/column-anggota-view"
 import DataKetuaPenelitian from "./components/data-ketua-penelitian"
-import ModalAnggota from "./components/modal-anggota"
-import ModalAnggotaManual from "./components/modal-anggota-manual"
+import ModalDosen from "./components/modal-dosen"
+import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
+import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
+import { useCreateDraftPenelitian } from "./hook/use-penelitian/create-draft-penelitian"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
@@ -42,8 +44,8 @@ export default function CreatePenelitian() {
       bidang: "",
       deskripsi: "",
       jenis_penelitian: "",
-      luaran_kriteria: "",
-    },
+      luaran_kriteria: ""
+    }
   })
 
   const { mutate, isPending } = useCreatePenelitian({
@@ -61,17 +63,49 @@ export default function CreatePenelitian() {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof PenelitianType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
-    },
+    }
   })
+
+  const { mutate: mutateDraft, isPending: isPendingDraft } =
+    useCreateDraftPenelitian({
+      onSuccess: res => {
+        if (!res.status) {
+          return toast.error(res.message)
+        }
+        toast.success(res.message)
+        setAnggota([])
+        form.reset()
+        router.push(`${ROUTE.DASHBOARD}/dosen/penelitian`)
+      },
+      onError: err => {
+        if (err.response?.data?.errors) {
+          for (const [key, value] of Object.entries(err.response.data.errors)) {
+            form.setError(key as keyof PenelitianType, {
+              message: value as string,
+              type: "manual"
+            })
+          }
+        }
+      }
+    })
+
+  const onDraft = async (data: PenelitianType) => {
+    const datas = {
+      ...data,
+      is_draft: true,
+      anggota
+    }
+    mutateDraft(datas)
+  }
 
   const onSubmit = async (data: PenelitianType) => {
     const datas = {
       ...data,
-      anggota,
+      anggota
     }
 
     mutate(datas)
@@ -81,17 +115,22 @@ export default function CreatePenelitian() {
 
   const watchJenisPenelitian = form.watch("jenis_penelitian")
 
-  const kriteria = listPenelitian?.data.filter(
-    item => item.id === watchJenisPenelitian,
-  )[0]?.kriteria
+  const kriteria = listPenelitian?.data.find(
+    item => item.id === watchJenisPenelitian
+  )?.kriteria
 
   const columnsView = columnAnggotaView()
+
+  const handleReset = () => {
+    form.reset()
+    setAnggota([])
+  }
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
     const akademikYears = generateAcademicYears(
       currentYear - 5,
-      currentYear + 5,
+      currentYear + 5
     )
     setTahunAkademik(akademikYears)
   }, [])
@@ -99,7 +138,7 @@ export default function CreatePenelitian() {
   return (
     <div>
       <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/penelitian`}>
-        Buat Penelitian
+        Create Penelitian
       </Breadcrumb>
       <Card className='max-w-full'>
         <CardContent className='py-6'>
@@ -116,7 +155,7 @@ export default function CreatePenelitian() {
                   control={form.control}
                   options={tahunAkademik.map(item => ({
                     id: item.split("/").join(""),
-                    name: item,
+                    name: item
                   }))}
                 />
                 <SelectField
@@ -126,12 +165,12 @@ export default function CreatePenelitian() {
                   options={[
                     {
                       id: "ganjil",
-                      name: "ganjil",
+                      name: "ganjil"
                     },
                     {
                       id: "genap",
-                      name: "genap",
-                    },
+                      name: "genap"
+                    }
                   ]}
                 />
               </div>
@@ -184,8 +223,9 @@ export default function CreatePenelitian() {
                 className='w-[17.5%] lg:w-[36%]'
               />
               <div className='flex flex-col gap-2 lg:flex-row'>
-                <ModalAnggota />
-                <ModalAnggotaManual />
+                <ModalDosen />
+                <ModalDosenManual />
+                <ModalMahasiswaManual />
               </div>
 
               <div>
@@ -193,14 +233,36 @@ export default function CreatePenelitian() {
               </div>
             </div>
 
-            <Button
-              type='submit'
-              className='mt-4 w-full capitalize'
-              disabled={isPending}
-            >
-              simpan
-              {isPending && <Loader2Icon className='ml-2 animate-spin' />}
-            </Button>
+            <div className='flex items-center gap-4'>
+              <Button
+                type='button'
+                variant='outline'
+                className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
+                disabled={isPendingDraft}
+                onClick={() => onDraft(form.getValues())}
+              >
+                Draft as form
+                {isPendingDraft && (
+                  <Loader2Icon className='ml-2 animate-spin' />
+                )}
+              </Button>
+              <Button
+                type='submit'
+                className='mt-4 w-full capitalize'
+                disabled={isPending}
+              >
+                Submit & upload proposal
+                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+              </Button>
+              <Button
+                type='reset'
+                variant='secondary'
+                className='mt-4 w-full border border-muted-foreground capitalize'
+                onClick={handleReset}
+              >
+                Reset Form
+              </Button>
+            </div>
           </Form>
         </CardContent>
       </Card>

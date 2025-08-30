@@ -24,7 +24,7 @@ interface ColumnProdiProps {
 
 export const columnProdi = ({
   fakultas,
-  refetch,
+  refetch
 }: ColumnProdiProps): ColumnDef<IProdi>[] => {
   return [
     {
@@ -33,18 +33,18 @@ export const columnProdi = ({
       cell: ({ row }) => {
         const index = row.index + 1
         return <span>{index}</span>
-      },
+      }
     },
     {
       id: "fakultas",
       accessorKey: "fakultas",
       header: "Fakultas",
-      cell: ({ row }) => row.original.fakultas.name,
+      cell: ({ row }) => row.original.fakultas.name
     },
     {
       id: "name",
       accessorKey: "name",
-      header: "Prodi",
+      header: "Prodi"
     },
     {
       id: "action",
@@ -57,8 +57,8 @@ export const columnProdi = ({
           resolver: zodResolver(prodiSchema),
           defaultValues: {
             name: item.name,
-            fakultas_id: item.fakultas.id,
-          },
+            fakultas_id: item.fakultas.id
+          }
         })
 
         const { mutate: updateData } = useUpdateProdi({
@@ -69,16 +69,16 @@ export const columnProdi = ({
           onError: err => {
             if (err.response?.data.errors) {
               for (const [key, value] of Object.entries(
-                err.response.data.errors,
+                err.response.data.errors
               )) {
                 form.setError(key as keyof ProdiType, {
                   message: value as string,
-                  type: "manual",
+                  type: "manual"
                 })
               }
             }
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const { mutate: deleteData } = useDeleteProdi({
@@ -88,13 +88,13 @@ export const columnProdi = ({
           },
           onError: err => {
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const onSubmit = async (data: ProdiType) => {
           updateData({
             id: item.id,
-            data,
+            data
           })
         }
 
@@ -140,13 +140,14 @@ export const columnProdi = ({
               description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
               className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
               onClick={onDelete}
-              tooltipContentText='hapus kaprodi'
+              tooltipContentText='hapus'
+              triggerAction='Hapus'
               size='icon'
               side='right'
             />
           </span>
         )
-      },
-    },
+      }
+    }
   ]
 }

@@ -13,8 +13,8 @@ export default function LoginForm() {
     resolver: zodResolver(loginSchema),
     defaultValues: {
       email: "",
-      password: "",
-    },
+      password: ""
+    }
   })
 
   const onSubmit = async (data: LoginType) => {
@@ -30,6 +30,7 @@ export default function LoginForm() {
       />
       <InputField
         label='password'
+        forgotPassword
         type='password'
         name='password'
         control={form.control}

@@ -7,7 +7,7 @@ import LoadingPage from "@/components/molecules/loading-page"
 import { useAuthContext } from "@/contexts/auth-context"
 
 function withAuth<T extends React.JSX.IntrinsicAttributes>(
-  WrappedComponent: React.ComponentType<T>,
+  WrappedComponent: React.ComponentType<T>
 ) {
   const Wrapper: React.FC<T> = props => {
     const { user, isLoading, isAuthenticated } = useAuthContext()
@@ -15,12 +15,6 @@ function withAuth<T extends React.JSX.IntrinsicAttributes>(
     const pathname = usePathname()
 
     useEffect(() => {
-      // not have session
-      if (!isLoading && !isAuthenticated && pathname !== "/") {
-        router.push("/")
-        return
-      }
-
       //  have session
       if (
         !isLoading &&
@@ -29,6 +23,11 @@ function withAuth<T extends React.JSX.IntrinsicAttributes>(
         (pathname === `/dashboard` || pathname === "/")
       ) {
         router.push(`/dashboard/${user.role}`)
+        return
+      }
+      // no session
+      if (!isLoading && !isAuthenticated && pathname !== "/forgot-password") {
+        router.push("/")
         return
       }
     }, [user, router, isLoading, isAuthenticated, pathname])

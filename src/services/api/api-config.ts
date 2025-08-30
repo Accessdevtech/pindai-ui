@@ -5,6 +5,9 @@ export const API_ENDPOINTS = {
   LOGIN: "/auth/login",
   LOGOUT: "/auth/logout",
   REGISTER: "/auth/register",
+  FORGOT_PASSWORD: "/auth/forgot-password",
+  RESET_PASSWORD: "/auth/reset-password",
+
   CHANGE_PASSWORD: "/change-password",
 
   DOSEN: "/dosen",
@@ -33,7 +36,7 @@ export const API_ENDPOINTS = {
   LIST_CANCELED_PENGABDIAN: "/list/canceled/pengabdian",
 
   LIST_APPROVED_PUBLIKASI: "/list/approved/publikasi",
-  LIST_CANCELED_PUBLIKASI: "/list/canceled/publikasi",
+  LIST_CANCELED_PUBLIKASI: "/list/canceled/publikasi"
 }
 
 export const API_ENDPOINTS_KEUANGAN = {
@@ -52,7 +55,7 @@ export const API_ENDPOINTS_KEUANGAN = {
 
   APPROVED_PUBLIKASI: "/keuangan/approved/publikasi",
   CANCELED_PUBLIKASI: "/keuangan/canceled/publikasi",
-  RETURNED_PUBLIKASI: "/keuangan/returned/publikasi",
+  RETURNED_PUBLIKASI: "/keuangan/returned/publikasi"
 }
 
 export const API_ENDPOINTS_DPPM = {
@@ -77,7 +80,7 @@ export const API_ENDPOINTS_DPPM = {
   KAPRODI: "/dppm/kaprodi",
   LUARAN: "/dppm/luaran",
   PRODI: "/dppm/prodi",
-  DOSEN: "/dppm/dosen",
+  DOSEN: "/dppm/dosen"
 }
 
 export const API_ENDPOINTS_KAPRODI = {
@@ -100,7 +103,7 @@ export const API_ENDPOINTS_KAPRODI = {
 
   APPROVED_PUBLIKASI: "/kaprodi/approved/publikasi",
   CANCELED_PUBLIKASI: "/kaprodi/canceled/publikasi",
-  RETURNED_PUBLIKASI: "/kaprodi/returned/publikasi",
+  RETURNED_PUBLIKASI: "/kaprodi/returned/publikasi"
 }
 
 export const API_ENDPOINTS_DOSEN = {
@@ -111,6 +114,8 @@ export const API_ENDPOINTS_DOSEN = {
   PUBLIKASI: "/dosen/publikasi",
   PENELITIAN: "/dosen/penelitian",
   PENGABDIAN: "/dosen/pengabdian",
+  DRAFT_PENELITIAN: "/dosen/penelitian/draft",
+  DRAFT_PENGABDIAN: "/dosen/pengabdian/draft",
 
   TRACKING_PENELITIAN: "/dosen/tracking/penelitian",
   TRACKING_PENGABDIAN: "/dosen/tracking/pengabdian",
@@ -120,7 +125,7 @@ export const API_ENDPOINTS_DOSEN = {
   DOWNLOAD_PENGABDIAN: "/dosen/pengabdian/download",
 
   UPLOAD_PENELITIAN: "/dosen/penelitian/upload",
-  UPLOAD_PENGABDIAN: "/dosen/pengabdian/upload",
+  UPLOAD_PENGABDIAN: "/dosen/pengabdian/upload"
 }
 
 export { API_BASE_URL }

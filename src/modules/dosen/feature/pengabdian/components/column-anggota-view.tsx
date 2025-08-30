@@ -3,55 +3,59 @@ import { ColumnDef } from "@tanstack/react-table"
 import { useAtom } from "jotai"
 import { TrashIcon } from "lucide-react"
 import { useState } from "react"
-import { AnggotaType } from "../schema/anggota-schema"
+import { AnggotaSchemaType } from "../schema/dosen-schema"
 import { anggotaAtom } from "../state/store"
 
-export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
+export const columnAnggotaView = (): ColumnDef<AnggotaSchemaType>[] => {
   return [
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <span>{row.index + 1}</span>,
+      cell: ({ row }) => <span>{row.index + 1}</span>
     },
     {
       accessorKey: "nidn",
-      header: "NIDN",
+      header: "NIDN"
     },
     {
       accessorKey: "name",
-      header: "Nama",
+      header: "Nama"
     },
     {
       accessorKey: "name_with_title",
-      header: "Nama Dengan Gelar",
+      header: "Nama Dengan Gelar"
+    },
+    {
+      accessorKey: "fakultas",
+      header: "Fakultas"
     },
     {
       accessorKey: "prodi",
-      header: "Prodi",
+      header: "Prodi"
     },
     {
       accessorKey: "phone_number",
-      header: "Nomor Telepon",
+      header: "Nomor Telepon"
     },
     {
       accessorKey: "email",
-      header: "Email",
+      header: "Email"
     },
     {
       accessorKey: "scholar_id",
-      header: "Scholar ID",
+      header: "Scholar ID"
     },
     {
       accessorKey: "scopus_id",
-      header: "Scopus ID",
+      header: "Scopus ID"
     },
     {
       accessorKey: "job_functional",
-      header: "Jabatan Fungsional",
+      header: "Jabatan Fungsional"
     },
     {
       accessorKey: "affiliate_campus",
-      header: "Kapus afiliasi",
+      header: "Kapus afiliasi"
     },
     {
       id: "action",
@@ -63,7 +67,7 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
 
         const handleClick = () => {
           const newValue = anggotaValue.filter(
-            item => item.nidn !== row.original.nidn,
+            item => item.nidn !== row.original.nidn
           )
           setAnggotaValue(newValue)
         }
@@ -77,12 +81,13 @@ export const columnAnggotaView = (): ColumnDef<AnggotaType>[] => {
             description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
             className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
             onClick={handleClick}
-            tooltipContentText='hapus kaprodi'
+            tooltipContentText='hapus'
+            triggerAction='Hapus'
             size='icon'
             side='right'
           />
         )
-      },
-    },
+      }
+    }
   ]
 }

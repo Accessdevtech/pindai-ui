@@ -10,6 +10,7 @@ export interface PengabdianDosen {
   title: string
   leader: string
   academic_year: string
+  is_draft: boolean
   created_date: Date
   status: StatusData
   existFile: boolean
@@ -44,6 +45,7 @@ export interface Anggota {
   nidn?: string
   name: string
   name_with_title?: string
+  fakultas: string
   prodi: string
   phone_number: string
   email: string

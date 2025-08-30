@@ -1,12 +1,12 @@
 "use client"
+import Alert from "@/components/atom/alert"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
-import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { columnsIdentitas } from "@/modules/dosen/feature/pengabdian/components/column-identitas"
@@ -14,12 +14,14 @@ import { IdentitasTable } from "@/modules/dosen/feature/pengabdian/components/id
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
 import { CheckIcon } from "lucide-react"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useApprovePengabdian } from "./hooks/use-pengabdian/approved-pengabdian"
 import { useCanclePengabdian } from "./hooks/use-pengabdian/cancle-pengabdian"
 import { useGetDetailPengabdian } from "./hooks/use-pengabdian/get-detail-pengabdian"
 
 export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
+  const [alert, setAlert] = useState(false)
   const { data, refetch } = useGetDetailPengabdian(id)
   const { mutate: approved } = useApprovePengabdian({
     onSuccess(res) {
@@ -35,7 +37,7 @@ export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutate: reject } = useCanclePengabdian({
@@ -52,7 +54,7 @@ export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
@@ -64,11 +66,11 @@ export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
         data={[
           {
             name: "Pengabdian",
-            href: `${ROUTE.DASHBOARD}/keuangan/pengabdian`,
+            href: `${ROUTE.DASHBOARD}/keuangan/pengabdian`
           },
           {
-            name: "Detail",
-          },
+            name: "Detail"
+          }
         ]}
       >
         {data?.title}
@@ -110,17 +112,22 @@ export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        {data?.status.keuangan === "pending" && (
+        {data?.existFile && data?.status.keuangan === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
-              <Button
+              <Alert
+                open={alert}
+                setOpen={setAlert}
+                title='Setujui Pengabdian'
                 variant='outline'
+                Icon={CheckIcon}
+                tooltipContentText='Setujui Pengabdian'
+                triggerContent='Setuju'
+                triggerAction='Setuju'
                 className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
+                description='Apakah anda yakin ingin menyetujui pengabdian ini?'
                 onClick={() => approved({ id })}
-              >
-                <CheckIcon />
-                Setuju
-              </Button>
+              />
             </CardContent>
           </Card>
         )}
@@ -137,7 +144,7 @@ export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
               { label: "Jenis Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
-              { label: "Abstrak", value: data?.deskripsi },
+              { label: "Abstrak", value: data?.deskripsi }
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>

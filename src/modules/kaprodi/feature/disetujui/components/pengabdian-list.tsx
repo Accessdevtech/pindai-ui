@@ -1,8 +1,7 @@
 import DataTable from "@/components/molecules/data-table"
 import { Card, CardContent } from "@/components/ui/card"
-import { tahunAkademikAtom } from "@/modules/dosen/feature/penelitian/state/store"
 import { Kaprodi } from "@/modules/kaprodi/kaprodi.interface"
-import { columnVisibilityAtom } from "@/state/store"
+import { columnVisibilityAtom, tahunAkademikAtom } from "@/state/store"
 import { useAtomValue, useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { useDebounce } from "use-debounce"
@@ -21,7 +20,7 @@ export default function PengabdianList({ user }: { user: Kaprodi }) {
     perPage,
     search,
     tahunAkademik,
-    "accepted",
+    "accepted"
   )
 
   const columns = columnPengabdian()
@@ -30,7 +29,7 @@ export default function PengabdianList({ user }: { user: Kaprodi }) {
     setColumnVisibility({
       status_kaprodi: false,
       status_dppm: false,
-      status_keuangan: false,
+      status_keuangan: false
     })
   }, [])
   return (
@@ -39,7 +38,7 @@ export default function PengabdianList({ user }: { user: Kaprodi }) {
         <DataTable
           search
           filtering={{
-            tahunAkademik: true,
+            tahunAkademik: true
           }}
           role={user?.role}
           columns={columns}

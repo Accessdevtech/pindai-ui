@@ -16,31 +16,35 @@ export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {
   return [
     {
       accessorKey: "nidn",
-      header: "NIDN",
+      header: "NIDN"
     },
     {
       accessorKey: "name",
-      header: "NAMA DOSEN",
+      header: "NAMA DOSEN"
+    },
+    {
+      accessorKey: "fakultas",
+      header: "FAKULTAS"
     },
     {
       accessorKey: "prodi",
-      header: "PRODI",
+      header: "PRODI"
     },
     {
       accessorKey: "affiliate_campus",
-      header: "AFILIASI UNIV",
+      header: "AFILIASI UNIV"
     },
     {
       accessorKey: "job_functional",
-      header: "JAB FUNGSIONAL",
+      header: "JAB FUNGSIONAL"
     },
     {
       accessorKey: "scholar_id",
-      header: "SCHOLAR ID",
+      header: "SCHOLAR ID"
     },
     {
       accessorKey: "scopus_id",
-      header: "SCOPUS ID",
+      header: "SCOPUS ID"
     },
     {
       id: "status",
@@ -50,12 +54,12 @@ export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {
 
         const isStatusAccepted = Every(
           [status?.kaprodi, status?.dppm, status?.keuangan],
-          status => status === "accepted",
+          status => status === "accepted"
         )
 
         const isStatusRejected = Every(
           [status?.kaprodi, status?.dppm, status?.keuangan],
-          status => status === "rejected",
+          status => status === "rejected"
         )
 
         return (
@@ -111,7 +115,7 @@ export const columnsIdentitas = ({ status }: Props): ColumnDef<Anggota>[] => {
             )}
           </div>
         )
-      },
-    },
+      }
+    }
   ]
 }

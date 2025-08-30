@@ -5,12 +5,12 @@ import DataTable from "@/components/molecules/data-table"
 import { Card, CardContent } from "@/components/ui/card"
 import { useAuthContext } from "@/contexts/auth-context"
 import {
+  columnVisibilityAtom,
   statusDppmAtom,
   statusKaprodiAtom,
   statusKeuanganAtom,
-  tahunAkademikAtom,
-} from "@/modules/dosen/feature/pengabdian/state/store"
-import { columnVisibilityAtom } from "@/state/store"
+  tahunAkademikAtom
+} from "@/state/store"
 import { useAtomValue, useSetAtom } from "jotai"
 import { useEffect, useState } from "react"
 import { useDebounce } from "use-debounce"
@@ -35,7 +35,7 @@ export default function PengabdianKaprodiPage() {
     tahunAkademik,
     statusKaprodi,
     statusDppm,
-    statusKeuangan,
+    statusKeuangan
   )
 
   const columns = columnPengabdian()
@@ -44,7 +44,7 @@ export default function PengabdianKaprodiPage() {
     setColumnVisibility({
       status_kaprodi: true,
       status_dppm: true,
-      status_keuangan: true,
+      status_keuangan: true
     })
   }, [])
 
@@ -57,6 +57,7 @@ export default function PengabdianKaprodiPage() {
             search
             filtering={{
               tahunAkademik: true,
+              reset: true
             }}
             role={user?.role}
             columns={columns}

@@ -6,6 +6,9 @@ export const anggotaSchema = z.object({
   name_with_title: z
     .string()
     .refine(name => name.length > 0, "Nama dengan gelar harus diisi"),
+  fakultas: z
+    .string()
+    .refine(fakultas => fakultas.length > 0, "Fakultas harus diisi"),
   prodi: z.string().refine(prodi => prodi.length > 0, "Prodi harus diisi"),
   phone_number: z
     .string()
@@ -18,7 +21,7 @@ export const anggotaSchema = z.object({
     .refine(job => job.length > 0, "Jabatan fungsional harus diisi"),
   affiliate_campus: z
     .string()
-    .refine(affiliate => affiliate.length > 0, "Affiliate harus diisi"),
+    .refine(affiliate => affiliate.length > 0, "Affiliate harus diisi")
 })
 
-export type AnggotaType = z.infer<typeof anggotaSchema>
+export type AnggotaSchemaType = z.infer<typeof anggotaSchema>

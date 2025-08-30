@@ -1,4 +1,5 @@
 "use client"
+import Alert from "@/components/atom/alert"
 import Breadcrumb from "@/components/atom/bradcrumb"
 import FileView from "@/components/atom/file-view"
 import Modal from "@/components/atom/modal"
@@ -9,7 +10,7 @@ import {
   CardContent,
   CardDescription,
   CardHeader,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
@@ -28,6 +29,7 @@ import { useGetDetailPengabdian } from "./hooks/use-pengabdian/get-detail-pengab
 import { useReturnedPengabdian } from "./hooks/use-pengabdian/returned-pengabdian"
 
 export default function DetailPengabdianDppmPage({ id }: { id: string }) {
+  const [alert, setAlert] = useState(false)
   const [resDocs, setResDocs] = useState<{
     proposal?: ViewDocs
     laporanKemajuan?: LaporanKemajuan[]
@@ -50,7 +52,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutate: reject } = useCanclePengabdian({
@@ -66,7 +68,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
     },
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutate: returned } = useReturnedPengabdian({
@@ -83,7 +85,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
 
     onError(error) {
       toast.error(error.response?.data.message)
-    },
+    }
   })
 
   const { mutateAsync: viewDocs, isPending } = useViewDocs()
@@ -93,7 +95,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
     const response = await viewDocs({
       id,
       category: "pengabdian",
-      jenis_dokumen: jenis_dokument.split(" ").join("_"),
+      jenis_dokumen: jenis_dokument.split(" ").join("_")
     })
     return response
   }
@@ -101,7 +103,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
   const viewFileLaporanKemajuan = async () => {
     const response = await viewLaporanKemajuan({
       id,
-      category: "pengabdian",
+      category: "pengabdian"
     })
 
     return response
@@ -112,7 +114,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
       viewFile("proposal"),
       viewFileLaporanKemajuan(),
       viewFile("surat_keterangan_selesai"),
-      viewFile("laporan"),
+      viewFile("laporan")
     ]).then(response => {
       const [proposal, laporanKemajuan, suratKeteranganSelesai, laporan] =
         response
@@ -128,7 +130,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
           suratKeteranganSelesai.status === "fulfilled"
             ? suratKeteranganSelesai.value
             : undefined,
-        laporan: laporan.status === "fulfilled" ? laporan.value : undefined,
+        laporan: laporan.status === "fulfilled" ? laporan.value : undefined
       })
     })
   }, [])
@@ -141,11 +143,11 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
         data={[
           {
             name: "Pengabdian",
-            href: `${ROUTE.DASHBOARD}/dppm/pengabdian`,
+            href: `${ROUTE.DASHBOARD}/dppm/pengabdian`
           },
           {
-            name: "Detail",
-          },
+            name: "Detail"
+          }
         ]}
       >
         {data?.title}
@@ -187,17 +189,22 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
           </CardContent>
         </Card>
 
-        {data?.status.kaprodi === "pending" && (
+        {data?.existFile && data?.status.dppm === "pending" && (
           <Card>
             <CardContent className='flex gap-2 p-6 capitalize text-muted-foreground'>
-              <Button
+              <Alert
+                open={alert}
+                setOpen={setAlert}
+                title='Setujui Pengabdian'
                 variant='outline'
+                Icon={CheckIcon}
+                tooltipContentText='Setujui Pengabdian'
+                triggerContent='Setuju'
+                triggerAction='Setuju'
                 className='grow border-green-500 text-green-500 hover:bg-green-500 hover:text-primary-foreground lg:w-fit'
+                description='Apakah anda yakin ingin menyetujui pengabdian ini?'
                 onClick={() => approved({ id })}
-              >
-                <CheckIcon />
-                Setuju
-              </Button>
+              />
               <Modal
                 title='Kembalikan Pengabdian'
                 name='Kembalikan'
@@ -250,7 +257,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
               { label: "Jenis Kriteria", value: data?.jenis_kriteria },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
-              { label: "Abstrak", value: data?.deskripsi },
+              { label: "Abstrak", value: data?.deskripsi }
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>
@@ -266,16 +273,19 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
             name='Lihat Proposal'
             btnStyle='w-full'
             tooltipContent='Lihat Proposal'
+            className='max-w-fit'
           >
-            {isPending ? (
-              <Loader2Icon className='animate-spin' />
-            ) : resDocs?.proposal ? (
-              <FileView resDocs={resDocs?.proposal as ViewDocs} scale={1} />
-            ) : (
-              <div className='capitalize'>
-                File tidak tersedia / belum di unggah
-              </div>
-            )}
+            <div className='max-h-[calc(100vh-200px)] flex-1 overflow-auto'>
+              {isPending ? (
+                <Loader2Icon className='animate-spin' />
+              ) : resDocs?.proposal ? (
+                <FileView resDocs={resDocs?.proposal as ViewDocs} scale={1} />
+              ) : (
+                <div className='capitalize'>
+                  File tidak tersedia / belum di unggah
+                </div>
+              )}
+            </div>
           </Modal>
         </CardContent>
       </Card>

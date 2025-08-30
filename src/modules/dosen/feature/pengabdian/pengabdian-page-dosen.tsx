@@ -6,6 +6,12 @@ import { buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
+import {
+  statusDppmAtom,
+  statusKaprodiAtom,
+  statusKeuanganAtom,
+  tahunAkademikAtom
+} from "@/state/store"
 import { useAtomValue } from "jotai"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
@@ -15,12 +21,6 @@ import { Dosen } from "../../dosen.interface"
 import { useUserProfile } from "../../hooks/use-profile/get-profile"
 import { columnPengabdian } from "./components/column-pengabdian"
 import { useGetPengabdian } from "./hook/use-pengabdian/get-pengabdian"
-import {
-  statusDppmAtom,
-  statusKaprodiAtom,
-  statusKeuanganAtom,
-  tahunAkademikAtom,
-} from "./state/store"
 
 export default function PengabdianDosenPage() {
   const tahunAkademik = useAtomValue(tahunAkademikAtom)
@@ -30,8 +30,8 @@ export default function PengabdianDosenPage() {
   const { data: user } = useUserProfile()
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
   const [search] = useDebounce(value, 1000)
+  const [perPage, setPerPage] = useState(10)
   const { data, refetch, isFetching } = useGetPengabdian(
     currentPage,
     perPage,
@@ -39,19 +39,17 @@ export default function PengabdianDosenPage() {
     tahunAkademik,
     statusKaprodi,
     statusDppm,
-    statusKeuangan,
+    statusKeuangan
   )
 
-  const columns = columnPengabdian({
-    refetch,
-  })
+  const columns = columnPengabdian({ refetch })
 
   if (!user) return null
 
   const isNull = Object.fromEntries(
     Object.entries(user as Dosen)
       .filter(([key]) => key !== "scholar_id" && key !== "scopus_id")
-      .map(([key, value]) => [key, value === null || value === ""]),
+      .map(([key, value]) => [key, value === null || value === ""])
   )
 
   return (
@@ -72,7 +70,7 @@ export default function PengabdianDosenPage() {
                 href={`${ROUTE.DASHBOARD}/${user?.role}/akun-saya`}
                 className={cn(
                   buttonVariants({ variant: "default" }),
-                  "w-fit capitalize",
+                  "w-fit capitalize"
                 )}
               >
                 <span>update data diri</span>
@@ -83,7 +81,7 @@ export default function PengabdianDosenPage() {
               href={`${ROUTE.DASHBOARD}/${user?.role}/pengabdian/create`}
               className={cn(
                 buttonVariants({ variant: "default" }),
-                "w-fit capitalize",
+                "w-fit capitalize"
               )}
             >
               <PlusIcon className='h-4 w-4' />
@@ -97,6 +95,7 @@ export default function PengabdianDosenPage() {
             filtering={{
               tahunAkademik: true,
               status: Boolean(statusKaprodi || statusDppm || statusKeuangan),
+              reset: true
             }}
             role={user?.role}
             columns={columns}

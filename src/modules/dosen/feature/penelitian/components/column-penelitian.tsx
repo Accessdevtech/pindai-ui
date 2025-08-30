@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
 import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
-import { InfoIcon, TrashIcon } from "lucide-react"
+import { EditIcon, InfoIcon, TrashIcon } from "lucide-react"
 import Link from "next/link"
 import { useState } from "react"
 import { toast } from "sonner"
@@ -14,7 +14,7 @@ import { useDeletePenelitian } from "../hook/use-penelitian/delete-penelitian"
 import { PenelitianDosen } from "../penelitian-dosen.interface"
 
 export const columnPenelitian = ({
-  refetch,
+  refetch
 }: {
   refetch: () => void
 }): ColumnDef<PenelitianDosen>[] => {
@@ -22,55 +22,7 @@ export const columnPenelitian = ({
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>,
-    },
-    {
-      id: "title",
-      accessorKey: "title",
-      header: "Judul Penelitian",
-    },
-    {
-      id: "leader",
-      accessorKey: "leader",
-      header: "Penanggung Jawab",
-    },
-    {
-      id: "academic_year",
-      accessorKey: "academic_year",
-      header: "Tahun Akademik",
-    },
-    {
-      id: "created_date",
-      accessorKey: "created_date",
-      header: "tanggal dibuat",
-    },
-    {
-      accessorKey: "status",
-      header: "status",
-      columns: [
-        {
-          id: "status_kaprodi",
-          accessorKey: "status_kaprodi",
-          header: "Kaprodi",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.kaprodi} />
-          ),
-        },
-        {
-          id: "status_dppm",
-          accessorKey: "status_dppm",
-          header: "Dppm",
-          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
-        },
-        {
-          id: "status_keuangan",
-          accessorKey: "status_keuangan",
-          header: "Keuangan",
-          cell: ({ row }) => (
-            <StatusBadge status={row.original.status.keuangan} />
-          ),
-        },
-      ],
+      cell: ({ row }) => <div>{row.index + 1}</div>
     },
     {
       id: "action",
@@ -80,6 +32,8 @@ export const columnPenelitian = ({
       cell: ({ row }) => {
         const [alert, setAlert] = useState(false)
 
+        const isDraft = row.original.is_draft
+
         const { mutate: deletePenelitian } = useDeletePenelitian({
           onSuccess: res => {
             toast.success(res.message)
@@ -87,53 +41,71 @@ export const columnPenelitian = ({
           },
           onError: err => {
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const isStatusPending = Every(
           [row.original.status.kaprodi, row.original.status.dppm],
-          status => status === "pending",
+          status => status === "pending"
         )
 
         const isStatusReturn = [
           row.original.status.kaprodi,
-          row.original.status.dppm,
+          row.original.status.dppm
         ].some(status => status === "returned")
 
         return (
           <span className='flex items-center justify-center gap-2'>
-            <Tooltip
-              contentText={
-                isStatusReturn
-                  ? "Unggah ulang proposal penelitian"
-                  : "Detail Penelitian"
-              }
-            >
-              <Link
-                href={`${ROUTE.DASHBOARD}/dosen/penelitian/${row.original.id}`}
-                className={cn(
-                  buttonVariants({ variant: "outline", size: "icon" }),
-                  "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
-                )}
+            {!isDraft && (
+              <Tooltip
+                contentText={
+                  isStatusReturn
+                    ? "Unggah ulang proposal penelitian"
+                    : "Detail Penelitian"
+                }
               >
-                <InfoIcon />
-              </Link>
-            </Tooltip>
+                <Link
+                  href={`${ROUTE.DASHBOARD}/dosen/penelitian/${row.original.id}`}
+                  className={cn(
+                    buttonVariants({ variant: "outline", size: "icon" }),
+                    "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
+                  )}
+                >
+                  <InfoIcon />
+                </Link>
+              </Tooltip>
+            )}
+            {isDraft ? (
+              <Tooltip contentText='Edit Draft penelitian'>
+                <Link
+                  href={`${ROUTE.DASHBOARD}/dosen/penelitian/edit/${row.original.id}`}
+                  className={cn(
+                    buttonVariants({ size: "icon", variant: "outline" }),
+                    "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                  )}
+                >
+                  <EditIcon />
+                </Link>
+              </Tooltip>
+            ) : null}
             {isStatusPending && (
               <>
-                {/* <Tooltip contentText='Edit penelitian'>
-                  <Link
-                    href={`${ROUTE.DASHBOARD}/dosen/penelitian/edit/${row.original.id}`}
-                    className={cn(buttonVariants({ size: "icon" }))}
-                  >
-                    <EditIcon />
-                  </Link>
-                </Tooltip> */}
+                {!isDraft && (
+                  <Tooltip contentText='Edit penelitian'>
+                    <Link
+                      href={`${ROUTE.DASHBOARD}/dosen/penelitian/edit/${row.original.id}`}
+                      className={cn(buttonVariants({ size: "icon" }))}
+                    >
+                      <EditIcon />
+                    </Link>
+                  </Tooltip>
+                )}
                 {!row.original.existFile && (
                   <Alert
                     Icon={TrashIcon}
                     open={alert}
                     setOpen={setAlert}
+                    triggerAction='hapus'
                     title='Hapus Penelitian'
                     size='icon'
                     variant='destructive'
@@ -148,7 +120,73 @@ export const columnPenelitian = ({
             )}
           </span>
         )
-      },
+      }
     },
+    {
+      id: "title",
+      accessorKey: "title",
+      header: "Judul Penelitian"
+    },
+    {
+      id: "leader",
+      accessorKey: "leader",
+      header: "Penanggung Jawab"
+    },
+    {
+      id: "academic_year",
+      accessorKey: "academic_year",
+      header: "Tahun Akademik"
+    },
+    {
+      id: "proposal",
+      accessorKey: "proposal",
+      header: "Proposal",
+      cell: ({ row }) => {
+        const isFileExist = row.original.existFile
+        return isFileExist ? (
+          "Telah diunggah"
+        ) : (
+          <Link
+            href={`${ROUTE.DASHBOARD}/dosen/penelitian/${row.original.id}`}
+            className={buttonVariants({ variant: "link" })}
+          >
+            Silahkan unggah
+          </Link>
+        )
+      }
+    },
+    {
+      id: "created_date",
+      accessorKey: "created_date",
+      header: "tanggal dibuat"
+    },
+    {
+      accessorKey: "status",
+      header: "status",
+      cell: ({ row }) => {
+        // Show "Draft" text if the row is a draft
+        if (row.original.is_draft) {
+          return <span className='font-medium text-gray-500'>Draft</span>
+        }
+
+        // Show status columns for non-draft items
+        return (
+          <div className='flex justify-between gap-2'>
+            <div className='flex flex-col items-center'>
+              <span className='mb-1 text-xs text-gray-600'>Kaprodi</span>
+              <StatusBadge status={row.original.status.kaprodi} />
+            </div>
+            <div className='flex flex-col items-center'>
+              <span className='mb-1 text-xs text-gray-600'>Dppm</span>
+              <StatusBadge status={row.original.status.dppm} />
+            </div>
+            <div className='flex flex-col items-center'>
+              <span className='mb-1 text-xs text-gray-600'>Keuangan</span>
+              <StatusBadge status={row.original.status.keuangan} />
+            </div>
+          </div>
+        )
+      }
+    }
   ]
 }

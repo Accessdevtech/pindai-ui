@@ -3,8 +3,8 @@ import { getDetailPenelitianDosen } from "../../penelitian-dosen.service"
 
 export const useGetDetailPenelitian = (id: string) => {
   return useQuery({
-    queryKey: ["anggota-penelitian", id],
+    queryKey: ["detail-penelitian", id],
     queryFn: async () => await getDetailPenelitianDosen(id),
-    placeholderData: previouseData => previouseData,
+    placeholderData: previouseData => previouseData
   })
 }

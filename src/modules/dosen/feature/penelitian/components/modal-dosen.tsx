@@ -8,15 +8,15 @@ import { dosenSearch } from "@/state/store"
 import { useAtom, useSetAtom } from "jotai"
 import { useState } from "react"
 import { useDebounce } from "use-debounce"
-import { useGetAnggota } from "../hook/use-pengabdian/get-anggota"
+import { useGetAnggota } from "../hook/use-penelitian/get-anggota"
 import {
   anggotaAtom,
   isDialogOpenAtom,
-  selectedAnggotaAtom,
+  selectedAnggotaAtom
 } from "../state/store"
 import { columnTambahAnggota } from "./column-tambah-anggota"
 
-export default function ModalAnggota() {
+export default function ModalDosen() {
   const [value, setValue] = useAtom(dosenSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
@@ -27,13 +27,13 @@ export default function ModalAnggota() {
   const { data, refetch, isFetching } = useGetAnggota(
     currentPage,
     perPage,
-    search,
+    search
   )
 
   const [selectedAnggota, setSelectedAnggota] = useAtom(selectedAnggotaAtom)
   const handleAddAnggota = () => {
     const newAnggota = data?.dosen.filter((anggota: Dosen) =>
-      selectedAnggota.includes(anggota.nidn),
+      selectedAnggota.includes(anggota.nidn)
     )
     setAnggota(prevAnggota => [...prevAnggota, ...newAnggota!])
     setSelectedAnggota([])
@@ -42,9 +42,7 @@ export default function ModalAnggota() {
 
   const handleCheckboxChange = (nidn: string) => {
     setSelectedAnggota(prev =>
-      prev.includes(nidn)
-        ? prev.filter(item => item !== nidn)
-        : [...prev, nidn],
+      prev.includes(nidn) ? prev.filter(item => item !== nidn) : [...prev, nidn]
     )
   }
 
@@ -54,16 +52,16 @@ export default function ModalAnggota() {
   }
 
   const columnTambah = columnTambahAnggota({
-    handleCheckboxChange,
+    handleCheckboxChange
   })
   return (
     <Modal
-      title='Daftar anggota pengabdian'
-      name='tambah anggota'
+      title='Daftar dosen penelitian'
+      name='tambah dosen'
       open={openModal}
       setOpen={setOpenModal}
-      description='Menampilkan daftar anggota yang terlibat dalam pengabdian'
-      tooltipContent='Klik untuk melihat detail anggota pengabdian'
+      description='Menampilkan daftar dosen yang dapat ditambahkan ke penelitian'
+      tooltipContent='Klik untuk melihat detail dosen'
       className='max-w-3xl'
     >
       <div className='max-h-[calc(100vh-200px)] flex-1 overflow-auto'>

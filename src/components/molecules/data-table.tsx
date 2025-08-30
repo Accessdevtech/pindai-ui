@@ -8,22 +8,23 @@ import {
   getFacetedUniqueValues,
   getPaginationRowModel,
   getSortedRowModel,
-  useReactTable,
+  useReactTable
 } from "@tanstack/react-table"
 
 import { useDownloadExcel } from "@/hooks/use-download-excel"
 import { Meta, Role } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import {
+  columnVisibilityAtom,
   statusDppmAtom,
   statusKaprodiAtom,
   statusKeuanganAtom,
-} from "@/modules/dosen/feature/penelitian/state/store"
-import { columnVisibilityAtom } from "@/state/store"
+  tahunAkademikAtom
+} from "@/state/store"
 import { EachUtil } from "@/utils/each-utils"
 import { downloadExcelFile } from "@/utils/files"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
-import { useAtom } from "jotai"
+import { useAtom, useSetAtom } from "jotai"
 import { RefreshCcwIcon, UploadIcon } from "lucide-react"
 import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -39,7 +40,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from "../ui/table"
 import { DataTablePagination } from "./data-table-pagination"
 import FilterStatus from "./filter-status"
@@ -58,6 +59,7 @@ interface DataTableProps<TData, TValue> {
   filtering?: {
     status?: boolean
     tahunAkademik?: boolean
+    reset?: boolean
   }
   refetch?: () => void
   setValue?: (value: string) => void
@@ -73,17 +75,18 @@ export default function DataTable<TData, TValue>({
   role,
   isLoading,
   search = false,
-  filtering = { status: false, tahunAkademik: false },
+  filtering = { status: false, tahunAkademik: false, reset: false },
   perPage,
   setPerPage,
   refetch,
   setValue,
-  onPaginationChange,
+  onPaginationChange
 }: DataTableProps<TData, TValue>) {
   const pathname = usePathname()
   const [sorting, setSorting] = useState<SortingState>([])
   const [rowSelection, setRowSelection] = useState({})
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
+  const setSelectTahunAkademik = useSetAtom(tahunAkademikAtom)
   const [statusKaprodi, setStatusKaprodi] = useAtom(statusKaprodiAtom)
   const [statusDppm, setStatusDppm] = useAtom(statusDppmAtom)
   const [statusKeuangan, setStatusKeuangan] = useAtom(statusKeuanganAtom)
@@ -96,7 +99,7 @@ export default function DataTable<TData, TValue>({
     },
     onError: error => {
       toast.error(error.message)
-    },
+    }
   })
 
   const table = useReactTable({
@@ -107,9 +110,9 @@ export default function DataTable<TData, TValue>({
       rowSelection,
       pagination: {
         pageIndex: currentPage ? currentPage - 1 : 0,
-        pageSize: meta?.per_page || perPage || 10,
+        pageSize: meta?.per_page || perPage || 10
       },
-      columnVisibility,
+      columnVisibility
     },
     pageCount: meta?.last_page,
     onSortingChange: setSorting,
@@ -120,14 +123,14 @@ export default function DataTable<TData, TValue>({
     getFacetedUniqueValues: getFacetedUniqueValues(),
     onRowSelectionChange: setRowSelection,
     onColumnVisibilityChange: setColumnVisibility,
-    manualPagination: true,
+    manualPagination: true
   })
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
     const akademikYears = generateAcademicYears(
       currentYear - 5,
-      currentYear + 5,
+      currentYear + 5
     )
     setTahunAkademik(akademikYears)
   }, [])
@@ -148,12 +151,24 @@ export default function DataTable<TData, TValue>({
           </div>
         )}
         <div className='flex flex-col-reverse items-end gap-4 xl:flex-row xl:items-center'>
+          {filtering.reset && (
+            <Button
+              variant='ghost'
+              className='border border-muted-foreground bg-muted text-muted-foreground'
+              onClick={() => {
+                setValue && setValue("")
+                setSelectTahunAkademik("")
+              }}
+            >
+              Reset Filter
+            </Button>
+          )}
           {filtering.tahunAkademik && (
             <div className='flex flex-1 items-center space-x-2'>
               <Combobox
                 options={tahunAkademik.map(item => ({
                   id: item.split("/").join(""),
-                  name: item,
+                  name: item
                 }))}
               />
             </div>
@@ -248,7 +263,7 @@ export default function DataTable<TData, TValue>({
                             ? null
                             : flexRender(
                                 header.column.columnDef.header,
-                                header.getContext(),
+                                header.getContext()
                               )}
                         </TableHead>
                       )
@@ -286,7 +301,7 @@ export default function DataTable<TData, TValue>({
                         >
                           {flexRender(
                             cell.column.columnDef.cell,
-                            cell.getContext(),
+                            cell.getContext()
                           )}
                         </TableCell>
                       )}

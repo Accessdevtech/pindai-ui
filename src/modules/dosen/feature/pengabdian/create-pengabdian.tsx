@@ -19,9 +19,11 @@ import { useForm } from "react-hook-form"
 import { toast } from "sonner"
 import { columnAnggotaView } from "./components/column-anggota-view"
 import DataKetuaPengabdian from "./components/data-ketua-pengabdian"
-import ModalAnggota from "./components/modal-anggota"
-import ModalAnggotaManual from "./components/modal-anggota-manual"
+import ModalDosen from "./components/modal-dosen"
+import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPengabdian from "./components/modal-jenis-pengabdian"
+import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
+import { useCreateDraftPengabdian } from "./hook/use-pengabdian/create-draft-pengabdian"
 import { useCreatePengabdian } from "./hook/use-pengabdian/create-pengabdian"
 import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
 import { PengabdianType, pengabdianSchema } from "./schema/pengabdian-schema"
@@ -42,8 +44,8 @@ export default function CreatePengabdian() {
       bidang: "",
       deskripsi: "",
       jenis_pengabdian: "",
-      luaran_kriteria: "",
-    },
+      luaran_kriteria: ""
+    }
   })
 
   const { mutate, isPending } = useCreatePengabdian({
@@ -61,17 +63,49 @@ export default function CreatePengabdian() {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof PengabdianType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
-    },
+    }
   })
+
+  const { mutate: mutateDraft, isPending: isPendingDraft } =
+    useCreateDraftPengabdian({
+      onSuccess: res => {
+        if (!res.status) {
+          return toast.error(res.message)
+        }
+        toast.success(res.message)
+        setAnggota([])
+        form.reset()
+        router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian`)
+      },
+      onError: err => {
+        if (err.response?.data?.errors) {
+          for (const [key, value] of Object.entries(err.response.data.errors)) {
+            form.setError(key as keyof PengabdianType, {
+              message: value as string,
+              type: "manual"
+            })
+          }
+        }
+      }
+    })
+
+  const onDraft = async (data: PengabdianType) => {
+    const datas = {
+      ...data,
+      is_draft: true,
+      anggota
+    }
+    mutateDraft(datas)
+  }
 
   const onSubmit = async (data: PengabdianType) => {
     const datas = {
       ...data,
-      anggota,
+      anggota
     }
 
     mutate(datas)
@@ -83,17 +117,22 @@ export default function CreatePengabdian() {
   const watchJenisPengabdian = form.watch("jenis_pengabdian")
 
   const kriteria = listPengabdian?.data.filter(
-    item => item.id === watchJenisPengabdian,
+    item => item.id === watchJenisPengabdian
   )[0]?.kriteria
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
     const akademikYears = generateAcademicYears(
       currentYear - 5,
-      currentYear + 5,
+      currentYear + 5
     )
     setTahunAkademik(akademikYears)
   }, [])
+
+  const handleReset = () => {
+    form.reset()
+    setAnggota([])
+  }
 
   return (
     <div>
@@ -115,7 +154,7 @@ export default function CreatePengabdian() {
                   control={form.control}
                   options={tahunAkademik.map(item => ({
                     id: item.split("/").join(""),
-                    name: item,
+                    name: item
                   }))}
                 />
                 <SelectField
@@ -125,12 +164,12 @@ export default function CreatePengabdian() {
                   options={[
                     {
                       id: "ganjil",
-                      name: "ganjil",
+                      name: "ganjil"
                     },
                     {
                       id: "genap",
-                      name: "genap",
-                    },
+                      name: "genap"
+                    }
                   ]}
                 />
               </div>
@@ -166,8 +205,9 @@ export default function CreatePengabdian() {
                 className='w-[17.5%] lg:w-[36%]'
               />
               <div className='flex flex-col gap-2 lg:flex-row'>
-                <ModalAnggota />
-                <ModalAnggotaManual />
+                <ModalDosen />
+                <ModalDosenManual />
+                <ModalMahasiswaManual />
               </div>
 
               <div>
@@ -175,14 +215,36 @@ export default function CreatePengabdian() {
               </div>
             </div>
 
-            <Button
-              type='submit'
-              className='mt-4 w-full capitalize'
-              disabled={isPending}
-            >
-              simpan{" "}
-              {isPending && <Loader2Icon className='ml-2 animate-spin' />}
-            </Button>
+            <div className='flex items-center gap-4'>
+              <Button
+                type='button'
+                variant='outline'
+                className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
+                disabled={isPendingDraft}
+                onClick={() => onDraft(form.getValues())}
+              >
+                Draft as form
+                {isPendingDraft && (
+                  <Loader2Icon className='ml-2 animate-spin' />
+                )}
+              </Button>
+              <Button
+                type='submit'
+                className='mt-4 w-full capitalize'
+                disabled={isPending}
+              >
+                Submit Pengabdian
+                {isPending && <Loader2Icon className='ml-2 animate-spin' />}
+              </Button>
+              <Button
+                type='reset'
+                variant='secondary'
+                className='mt-4 w-full border border-muted-foreground capitalize'
+                onClick={handleReset}
+              >
+                Reset Form
+              </Button>
+            </div>
           </Form>
         </CardContent>
       </Card>
