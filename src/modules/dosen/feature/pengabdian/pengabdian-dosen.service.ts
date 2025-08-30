@@ -9,7 +9,10 @@ import {
 } from "./pengabdian-dosen.interface"
 
 import { ListPengabdianResponse } from "@/modules/listdata/pengabdian.list.interface"
-import { PengabdianType } from "./schema/pengabdian-schema"
+import {
+  PengabdianDraftType,
+  PengabdianFinalType
+} from "@/schema/pengabdian-base"
 
 export async function getPengabdianDosen(
   page: number,
@@ -47,7 +50,7 @@ export async function getDraftPengabdian(id: string) {
   )
   return response.data
 }
-export async function createPengabdianDosen(data: PengabdianType) {
+export async function createPengabdianDosen(data: PengabdianFinalType) {
   const response: PengabdianDosenResponse = await postData(
     API_ENDPOINTS_DOSEN.PENGABDIAN,
     data
@@ -55,7 +58,7 @@ export async function createPengabdianDosen(data: PengabdianType) {
   return response
 }
 
-export async function createDraftPengabdian(data: PengabdianType) {
+export async function createDraftPengabdian(data: PengabdianDraftType) {
   const response: PengabdianDosenResponse = await postData(
     API_ENDPOINTS_DOSEN.DRAFT_PENGABDIAN,
     data
@@ -63,7 +66,10 @@ export async function createDraftPengabdian(data: PengabdianType) {
   return response
 }
 
-export async function updatePengabdianDosen(id: string, data: PengabdianType) {
+export async function updatePengabdianDosen(
+  id: string,
+  data: PengabdianDraftType
+) {
   const response: PengabdianDosenResponse = await putData(
     `${API_ENDPOINTS_DOSEN.PENGABDIAN}/${id}`,
     data

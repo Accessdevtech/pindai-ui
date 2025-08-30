@@ -8,6 +8,17 @@ import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  pengabdianDraftSchema,
+  PengabdianDraftType,
+  pengabdianFinalSchema,
+  PengabdianFinalType
+} from "@/schema/pengabdian-base"
+import {
+  PengabdianCompleteDraftType,
+  PengabdianCompleteFinalType
+} from "@/schema/pengabdian-comprehensive"
+import { formatAcademicYearForBackend } from "@/schema/validation-utils"
 import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,7 +37,6 @@ import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useGetDraftPengabdian } from "./hook/use-pengabdian/get-draft"
 import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
 import { useUpdatePengabdian } from "./hook/use-pengabdian/update-pengabdian"
-import { pengabdianSchema, PengabdianType } from "./schema/pengabdian-schema"
 import { anggotaAtom } from "./state/store"
 
 interface EditPengabdianProps {
@@ -39,23 +49,29 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
   const { data } = useGetDraftPengabdian(id)
   const [anggota, setAnggota] = useAtom(anggotaAtom)
 
-  const form = useForm<PengabdianType>({
-    resolver: zodResolver(pengabdianSchema),
-    defaultValues: {
-      tahun_akademik: "",
-      semester: "",
-      judul: "",
-      bidang: "",
-      deskripsi: "",
-      jenis_pengabdian: "",
-      luaran_kriteria: ""
-    }
+  const defaultValues = {
+    tahun_akademik: "",
+    semester: "",
+    judul: "",
+    bidang: "",
+    deskripsi: "",
+    jenis_pengabdian: "",
+    luaran_kriteria: ""
+  }
+
+  const formSubmit = useForm<PengabdianFinalType>({
+    resolver: zodResolver(pengabdianFinalSchema),
+    defaultValues
   })
 
+  const formDraft = useForm<PengabdianDraftType>({
+    resolver: zodResolver(pengabdianDraftSchema),
+    defaultValues
+  })
   // Reset form values when data is loaded
   useEffect(() => {
     if (data) {
-      form.reset({
+      formSubmit.reset({
         tahun_akademik: data.academic_year || "",
         semester: data.semester || "",
         judul: data.title || "",
@@ -65,7 +81,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
         luaran_kriteria: data.jenis_kriteria || ""
       })
     }
-  }, [data, form])
+  }, [data, formSubmit])
 
   const { mutate, isPending } = useUpdatePengabdian({
     onSuccess: res => {
@@ -74,13 +90,13 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
       }
       toast.success(res.message)
       setAnggota([])
-      form.reset()
+      formSubmit.reset()
       router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian/${res.data.id}`)
     },
     onError: err => {
       if (err.response?.data?.errors) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
-          form.setError(key as keyof PengabdianType, {
+          formSubmit.setError(key as keyof PengabdianFinalType, {
             message: value as string,
             type: "manual"
           })
@@ -97,13 +113,13 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
         }
         toast.success(res.message)
         setAnggota([])
-        form.reset()
+        formDraft.reset()
         router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian`)
       },
       onError: err => {
         if (err.response?.data?.errors) {
           for (const [key, value] of Object.entries(err.response.data.errors)) {
-            form.setError(key as keyof PengabdianType, {
+            formSubmit.setError(key as keyof PengabdianDraftType, {
               message: value as string,
               type: "manual"
             })
@@ -114,11 +130,11 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
 
   const { data: listPengabdian, isFetching } = useGetListPengabdian()
 
-  const watchJenisPengabdian = form.watch("jenis_pengabdian")
+  const watchJenisPengabdian = formSubmit.watch("jenis_pengabdian")
 
-  const kriteria = listPengabdian?.data.filter(
+  const kriteria = listPengabdian?.data.find(
     item => item.id === watchJenisPengabdian
-  )[0]?.kriteria
+  )?.kriteria
 
   const columnsView = columnAnggotaView()
 
@@ -154,19 +170,17 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
     }
   }, [data?.anggota, setAnggota])
 
-  const onDraft = async (data: PengabdianType) => {
-    const datas = {
+  const onDraft = async (data: PengabdianDraftType) => {
+    const datas: PengabdianCompleteDraftType = {
       ...data,
-      is_draft: true,
       anggota
     }
     mutateDraft({ id, data: datas })
   }
 
-  const onSubmit = async (data: PengabdianType) => {
-    const datas = {
+  const onSubmit = async (data: PengabdianFinalType) => {
+    const datas: PengabdianCompleteFinalType = {
       ...data,
-      is_draft: false,
       anggota
     }
 
@@ -180,7 +194,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
       </Breadcrumb>
       <Card className='max-w-full'>
         <CardContent className='py-6'>
-          <Form form={form} onSubmit={onSubmit}>
+          <Form form={formSubmit} onSubmit={onSubmit}>
             <div className='flex w-full flex-col gap-4'>
               <Divider
                 text='data pengabdian-tahap 1'
@@ -190,16 +204,16 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
                 <SelectField
                   name='tahun_akademik'
                   label='Tahun Akademik'
-                  control={form.control}
+                  control={formSubmit.control}
                   options={tahunAkademik.map(item => ({
-                    id: item.split("/").join(""),
+                    id: formatAcademicYearForBackend(item),
                     name: item
                   }))}
                 />
                 <SelectField
                   name='semester'
                   label='Semester'
-                  control={form.control}
+                  control={formSubmit.control}
                   options={[
                     {
                       id: "ganjil",
@@ -213,23 +227,31 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
                 />
               </div>
 
-              <InputField name='bidang' label='bidang' control={form.control} />
-              <InputField name='judul' label='judul' control={form.control} />
+              <InputField
+                name='bidang'
+                label='bidang'
+                control={formSubmit.control}
+              />
+              <InputField
+                name='judul'
+                label='judul'
+                control={formSubmit.control}
+              />
               <TextAreaField
                 name='deskripsi'
                 label='abstrak'
-                control={form.control}
+                control={formSubmit.control}
               />
               <ModalJenisPengabdian
                 data={listPengabdian?.data || []}
                 isFetching={isFetching}
-                control={form.control}
+                control={formSubmit.control}
                 name='jenis_pengabdian'
               />
               {kriteria && (
                 <SelectField
                   label='jenis kriteria'
-                  control={form.control}
+                  control={formSubmit.control}
                   name='luaran_kriteria'
                   options={kriteria || []}
                 />
@@ -260,7 +282,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
                 variant='outline'
                 className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
                 disabled={isPendingDraft}
-                onClick={() => onDraft(form.getValues())}
+                onClick={() => onDraft(formSubmit.getValues())}
               >
                 Draft as form
                 {isPendingDraft && (

@@ -8,6 +8,17 @@ import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  penelitianDraftSchema,
+  PenelitianDraftType,
+  penelitianFinalSchema,
+  PenelitianFinalType
+} from "@/schema/penelitian-base"
+import {
+  PenelitianCompleteDraftType,
+  PenelitianCompleteFinalType
+} from "@/schema/penelitian-comprehensive"
+import { formatAcademicYearForBackend } from "@/schema/validation-utils"
 import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,7 +37,6 @@ import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useGetDraftPenelitian } from "./hook/use-penelitian/get-draft"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { useUpdatePenelitian } from "./hook/use-penelitian/update-penelitian"
-import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
 import { anggotaAtom } from "./state/store"
 
 interface EditPenelitianProps {
@@ -39,33 +49,42 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
   const { data } = useGetDraftPenelitian(id)
   const [anggota, setAnggota] = useAtom(anggotaAtom)
 
-  const form = useForm<PenelitianType>({
-    resolver: zodResolver(penelitianSchema),
-    defaultValues: {
-      tahun_akademik: "",
-      semester: "",
-      judul: "",
-      bidang: "",
-      deskripsi: "",
-      jenis_penelitian: "",
-      luaran_kriteria: ""
-    }
+  const defaultValues = {
+    tahun_akademik: "",
+    semester: "",
+    judul: "",
+    bidang: "",
+    deskripsi: "",
+    jenis_penelitian: "",
+    luaran_kriteria: ""
+  }
+
+  const formSubmit = useForm<PenelitianFinalType>({
+    resolver: zodResolver(penelitianFinalSchema),
+    defaultValues
+  })
+
+  const formDraft = useForm<PenelitianDraftType>({
+    resolver: zodResolver(penelitianDraftSchema),
+    defaultValues
   })
 
   // Reset form values when data is loaded
   useEffect(() => {
-    if (data) {
-      form.reset({
-        tahun_akademik: data.academic_year || "",
-        semester: data.semester || "",
-        judul: data.title || "",
-        bidang: data.bidang || "",
-        deskripsi: data.deskripsi || "",
-        jenis_penelitian: data.jenis_penelitian || "",
-        luaran_kriteria: data.jenis_kriteria || ""
-      })
+    if (!data) return
+
+    const resetData = {
+      tahun_akademik: data.academic_year || "",
+      semester: data.semester || "",
+      judul: data.title || "",
+      bidang: data.bidang || "",
+      deskripsi: data.deskripsi || "",
+      jenis_penelitian: data.jenis_penelitian || "",
+      luaran_kriteria: data.jenis_kriteria || ""
     }
-  }, [data, form])
+    formSubmit.reset(resetData)
+    formDraft.reset(resetData)
+  }, [data, formSubmit, formDraft])
 
   const { mutate, isPending } = useUpdatePenelitian({
     onSuccess: res => {
@@ -74,13 +93,13 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
       }
       toast.success(res.message)
       setAnggota([])
-      form.reset()
+      formSubmit.reset()
       router.push(`${ROUTE.DASHBOARD}/dosen/penelitian/${res.data.id}`)
     },
     onError: err => {
       if (err.response?.data?.errors) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
-          form.setError(key as keyof PenelitianType, {
+          formSubmit.setError(key as keyof PenelitianFinalType, {
             message: value as string,
             type: "manual"
           })
@@ -97,13 +116,13 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
         }
         toast.success(res.message)
         setAnggota([])
-        form.reset()
+        formDraft.reset()
         router.push(`${ROUTE.DASHBOARD}/dosen/penelitian`)
       },
       onError: err => {
         if (err.response?.data?.errors) {
           for (const [key, value] of Object.entries(err.response.data.errors)) {
-            form.setError(key as keyof PenelitianType, {
+            formSubmit.setError(key as keyof PenelitianDraftType, {
               message: value as string,
               type: "manual"
             })
@@ -114,11 +133,11 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
 
   const { data: listPenelitian, isFetching } = useGetListPenelitian()
 
-  const watchJenisPenelitian = form.watch("jenis_penelitian")
+  const watchJenisPenelitian = formSubmit.watch("jenis_penelitian")
 
-  const kriteria = listPenelitian?.data.filter(
+  const kriteria = listPenelitian?.data.find(
     item => item.id === watchJenisPenelitian
-  )[0]?.kriteria
+  )?.kriteria
 
   const columnsView = columnAnggotaView()
 
@@ -154,19 +173,17 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
     }
   }, [data?.anggota, setAnggota])
 
-  const onDraft = async (data: PenelitianType) => {
-    const datas = {
+  const onDraft = async (data: PenelitianDraftType) => {
+    const datas: PenelitianCompleteDraftType = {
       ...data,
-      is_draft: true,
       anggota
     }
     mutateDraft({ id, data: datas })
   }
 
-  const onSubmit = async (data: PenelitianType) => {
-    const datas = {
+  const onSubmit = async (data: PenelitianFinalType) => {
+    const datas: PenelitianCompleteFinalType = {
       ...data,
-      is_draft: false,
       anggota
     }
 
@@ -180,7 +197,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
       </Breadcrumb>
       <Card className='max-w-full'>
         <CardContent className='py-6'>
-          <Form form={form} onSubmit={onSubmit}>
+          <Form form={formSubmit} onSubmit={onSubmit}>
             <div className='flex w-full flex-col gap-4'>
               <Divider
                 text='data penelitian-tahap 1'
@@ -190,16 +207,16 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
                 <SelectField
                   name='tahun_akademik'
                   label='Tahun Akademik'
-                  control={form.control}
+                  control={formSubmit.control}
                   options={tahunAkademik.map(item => ({
-                    id: item.split("/").join(""),
+                    id: formatAcademicYearForBackend(item),
                     name: item
                   }))}
                 />
                 <SelectField
                   name='semester'
                   label='Semester'
-                  control={form.control}
+                  control={formSubmit.control}
                   options={[
                     {
                       id: "ganjil",
@@ -213,23 +230,35 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
                 />
               </div>
 
-              <InputField name='bidang' label='bidang' control={form.control} />
-              <InputField name='judul' label='judul' control={form.control} />
-              <TextAreaField
-                name='deskripsi'
-                label='abstrak'
-                control={form.control}
+              <InputField
+                name='bidang'
+                label='bidang'
+                control={formSubmit.control}
               />
+              <div className='space-y-2'>
+                <InputField
+                  name='judul'
+                  label='judul'
+                  control={formSubmit.control}
+                />
+              </div>
+              <div className='space-y-2'>
+                <TextAreaField
+                  name='deskripsi'
+                  label='abstrak'
+                  control={formSubmit.control}
+                />
+              </div>
               <ModalJenisPenelitian
                 data={listPenelitian?.data || []}
                 isFetching={isFetching}
-                control={form.control}
+                control={formSubmit.control}
                 name='jenis_penelitian'
               />
               {kriteria && (
                 <SelectField
                   label='jenis kriteria'
-                  control={form.control}
+                  control={formSubmit.control}
                   name='luaran_kriteria'
                   options={kriteria || []}
                 />
@@ -260,7 +289,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
                 variant='outline'
                 className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
                 disabled={isPendingDraft}
-                onClick={() => onDraft(form.getValues())}
+                onClick={() => onDraft(formSubmit.getValues())}
               >
                 Draft as form
                 {isPendingDraft && (
