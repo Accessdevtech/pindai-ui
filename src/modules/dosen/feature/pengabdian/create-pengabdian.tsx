@@ -134,8 +134,6 @@ export default function CreatePengabdian() {
     setAnggota([])
   }
 
-  console.log(anggota)
-
   return (
     <div>
       <Breadcrumb href={`${ROUTE.DASHBOARD}/dosen/pengabdian`}>
