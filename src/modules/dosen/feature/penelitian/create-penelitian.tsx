@@ -22,17 +22,18 @@ import DataKetuaPenelitian from "./components/data-ketua-penelitian"
 import ModalDosen from "./components/modal-dosen"
 import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
+import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useCreateDraftPenelitian } from "./hook/use-penelitian/create-draft-penelitian"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
-import { dosenAtom } from "./state/store"
+import { anggotaAtom } from "./state/store"
 
 export default function CreatePenelitian() {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
 
-  const [anggota, setAnggota] = useAtom(dosenAtom)
+  const [anggota, setAnggota] = useAtom(anggotaAtom)
 
   const form = useForm<PenelitianType>({
     resolver: zodResolver(penelitianSchema),
@@ -68,6 +69,8 @@ export default function CreatePenelitian() {
       }
     }
   })
+
+  console.log(anggota)
 
   const { mutate: mutateDraft, isPending: isPendingDraft } =
     useCreateDraftPenelitian({
@@ -224,7 +227,7 @@ export default function CreatePenelitian() {
               <div className='flex flex-col gap-2 lg:flex-row'>
                 <ModalDosen />
                 <ModalDosenManual />
-                {/* <ModalMahasiswaManual /> */}
+                <ModalMahasiswaManual />
               </div>
 
               <div>

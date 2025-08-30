@@ -2,8 +2,8 @@
 import { Checkbox } from "@/components/ui/checkbox"
 import { ColumnDef } from "@tanstack/react-table"
 import { useAtomValue } from "jotai"
-import { DosenSchemaType } from "../schema/dosen-schema"
-import { dosenAtom, selectedAnggotaAtom } from "../state/store"
+import { AnggotaSchemaType } from "../schema/dosen-schema"
+import { anggotaAtom, selectedAnggotaAtom } from "../state/store"
 
 interface FormFieldProps {
   handleCheckboxChange: (nidn: string) => void
@@ -11,12 +11,12 @@ interface FormFieldProps {
 
 export const columnTambahAnggota = ({
   handleCheckboxChange
-}: FormFieldProps): ColumnDef<DosenSchemaType>[] => {
+}: FormFieldProps): ColumnDef<AnggotaSchemaType>[] => {
   return [
     {
       id: "select",
       cell: ({ row }) => {
-        const anggota = useAtomValue(dosenAtom)
+        const anggota = useAtomValue(anggotaAtom)
         const selectedAnggota = useAtomValue(selectedAnggotaAtom)
 
         const isSlected = anggota.some(item => item.nidn === row.original.nidn)

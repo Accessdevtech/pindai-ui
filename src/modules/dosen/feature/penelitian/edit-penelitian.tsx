@@ -22,11 +22,12 @@ import DataKetuaPenelitian from "./components/data-ketua-penelitian"
 import ModalDosen from "./components/modal-dosen"
 import ModalDosenManual from "./components/modal-dosen-manual"
 import ModalJenisPenelitian from "./components/modal-jenis-penelitian"
+import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useGetDraftPenelitian } from "./hook/use-penelitian/get-draft"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
 import { useUpdatePenelitian } from "./hook/use-penelitian/update-penelitian"
 import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
-import { dosenAtom } from "./state/store"
+import { anggotaAtom } from "./state/store"
 
 interface EditPenelitianProps {
   id: string
@@ -36,7 +37,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
   const { data } = useGetDraftPenelitian(id)
-  const [anggota, setAnggota] = useAtom(dosenAtom)
+  const [anggota, setAnggota] = useAtom(anggotaAtom)
 
   const form = useForm<PenelitianType>({
     resolver: zodResolver(penelitianSchema),
@@ -140,6 +141,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
           nidn: member.nidn || "",
           name: member.name,
           name_with_title: member.name_with_title || "",
+          fakultas: member.fakultas,
           prodi: member.prodi,
           phone_number: member.phone_number,
           email: member.email,
@@ -244,6 +246,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
               <div className='flex flex-col gap-2 lg:flex-row'>
                 <ModalDosen />
                 <ModalDosenManual />
+                <ModalMahasiswaManual />
               </div>
 
               <div>

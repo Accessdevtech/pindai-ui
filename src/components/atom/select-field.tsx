@@ -11,14 +11,14 @@ import {
   CommandGroup,
   CommandInput,
   CommandItem,
-  CommandList,
+  CommandList
 } from "../ui/command"
 import {
   FormControl,
   FormField,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from "../ui/form"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
@@ -50,7 +50,7 @@ export default function SelectField<TFieldValues extends FieldValues>({
                   variant='outline'
                   role='combobox'
                   className={cn("w-full justify-between capitalize", {
-                    "text-muted-foreground": !field.value,
+                    "text-muted-foreground": !field.value
                   })}
                 >
                   <span className='truncate'>
@@ -84,7 +84,7 @@ export default function SelectField<TFieldValues extends FieldValues>({
                         >
                           <Check
                             className={cn("opacity-0", {
-                              "opacity-100": option.id === field.value,
+                              "opacity-100": option.id === field.value
                             })}
                           />
                           {option.name}
