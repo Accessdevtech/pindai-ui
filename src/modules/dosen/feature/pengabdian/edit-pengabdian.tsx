@@ -10,6 +10,7 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
+import { formatAcademicYearForBackend } from "@/schema/validation-utils"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useAtom } from "jotai"
 import { Loader2Icon } from "lucide-react"
@@ -192,7 +193,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
                   label='Tahun Akademik'
                   control={form.control}
                   options={tahunAkademik.map(item => ({
-                    id: item.split("/").join(""),
+                    id: formatAcademicYearForBackend(item),
                     name: item
                   }))}
                 />

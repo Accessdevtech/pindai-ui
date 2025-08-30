@@ -8,6 +8,17 @@ import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
+import {
+  penelitianDraftSchema,
+  PenelitianDraftType,
+  penelitianFinalSchema,
+  PenelitianFinalType
+} from "@/schema/penelitian-base"
+import {
+  type PenelitianCompleteDraftType,
+  type PenelitianCompleteFinalType
+} from "@/schema/penelitian-comprehensive"
+import { formatAcademicYearForBackend } from "@/schema/validation-utils"
 import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -26,26 +37,34 @@ import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useCreateDraftPenelitian } from "./hook/use-penelitian/create-draft-penelitian"
 import { useCreatePenelitian } from "./hook/use-penelitian/create-penelitian"
 import { useGetListPenelitian } from "./hook/use-penelitian/get-list-penelitian"
-import { penelitianSchema, PenelitianType } from "./schema/penelitian-schema"
 import { anggotaAtom } from "./state/store"
 
 export default function CreatePenelitian() {
   const router = useRouter()
   const [tahunAkademik, setTahunAkademik] = useState<string[]>([])
 
+  const defaultValues = {
+    tahun_akademik: "",
+    semester: "",
+    judul: "",
+    bidang: "",
+    deskripsi: "",
+    jenis_penelitian: "",
+    luaran_kriteria: ""
+  }
   const [anggota, setAnggota] = useAtom(anggotaAtom)
+  // Use final type as base form type to ensure all fields are properly typed
+  // Validation will be handled manually in onDraft and onSubmit functions
+  const formSumbit = useForm<PenelitianFinalType>({
+    resolver: zodResolver(penelitianFinalSchema),
+    mode: "onSubmit",
+    defaultValues
+  })
 
-  const form = useForm<PenelitianType>({
-    resolver: zodResolver(penelitianSchema),
-    defaultValues: {
-      tahun_akademik: "",
-      semester: "",
-      judul: "",
-      bidang: "",
-      deskripsi: "",
-      jenis_penelitian: "",
-      luaran_kriteria: ""
-    }
+  const formDraft = useForm<PenelitianDraftType>({
+    resolver: zodResolver(penelitianDraftSchema),
+    mode: "onSubmit",
+    defaultValues
   })
 
   const { mutate, isPending } = useCreatePenelitian({
@@ -55,13 +74,13 @@ export default function CreatePenelitian() {
       }
       toast.success(res.message)
       setAnggota([])
-      form.reset()
+      formSumbit.reset()
       router.push(`${ROUTE.DASHBOARD}/dosen/penelitian/${res.data.id}?new=true`)
     },
     onError: err => {
       if (err.response?.data?.errors) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
-          form.setError(key as keyof PenelitianType, {
+          formSumbit.setError(key as keyof PenelitianFinalType, {
             message: value as string,
             type: "manual"
           })
@@ -78,13 +97,13 @@ export default function CreatePenelitian() {
         }
         toast.success(res.message)
         setAnggota([])
-        form.reset()
+        formSumbit.reset()
         router.push(`${ROUTE.DASHBOARD}/dosen/penelitian`)
       },
       onError: err => {
         if (err.response?.data?.errors) {
           for (const [key, value] of Object.entries(err.response.data.errors)) {
-            form.setError(key as keyof PenelitianType, {
+            formSumbit.setError(key as keyof PenelitianDraftType, {
               message: value as string,
               type: "manual"
             })
@@ -93,37 +112,42 @@ export default function CreatePenelitian() {
       }
     })
 
-  const onDraft = async (data: PenelitianType) => {
-    const datas = {
+  const onDraft = async (data: PenelitianDraftType) => {
+    // Create complete draft data with anggota
+    const draftData: PenelitianCompleteDraftType = {
       ...data,
-      is_draft: true,
       anggota
     }
-    mutateDraft(datas)
+    mutateDraft(draftData)
   }
 
-  const onSubmit = async (data: PenelitianType) => {
-    const datas = {
+  const onSubmit = async (data: PenelitianFinalType) => {
+    // Create complete final data with anggota
+    const finalData: PenelitianCompleteFinalType = {
       ...data,
       anggota
     }
-
-    mutate(datas)
+    mutate(finalData)
   }
 
   const { data: listPenelitian, isFetching } = useGetListPenelitian()
 
-  const watchJenisPenelitian = form.watch("jenis_penelitian")
+  const watchJenisPenelitian = formSumbit.watch("jenis_penelitian")
 
   const kriteria = listPenelitian?.data.find(
     item => item.id === watchJenisPenelitian
   )?.kriteria
 
+  // Note: Validation is handled manually in onDraft and onSubmit functions
+  // Draft mode only requires tahun_akademik and semester
+  // Final mode requires all fields
+
   const columnsView = columnAnggotaView()
 
   const handleReset = () => {
-    form.reset()
+    formSumbit.reset()
     setAnggota([])
+    formSumbit.clearErrors() // Clear any validation errors
   }
 
   useEffect(() => {
@@ -142,7 +166,7 @@ export default function CreatePenelitian() {
       </Breadcrumb>
       <Card className='max-w-full'>
         <CardContent className='py-6'>
-          <Form form={form} onSubmit={onSubmit}>
+          <Form form={formSumbit} onSubmit={onSubmit}>
             <div className='flex w-full flex-col gap-4'>
               <Divider
                 text='data penelitian-tahap 1'
@@ -152,16 +176,16 @@ export default function CreatePenelitian() {
                 <SelectField
                   name='tahun_akademik'
                   label='Tahun Akademik'
-                  control={form.control}
+                  control={formSumbit.control}
                   options={tahunAkademik.map(item => ({
-                    id: item.split("/").join(""),
+                    id: formatAcademicYearForBackend(item),
                     name: item
                   }))}
                 />
                 <SelectField
                   name='semester'
                   label='Semester'
-                  control={form.control}
+                  control={formSumbit.control}
                   options={[
                     {
                       id: "ganjil",
@@ -175,23 +199,35 @@ export default function CreatePenelitian() {
                 />
               </div>
 
-              <InputField name='bidang' label='bidang' control={form.control} />
-              <InputField name='judul' label='judul' control={form.control} />
-              <TextAreaField
-                name='deskripsi'
-                label='abstrak'
-                control={form.control}
+              <InputField
+                name='bidang'
+                label='bidang'
+                control={formSumbit.control}
               />
+              <div className='space-y-2'>
+                <InputField
+                  name='judul'
+                  label='judul'
+                  control={formSumbit.control}
+                />
+              </div>
+              <div className='space-y-2'>
+                <TextAreaField
+                  name='deskripsi'
+                  label='abstrak'
+                  control={formSumbit.control}
+                />
+              </div>
               <ModalJenisPenelitian
                 data={listPenelitian?.data || []}
                 isFetching={isFetching}
-                control={form.control}
+                control={formSumbit.control}
                 name='jenis_penelitian'
               />
               {kriteria && (
                 <SelectField
                   label='jenis kriteria'
-                  control={form.control}
+                  control={formSumbit.control}
                   name='luaran_kriteria'
                   options={kriteria || []}
                 />
@@ -239,9 +275,9 @@ export default function CreatePenelitian() {
                 variant='outline'
                 className='mt-4 w-full border border-primary capitalize text-primary hover:bg-primary hover:text-primary-foreground'
                 disabled={isPendingDraft}
-                onClick={() => onDraft(form.getValues())}
+                onClick={() => onDraft(formDraft.getValues())}
               >
-                Draft as form
+                Save as Draft
                 {isPendingDraft && (
                   <Loader2Icon className='ml-2 animate-spin' />
                 )}
@@ -251,7 +287,7 @@ export default function CreatePenelitian() {
                 className='mt-4 w-full capitalize'
                 disabled={isPending}
               >
-                Submit & upload proposal
+                Submit Final
                 {isPending && <Loader2Icon className='ml-2 animate-spin' />}
               </Button>
               <Button

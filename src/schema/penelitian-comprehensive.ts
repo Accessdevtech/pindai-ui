@@ -1,16 +1,9 @@
 import { z } from "zod"
 import {
-  penelitianFinalSchema,
-  penelitianDraftSchema,
-  type PenelitianFinalType,
-  type PenelitianDraftType
-} from "./penelitian-base"
-import {
-  anggotaArrayFinalSchema,
   anggotaArrayDraftSchema,
-  type AnggotaArrayFinalType,
-  type AnggotaArrayDraftType
+  anggotaArrayFinalSchema
 } from "./anggota-validation"
+import { penelitianDraftSchema, penelitianFinalSchema } from "./penelitian-base"
 
 /**
  * Comprehensive penelitian schemas that include both penelitian data and anggota data
@@ -50,24 +43,35 @@ export const penelitianCompleteUnionSchema = z.union([
 /**
  * Discriminated union schema for complete penelitian based on draft status
  */
-export const penelitianCompleteDiscriminatedSchema = z.discriminatedUnion("is_draft", [
-  z.object({
-    is_draft: z.literal(false),
-    ...penelitianCompleteFinalSchema.shape
-  }),
-  z.object({
-    is_draft: z.literal(true),
-    ...penelitianCompleteDraftSchema.shape
-  })
-])
+export const penelitianCompleteDiscriminatedSchema = z.discriminatedUnion(
+  "is_draft",
+  [
+    z.object({
+      is_draft: z.literal(false),
+      ...penelitianCompleteFinalSchema.shape
+    }),
+    z.object({
+      is_draft: z.literal(true),
+      ...penelitianCompleteDraftSchema.shape
+    })
+  ]
+)
 
 /**
  * Type definitions for complete penelitian data
  */
-export type PenelitianCompleteFinalType = z.infer<typeof penelitianCompleteFinalSchema>
-export type PenelitianCompleteDraftType = z.infer<typeof penelitianCompleteDraftSchema>
-export type PenelitianCompleteUnionType = z.infer<typeof penelitianCompleteUnionSchema>
-export type PenelitianCompleteDiscriminatedType = z.infer<typeof penelitianCompleteDiscriminatedSchema>
+export type PenelitianCompleteFinalType = z.infer<
+  typeof penelitianCompleteFinalSchema
+>
+export type PenelitianCompleteDraftType = z.infer<
+  typeof penelitianCompleteDraftSchema
+>
+export type PenelitianCompleteUnionType = z.infer<
+  typeof penelitianCompleteUnionSchema
+>
+export type PenelitianCompleteDiscriminatedType = z.infer<
+  typeof penelitianCompleteDiscriminatedSchema
+>
 
 /**
  * Utility function to create complete penelitian schema based on draft status
@@ -85,15 +89,15 @@ export const createCompletePenelitianSchema = (isDraft: boolean) => {
  */
 export const validateCompletePenelitianForFinalSubmission = (data: unknown) => {
   const result = penelitianCompleteFinalSchema.safeParse(data)
-  
+
   if (!result.success) {
-    const penelitianErrors = result.error.issues.filter(issue => 
-      !issue.path.includes('anggota')
+    const penelitianErrors = result.error.issues.filter(
+      issue => !issue.path.includes("anggota")
     )
-    const anggotaErrors = result.error.issues.filter(issue => 
-      issue.path.includes('anggota')
+    const anggotaErrors = result.error.issues.filter(issue =>
+      issue.path.includes("anggota")
     )
-    
+
     return {
       isValid: false,
       penelitianErrors,
@@ -101,7 +105,7 @@ export const validateCompletePenelitianForFinalSubmission = (data: unknown) => {
       allErrors: result.error.issues
     }
   }
-  
+
   return {
     isValid: true,
     data: result.data,
@@ -117,7 +121,7 @@ export const validateCompletePenelitianForFinalSubmission = (data: unknown) => {
  */
 export const validateCompletePenelitianDraft = (data: unknown) => {
   const draftResult = penelitianCompleteDraftSchema.safeParse(data)
-  
+
   if (!draftResult.success) {
     return {
       isValid: false,
@@ -125,24 +129,27 @@ export const validateCompletePenelitianDraft = (data: unknown) => {
       completionPercentage: 0
     }
   }
-  
+
   // Calculate overall completion percentage
   const penelitianFields = Object.keys(penelitianFinalSchema.shape).length
-  const filledPenelitianFields = Object.entries(draftResult.data)
-    .filter(([key, value]) => key !== 'anggota' && value && value.toString().trim() !== '')
-    .length
-  
+  const filledPenelitianFields = Object.entries(draftResult.data).filter(
+    ([key, value]) =>
+      key !== "anggota" && value && value.toString().trim() !== ""
+  ).length
+
   const penelitianCompletion = (filledPenelitianFields / penelitianFields) * 100
-  
+
   // Calculate anggota completion
   const anggotaCount = draftResult.data.anggota?.length || 0
   const anggotaCompletion = anggotaCount > 0 ? 50 : 0 // Basic completion if any anggota exists
-  
-  const overallCompletion = Math.round((penelitianCompletion * 0.7) + (anggotaCompletion * 0.3))
-  
+
+  const overallCompletion = Math.round(
+    penelitianCompletion * 0.7 + anggotaCompletion * 0.3
+  )
+
   // Check if ready for final submission
   const finalValidation = validateCompletePenelitianForFinalSubmission(data)
-  
+
   return {
     isValid: true,
     data: draftResult.data,

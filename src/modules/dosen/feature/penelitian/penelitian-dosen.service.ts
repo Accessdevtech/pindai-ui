@@ -9,6 +9,7 @@ import {
 } from "./penelitian-dosen.interface"
 
 import { ListPenelitianResponse } from "@/modules/listdata/penelitian.list.interface"
+import { PenelitianDraftType } from "@/schema/penelitian-base"
 import { PenelitianType } from "./schema/penelitian-schema"
 
 export async function getPenelitianDosen(
@@ -47,7 +48,7 @@ export async function getDraftPenelitian(id: string) {
   )
   return response.data
 }
-export async function createDraftPenelitian(data: PenelitianType) {
+export async function createDraftPenelitian(data: PenelitianDraftType) {
   const response: PenelitianDosenResponse = await postData(
     API_ENDPOINTS_DOSEN.DRAFT_PENELITIAN,
     data
@@ -63,7 +64,10 @@ export async function createPenelitianDosen(data: PenelitianType) {
   return response
 }
 
-export async function updatePenelitianDosen(id: string, data: PenelitianType) {
+export async function updatePenelitianDosen(
+  id: string,
+  data: PenelitianDraftType
+) {
   const response: PenelitianDosenResponse = await putData(
     `${API_ENDPOINTS_DOSEN.PENELITIAN}/${id}`,
     data
