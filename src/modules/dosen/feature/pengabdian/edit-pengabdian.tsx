@@ -8,16 +8,6 @@ import DataTable from "@/components/molecules/data-table"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
-import {
-  pengabdianDraftSchema,
-  PengabdianDraftType,
-  pengabdianFinalSchema,
-  PengabdianFinalType
-} from "@/schema/pengabdian-base"
-import {
-  PengabdianCompleteDraftType,
-  PengabdianCompleteFinalType
-} from "@/schema/pengabdian-comprehensive"
 import { formatAcademicYearForBackend } from "@/schema/validation-utils"
 import { ROUTE } from "@/services/route"
 import { generateAcademicYears } from "@/utils/tahun-akademik"
@@ -37,6 +27,7 @@ import ModalMahasiswaManual from "./components/modal-mahasiswa-manual"
 import { useGetDraftPengabdian } from "./hook/use-pengabdian/get-draft"
 import { useGetListPengabdian } from "./hook/use-pengabdian/get-list-pengabdian"
 import { useUpdatePengabdian } from "./hook/use-pengabdian/update-pengabdian"
+import { pengabdianSchema, PengabdianType } from "./schema/pengabdian-schema"
 import { anggotaAtom } from "./state/store"
 
 interface EditPengabdianProps {
@@ -59,15 +50,11 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
     luaran_kriteria: ""
   }
 
-  const formSubmit = useForm<PengabdianFinalType>({
-    resolver: zodResolver(pengabdianFinalSchema),
+  const formSubmit = useForm<PengabdianType>({
+    resolver: zodResolver(pengabdianSchema),
     defaultValues
   })
 
-  const formDraft = useForm<PengabdianDraftType>({
-    resolver: zodResolver(pengabdianDraftSchema),
-    defaultValues
-  })
   // Reset form values when data is loaded
   useEffect(() => {
     if (data) {
@@ -96,7 +83,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
     onError: err => {
       if (err.response?.data?.errors) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
-          formSubmit.setError(key as keyof PengabdianFinalType, {
+          formSubmit.setError(key as keyof PengabdianType, {
             message: value as string,
             type: "manual"
           })
@@ -113,13 +100,13 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
         }
         toast.success(res.message)
         setAnggota([])
-        formDraft.reset()
+        formSubmit.reset()
         router.push(`${ROUTE.DASHBOARD}/dosen/pengabdian`)
       },
       onError: err => {
         if (err.response?.data?.errors) {
           for (const [key, value] of Object.entries(err.response.data.errors)) {
-            formSubmit.setError(key as keyof PengabdianDraftType, {
+            formSubmit.setError(key as keyof PengabdianType, {
               message: value as string,
               type: "manual"
             })
@@ -170,17 +157,19 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
     }
   }, [data?.anggota, setAnggota])
 
-  const onDraft = async (data: PengabdianDraftType) => {
-    const datas: PengabdianCompleteDraftType = {
+  const onDraft = async (data: PengabdianType) => {
+    const datas = {
       ...data,
+      is_draft: true,
       anggota
     }
     mutateDraft({ id, data: datas })
   }
 
-  const onSubmit = async (data: PengabdianFinalType) => {
-    const datas: PengabdianCompleteFinalType = {
+  const onSubmit = async (data: PengabdianType) => {
+    const datas = {
       ...data,
+      is_draft: false,
       anggota
     }
 
