@@ -5,14 +5,15 @@ import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useAtom, useSetAtom } from "jotai"
+import { useSetAtom } from "jotai"
+import { useState } from "react"
 import { useForm } from "react-hook-form"
 import { AnggotaSchemaType, anggotaSchema } from "../schema/dosen-schema"
-import { anggotaAtom, isDialogOpenManualAtom } from "../state/store"
+import { anggotaAtom } from "../state/store"
 
 export default function ModalDosenManual() {
   const setAnggota = useSetAtom(anggotaAtom)
-  const [openModalManual, setOpenModalManual] = useAtom(isDialogOpenManualAtom)
+  const [openModalManual, setOpenModalManual] = useState(false)
   const formAnggotaManual = useForm<AnggotaSchemaType>({
     resolver: zodResolver(anggotaSchema),
     defaultValues: {
@@ -32,6 +33,7 @@ export default function ModalDosenManual() {
   const onSubmitAnggotaManual = (data: AnggotaSchemaType) => {
     setAnggota(prevAnggota => [...prevAnggota, data])
     setOpenModalManual(false)
+    formAnggotaManual.reset()
   }
   return (
     <Modal

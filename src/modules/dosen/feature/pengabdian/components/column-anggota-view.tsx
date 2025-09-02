@@ -5,6 +5,8 @@ import { TrashIcon } from "lucide-react"
 import { useState } from "react"
 import { AnggotaSchemaType } from "../schema/dosen-schema"
 import { anggotaAtom } from "../state/store"
+import EditModalDosenManual from "./edit-modal-dosen-manual"
+import EditModalMahasiswaManual from "./edit-modal-mahasiswa-manual"
 
 export const columnAnggotaView = (): ColumnDef<AnggotaSchemaType>[] => {
   return [
@@ -12,6 +14,45 @@ export const columnAnggotaView = (): ColumnDef<AnggotaSchemaType>[] => {
       id: "no",
       header: "No",
       cell: ({ row }) => <span>{row.index + 1}</span>
+    },
+    {
+      id: "action",
+      header: "Aksi",
+      cell: ({ row }) => {
+        const [anggotaValue, setAnggotaValue] = useAtom(anggotaAtom)
+        const item = row.original
+        const [open, setOpen] = useState(false)
+
+        const handleClick = () => {
+          const newValue = anggotaValue.filter(
+            item => item.nidn !== row.original.nidn
+          )
+          setAnggotaValue(newValue)
+        }
+
+        return (
+          <div className='flex items-center gap-2'>
+            {row.original.job_functional === "Mahasiswa" ? (
+              <EditModalMahasiswaManual data={item} />
+            ) : (
+              <EditModalDosenManual data={item} />
+            )}
+            <Alert
+              Icon={TrashIcon}
+              open={open}
+              setOpen={setOpen}
+              title={`hapus data ${item.name} ini`}
+              description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
+              className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
+              onClick={handleClick}
+              tooltipContentText='hapus'
+              triggerAction='Hapus'
+              size='icon'
+              side='right'
+            />
+          </div>
+        )
+      }
     },
     {
       accessorKey: "nidn",
@@ -56,38 +97,6 @@ export const columnAnggotaView = (): ColumnDef<AnggotaSchemaType>[] => {
     {
       accessorKey: "affiliate_campus",
       header: "Kapus afiliasi"
-    },
-    {
-      id: "action",
-      header: "Aksi",
-      cell: ({ row }) => {
-        const [anggotaValue, setAnggotaValue] = useAtom(anggotaAtom)
-        const item = row.original
-        const [open, setOpen] = useState(false)
-
-        const handleClick = () => {
-          const newValue = anggotaValue.filter(
-            item => item.nidn !== row.original.nidn
-          )
-          setAnggotaValue(newValue)
-        }
-
-        return (
-          <Alert
-            Icon={TrashIcon}
-            open={open}
-            setOpen={setOpen}
-            title={`hapus data ${item.name} ini`}
-            description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
-            className='bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground'
-            onClick={handleClick}
-            tooltipContentText='hapus'
-            triggerAction='Hapus'
-            size='icon'
-            side='right'
-          />
-        )
-      }
     }
   ]
 }

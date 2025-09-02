@@ -4,12 +4,19 @@ import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSetAtom } from "jotai"
-import { useState } from "react"
+import { EditIcon } from "lucide-react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { anggotaSchema, AnggotaSchemaType } from "../schema/dosen-schema"
 import { anggotaAtom } from "../state/store"
 
-export default function ModalMahasiswaManual() {
+interface EditModalMahasiswaManualProps {
+  data: AnggotaSchemaType
+}
+
+export default function EditModalMahasiswaManual({
+  data
+}: EditModalMahasiswaManualProps) {
   const setAnggota = useSetAtom(anggotaAtom)
   const [open, setOpen] = useState(false)
   const formMahasiswaManual = useForm<AnggotaSchemaType>({
@@ -28,6 +35,11 @@ export default function ModalMahasiswaManual() {
       affiliate_campus: "-"
     }
   })
+
+  useEffect(() => {
+    formMahasiswaManual.reset(data)
+  }, [data, formMahasiswaManual])
+
   const onSubmitMahasiswaManual = (data: AnggotaSchemaType) => {
     setAnggota(prevMahasiswa => [...prevMahasiswa, data])
     setOpen(false)
@@ -38,7 +50,8 @@ export default function ModalMahasiswaManual() {
       title='Daftar mahasiswa penelitian manual'
       open={open}
       setOpen={setOpen}
-      name='tambah mahasiswa manual'
+      Icon={EditIcon}
+      size='icon'
       description='Tambahkan mahasiswa penelitian secara manual dengan mengisi form yang tersedia'
       tooltipContent='Detail mahasiswa penelitian'
       variant='outline'
