@@ -4,7 +4,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import { downloadDocxFile, uploadPdfFile } from "@/utils/files"
 
@@ -23,7 +23,7 @@ import { EachUtil, Every, Reduce } from "@/utils/each-utils"
 import { useAtom, useSetAtom } from "jotai"
 import { FileOutput, UploadIcon } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
@@ -36,12 +36,13 @@ import { useUploadPenelitian } from "./hook/use-penelitian/upload"
 
 export default function DetailPenelitianPage({
   id,
-  user,
+  user
 }: {
   id: string
   user: Dosen
 }) {
   const { refresh } = useRouter()
+  const [open, setOpen] = useState(false)
   const setLaporanKemajuan = useSetAtom(laporanKemajuanAtom)
   const setLaporan = useSetAtom(laporanAtom)
   const [proposal, setProposal] = useAtom(proposalAtom)
@@ -53,7 +54,7 @@ export default function DetailPenelitianPage({
     if (isNew === true) {
       toast.info("Data berhasil disubmit", {
         description: "Silahkan unggah proposal penelitian anda",
-        duration: 5000,
+        duration: 5000
       })
     }
 
@@ -68,7 +69,7 @@ export default function DetailPenelitianPage({
     onError(err) {
       toast.error(err.response?.data.message)
       toast.dismiss()
-    },
+    }
   })
 
   const { mutate: upload } = useUploadPenelitian({
@@ -77,11 +78,12 @@ export default function DetailPenelitianPage({
       setProposal(null)
       setLaporanKemajuan(null)
       setLaporan(null)
+      setOpen(false)
       refresh()
     },
     onError(err) {
       toast.error(err.response?.data.message)
-    },
+    }
   })
 
   const handleFileUpload = async (file: File, jenis_dokumen?: string) => {
@@ -91,7 +93,7 @@ export default function DetailPenelitianPage({
       id,
       file: fileEncode,
       category: "penelitian",
-      jenis_dokumen: jenis_dokumen?.split(" ").join("_"),
+      jenis_dokumen: jenis_dokumen?.split(" ").join("_")
     })
   }
 
@@ -99,12 +101,12 @@ export default function DetailPenelitianPage({
     mutate({
       id,
       jenis_dokumen: jenis_Dokumen.split(" ").join("_"),
-      category: "penelitian",
+      category: "penelitian"
     })
   }
 
   const isLeader = data?.anggota.some(
-    anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
+    anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn
   )
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
@@ -112,7 +114,7 @@ export default function DetailPenelitianPage({
     isLeader,
     status: data?.status,
     handleFileUpload,
-    handleDownload,
+    handleDownload
   })
 
   if (isPending) toast.loading("Sedang Mengunduh Dokumen")
@@ -120,7 +122,7 @@ export default function DetailPenelitianPage({
   const statusArray = [
     data?.status.kaprodi,
     data?.status.dppm,
-    data?.status.keuangan,
+    data?.status.keuangan
   ]
 
   const isRejectedDppm = Reduce(statusArray, status => status === "rejected")
@@ -151,11 +153,11 @@ export default function DetailPenelitianPage({
         data={[
           {
             name: "Penelitian",
-            href: `${ROUTE.DASHBOARD}/dosen/penelitian`,
+            href: `${ROUTE.DASHBOARD}/dosen/penelitian`
           },
           {
-            name: "Detail",
-          },
+            name: "Detail"
+          }
         ]}
       >
         {data?.title}
@@ -209,7 +211,7 @@ export default function DetailPenelitianPage({
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
               { label: "Dibuat pada", value: data?.created_date },
-              { label: "Abstrak", value: data?.deskripsi },
+              { label: "Abstrak", value: data?.deskripsi }
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>
@@ -223,6 +225,8 @@ export default function DetailPenelitianPage({
           <div className='flex gap-4'>
             <div className='flex w-full flex-col gap-2'>
               <Modal
+                open={open}
+                setOpen={setOpen}
                 name='Unggah Proposal Penelitian'
                 Icon={UploadIcon}
                 title='Unggah Proposal Penelitian'
@@ -230,7 +234,7 @@ export default function DetailPenelitianPage({
                 btnStyle='w-full'
                 description='Unggah penelitian Anda dalam format PDF menggunakan form ini.'
                 className={cn({
-                  "max-h-fit max-w-2xl": proposal,
+                  "max-h-fit max-w-2xl": proposal
                 })}
               >
                 <ScrollArea className='max-h-[70vh]'>
@@ -252,7 +256,7 @@ export default function DetailPenelitianPage({
               <p
                 className={cn(
                   "text-sm font-semibold text-muted-foreground",
-                  isFileExist && "text-green-500",
+                  isFileExist && "text-green-500"
                 )}
               >
                 {isFileExist
