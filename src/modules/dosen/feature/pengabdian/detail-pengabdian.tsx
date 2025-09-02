@@ -3,7 +3,7 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardTitle,
+  CardTitle
 } from "@/components/ui/card"
 import { downloadDocxFile, uploadPdfFile } from "@/utils/files"
 
@@ -22,7 +22,7 @@ import { EachUtil, Every, Reduce } from "@/utils/each-utils"
 import { useAtom, useSetAtom } from "jotai"
 import { FileOutput, UploadIcon } from "lucide-react"
 import { useRouter, useSearchParams } from "next/navigation"
-import { useEffect } from "react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { Dosen } from "../../dosen.interface"
 import { columnsDokumen } from "./components/column-dokumen"
@@ -35,12 +35,13 @@ import { useUploadPengabdian } from "./hook/use-pengabdian/upload"
 
 export default function DetailPengabdianPage({
   id,
-  user,
+  user
 }: {
   id: string
   user: Dosen
 }) {
   const { refresh } = useRouter()
+  const [open, setOpen] = useState(false)
   const setLaporanKemajuan = useSetAtom(laporanKemajuanAtom)
   const setLaporan = useSetAtom(laporanAtom)
   const [proposal, setProposal] = useAtom(proposalAtom)
@@ -53,7 +54,7 @@ export default function DetailPengabdianPage({
     if (isNew === true) {
       toast.info("Data berhasil disubmit", {
         description: "Silahkan unggah proposal pengabdian anda",
-        duration: 5000,
+        duration: 5000
       })
     }
     toast.dismiss()
@@ -67,7 +68,7 @@ export default function DetailPengabdianPage({
     onError(err) {
       toast.error(err.response?.data.message)
       toast.dismiss()
-    },
+    }
   })
 
   const { mutate: upload } = useUploadPengabdian({
@@ -76,11 +77,12 @@ export default function DetailPengabdianPage({
       setProposal(null)
       setLaporanKemajuan(null)
       setLaporan(null)
+      setOpen(false)
       refresh()
     },
     onError(err) {
       toast.error(err.response?.data.message)
-    },
+    }
   })
 
   const handleFileUpload = async (file: File, jenis_dokumen?: string) => {
@@ -90,7 +92,7 @@ export default function DetailPengabdianPage({
       id,
       file: fileEncode,
       category: "pengabdian",
-      jenis_dokumen: jenis_dokumen?.split(" ").join("_"),
+      jenis_dokumen: jenis_dokumen?.split(" ").join("_")
     })
   }
 
@@ -98,12 +100,12 @@ export default function DetailPengabdianPage({
     mutate({
       id,
       jenis_dokumen: jenis_Dokumen?.split(" ").join("_"),
-      category: "pengabdian",
+      category: "pengabdian"
     })
   }
 
   const isLeader = data?.anggota.some(
-    anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn,
+    anggota => anggota.is_leader === 1 && anggota.nidn === user.nidn
   )
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
@@ -111,7 +113,7 @@ export default function DetailPengabdianPage({
     isLeader,
     status: data?.status,
     handleFileUpload,
-    handleDownload,
+    handleDownload
   })
 
   if (isPending) toast.loading("Sedang Mengunduh Dokumen")
@@ -119,7 +121,7 @@ export default function DetailPengabdianPage({
   const statusArray = [
     data?.status.kaprodi,
     data?.status.dppm,
-    data?.status.keuangan,
+    data?.status.keuangan
   ]
 
   const isRejectedDppm = Reduce(statusArray, status => status === "rejected")
@@ -149,11 +151,11 @@ export default function DetailPengabdianPage({
         data={[
           {
             name: "Pengabdian",
-            href: `${ROUTE.DASHBOARD}/dosen/pengabdian`,
+            href: `${ROUTE.DASHBOARD}/dosen/pengabdian`
           },
           {
-            name: "Detail",
-          },
+            name: "Detail"
+          }
         ]}
       >
         {data?.title}
@@ -207,7 +209,7 @@ export default function DetailPengabdianPage({
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
               { label: "Dibuat pada", value: data?.created_date },
-              { label: "Abstrak", value: data?.deskripsi },
+              { label: "Abstrak", value: data?.deskripsi }
             ]}
             render={(item, index) => (
               <div className='flex flex-col gap-2' key={index}>
@@ -221,6 +223,8 @@ export default function DetailPengabdianPage({
           <div className='flex gap-4'>
             <div className='flex w-full flex-col gap-2'>
               <Modal
+                open={open}
+                setOpen={setOpen}
                 name='Unggah Proposal Pengabdian'
                 Icon={UploadIcon}
                 title='Unggah Proposal Pengabdian'
@@ -228,7 +232,7 @@ export default function DetailPengabdianPage({
                 disabled={!isLeader || isDisabled}
                 description='Unggah pengabdian Anda dalam format PDF menggunakan form ini.'
                 className={cn({
-                  "max-h-fit max-w-2xl": proposal,
+                  "max-h-fit max-w-2xl": proposal
                 })}
               >
                 <ScrollArea className='max-h-[70vh]'>
@@ -250,7 +254,7 @@ export default function DetailPengabdianPage({
               <p
                 className={cn(
                   "text-sm font-semibold text-muted-foreground",
-                  isFileExist && "text-green-500",
+                  isFileExist && "text-green-500"
                 )}
               >
                 {isFileExist
