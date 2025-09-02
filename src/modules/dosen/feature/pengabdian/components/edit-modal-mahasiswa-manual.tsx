@@ -3,7 +3,7 @@ import Modal from "@/components/atom/modal"
 import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useSetAtom } from "jotai"
+import { useAtom } from "jotai"
 import { EditIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -17,7 +17,7 @@ interface ModalMahasiswaManual {
 export default function EditModalMahasiswaManual({
   data
 }: ModalMahasiswaManual) {
-  const setAnggota = useSetAtom(anggotaAtom)
+  const [anggota, setAnggota] = useAtom(anggotaAtom)
   const [open, setOpen] = useState(false)
   const formMahasiswaManual = useForm<AnggotaSchemaType>({
     resolver: zodResolver(anggotaSchema),
@@ -40,8 +40,21 @@ export default function EditModalMahasiswaManual({
     formMahasiswaManual.reset(data)
   }, [data, formMahasiswaManual])
 
-  const onSubmitMahasiswaManual = (data: AnggotaSchemaType) => {
-    setAnggota(prevMahasiswa => [...prevMahasiswa, data])
+  const onSubmitMahasiswaManual = (formData: AnggotaSchemaType) => {
+    // Check for duplicate data based on NIDN (unique identifier)
+    const existingIndex = anggota.findIndex(item => item.nidn === formData.nidn)
+
+    if (existingIndex === -1) {
+      // Add new data if no duplicate found
+      setAnggota(prevAnggota => [...prevAnggota, formData])
+    } else {
+      // Replace existing data when duplicate is found
+      setAnggota(prevAnggota =>
+        prevAnggota.map((item, index) =>
+          index === existingIndex ? formData : item
+        )
+      )
+    }
     setOpen(false)
     formMahasiswaManual.reset()
   }
