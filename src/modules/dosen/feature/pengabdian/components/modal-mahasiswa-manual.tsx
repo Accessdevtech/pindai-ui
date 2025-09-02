@@ -31,6 +31,7 @@ export default function ModalMahasiswaManual() {
   const onSubmitMahasiswaManual = (data: AnggotaSchemaType) => {
     setAnggota(prevMahasiswa => [...prevMahasiswa, data])
     setOpen(false)
+    formMahasiswaManual.reset()
   }
   return (
     <Modal

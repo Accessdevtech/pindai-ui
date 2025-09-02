@@ -6,12 +6,17 @@ import { Button } from "@/components/ui/button"
 import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useSetAtom } from "jotai"
-import { useState } from "react"
+import { EditIcon } from "lucide-react"
+import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
 import { AnggotaSchemaType, anggotaSchema } from "../schema/dosen-schema"
 import { anggotaAtom } from "../state/store"
 
-export default function ModalDosenManual() {
+interface ModalDosenManual {
+  data: AnggotaSchemaType
+}
+
+export default function EditModalDosenManual({ data }: ModalDosenManual) {
   const setAnggota = useSetAtom(anggotaAtom)
   const [openModalManual, setOpenModalManual] = useState(false)
   const formAnggotaManual = useForm<AnggotaSchemaType>({
@@ -30,6 +35,11 @@ export default function ModalDosenManual() {
       affiliate_campus: ""
     }
   })
+
+  useEffect(() => {
+    formAnggotaManual.reset(data)
+  }, [data, formAnggotaManual])
+
   const onSubmitAnggotaManual = (data: AnggotaSchemaType) => {
     setAnggota(prevAnggota => [...prevAnggota, data])
     setOpenModalManual(false)
@@ -40,7 +50,8 @@ export default function ModalDosenManual() {
       title='Daftar dosen pengabdian manual'
       open={openModalManual}
       setOpen={setOpenModalManual}
-      name='tambah dosen manual'
+      Icon={EditIcon}
+      size='icon'
       description='Tambahkan dosen pengabdian secara manual dengan mengisi form yang tersedia'
       tooltipContent='Detail dosen pengabdian'
       variant='outline'
