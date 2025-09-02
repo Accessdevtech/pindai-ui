@@ -7,26 +7,23 @@ import {
   Card,
   CardContent,
   CardDescription,
-  CardHeader,
+  CardHeader
 } from "@/components/ui/card"
 import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { removeCookie } from "@/services/storage/cookie-storage-service"
 import { zodResolver } from "@hookform/resolvers/zod"
-// import { useAtomValue } from "jotai"
 import { useForm } from "react-hook-form"
 import { toast } from "sonner"
-// import { useDebounce } from "use-debounce"
 import { IFakultas } from "../listdata/fakultas.interface"
 import { useGetFakultasList } from "../listdata/hooks/use-fakultas/get-fakultas-list"
 import { useGetProdiList } from "../listdata/hooks/use-prodi/use-prodi-list"
 import { IProdi, IProfileDosen } from "./dosen.interface"
-// import { scholarSearchAtom } from "./feature/scholar/state/store"
 import { useUpdateProfile } from "./hooks/use-profile/update-profile"
 import { profileSchema, ProfileType } from "./profile.schema"
 
 export default function ProfileDosen({
   user,
-  refetch,
+  refetch
 }: {
   user: IProfileDosen
   refetch: () => void
@@ -46,9 +43,9 @@ export default function ProfileDosen({
         user?.affiliate_campus === null ? "" : user?.affiliate_campus,
       fakultas_id: user?.fakultas_id === null ? "" : user?.fakultas_id,
       prodi_id: user?.prodi_id === null ? "" : user?.prodi_id,
-      // scholar_id: user?.scholar_id === null ? "" : user?.scholar_id,
-      scopus_id: user?.scopus_id === null ? "" : user?.scopus_id,
-    },
+      scholar_id: user?.scholar_id === null ? "" : user?.scholar_id,
+      scopus_id: user?.scopus_id === null ? "" : user?.scopus_id
+    }
   })
 
   const { data: fakultas } = useGetFakultasList()
@@ -70,20 +67,16 @@ export default function ProfileDosen({
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof ProfileType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
-    },
+    }
   })
 
   const onSubmit = (data: ProfileType) => {
     mutate(data)
   }
-
-  // const valueScholar = useAtomValue(scholarSearchAtom)
-  // const [searchScholar] = useDebounce(valueScholar, 2000)
-  // const { data: scholar } = useListScholarId(searchScholar)
 
   return (
     <div className='flex flex-col gap-4'>
@@ -138,12 +131,11 @@ export default function ProfileDosen({
               options={(prodi?.data as IProdi[]) || []}
               control={form.control}
             />
-            {/* <SelectScholar
-              label='scholar ID'
+            <InputField
+              label='Scholar ID'
               name='scholar_id'
-              options={(scholar?.data as ScholarData[]) || []}
               control={form.control}
-            /> */}
+            />
             <InputField
               label='scopus ID'
               name='scopus_id'
