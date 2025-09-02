@@ -128,3 +128,10 @@ export async function uploadPenelitian(
   )
   return response
 }
+
+export async function getEditKembalikan(id: string) {
+  const response: DosenResponse<DetailPenelitian> = await getData(
+    `${API_ENDPOINTS_DOSEN.DIKEMBALIKAN_PENELITIAN}/${id}`
+  )
+  return response.data
+}

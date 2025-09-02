@@ -54,6 +54,9 @@ export const columnPenelitian = ({
           row.original.status.dppm
         ].some(status => status === "returned")
 
+        const baseRoute = `${ROUTE.DASHBOARD}/dosen/penelitian/edit/`
+        const routeDikembalikan = `${baseRoute}/dikembalikan/${row.original.id}`
+
         return (
           <span className='flex items-center justify-center gap-2'>
             {!isDraft && (
@@ -75,32 +78,44 @@ export const columnPenelitian = ({
                 </Link>
               </Tooltip>
             )}
-            {isDraft ? (
-              <Tooltip contentText='Edit Draft penelitian'>
-                <Link
-                  href={`${ROUTE.DASHBOARD}/dosen/penelitian/edit/${row.original.id}`}
-                  className={cn(
-                    buttonVariants({ size: "icon", variant: "outline" }),
-                    "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
-                  )}
-                >
-                  <EditIcon />
-                </Link>
-              </Tooltip>
-            ) : null}
-            {isStatusPending && (
+            {(isStatusPending || isStatusReturn) && (
               <>
-                {!isDraft && (
-                  <Tooltip contentText='Edit penelitian'>
+                {isStatusReturn ? (
+                  <Tooltip contentText='Edit penelitian dikembalikan'>
                     <Link
-                      href={`${ROUTE.DASHBOARD}/dosen/penelitian/edit/${row.original.id}`}
-                      className={cn(buttonVariants({ size: "icon" }))}
+                      href={routeDikembalikan}
+                      className={cn(
+                        buttonVariants({
+                          size: "icon",
+                          variant: "outline"
+                        }),
+                        "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                      )}
+                    >
+                      <EditIcon />
+                    </Link>
+                  </Tooltip>
+                ) : (
+                  <Tooltip
+                    contentText={
+                      isDraft ? "Edit Draft penelitian" : "Edit penelitian"
+                    }
+                  >
+                    <Link
+                      href={`${baseRoute}/${row.original.id}`}
+                      className={cn(
+                        buttonVariants({
+                          size: "icon",
+                          variant: "outline"
+                        }),
+                        "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
+                      )}
                     >
                       <EditIcon />
                     </Link>
                   </Tooltip>
                 )}
-                {!row.original.existFile && (
+                {!row.original.existFile && !isStatusReturn && (
                   <Alert
                     Icon={TrashIcon}
                     open={alert}

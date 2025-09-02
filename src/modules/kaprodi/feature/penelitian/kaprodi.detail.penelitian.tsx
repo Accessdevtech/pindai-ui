@@ -120,6 +120,8 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
     ]).then(response => {
       const [proposal, laporanKemajuan, suratKeteranganSelesai, laporan] =
         response
+
+      console.log(proposal.status === "fulfilled" && proposal.value)
       setResDocs({
         proposal: proposal.status === "fulfilled" ? proposal.value : undefined,
         laporanKemajuan:
@@ -274,9 +276,8 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
             name='Lihat Proposal'
             btnStyle='w-full'
             tooltipContent='Lihat Proposal'
-            className='max-w-fit'
           >
-            <div className='max-h-[calc(100vh-200px)] flex-1 overflow-auto'>
+            <div className='max-h-[calc(100vh-200px)] w-fit flex-1 overflow-auto'>
               {isPending ? (
                 <Loader2Icon className='animate-spin' />
               ) : resDocs?.proposal ? (
