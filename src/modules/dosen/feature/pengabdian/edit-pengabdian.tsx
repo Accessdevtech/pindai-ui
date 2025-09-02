@@ -87,6 +87,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
             message: value as string,
             type: "manual"
           })
+          toast.error(value as string)
         }
       }
     }
