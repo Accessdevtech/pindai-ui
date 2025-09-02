@@ -88,6 +88,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
             message: value as string,
             type: "manual"
           })
+          toast.error(value as string)
         }
       }
     }
