@@ -5,7 +5,7 @@ import Form from "@/components/molecules/form"
 import { Button } from "@/components/ui/button"
 import { jabatanFungsional } from "@/constant/jabatan-fungsional"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { useSetAtom } from "jotai"
+import { useAtom } from "jotai"
 import { EditIcon } from "lucide-react"
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -19,7 +19,7 @@ interface EditModalDosenManualProps {
 export default function EditModalDosenManual({
   data
 }: EditModalDosenManualProps) {
-  const setAnggota = useSetAtom(anggotaAtom)
+  const [anggota, setAnggota] = useAtom(anggotaAtom)
   const [open, isOpen] = useState(false)
   const formAnggotaManual = useForm<AnggotaSchemaType>({
     resolver: zodResolver(anggotaSchema),
@@ -42,8 +42,21 @@ export default function EditModalDosenManual({
     formAnggotaManual.reset(data)
   }, [data, formAnggotaManual])
 
-  const onSubmitAnggotaManual = (data: AnggotaSchemaType) => {
-    setAnggota(prevAnggota => [...prevAnggota, data])
+  const onSubmitAnggotaManual = (formData: AnggotaSchemaType) => {
+    // Check for duplicate data based on NIDN (unique identifier)
+    const existingIndex = anggota.findIndex(item => item.nidn === formData.nidn)
+
+    if (existingIndex === -1) {
+      // Add new data if no duplicate found
+      setAnggota(prevAnggota => [...prevAnggota, formData])
+    } else {
+      // Replace existing data when duplicate is found
+      setAnggota(prevAnggota =>
+        prevAnggota.map((item, index) =>
+          index === existingIndex ? formData : item
+        )
+      )
+    }
     isOpen(false)
     formAnggotaManual.reset()
   }
