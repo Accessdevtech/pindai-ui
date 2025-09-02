@@ -1,6 +1,6 @@
 "use client"
-import ComingSoon from "@/components/molecules/coming-soon"
 import { useRequiredAuth } from "@/hooks/use-required-auth"
+import EditDikembalikanPenelitian from "@/modules/dosen/feature/penelitian/edit-dikembalikan"
 import { useParams } from "next/navigation"
 
 export default function EditPage() {
@@ -10,5 +10,5 @@ export default function EditPage() {
   if (!id || !user) {
     return null
   }
-  return <ComingSoon />
+  return <EditDikembalikanPenelitian id={id as string} />
 }
