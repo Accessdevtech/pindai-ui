@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils"
+import { Eye, EyeOff } from "lucide-react"
 import Link from "next/link"
-import { HTMLInputTypeAttribute } from "react"
+import { HTMLInputTypeAttribute, useState } from "react"
 import { FieldPath, FieldValues, UseControllerProps } from "react-hook-form"
-import { buttonVariants } from "../ui/button"
+import { Button, buttonVariants } from "../ui/button"
 import {
   FormControl,
   FormDescription,
@@ -29,6 +30,8 @@ export default function InputField<TFieldValues extends FieldValues>({
   forgotPassword = false,
   ...props
 }: InputFieldProps<TFieldValues>) {
+  const [showPassword, setShowPassword] = useState(false)
+  const toggleShowPassword = () => setShowPassword(!showPassword)
   return (
     <FormField
       {...props}
@@ -48,16 +51,35 @@ export default function InputField<TFieldValues extends FieldValues>({
               </Link>
             )}
           </div>
-          <FormControl>
-            <Input
-              placeholder={label}
-              type={type}
-              {...field}
-              value={field.value === null ? "" : field.value}
-              // autoComplete='off'
-              autoComplete={type === "password" ? "off" : "on"}
-            />
-          </FormControl>
+          <div className='relative'>
+            <FormControl>
+              <Input
+                placeholder={label}
+                type={
+                  type === "password"
+                    ? showPassword
+                      ? "text"
+                      : "password"
+                    : type
+                }
+                {...field}
+                value={field.value === null ? "" : field.value}
+                // autoComplete='off'
+                autoComplete={type === "password" ? "off" : "on"}
+              />
+            </FormControl>
+            {type === "password" && (
+              <Button
+                type='button'
+                variant='ghost'
+                size='icon'
+                className='absolute right-0 top-0 z-10'
+                onClick={toggleShowPassword}
+              >
+                {showPassword ? <Eye /> : <EyeOff />}
+              </Button>
+            )}
+          </div>
           <FormDescription>{hint}</FormDescription>
           <FormMessage />
         </FormItem>
