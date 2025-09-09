@@ -57,6 +57,8 @@ export const columnPenelitian = ({
         const baseRoute = `${ROUTE.DASHBOARD}/dosen/penelitian/edit/`
         const routeDikembalikan = `${baseRoute}/dikembalikan/${row.original.id}`
 
+        const isLeader = row.original.is_leader
+
         return (
           <span className='flex items-center justify-center gap-2'>
             {!isDraft && (
@@ -78,7 +80,7 @@ export const columnPenelitian = ({
                 </Link>
               </Tooltip>
             )}
-            {(isStatusPending || isStatusReturn) && (
+            {(isStatusPending || isStatusReturn) && isLeader && (
               <>
                 {isStatusReturn ? (
                   <Tooltip contentText='Edit penelitian dikembalikan'>
@@ -115,7 +117,7 @@ export const columnPenelitian = ({
                     </Link>
                   </Tooltip>
                 )}
-                {!row.original.existFile && !isStatusReturn && (
+                {!isStatusReturn && (
                   <Alert
                     Icon={TrashIcon}
                     open={alert}

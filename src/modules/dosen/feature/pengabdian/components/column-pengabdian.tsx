@@ -57,6 +57,8 @@ export const columnPengabdian = ({
         const baseRoute = `${ROUTE.DASHBOARD}/dosen/pengabdian/edit/`
         const routeDikembalikan = `${baseRoute}/dikembalikan/${row.original.id}`
 
+        const isLeader = row.original.is_leader
+
         return (
           <span className='flex items-center justify-center gap-2'>
             {!isDraft && (
@@ -78,7 +80,7 @@ export const columnPengabdian = ({
                 </Link>
               </Tooltip>
             )}
-            {(isStatusPending || isStatusReturn) && (
+            {(isStatusPending || isStatusReturn) && isLeader && (
               <>
                 {isStatusReturn ? (
                   <Tooltip contentText='Edit pengabdian dikembalikan'>
@@ -115,7 +117,7 @@ export const columnPengabdian = ({
                     </Link>
                   </Tooltip>
                 )}
-                {!row.original.existFile && !isStatusReturn && (
+                {!isStatusReturn && (
                   <Alert
                     Icon={TrashIcon}
                     open={alert}
