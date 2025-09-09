@@ -12,10 +12,11 @@ export const useDownloadExcel = ({ onSuccess, onError }: Props) => {
   return useMutation<
     ResponseDownloadExcel,
     AxiosError<ResponseDownloadExcel>,
-    { category: string }
+    { category: string; rangeDate: { from: Date; to: Date | undefined } }
   >({
-    mutationFn: async ({ category }) => await downloadExcel(category),
+    mutationFn: async ({ category, rangeDate }) =>
+      await downloadExcel(category, rangeDate),
     onSuccess,
-    onError,
+    onError
   })
 }

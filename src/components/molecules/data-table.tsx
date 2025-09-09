@@ -30,8 +30,10 @@ import { usePathname } from "next/navigation"
 import { useEffect, useState } from "react"
 import { toast } from "sonner"
 import { Combobox } from "../atom/combobox"
+import Modal from "../atom/modal"
 import Tooltip from "../atom/tooltip"
 import { Button } from "../ui/button"
+import { DateRangePicker } from "../ui/date-range-picker"
 import { Input } from "../ui/input"
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 import {
@@ -91,6 +93,13 @@ export default function DataTable<TData, TValue>({
   const [statusDppm, setStatusDppm] = useAtom(statusDppmAtom)
   const [statusKeuangan, setStatusKeuangan] = useAtom(statusKeuanganAtom)
   const [columnVisibility, setColumnVisibility] = useAtom(columnVisibilityAtom)
+  const [rangeDate, setRangeDate] = useState<{
+    from: Date
+    to: Date | undefined
+  }>({
+    from: new Date(),
+    to: new Date()
+  })
 
   const { mutate } = useDownloadExcel({
     onSuccess: res => {
@@ -98,7 +107,7 @@ export default function DataTable<TData, TValue>({
       toast.success("Data berhasil diexport")
     },
     onError: error => {
-      toast.error(error.message)
+      toast.error(error.response?.data.message || error.message)
     }
   })
 
@@ -227,18 +236,33 @@ export default function DataTable<TData, TValue>({
                 </Button>
               )}
             </Tooltip>
+
             {["dppm", "kaprodi"].includes(role as string) &&
               !["list-disetujui", "list-dibatalkan"].includes(category) && (
-                <Tooltip contentText='Export Excel'>
+                <Modal
+                  title='Export Excel'
+                  tooltipContent='Export Excel'
+                  Icon={UploadIcon}
+                  size='icon'
+                  variant='outline'
+                  btnStyle='border-green-500 p-4 text-green-500 hover:bg-green-500 hover:text-white'
+                  description='Export data ke Excel'
+                >
+                  <DateRangePicker
+                    onUpdate={dates => setRangeDate(dates.range)}
+                    align='center'
+                    locale='id-ID'
+                    showCompare={false}
+                  />
                   <Button
-                    size='icon'
-                    variant='outline'
-                    className='border-green-500 p-4 text-green-500 hover:bg-green-500 hover:text-white'
-                    onClick={() => mutate({ category })}
+                    onClick={() => {
+                      mutate({ category, rangeDate })
+                      // console.log(rangeDate)
+                    }}
                   >
-                    <UploadIcon className='h-4 w-4' />
+                    Export
                   </Button>
-                </Tooltip>
+                </Modal>
               )}
           </div>
         </div>

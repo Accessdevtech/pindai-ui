@@ -4,6 +4,7 @@ import StatusBadge from "@/components/atom/status-badge"
 import { buttonVariants } from "@/components/ui/button"
 import { Separator } from "@/components/ui/separator"
 import { cn } from "@/lib/utils"
+import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
@@ -50,6 +51,16 @@ export const columnPublikasi = ({
             toast.error(err.response?.data.message)
           }
         })
+
+        const isStatusPending = Every(
+          [row.original.status.kaprodi, row.original.status.dppm],
+          status => status === "pending"
+        )
+
+        const isStatusReturn = [
+          row.original.status.kaprodi,
+          row.original.status.dppm
+        ].some(status => status === "returned")
 
         return (
           <span className='flex items-center justify-center gap-2'>
@@ -129,7 +140,46 @@ export const columnPublikasi = ({
                 </Link>
               </div>
             </Modal>
-            {row.original.status.kaprodi !== "accepted" &&
+            {(isStatusPending || isStatusReturn) && (
+              <>
+                <Modal
+                  open={open}
+                  setOpen={setOpen}
+                  Icon={EditIcon}
+                  title='Edit Publikasi'
+                  size='icon'
+                  variant='outline'
+                  btnStyle='border-primary text-primary hover:bg-primary hover:text-primary-foreground'
+                  description='Edit Publikasi'
+                  tooltipContent='Edit Publikasi'
+                  className='max-w-2xl'
+                >
+                  <div className='flex flex-col gap-4 overflow-hidden px-1'>
+                    <FormPublikasi
+                      refetch={refetch}
+                      publikasi={data}
+                      onClose={() => setOpen(false)}
+                    />
+                  </div>
+                </Modal>
+                {!isStatusReturn && (
+                  <Alert
+                    Icon={TrashIcon}
+                    open={alert}
+                    setOpen={setAlert}
+                    title='Hapus Publikasi'
+                    triggerAction='Hapus'
+                    size='icon'
+                    variant='destructive'
+                    description='Apakah anda yakin ingin menghapus publikasi ini?'
+                    onClick={() => {
+                      mutate({ id: row.original.id })
+                    }}
+                  />
+                )}
+              </>
+            )}
+            {/* {row.original.status.kaprodi !== "accepted" &&
               row.original.status.dppm !== "accepted" && (
                 <>
                   <Modal
@@ -164,7 +214,7 @@ export const columnPublikasi = ({
                     }}
                   />
                 </>
-              )}
+              )} */}
           </span>
         )
       }
