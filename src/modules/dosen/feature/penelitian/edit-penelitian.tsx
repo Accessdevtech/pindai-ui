@@ -91,6 +91,7 @@ export default function EditPenelitian({ id }: EditPenelitianProps) {
           toast.error(value as string)
         }
       }
+      toast.error(err.response?.data.message)
     }
   })
 

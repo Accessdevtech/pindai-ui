@@ -90,6 +90,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
           toast.error(value as string)
         }
       }
+      toast.error(err.response?.data.message)
     }
   })
 
