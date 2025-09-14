@@ -9,7 +9,7 @@ import {
 
 interface Props {
   onSuccess: (response: Response) => void
-  onError: (error: any) => void
+  onError: (error: AxiosError<Response>) => void
 }
 
 export const useForgotPasswordEmail = ({ onSuccess, onError }: Props) => {
