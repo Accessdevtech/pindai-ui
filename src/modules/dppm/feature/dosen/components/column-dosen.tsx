@@ -12,43 +12,50 @@ interface ColumnDosenProps {
 }
 
 export const columnDosen = ({
-  refetch,
+  refetch
 }: ColumnDosenProps): ColumnDef<IDosen>[] => {
   return [
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>,
+      cell: ({ row, table }) => {
+        const page = table.getState().pagination.pageIndex
+        const pageSize = table.getState().pagination.pageSize
+        const start = page * pageSize + 1
+        const end = start + row.index
+
+        return <div>{end}</div>
+      }
     },
     {
       id: "nidn",
       accessorKey: "nidn",
-      header: "NIDN",
+      header: "NIDN"
     },
     {
       id: "name",
       accessorKey: "name",
-      header: "Nama",
+      header: "Nama"
     },
     {
       id: "name_with_title",
       accessorKey: "name_with_title",
-      header: "Nama dengan Gelar",
+      header: "Nama dengan Gelar"
     },
     {
       id: "email",
       accessorKey: "email",
-      header: "Email",
+      header: "Email"
     },
     {
       id: "prodi",
       accessorKey: "prodi",
-      header: "Prodi",
+      header: "Prodi"
     },
     {
       id: "affiliate_campus",
       accessorKey: "affiliate_campus",
-      header: "Afiliasi",
+      header: "Afiliasi"
     },
     {
       id: "is_active",
@@ -66,7 +73,7 @@ export const columnDosen = ({
               className={cn("p-2 hover:text-primary-foreground", {
                 "border-green-500 text-green-500 hover:bg-green-500":
                   item.is_active,
-                "border-red-500 text-red-500 hover:bg-red-500": !item.is_active,
+                "border-red-500 text-red-500 hover:bg-red-500": !item.is_active
               })}
             >
               {item.is_active ? (
@@ -77,7 +84,7 @@ export const columnDosen = ({
             </Badge>
           </Tooltip>
         )
-      },
+      }
     },
     {
       id: "action",
@@ -100,7 +107,7 @@ export const columnDosen = ({
             </Modal>
           </span>
         )
-      },
-    },
+      }
+    }
   ]
 }
