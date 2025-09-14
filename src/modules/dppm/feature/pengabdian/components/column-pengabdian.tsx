@@ -13,7 +13,14 @@ export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>,
+      cell: ({ row, table }) => {
+        const page = table.getState().pagination.pageIndex
+        const pageSize = table.getState().pagination.pageSize
+        const start = page * pageSize + 1
+        const end = start + row.index
+
+        return <div>{end}</div>
+      }
     },
     {
       id: "action",
@@ -27,34 +34,34 @@ export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
               href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${row.original.id}`}
               className={cn(
                 buttonVariants({ variant: "outline", size: "icon" }),
-                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground",
+                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
               )}
             >
               <InfoIcon />
             </Link>
           </Tooltip>
         )
-      },
+      }
     },
     {
       id: "title",
       accessorKey: "title",
-      header: "Judul Pengabdian",
+      header: "Judul Pengabdian"
     },
     {
       id: "leader",
       accessorKey: "leader",
-      header: "Penanggung Jawab",
+      header: "Penanggung Jawab"
     },
     {
       id: "academic_year",
       accessorKey: "academic_year",
-      header: "Tahun Akademik",
+      header: "Tahun Akademik"
     },
     {
       id: "created_date",
       accessorKey: "created_date",
-      header: "tanggal dibuat",
+      header: "tanggal dibuat"
     },
     {
       accessorKey: "status",
@@ -66,13 +73,13 @@ export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
           header: "Kaprodi",
           cell: ({ row }) => (
             <StatusBadge status={row.original.status.kaprodi} />
-          ),
+          )
         },
         {
           id: "status_dppm",
           accessorKey: "status_dppm",
           header: "Dppm",
-          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
+          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />
         },
         {
           id: "status_keuangan",
@@ -80,9 +87,9 @@ export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
           header: "Keuangan",
           cell: ({ row }) => (
             <StatusBadge status={row.original.status.keuangan} />
-          ),
-        },
-      ],
-    },
+          )
+        }
+      ]
+    }
   ]
 }

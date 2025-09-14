@@ -20,13 +20,20 @@ interface columnPublikasiProps {
 
 export const columnPublikasi = ({
   pubilkasi,
-  refetch,
+  refetch
 }: columnPublikasiProps): ColumnDef<PublikasiKaprodi>[] => {
   return [
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>,
+      cell: ({ row, table }) => {
+        const page = table.getState().pagination.pageIndex
+        const pageSize = table.getState().pagination.pageSize
+        const start = page * pageSize + 1
+        const end = start + row.index
+
+        return <div>{end}</div>
+      }
     },
     {
       id: "action",
@@ -43,11 +50,11 @@ export const columnPublikasi = ({
           },
           onError: err => {
             toast.error(err.response?.data.message)
-          },
+          }
         })
 
         const data = pubilkasi.find(
-          publikasi => publikasi.id === row.original.id,
+          publikasi => publikasi.id === row.original.id
         )
 
         return (
@@ -63,7 +70,7 @@ export const columnPublikasi = ({
               <div className='flex flex-col gap-4 tracking-wide'>
                 {[
                   row.original.status.kaprodi,
-                  row.original.status.dppm,
+                  row.original.status.dppm
                 ].includes("rejected") && (
                   <div className='rounded-lg border border-red-500 px-4 py-2 text-red-500'>
                     <p className='text-sm capitalize'>
@@ -117,7 +124,7 @@ export const columnPublikasi = ({
                     <span className='font-medium'>Tanggal Publikasi:</span>
                     {data?.tanggal_publikasi
                       ? format(new Date(data?.tanggal_publikasi), "PPP", {
-                          locale: id,
+                          locale: id
                         })
                       : "-"}
                   </p>
@@ -140,7 +147,7 @@ export const columnPublikasi = ({
                   href={data?.link_publikasi as string}
                   className={cn(
                     buttonVariants({ variant: "default" }),
-                    "capitalize",
+                    "capitalize"
                   )}
                   target='_blank'
                 >
@@ -165,15 +172,15 @@ export const columnPublikasi = ({
               )}
           </span>
         )
-      },
+      }
     },
     {
       accessorKey: "judul",
-      header: "Judul Pengabdian",
+      header: "Judul Pengabdian"
     },
     {
       accessorKey: "author",
-      header: "Penulis",
+      header: "Penulis"
     },
     {
       accessorKey: "tanggal_publikasi",
@@ -181,15 +188,15 @@ export const columnPublikasi = ({
       cell: ({ row }) => {
         const date = new Date(row.original.tanggal_publikasi)
         return <span>{format(date, "PPP", { locale: id })}</span>
-      },
+      }
     },
     {
       accessorKey: "tahun",
-      header: "Tahun",
+      header: "Tahun"
     },
     {
       accessorKey: "jurnal",
-      header: "Jurnal",
+      header: "Jurnal"
     },
     {
       accessorKey: "status",
@@ -201,13 +208,13 @@ export const columnPublikasi = ({
           header: "Kaprodi",
           cell: ({ row }) => (
             <StatusBadge status={row.original.status.kaprodi} />
-          ),
+          )
         },
         {
           id: "status_dppm",
           accessorKey: "status_dppm",
           header: "Dppm",
-          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />,
+          cell: ({ row }) => <StatusBadge status={row.original.status.dppm} />
         },
         {
           id: "status_keuangan",
@@ -215,9 +222,9 @@ export const columnPublikasi = ({
           header: "Keuangan",
           cell: ({ row }) => (
             <StatusBadge status={row.original.status.keuangan} />
-          ),
-        },
-      ],
-    },
+          )
+        }
+      ]
+    }
   ]
 }

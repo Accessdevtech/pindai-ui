@@ -29,7 +29,14 @@ export const columnPublikasi = ({
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => <div>{row.index + 1}</div>
+      cell: ({ row, table }) => {
+        const page = table.getState().pagination.pageIndex
+        const pageSize = table.getState().pagination.pageSize
+        const start = page * pageSize + 1
+        const end = start + row.index
+
+        return <div>{end}</div>
+      }
     },
     {
       id: "action",

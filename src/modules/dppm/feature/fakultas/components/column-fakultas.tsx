@@ -24,9 +24,13 @@ export const columnFakultas = ({ refetch }: Props): ColumnDef<IFakultas>[] => {
     {
       id: "no",
       header: "No",
-      cell: ({ row }) => {
-        const index = row.index + 1
-        return <span>{index}</span>
+      cell: ({ row, table }) => {
+        const page = table.getState().pagination.pageIndex
+        const pageSize = table.getState().pagination.pageSize
+        const start = page * pageSize + 1
+        const end = start + row.index
+
+        return <div>{end}</div>
       }
     },
     {
