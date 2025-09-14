@@ -48,6 +48,7 @@ export default function ForgotPasswordFormReset({
             type: "manual"
           })
         }
+        toast.error(err.response?.data.message);
       }
     }
   })
