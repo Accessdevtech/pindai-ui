@@ -33,8 +33,8 @@ export default function ForgotPasswordFormEmail() {
             type: "manual"
           })
         }
-        toast.error(err.response?.data.message);
       }
+      toast.error(err.response?.data.message)
     }
   })
 
