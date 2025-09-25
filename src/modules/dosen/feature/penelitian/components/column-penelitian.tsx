@@ -67,7 +67,7 @@ export const columnPenelitian = ({
         const isLeader = row.original.is_leader
 
         return (
-          <span className='flex items-center justify-center gap-2'>
+          <span className='flex gap-2 justify-center items-center'>
             {!isDraft && (
               <Tooltip
                 contentText={
@@ -195,7 +195,7 @@ export const columnPenelitian = ({
 
         // Show status columns for non-draft items
         return (
-          <div className='flex justify-between gap-2'>
+          <div className='flex gap-2 justify-between'>
             <div className='flex flex-col items-center'>
               <span className='mb-1 text-xs text-gray-600'>Kaprodi</span>
               <StatusBadge status={row.original.status.kaprodi} />
