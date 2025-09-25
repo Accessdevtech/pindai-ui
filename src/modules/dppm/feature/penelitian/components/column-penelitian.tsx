@@ -1,3 +1,4 @@
+import Alert from "@/components/atom/alert"
 import StatusBadge from "@/components/atom/status-badge"
 import Tooltip from "@/components/atom/tooltip"
 import { buttonVariants } from "@/components/ui/button"
@@ -5,10 +6,19 @@ import { cn } from "@/lib/utils"
 import { PenelitianDosen } from "@/modules/dosen/feature/penelitian/penelitian-dosen.interface"
 import { ROUTE } from "@/services/route"
 import { ColumnDef } from "@tanstack/react-table"
-import { InfoIcon } from "lucide-react"
+import { InfoIcon, TrashIcon } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import { toast } from "sonner"
+import { useDeletePenelitian } from "../hooks/use-penelitian/delete-penelitian"
 
-export const columnPenelitian = (): ColumnDef<PenelitianDosen>[] => {
+interface ColumnPenelitianProps {
+  refetch: () => void
+}
+
+export const columnPenelitian = ({
+  refetch
+}: ColumnPenelitianProps): ColumnDef<PenelitianDosen>[] => {
   return [
     {
       id: "no",
@@ -28,18 +38,46 @@ export const columnPenelitian = (): ColumnDef<PenelitianDosen>[] => {
       header: "aksi",
 
       cell: ({ row }) => {
+        const [alert, setAlert] = useState(false)
+
+        const { mutate: deletePenelitian } = useDeletePenelitian({
+          onSuccess: res => {
+            toast.success(res.message)
+            refetch()
+          },
+          onError: err => {
+            toast.error(err.response?.data.message)
+          }
+        })
         return (
-          <Tooltip contentText='Detail penelitian'>
-            <Link
-              href={`${ROUTE.DASHBOARD}/dppm/penelitian/${row.original.id}`}
-              className={cn(
-                buttonVariants({ variant: "outline", size: "icon" }),
-                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
-              )}
-            >
-              <InfoIcon />
-            </Link>
-          </Tooltip>
+          <span className='flex gap-2 justify-center items-center'>
+            <Tooltip contentText='Detail penelitian'>
+              <Link
+                href={`${ROUTE.DASHBOARD}/dppm/penelitian/${row.original.id}`}
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "icon" }),
+                  "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
+                )}
+              >
+                <InfoIcon />
+              </Link>
+            </Tooltip>
+
+            <Alert
+              Icon={TrashIcon}
+              open={alert}
+              setOpen={setAlert}
+              triggerAction='hapus'
+              title='Hapus Penelitian'
+              size='icon'
+              variant='destructive'
+              tooltipContentText='Hapus Penelitian'
+              description='Apakah anda yakin ingin menghapus penelitian ini?'
+              onClick={() => {
+                deletePenelitian({ id: row.original.id })
+              }}
+            />
+          </span>
         )
       }
     },
