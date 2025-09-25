@@ -27,7 +27,7 @@ export default function PenelitianList({ user }: { user: User }) {
     "accepted"
   )
 
-  const columns = columnPenelitian()
+  const columns = columnPenelitian({ refetch })
   useEffect(() => {
     setColumnVisibility({
       status_kaprodi: false,
