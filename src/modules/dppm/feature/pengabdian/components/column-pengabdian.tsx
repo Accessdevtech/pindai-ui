@@ -1,3 +1,4 @@
+import Alert from "@/components/atom/alert"
 import StatusBadge from "@/components/atom/status-badge"
 import Tooltip from "@/components/atom/tooltip"
 import { buttonVariants } from "@/components/ui/button"
@@ -5,10 +6,19 @@ import { cn } from "@/lib/utils"
 import { PengabdianDosen } from "@/modules/dosen/feature/pengabdian/pengabdian-dosen.interface"
 import { ROUTE } from "@/services/route"
 import { ColumnDef } from "@tanstack/react-table"
-import { InfoIcon } from "lucide-react"
+import { InfoIcon, TrashIcon } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
+import { toast } from "sonner"
+import { useDeletePengabdian } from "../hooks/use-pengabdian/delete-pengabdian"
 
-export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
+interface ColumnPengabdianProps {
+  refetch: () => void
+}
+
+export const columnPengabdian = ({
+  refetch
+}: ColumnPengabdianProps): ColumnDef<PengabdianDosen>[] => {
   return [
     {
       id: "no",
@@ -28,18 +38,46 @@ export const columnPengabdian = (): ColumnDef<PengabdianDosen>[] => {
       header: "aksi",
 
       cell: ({ row }) => {
+        const [alert, setAlert] = useState(false)
+
+        const { mutate: deletePengabdian } = useDeletePengabdian({
+          onSuccess: res => {
+            toast.success(res.message)
+            refetch()
+          },
+          onError: err => {
+            toast.error(err.response?.data.message)
+          }
+        })
         return (
-          <Tooltip contentText='Detail Pengabdian'>
-            <Link
-              href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${row.original.id}`}
-              className={cn(
-                buttonVariants({ variant: "outline", size: "icon" }),
-                "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
-              )}
-            >
-              <InfoIcon />
-            </Link>
-          </Tooltip>
+          <span className='flex gap-2 justify-center items-center'>
+            <Tooltip contentText='Detail Pengabdian'>
+              <Link
+                href={`${ROUTE.DASHBOARD}/dppm/pengabdian/${row.original.id}`}
+                className={cn(
+                  buttonVariants({ variant: "outline", size: "icon" }),
+                  "border-cyan-500 text-cyan-500 hover:bg-cyan-500 hover:text-primary-foreground"
+                )}
+              >
+                <InfoIcon />
+              </Link>
+            </Tooltip>
+
+            <Alert
+              Icon={TrashIcon}
+              open={alert}
+              setOpen={setAlert}
+              triggerAction='hapus'
+              title='Hapus Pengabdian'
+              size='icon'
+              variant='destructive'
+              tooltipContentText='Hapus Pengabdian'
+              description='Apakah anda yakin ingin menghapus pengabdian ini?'
+              onClick={() => {
+                deletePengabdian({ id: row.original.id })
+              }}
+            />
+          </span>
         )
       }
     },

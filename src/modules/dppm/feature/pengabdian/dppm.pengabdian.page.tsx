@@ -36,7 +36,7 @@ export default function PengabdianDppmPage() {
     statusKeuangan
   )
 
-  const columns = columnPengabdian()
+  const columns = columnPengabdian({refetch})
 
   return (
     <div className='flex flex-col gap-4'>

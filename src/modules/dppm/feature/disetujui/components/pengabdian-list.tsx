@@ -24,7 +24,7 @@ export default function PengabdianList({ user }: { user: User }) {
     "accepted"
   )
 
-  const columns = columnPengabdian()
+  const columns = columnPengabdian({ refetch })
 
   useEffect(() => {
     setColumnVisibility({

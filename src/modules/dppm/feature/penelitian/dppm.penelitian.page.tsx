@@ -36,7 +36,7 @@ export default function PenelitianDppmPage() {
     statusKeuangan
   )
 
-  const columns = columnPenelitian()
+  const columns = columnPenelitian({ refetch })
 
   return (
     <div className='flex flex-col gap-4'>

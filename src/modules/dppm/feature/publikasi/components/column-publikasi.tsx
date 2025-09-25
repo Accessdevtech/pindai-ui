@@ -1,3 +1,4 @@
+import Alert from "@/components/atom/alert"
 import Modal from "@/components/atom/modal"
 import StatusBadge from "@/components/atom/status-badge"
 import Tooltip from "@/components/atom/tooltip"
@@ -7,10 +8,12 @@ import { cn } from "@/lib/utils"
 import { ColumnDef } from "@tanstack/react-table"
 import { format } from "date-fns"
 import { id } from "date-fns/locale"
-import { CheckIcon, InfoIcon } from "lucide-react"
+import { CheckIcon, InfoIcon, TrashIcon } from "lucide-react"
 import Link from "next/link"
+import { useState } from "react"
 import { toast } from "sonner"
 import { useApprovePublikasi } from "../hooks/use-publikasi/approve-publikasi"
+import { useDeletePublikasi } from "../hooks/use-publikasi/delete-publikasi"
 import { Publikasi, PublikasiDppm } from "../publikasi-interface"
 
 interface columnPublikasiProps {
@@ -40,6 +43,8 @@ export const columnPublikasi = ({
       accessorKey: "action",
       header: "aksi",
       cell: ({ row }) => {
+        const [alert, setAlert] = useState(false)
+
         const { mutate: approved } = useApprovePublikasi({
           onSuccess: res => {
             if (!res.status) {
@@ -53,12 +58,22 @@ export const columnPublikasi = ({
           }
         })
 
+        const { mutate: deletePublikasi } = useDeletePublikasi({
+          onSuccess: res => {
+            toast.success(res.message)
+            refetch()
+          },
+          onError: err => {
+            toast.error(err.response?.data.message)
+          }
+        })
+
         const data = pubilkasi.find(
           publikasi => publikasi.id === row.original.id
         )
 
         return (
-          <span className='flex items-center justify-center gap-2'>
+          <span className='flex gap-2 justify-center items-center'>
             <Modal
               Icon={InfoIcon}
               title='Detail Publikasi'
@@ -72,16 +87,16 @@ export const columnPublikasi = ({
                   row.original.status.kaprodi,
                   row.original.status.dppm
                 ].includes("rejected") && (
-                  <div className='rounded-lg border border-red-500 px-4 py-2 text-red-500'>
-                    <p className='text-sm capitalize'>
-                      <span className='font-medium'>Kaprodi Komentar: </span>
-                      {data?.keterangan}
-                    </p>
-                  </div>
-                )}
+                    <div className='py-2 px-4 text-red-500 rounded-lg border border-red-500'>
+                      <p className='text-sm capitalize'>
+                        <span className='font-medium'>Kaprodi Komentar: </span>
+                        {data?.keterangan}
+                      </p>
+                    </div>
+                  )}
                 {row.original.status.kaprodi === "accepted" &&
                   row.original.status.dppm === "rejected" && (
-                    <div className='rounded-lg border border-red-500 px-4 py-2 text-red-500'>
+                    <div className='py-2 px-4 text-red-500 rounded-lg border border-red-500'>
                       <p className='text-sm capitalize'>
                         <span className='font-medium'>Dppm Komentar: </span>
                         {data?.keterangan}
@@ -124,8 +139,8 @@ export const columnPublikasi = ({
                     <span className='font-medium'>Tanggal Publikasi:</span>
                     {data?.tanggal_publikasi
                       ? format(new Date(data?.tanggal_publikasi), "PPP", {
-                          locale: id
-                        })
+                        locale: id
+                      })
                       : "-"}
                   </p>
                   <Separator />
@@ -155,6 +170,21 @@ export const columnPublikasi = ({
                 </Link>
               </div>
             </Modal>
+
+            <Alert
+              Icon={TrashIcon}
+              open={alert}
+              setOpen={setAlert}
+              triggerAction='hapus'
+              title='Hapus Pengabdian'
+              size='icon'
+              variant='destructive'
+              tooltipContentText='Hapus Pengabdian'
+              description='Apakah anda yakin ingin menghapus pengabdian ini?'
+              onClick={() => {
+                deletePublikasi({ id: row.original.id })
+              }}
+            />
             {row.original.status.kaprodi === "pending" &&
               row.original.status.dppm === "pending" &&
               row.original.status.keuangan === "pending" && (
@@ -162,7 +192,7 @@ export const columnPublikasi = ({
                   <Button
                     variant='ghost'
                     size='icon'
-                    className='bg-green-500/30 text-green-500 hover:bg-green-500 hover:text-primary-foreground'
+                    className='text-green-500 hover:bg-green-500 bg-green-500/30 hover:text-primary-foreground'
                     onClick={() => approved({ id: row.original.id })}
                   >
                     <CheckIcon />
