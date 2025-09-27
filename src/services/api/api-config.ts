@@ -77,6 +77,7 @@ export const API_ENDPOINTS_DPPM = {
 
   DASHBOARD: "/dppm/dashboard",
   FAKULTAS: "/dppm/fakultas",
+  PERIODE: "/dppm/periode",
   KAPRODI: "/dppm/kaprodi",
   LUARAN: "/dppm/luaran",
   PRODI: "/dppm/prodi",
