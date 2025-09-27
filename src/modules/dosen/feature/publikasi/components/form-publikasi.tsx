@@ -19,7 +19,7 @@ import ModalJenisPublikasi from "./modal-jenis-publikasi"
 export default function FormPublikasi({
   publikasi,
   refetch,
-  onClose,
+  onClose
 }: {
   publikasi?: Publikasi
   onClose: () => void
@@ -38,13 +38,13 @@ export default function FormPublikasi({
       tahun: publikasi?.tahun || "",
       jurnal: publikasi?.jurnal || "",
       link_publikasi: publikasi?.link_publikasi || "",
-      luaran_kriteria: publikasi?.luaran_kriteria || "",
-    },
+      luaran_kriteria: publikasi?.luaran_kriteria || ""
+    }
   })
 
   const watchJenisPublikasi = form.watch("jenis_publikasi")
   const kriteria = listPublikasi?.data.filter(
-    item => item.id === watchJenisPublikasi,
+    item => item.id === watchJenisPublikasi
   )[0]?.kriteria
 
   const { mutate: createPublikasi, isPending: createPending } =
@@ -59,11 +59,11 @@ export default function FormPublikasi({
           for (const [key, value] of Object.entries(err.response.data.errors)) {
             form.setError(key as keyof PublikasiType, {
               message: value as string,
-              type: "manual",
+              type: "manual"
             })
           }
         }
-      },
+      }
     })
 
   const { mutate: updatePublikasi, isPending: updatePending } =
@@ -78,25 +78,26 @@ export default function FormPublikasi({
           for (const [key, value] of Object.entries(err.response.data.errors)) {
             form.setError(key as keyof PublikasiType, {
               message: value as string,
-              type: "manual",
+              type: "manual"
             })
           }
         }
-      },
+      }
     })
 
   const onSubmit = async (data: PublikasiType) => {
-    if (!publikasi) {
-      return createPublikasi({
-        ...data,
-        tanggal_publikasi: formatISO(data.tanggal_publikasi),
-      })
-    } else {
-      return updatePublikasi({
-        id: publikasi.id,
-        data: { ...data, tanggal_publikasi: formatISO(data.tanggal_publikasi) },
-      })
-    }
+    return publikasi
+      ? updatePublikasi({
+          id: publikasi.id,
+          data: {
+            ...data,
+            tanggal_publikasi: formatISO(data.tanggal_publikasi)
+          }
+        })
+      : createPublikasi({
+          ...data,
+          tanggal_publikasi: formatISO(data.tanggal_publikasi)
+        })
   }
   return (
     <Form form={form} onSubmit={onSubmit}>
