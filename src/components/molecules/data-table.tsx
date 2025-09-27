@@ -218,7 +218,7 @@ export default function DataTable<TData, TValue>({
           )}
           <div className='flex gap-2'>
             <Tooltip contentText='Refresh Halaman / Data'>
-              {!refetch ? null : (
+              {refetch ? (
                 <Button
                   size='icon'
                   variant='outline'
@@ -234,7 +234,7 @@ export default function DataTable<TData, TValue>({
                 >
                   <RefreshCcwIcon className='h-4 w-4' />
                 </Button>
-              )}
+              ) : null}
             </Tooltip>
 
             {["dppm", "kaprodi"].includes(role as string) &&
