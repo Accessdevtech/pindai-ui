@@ -8,12 +8,12 @@ const axiosInstance = axios.create({
   // timeout: 9000,
   headers: {
     "Content-Type": "application/json",
-    Accept: "application/json",
-  },
+    Accept: "application/json"
+  }
 })
 
 const encryptRequestResponse = new EncryptRequestResponse(
-  process.env.NEXT_PUBLIC_SECURE_REQUEST_KEY as string,
+  process.env.NEXT_PUBLIC_SECURE_REQUEST_KEY as string
 )
 encryptRequestResponse.injectInterceptors(axiosInstance)
 
@@ -44,7 +44,7 @@ axiosInstance.interceptors.response.use(
       window.location.href = "/"
     }
     return Promise.reject(error)
-  },
+  }
 )
 
 export default axiosInstance
