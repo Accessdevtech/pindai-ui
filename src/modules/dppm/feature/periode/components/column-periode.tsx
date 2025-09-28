@@ -34,10 +34,12 @@ export const columnPeriode = ({
         const [open, setOpen] = useState(false)
         const [alertOpen, setAlertOpen] = useState(false)
         const item = row.original
+        const isDraft = item.status === "draft"
 
         const { mutate: deletePeriode } = useDeletePeriode({
           onSuccess: response => {
             toast.success(response.message || "Periode berhasil dihapus")
+            refetch()
           },
           onError: error => {
             toast.error(
@@ -59,25 +61,27 @@ export const columnPeriode = ({
               periode={item}
               refetch={refetch}
             />
-            <Alert
-              Icon={TrashIcon}
-              open={alertOpen}
-              setOpen={setAlertOpen}
-              title={`hapus data ${item.name} ini`}
-              description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
-              className={cn(
-                "bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground",
-                {
-                  "cursor-not-allowed": !item.can_delete
-                }
-              )}
-              onClick={onDelete}
-              disabled={!item.can_delete}
-              tooltipContentText='hapus'
-              triggerAction='Hapus'
-              size='icon'
-              side='right'
-            />
+            {isDraft && (
+              <Alert
+                Icon={TrashIcon}
+                open={alertOpen}
+                setOpen={setAlertOpen}
+                title={`hapus data ${item.name} ini`}
+                description={`apakah anda yakin ingin menghapus ${item.name} ini?`}
+                className={cn(
+                  "bg-red-500/30 text-red-500 hover:bg-red-500 hover:text-primary-foreground",
+                  {
+                    "cursor-not-allowed": !item.can_delete
+                  }
+                )}
+                onClick={onDelete}
+                disabled={!item.can_delete}
+                tooltipContentText='hapus'
+                triggerAction='Hapus'
+                size='icon'
+                side='right'
+              />
+            )}
           </span>
         )
       }

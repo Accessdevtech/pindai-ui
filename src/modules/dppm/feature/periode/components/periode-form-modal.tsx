@@ -112,8 +112,8 @@ export default function PeriodeFormModal({
       disabled={!periode?.can_update}
       tooltipContent={mode === "create" ? "tambah periode" : "update periode"}
       btnStyle={cn("capitalize", {
-        "w-fit": mode === "create",
-        "cursor-not-allowed": mode === "update" && !periode?.can_update
+        "w-fit": mode === "create"
+        // "cursor-not-allowed": mode === "update" && !periode?.can_update
       })}
       size={mode === "update" ? "icon" : "default"}
       open={isOpen}
@@ -125,6 +125,7 @@ export default function PeriodeFormModal({
         <div className='flex w-full items-center justify-center gap-4'>
           <DatePickerField
             label='tanggal mulai'
+            disabled={periode?.can_update}
             name='start_date'
             control={form.control}
           />
