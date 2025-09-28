@@ -1,11 +1,11 @@
 "use client"
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuSeparator,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from "@/components/ui/dropdown-menu"
 import { useAuthContext } from "@/contexts/auth-context"
 import { cn, getInitials } from "@/lib/utils"
@@ -24,14 +24,14 @@ export default function ProfileButton() {
     <DropdownMenu>
       <DropdownMenuTrigger>
         <Avatar>
-          <AvatarImage></AvatarImage>
+          {/* <AvatarImage></AvatarImage> */}
           <AvatarFallback>{getInitials(user?.name as string)}</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
       <DropdownMenuContent side='bottom' align='end' className='w-64'>
         <DropdownMenuItem className='flex flex-row gap-4'>
           <Avatar>
-            <AvatarImage></AvatarImage>
+            {/* <AvatarImage></AvatarImage> */}
             <AvatarFallback>{getInitials(user?.name as string)}</AvatarFallback>
           </Avatar>
           <div className='flex flex-col gap-2 overflow-hidden'>
@@ -48,7 +48,7 @@ export default function ProfileButton() {
           href={`/dashboard/${user?.role}/akun-saya`}
           className={cn(
             buttonVariants({ variant: "ghost" }),
-            "w-full justify-start",
+            "w-full justify-start"
           )}
         >
           <DropdownMenuItem className='flex flex-row gap-4'>
@@ -58,37 +58,6 @@ export default function ProfileButton() {
             </span>
           </DropdownMenuItem>
         </Link>
-        {/* {user?.role !== "dppm" && user?.role !== "keuangan" ? (
-          <Link
-            href={`/dashboard/${user?.role}/akun-saya`}
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "w-full justify-start",
-            )}
-          >
-            <DropdownMenuItem className='flex flex-row gap-4'>
-              <UserIcon className='text-muted-foreground' />
-              <span className='font-bold capitalize text-muted-foreground'>
-                akun saya
-              </span>
-            </DropdownMenuItem>
-          </Link>
-        ) : (
-          <Link
-            href={`/dashboard/${user?.role}/ubah-sandi`}
-            className={cn(
-              buttonVariants({ variant: "ghost" }),
-              "w-full justify-start",
-            )}
-          >
-            <DropdownMenuItem className='flex flex-row gap-4'>
-              <UserIcon className='text-muted-foreground' />
-              <span className='font-bold capitalize text-muted-foreground'>
-                ubah sandi
-              </span>
-            </DropdownMenuItem>
-          </Link>
-        )} */}
         <DropdownMenuSeparator className='bg-gray-300' />
         <Button
           variant={"ghost"}
