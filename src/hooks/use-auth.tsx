@@ -54,6 +54,7 @@ export function useAuth() {
 
       await removeCookie("token")
       await removeCookie("user")
+      localStorage.clear()
 
       toast.success(res.message)
     } catch (err: any) {

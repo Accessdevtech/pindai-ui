@@ -1,13 +1,16 @@
 import Alert from "@/components/atom/alert"
 import StatusBadge from "@/components/atom/status-badge"
 import Tooltip from "@/components/atom/tooltip"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
+import { periodeActiveAtom } from "@/state/store"
 import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
+import { useAtomValue } from "jotai"
 import { EditIcon, InfoIcon, TrashIcon } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import { useDeletePengabdian } from "../hook/use-pengabdian/delete-pengabdian"
@@ -37,6 +40,8 @@ export const columnPengabdian = ({
       header: "aksi",
 
       cell: ({ row }) => {
+        const navigate = useRouter()
+        const periodeActive = useAtomValue(periodeActiveAtom)
         const [alert, setAlert] = useState(false)
 
         const isDraft = row.original.is_draft
@@ -91,18 +96,16 @@ export const columnPengabdian = ({
               <>
                 {isStatusReturn ? (
                   <Tooltip contentText='Edit pengabdian dikembalikan'>
-                    <Link
-                      href={routeDikembalikan}
+                    <Button
+                      size='icon'
+                      variant='outline'
+                      onClick={() => navigate.push(routeDikembalikan)}
                       className={cn(
-                        buttonVariants({
-                          size: "icon",
-                          variant: "outline"
-                        }),
                         "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                       )}
                     >
                       <EditIcon />
-                    </Link>
+                    </Button>
                   </Tooltip>
                 ) : (
                   <Tooltip
@@ -110,18 +113,19 @@ export const columnPengabdian = ({
                       isDraft ? "Edit Draft pengabdian" : "Edit pengabdian"
                     }
                   >
-                    <Link
-                      href={`${baseRoute}/${row.original.id}`}
+                    <Button
+                      size='icon'
+                      variant='outline'
+                      disabled={!periodeActive}
+                      onClick={() =>
+                        navigate.push(`${baseRoute}/${row.original.id}`)
+                      }
                       className={cn(
-                        buttonVariants({
-                          size: "icon",
-                          variant: "outline"
-                        }),
                         "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                       )}
                     >
                       <EditIcon />
-                    </Link>
+                    </Button>
                   </Tooltip>
                 )}
                 {!isStatusReturn && (
@@ -131,6 +135,7 @@ export const columnPengabdian = ({
                     setOpen={setAlert}
                     title='Hapus Pengabdian'
                     triggerAction='Hapus'
+                    disabled={!periodeActive}
                     size='icon'
                     variant='destructive'
                     tooltipContentText='Hapus Pengabdian'

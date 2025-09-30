@@ -129,10 +129,7 @@ export default function EditPengabdian({ id }: EditPengabdianProps) {
 
   useEffect(() => {
     const currentYear = new Date().getFullYear()
-    const akademikYears = generateAcademicYears(
-      currentYear - 5,
-      currentYear + 5
-    )
+    const akademikYears = generateAcademicYears(currentYear, currentYear + 10)
     setTahunAkademik(akademikYears)
   }, [])
 

@@ -2,11 +2,12 @@
 import Breadcrumb from "@/components/atom/bradcrumb"
 import Modal from "@/components/atom/modal"
 import DataTable from "@/components/molecules/data-table"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { Card, CardContent, CardHeader } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
 import {
+  periodeActiveAtom,
   statusDppmAtom,
   statusKaprodiAtom,
   statusKeuanganAtom,
@@ -15,6 +16,7 @@ import {
 import { useAtomValue } from "jotai"
 import { PlusIcon } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { useDebounce } from "use-debounce"
 import { Dosen } from "../../dosen.interface"
@@ -23,6 +25,8 @@ import { columnPengabdian } from "./components/column-pengabdian"
 import { useGetPengabdian } from "./hook/use-pengabdian/get-pengabdian"
 
 export default function PengabdianDosenPage() {
+  const navigate = useRouter()
+  const periodeActive = useAtomValue(periodeActiveAtom)
   const tahunAkademik = useAtomValue(tahunAkademikAtom)
   const statusKaprodi = useAtomValue(statusKaprodiAtom)
   const statusDppm = useAtomValue(statusDppmAtom)
@@ -77,19 +81,21 @@ export default function PengabdianDosenPage() {
               </Link>
             </Modal>
           ) : (
-            <Link
-              href={`${ROUTE.DASHBOARD}/${user?.role}/pengabdian/create`}
-              className={cn(
-                buttonVariants({ variant: "default" }),
-                "w-fit capitalize"
-              )}
+            <Button
+              onClick={() =>
+                navigate.push(
+                  `${ROUTE.DASHBOARD}/${user?.role}/pengabdian/create`
+                )
+              }
+              disabled={!periodeActive}
+              className={cn("w-fit capitalize")}
             >
               <PlusIcon className='h-4 w-4' />
               <span>tambah pengabdian</span>
-            </Link>
+            </Button>
           )}
         </CardHeader>
-        <CardContent className='py-6'>
+        <CardContent>
           <DataTable
             search
             filtering={{

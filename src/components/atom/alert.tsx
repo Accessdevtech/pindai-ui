@@ -24,6 +24,7 @@ interface AlertProps {
   Icon?: LucideIcon
   onClick?: () => void
   className?: string
+  disabled?: boolean
   variant?:
     | "link"
     | "default"
@@ -46,6 +47,7 @@ export default function Alert({
   className,
   variant,
   size,
+  disabled,
   open,
   setOpen
 }: AlertProps) {
@@ -53,7 +55,12 @@ export default function Alert({
     <AlertDialog open={open} onOpenChange={setOpen}>
       <Tooltips contentText={tooltipContentText || ""} side={side}>
         <AlertDialogTrigger asChild>
-          <Button variant={variant} size={size} className={cn(className)}>
+          <Button
+            variant={variant}
+            size={size}
+            className={cn(className)}
+            disabled={disabled}
+          >
             {Icon && <Icon />}
             {triggerContent}
           </Button>

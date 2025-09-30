@@ -1,6 +1,7 @@
 import { Kriteria } from "@/modules/listdata/pengabdian.list.interface"
 import { VisibilityState } from "@tanstack/react-table"
 import { atom } from "jotai"
+import { atomWithStorage } from "jotai/utils"
 
 export const dosenSearch = atom("")
 export const fakultasSearch = atom("")
@@ -27,3 +28,8 @@ export const tahunAkademikAtom = atom<string>("")
 export const statusKaprodiAtom = atom<string>("")
 export const statusDppmAtom = atom<string>("")
 export const statusKeuanganAtom = atom<string>("")
+
+export const periodeActiveAtom = atomWithStorage<boolean>(
+  "periodeActive",
+  false
+)

@@ -6,6 +6,7 @@ import { Role } from "@/interface/type"
 import { EachUtil } from "@/utils/each-utils"
 import ActionCard from "./components/ActionCard"
 import InfoCard from "./components/InfoCard"
+import PeriodeCard from "./components/periode-card"
 import { useGetDashboard } from "./hooks/use-dashboard"
 
 export default function DosenPage({ role }: { role: Role | undefined }) {
@@ -73,7 +74,9 @@ export default function DosenPage({ role }: { role: Role | undefined }) {
         </span>
       </Card>
 
+      <PeriodeCard periode={data?.periode} />
       <ActionCard role={role} />
+
       <InfoCard role={role} />
     </div>
   )

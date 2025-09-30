@@ -1,12 +1,15 @@
 import Alert from "@/components/atom/alert"
 import Tooltip from "@/components/atom/tooltip"
-import { buttonVariants } from "@/components/ui/button"
+import { Button, buttonVariants } from "@/components/ui/button"
 import { cn } from "@/lib/utils"
 import { ROUTE } from "@/services/route"
+import { periodeActiveAtom } from "@/state/store"
 import { Every } from "@/utils/each-utils"
 import { ColumnDef } from "@tanstack/react-table"
+import { useAtomValue } from "jotai"
 import { EditIcon, InfoIcon, TrashIcon } from "lucide-react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { useState } from "react"
 import { toast } from "sonner"
 import StatusBadge from "../../../../../components/atom/status-badge"
@@ -37,6 +40,8 @@ export const columnPenelitian = ({
       header: "aksi",
 
       cell: ({ row }) => {
+        const navigate = useRouter()
+        const periodeActive = useAtomValue(periodeActiveAtom)
         const [alert, setAlert] = useState(false)
 
         const isDraft = row.original.is_draft
@@ -67,7 +72,7 @@ export const columnPenelitian = ({
         const isLeader = row.original.is_leader
 
         return (
-          <span className='flex gap-2 justify-center items-center'>
+          <span className='flex items-center justify-center gap-2'>
             {!isDraft && (
               <Tooltip
                 contentText={
@@ -91,18 +96,16 @@ export const columnPenelitian = ({
               <>
                 {isStatusReturn ? (
                   <Tooltip contentText='Edit penelitian dikembalikan'>
-                    <Link
-                      href={routeDikembalikan}
+                    <Button
+                      size='icon'
+                      variant='outline'
+                      onClick={() => navigate.push(routeDikembalikan)}
                       className={cn(
-                        buttonVariants({
-                          size: "icon",
-                          variant: "outline"
-                        }),
                         "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                       )}
                     >
                       <EditIcon />
-                    </Link>
+                    </Button>
                   </Tooltip>
                 ) : (
                   <Tooltip
@@ -110,18 +113,19 @@ export const columnPenelitian = ({
                       isDraft ? "Edit Draft penelitian" : "Edit penelitian"
                     }
                   >
-                    <Link
-                      href={`${baseRoute}/${row.original.id}`}
+                    <Button
+                      size='icon'
+                      variant='outline'
+                      disabled={!periodeActive}
+                      onClick={() =>
+                        navigate.push(`${baseRoute}/${row.original.id}`)
+                      }
                       className={cn(
-                        buttonVariants({
-                          size: "icon",
-                          variant: "outline"
-                        }),
                         "border border-primary text-primary hover:bg-primary hover:text-primary-foreground"
                       )}
                     >
                       <EditIcon />
-                    </Link>
+                    </Button>
                   </Tooltip>
                 )}
                 {!isStatusReturn && (
@@ -129,6 +133,7 @@ export const columnPenelitian = ({
                     Icon={TrashIcon}
                     open={alert}
                     setOpen={setAlert}
+                    disabled={!periodeActive}
                     triggerAction='hapus'
                     title='Hapus Penelitian'
                     size='icon'
@@ -195,7 +200,7 @@ export const columnPenelitian = ({
 
         // Show status columns for non-draft items
         return (
-          <div className='flex gap-2 justify-between'>
+          <div className='flex justify-between gap-2'>
             <div className='flex flex-col items-center'>
               <span className='mb-1 text-xs text-gray-600'>Kaprodi</span>
               <StatusBadge status={row.original.status.kaprodi} />

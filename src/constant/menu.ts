@@ -8,54 +8,58 @@ export const navData = {
   management: [
     {
       name: "fakultas",
-      roles: ["dppm"],
+      roles: ["dppm"]
+    },
+    {
+      name: "periode",
+      roles: ["dppm"]
     },
     {
       name: "prodi",
-      roles: ["dppm"],
+      roles: ["dppm"]
     },
     {
       name: "kaprodi",
-      roles: ["dppm"],
+      roles: ["dppm"]
     },
     {
       name: "dosen",
-      roles: ["dppm", "kaprodi"],
+      roles: ["dppm", "kaprodi"]
     },
     {
       name: "master luaran",
-      roles: ["dppm"],
-    },
+      roles: ["dppm"]
+    }
   ],
   main: [
     {
       name: "penelitian",
-      roles: ["dosen", "kaprodi", "dppm", "keuangan"],
+      roles: ["dosen", "kaprodi", "dppm", "keuangan"]
     },
     {
       name: "pengabdian",
-      roles: ["dosen", "kaprodi", "dppm", "keuangan"],
+      roles: ["dosen", "kaprodi", "dppm", "keuangan"]
     },
     {
       name: "publikasi",
-      roles: ["dosen", "kaprodi", "dppm", "keuangan"],
+      roles: ["dosen", "kaprodi", "dppm", "keuangan"]
     },
     {
       name: "scholar",
-      roles: ["dosen"],
+      roles: ["dosen"]
     },
     {
       name: "list disetujui",
-      roles: ["dppm", "kaprodi", "keuangan"],
+      roles: ["dppm", "kaprodi", "keuangan"]
     },
     {
       name: "list dibatalkan",
-      roles: ["dppm", "kaprodi", "keuangan"],
+      roles: ["dppm", "kaprodi", "keuangan"]
     },
     {
       name: "aktifitas",
-      roles: ["dosen"],
-    },
+      roles: ["dosen"]
+    }
   ],
   sub: [
     // {
@@ -73,5 +77,5 @@ export const navData = {
     //   roles: ["dppm"],
     //   mainMenu: ["fakultas"],
     // },
-  ],
+  ]
 }
