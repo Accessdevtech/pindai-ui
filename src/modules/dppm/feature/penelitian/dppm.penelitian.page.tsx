@@ -24,7 +24,7 @@ export default function PenelitianDppmPage() {
   const { user } = useAuthContext()
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 1000)
   const { data, refetch, isFetching } = useGetPenelitian(
     currentPage,
