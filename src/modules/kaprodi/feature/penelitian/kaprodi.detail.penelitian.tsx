@@ -121,7 +121,6 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
       const [proposal, laporanKemajuan, suratKeteranganSelesai, laporan] =
         response
 
-      console.log(proposal.status === "fulfilled" && proposal.value)
       setResDocs({
         proposal: proposal.status === "fulfilled" ? proposal.value : undefined,
         laporanKemajuan:
@@ -140,6 +139,7 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
   }, [])
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
+
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -256,7 +256,11 @@ export default function DetailPenelitianKaprodiPage({ id }: { id: string }) {
               { label: "Judul Penelitian", value: data?.title },
               { label: "Bidang", value: data?.bidang || "-" },
               { label: "Jenis Penelitian", value: data?.jenis_penelitian },
-              { label: "Jenis Kriteria", value: data?.jenis_kriteria },
+              {
+                label: "Jenis Kriteria",
+                value: `${data?.jenis_kriteria} (${data?.nominal.formatted})`
+              },
+              { label: "Terbilang", value: data?.nominal.in_words },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
               { label: "Abstrak", value: data?.deskripsi }
