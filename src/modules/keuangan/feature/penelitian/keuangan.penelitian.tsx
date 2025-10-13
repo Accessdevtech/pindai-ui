@@ -24,7 +24,7 @@ export default function PenelitianKeuanganPage() {
   const { user } = useAuthContext()
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 1000)
   const { data, refetch, isFetching } = useGetPenelitian(
     currentPage,
@@ -37,6 +37,11 @@ export default function PenelitianKeuanganPage() {
   )
 
   const columns = columnPenelitian()
+
+  const approved = data?.penelitian.filter(
+    item =>
+      item.status.dppm === "accepted" && item.status.kaprodi === "accepted"
+  )
 
   return (
     <div className='flex flex-col gap-4'>
@@ -51,7 +56,7 @@ export default function PenelitianKeuanganPage() {
             }}
             role={user?.role}
             columns={columns}
-            data={data?.penelitian || []}
+            data={approved || []}
             meta={data?.meta}
             value={value}
             perPage={perPage}
