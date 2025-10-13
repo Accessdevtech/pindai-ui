@@ -35,7 +35,7 @@ export default function PenelitianDosenPage() {
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const [search] = useDebounce(value, 1000)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const { data, refetch, isFetching } = useGetPenelitian(
     currentPage,
     perPage,

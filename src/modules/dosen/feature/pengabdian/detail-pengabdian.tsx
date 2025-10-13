@@ -205,7 +205,11 @@ export default function DetailPengabdianPage({
               { label: "Judul pengabdian", value: data?.title },
               { label: "Bidang", value: data?.bidang || "-" },
               { label: "Jenis pengabdian", value: data?.jenis_pengabdian },
-              { label: "Jenis Kriteria", value: data?.jenis_kriteria },
+              {
+                label: "Jenis Kriteria",
+                value: `${data?.jenis_kriteria} (${data?.nominal.formatted})`
+              },
+              { label: "Terbilang", value: data?.nominal.in_words },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
               { label: "Dibuat pada", value: data?.created_date },

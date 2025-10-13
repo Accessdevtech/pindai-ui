@@ -12,7 +12,7 @@ export default function PublikasiList({ user }: { user: Kaprodi }) {
   const tahunAkademik = useAtomValue(tahunAkademikAtom)
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 1000)
   const setColumnVisibility = useSetAtom(columnVisibilityAtom)
   const { data, refetch, isFetching } = useGetPublikasi(

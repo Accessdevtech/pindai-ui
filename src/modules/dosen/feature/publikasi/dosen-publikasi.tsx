@@ -31,7 +31,7 @@ export default function DosenPublikasi() {
   const [value, setValue] = useAtom(publikasiSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const { user } = useAuthContext()
   const { data, refetch, isFetching } = useGetPublikasi(
     currentPage,

@@ -10,10 +10,10 @@ export const navData = {
       name: "fakultas",
       roles: ["dppm"]
     },
-    {
-      name: "periode",
-      roles: ["dppm"]
-    },
+    // {
+    //   name: "periode",
+    //   roles: ["dppm"]
+    // },
     {
       name: "prodi",
       roles: ["dppm"]
@@ -62,6 +62,15 @@ export const navData = {
     }
   ],
   sub: [
+    {
+      name: "configurasi",
+      roles: ["dppm"],
+      manageMenu: ["dokumen", "periode"]
+    }
+    // {
+    //   name: "dokumen",
+    //   roles: ["dppm"],
+    // },
     // {
     //   name: "timeline",
     //   roles: ["dosen"],

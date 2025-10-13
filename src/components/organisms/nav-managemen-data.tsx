@@ -2,8 +2,13 @@ import { navData } from "@/constant/menu"
 import { Role } from "@/interface/type"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { LayersIcon } from "lucide-react"
+import { ArchiveIcon, ChevronDown, LayersIcon } from "lucide-react"
 import Link from "next/link"
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger
+} from "../ui/collapsible"
 import { Separator } from "../ui/separator"
 import {
   SidebarGroup,
@@ -11,6 +16,8 @@ import {
   SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarMenuSub
 } from "../ui/sidebar"
 
 interface NavManagemenDataProps {
@@ -20,7 +27,7 @@ interface NavManagemenDataProps {
 
 export default function NavManagemenData({
   role,
-  isActive,
+  isActive
 }: NavManagemenDataProps) {
   return (
     <SidebarGroup className='px-0'>
@@ -50,6 +57,50 @@ export default function NavManagemenData({
                     <span className='capitalize'>{item.name}</span>
                   </Link>
                 </SidebarMenuButton>
+              )
+            }
+          />
+
+          <EachUtil
+            of={navData.sub}
+            render={(item, index) =>
+              item.roles.includes(role as string) && (
+                <Collapsible className='group/collapsible' key={index}>
+                  <SidebarMenuItem>
+                    <CollapsibleTrigger asChild>
+                      <SidebarMenuButton className='capitalize hover:bg-primary/30 hover:text-primary data-[state=open]:hover:bg-primary/30 data-[state=open]:hover:text-primary'>
+                        <ArchiveIcon />
+                        {item.name}
+                        <ChevronDown className='ml-auto transition-transform group-data-[state=open]/collapsible:rotate-180' />
+                      </SidebarMenuButton>
+                    </CollapsibleTrigger>
+                    <CollapsibleContent className='mt-2'>
+                      <SidebarMenuSub>
+                        <EachUtil
+                          of={item.manageMenu}
+                          render={(menu, index) => (
+                            <SidebarMenuButton
+                              asChild
+                              isActive={isActive(
+                                `${ROUTE.DASHBOARD}/${role}/${item.name.split(" ").join("-")}/${menu}`
+                              )}
+                              key={index}
+                              className='hover:bg-primary/30 hover:text-primary data-[active=true]:bg-primary/30 data-[active=true]:text-primary'
+                            >
+                              <Link
+                                href={`${ROUTE.DASHBOARD}/${role}/${item.name.split(" ").join("-")}/${menu}`}
+                                key={index}
+                              >
+                                <LayersIcon />
+                                <span className='capitalize'>{menu}</span>
+                              </Link>
+                            </SidebarMenuButton>
+                          )}
+                        />
+                      </SidebarMenuSub>
+                    </CollapsibleContent>
+                  </SidebarMenuItem>
+                </Collapsible>
               )
             }
           />

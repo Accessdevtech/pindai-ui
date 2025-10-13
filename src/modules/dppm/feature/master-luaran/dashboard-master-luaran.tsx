@@ -17,12 +17,12 @@ export default function MasterLuaranPage() {
   const [open, setOpen] = useState<boolean>(false)
   const [value, setValue] = useAtom(luaranSearchAtom)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 500)
   const { data, refetch, isFetching } = useGetLuaran(
     currentPage,
     search,
-    perPage,
+    perPage
   )
 
   // const groupedData = useMemo(() => {

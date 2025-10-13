@@ -30,6 +30,11 @@ export interface DetailPenelitian {
   deskripsi: string
   keterangan: string
   jenis_kriteria: string
+  nominal: {
+    amount: number
+    formatted: string
+    in_words: string
+  }
   academic_year: string
   status: StatusData
   anggota: Anggota[]

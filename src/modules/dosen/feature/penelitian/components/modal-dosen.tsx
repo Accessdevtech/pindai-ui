@@ -20,7 +20,7 @@ export default function ModalDosen() {
   const [value, setValue] = useAtom(dosenSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [openModal, setOpenModal] = useAtom(isDialogOpenAtom)
 
   const setAnggota = useSetAtom(anggotaAtom)

@@ -25,12 +25,12 @@ export default function PageProdi({ role }: { role: Role | undefined }) {
   const [value, setValue] = useAtom(prodiSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const { data: fakultas } = useGetFakultasList()
   const { data, refetch, isFetching } = useGetProdi(
     currentPage,
     perPage,
-    search,
+    search
   )
 
   const { isOpen, closeDialog, toggleDialog } = useDialog(data?.prodi || [])
@@ -52,19 +52,19 @@ export default function PageProdi({ role }: { role: Role | undefined }) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof ProdiType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
       toast.error(err.response?.data.message)
-    },
+    }
   })
 
   const form = useForm<ProdiType>({
     resolver: zodResolver(prodiSchema),
     defaultValues: {
-      name: "",
-    },
+      name: ""
+    }
   })
 
   const onSubmit = async (data: ProdiType) => {
@@ -75,7 +75,7 @@ export default function PageProdi({ role }: { role: Role | undefined }) {
 
   const columns = columnProdi({
     fakultas: fakultas?.data || [],
-    refetch,
+    refetch
   })
   return (
     <Card>
