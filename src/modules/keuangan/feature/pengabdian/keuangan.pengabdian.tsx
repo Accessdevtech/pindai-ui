@@ -24,7 +24,7 @@ export default function PengabdianKeuanganPage() {
   const { user } = useAuthContext()
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 1000)
   const { data, refetch, isFetching } = useGetPengabdian(
     currentPage,
@@ -37,6 +37,11 @@ export default function PengabdianKeuanganPage() {
   )
 
   const columns = columnPengabdian()
+
+  const approved = data?.pengabdian.filter(
+    item =>
+      item.status.dppm === "accepted" && item.status.kaprodi === "accepted"
+  )
 
   return (
     <div className='flex flex-col gap-4'>
@@ -51,7 +56,7 @@ export default function PengabdianKeuanganPage() {
             }}
             role={user?.role}
             columns={columns}
-            data={data?.pengabdian || []}
+            data={approved || []}
             meta={data?.meta}
             value={value}
             perPage={perPage}
