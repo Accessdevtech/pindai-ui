@@ -146,6 +146,8 @@ export default function DetailPenelitianPage({
       data.status.dppm === "pending")
   )
 
+  console.log(data)
+
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
@@ -207,7 +209,11 @@ export default function DetailPenelitianPage({
               { label: "Judul Penelitian", value: data?.title },
               { label: "Bidang", value: data?.bidang || "-" },
               { label: "Jenis Penelitian", value: data?.jenis_penelitian },
-              { label: "Kriteria", value: data?.jenis_kriteria },
+              {
+                label: "Kriteria",
+                value: `${data?.jenis_kriteria} (${data?.nominal.formatted})`
+              },
+              { label: "Terbilang", value: data?.nominal.in_words },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
               { label: "Dibuat pada", value: data?.created_date },
@@ -234,7 +240,7 @@ export default function DetailPenelitianPage({
                 btnStyle='w-full'
                 description='Unggah penelitian Anda dalam format PDF menggunakan form ini.'
                 className={cn({
-                  "max-h-fit max-w-2xl": proposal
+                  "max-h-fit max-w-2xl overflow-hidden": proposal
                 })}
               >
                 <ScrollArea className='max-h-[70vh]'>

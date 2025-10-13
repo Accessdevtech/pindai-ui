@@ -237,7 +237,7 @@ export default function DataTable<TData, TValue>({
               ) : null}
             </Tooltip>
 
-            {["dppm", "kaprodi"].includes(role as string) &&
+            {["dppm", "kaprodi", "keuangan"].includes(role as string) &&
               !["list-disetujui", "list-dibatalkan"].includes(category) && (
                 <Modal
                   title='Export Excel'
@@ -249,7 +249,10 @@ export default function DataTable<TData, TValue>({
                   description='Export data ke Excel'
                 >
                   <DateRangePicker
-                    onUpdate={dates => setRangeDate(dates.range)}
+                    onUpdate={dates => {
+                      setRangeDate(dates.range)
+                      console.log(dates.range)
+                    }}
                     align='center'
                     locale='id-ID'
                     showCompare={false}
@@ -257,7 +260,6 @@ export default function DataTable<TData, TValue>({
                   <Button
                     onClick={() => {
                       mutate({ category, rangeDate })
-                      // console.log(rangeDate)
                     }}
                   >
                     Export

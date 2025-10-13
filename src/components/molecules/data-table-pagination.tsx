@@ -6,7 +6,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from "@/components/ui/select"
 import { Meta } from "@/interface/type"
 import { Table } from "@tanstack/react-table"
@@ -14,7 +14,7 @@ import {
   ChevronLeft,
   ChevronRight,
   ChevronsLeft,
-  ChevronsRight,
+  ChevronsRight
 } from "lucide-react"
 
 interface DataTablePaginationProps<TData> {
@@ -30,7 +30,7 @@ export function DataTablePagination<TData>({
   perPage,
   onPaginationChange,
   serPerPage,
-  meta,
+  meta
 }: DataTablePaginationProps<TData>) {
   return (
     <div className='flex items-center justify-between px-2'>
@@ -52,7 +52,7 @@ export function DataTablePagination<TData>({
               <SelectValue placeholder={perPage} />
             </SelectTrigger>
             <SelectContent side='top'>
-              {[10, 20, 30, 40, 50].map(pageSize => (
+              {[20, 30, 40, 50, 100, 150].map(pageSize => (
                 <SelectItem key={pageSize} value={`${pageSize}`}>
                   {pageSize}
                 </SelectItem>

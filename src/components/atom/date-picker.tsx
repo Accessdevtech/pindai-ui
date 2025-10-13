@@ -1,77 +1,45 @@
-"use client"
-
-import { CalendarIcon } from "lucide-react"
-
-import { Button } from "@/components/ui/button"
-import { Calendar } from "@/components/ui/calendar"
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from "@/components/ui/popover"
-import { cn } from "@/lib/utils"
+import { FieldConfig } from "@/modules/dppm/feature/configurasi/dokumen/type"
 import { format } from "date-fns"
-import { id } from "date-fns/locale"
-import { FieldPath, FieldValues, UseControllerProps } from "react-hook-form"
-import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage
-} from "../ui/form"
+import { CalendarIcon } from "lucide-react"
+import { Button } from "../ui/button"
+import { Calendar } from "../ui/calendar"
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover"
 
-interface DatePickerProps<TFieldValues extends FieldValues> {
-  control: UseControllerProps<TFieldValues>["control"]
-  name: FieldPath<TFieldValues>
-  disabled?: boolean
-  label: string
+interface DatePickerProps {
+  field: FieldConfig
+  updateField: <K extends keyof FieldConfig>(
+    id: string,
+    key: K,
+    value: FieldConfig[K]
+  ) => void
 }
 
-export function DatePickerField<TFieldValues extends FieldValues>({
-  label,
-  ...props
-}: DatePickerProps<TFieldValues>) {
+export function DatePicker({ field, updateField }: DatePickerProps) {
+  // console.log(field)
+  // console.log("render date picker", new Date(field.value as string))
   return (
-    <FormField
-      {...props}
-      render={({ field }) => (
-        <FormItem className='flex w-full flex-col gap-2'>
-          <FormLabel className='capitalize'>{label}</FormLabel>
-          <Popover>
-            <PopoverTrigger asChild>
-              <FormControl>
-                <Button
-                  variant={"outline"}
-                  className={cn("w-full justify-between capitalize", {
-                    "text-muted-foreground": !field.value
-                  })}
-                  disabled={props.disabled}
-                >
-                  {field.value
-                    ? format(field.value, "PPP", { locale: id })
-                    : "pilih tanggal..."}
-                  <CalendarIcon className='ml-auto h-4 w-4 opacity-50' />
-                </Button>
-              </FormControl>
-            </PopoverTrigger>
-            <PopoverContent align='start'>
-              <Calendar
-                mode='single'
-                selected={field.value}
-                onSelect={date => {
-                  field.onChange(date)
-                }}
-                // disabled={date =>
-                //   date > new Date() || date < new Date("1900-01-01")
-                // }
-                initialFocus
-              />
-            </PopoverContent>
-          </Popover>
-          <FormMessage />
-        </FormItem>
-      )}
-    />
+    <Popover>
+      <PopoverTrigger asChild>
+        <Button
+          variant='outline'
+          data-empty={!field.value}
+          className='w-full justify-start text-left font-normal data-[empty=true]:text-muted-foreground'
+        >
+          <CalendarIcon />
+          {field.value
+            ? format(new Date(field.value), "d/M/yyy")
+            : "Pick a date"}
+        </Button>
+      </PopoverTrigger>
+      <PopoverContent className='w-auto p-0'>
+        <Calendar
+          mode='single'
+          selected={field.value ? new Date(field.value) : undefined}
+          onSelect={d =>
+            updateField(field.id, "value", d ? (d as Date).toISOString() : "")
+          }
+        />
+      </PopoverContent>
+    </Popover>
   )
 }

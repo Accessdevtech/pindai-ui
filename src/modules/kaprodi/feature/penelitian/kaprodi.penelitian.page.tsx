@@ -25,7 +25,7 @@ export default function PenelitianKaprodiPage() {
   const { user } = useAuthContext()
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 1000)
   const setColumnVisibility = useSetAtom(columnVisibilityAtom)
   const { data, refetch, isFetching } = useGetPenelitian(
@@ -45,7 +45,7 @@ export default function PenelitianKaprodiPage() {
       status_dppm: true,
       status_keuangan: true
     })
-  })
+  }, [])
 
   return (
     <div className='flex flex-col gap-4'>

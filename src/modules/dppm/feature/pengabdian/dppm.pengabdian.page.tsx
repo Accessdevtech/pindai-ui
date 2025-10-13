@@ -24,7 +24,7 @@ export default function PengabdianDppmPage() {
   const { user } = useAuthContext()
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 1000)
   const { data, refetch, isFetching } = useGetPengabdian(
     currentPage,
@@ -36,7 +36,7 @@ export default function PengabdianDppmPage() {
     statusKeuangan
   )
 
-  const columns = columnPengabdian({refetch})
+  const columns = columnPengabdian({ refetch })
 
   return (
     <div className='flex flex-col gap-4'>

@@ -11,7 +11,7 @@ import { useGetPublikasi } from "../../publikasi/hooks/use-publikasi/get-publika
 export default function PublikasiList({ user }: { user: User }) {
   const [value, setValue] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 1000)
   const setColumnVisibility = useSetAtom(columnVisibilityAtom)
   const { data, refetch, isFetching } = useGetPublikasi(
@@ -19,19 +19,19 @@ export default function PublikasiList({ user }: { user: User }) {
     perPage,
     search,
     "",
-    "rejected",
+    "rejected"
   )
 
   const columns = columnPublikasi({
     pubilkasi: data?.publikasi || [],
-    refetch,
+    refetch
   })
 
   useEffect(() => {
     setColumnVisibility({
       status_kaprodi: false,
       status_dppm: false,
-      status_keuangan: false,
+      status_keuangan: false
     })
   }, [])
   return (
@@ -40,7 +40,7 @@ export default function PublikasiList({ user }: { user: User }) {
         <DataTable
           search
           filtering={{
-            tahunAkademik: true,
+            tahunAkademik: true
           }}
           role={user?.role}
           columns={columns}

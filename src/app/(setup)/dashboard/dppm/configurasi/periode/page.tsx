@@ -1,6 +1,6 @@
 "use client"
 import { useRequiredAuth } from "@/hooks/use-required-auth"
-import Periode from "@/modules/dppm/feature/periode/periode"
+import Periode from "@/modules/dppm/feature/configurasi/periode/periode"
 
 export default function () {
   const { user } = useRequiredAuth()

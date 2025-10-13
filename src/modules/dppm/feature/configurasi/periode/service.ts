@@ -20,7 +20,6 @@ export const getPeriode = async ({
     API_ENDPOINTS_DPPM.PERIODE,
     params
   )
-  console.log(response)
   return response.data
 }
 

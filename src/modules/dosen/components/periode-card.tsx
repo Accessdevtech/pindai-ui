@@ -8,7 +8,7 @@ import {
   CardTitle
 } from "@/components/ui/card"
 import { cn } from "@/lib/utils"
-import { PeriodeType } from "@/modules/dppm/feature/periode/schema"
+import { PeriodeType } from "@/modules/dppm/feature/configurasi/periode/schema"
 import { periodeActiveAtom } from "@/state/store"
 import { daysBetween } from "@/utils/day-between"
 import { formatDate } from "date-fns"

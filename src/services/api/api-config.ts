@@ -71,6 +71,8 @@ export const API_ENDPOINTS_DPPM = {
   CANCELED_PUBLIKASI: "/dppm/canceled/publikasi",
   RETURNED_PUBLIKASI: "/dppm/returned/publikasi",
 
+  CONIG_DOKUMEN: "/dppm/config/dokumen",
+
   PENELITIAN: "/dppm/penelitian",
   PENGABDIAN: "/dppm/pengabdian",
   PUBLIKASI: "/dppm/publikasi",

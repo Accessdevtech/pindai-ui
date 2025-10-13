@@ -30,11 +30,11 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
   const [show, setShow] = useState(false)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const { data, refetch, isFetching } = useGetKaprodi(
     currentPage,
     perPage,
-    search,
+    search
   )
 
   const { isOpen, closeDialog, toggleDialog } = useDialog(data?.kaprodi || [])
@@ -55,12 +55,12 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof KaprodiType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
       toast.error(err.response?.data.message)
-    },
+    }
   })
 
   const form = useForm<KaprodiType>({
@@ -73,8 +73,8 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
       address: "",
       fakultas_id: "",
       prodi_id: "",
-      status: "true",
-    },
+      status: "true"
+    }
   })
 
   const onSubmit = async (data: KaprodiType) => {
@@ -89,7 +89,7 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
 
   const columns = columnKaprodi({
     fakultas: fakultasList?.data || [],
-    refetch,
+    refetch
   })
 
   const showPassword = () => setShow(!show)
@@ -160,7 +160,7 @@ export default function KaprodiPage({ role }: { role: Role | undefined }) {
               label='status'
               options={[
                 { label: "aktif", value: "true" },
-                { label: "tidak aktif", value: "false" },
+                { label: "tidak aktif", value: "false" }
               ]}
             />
             <Button type='submit' disabled={form.formState.isSubmitting}>

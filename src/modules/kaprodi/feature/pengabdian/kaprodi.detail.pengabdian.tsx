@@ -256,7 +256,11 @@ export default function DetailPengabdianKaprodiPage({ id }: { id: string }) {
               { label: "Judul Pengabdian", value: data?.title },
               { label: "Bidang", value: data?.bidang || "-" },
               { label: "Jenis Pengabdian", value: data?.jenis_pengabdian },
-              { label: "Jenis Kriteria", value: data?.jenis_kriteria },
+              {
+                label: "Jenis Kriteria",
+                value: `${data?.jenis_kriteria} (${data?.nominal.formatted})`
+              },
+              { label: "Terbilang", value: data?.nominal.in_words },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
               { label: "Abstrak", value: data?.deskripsi }

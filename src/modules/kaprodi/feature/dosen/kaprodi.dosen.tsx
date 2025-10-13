@@ -15,19 +15,19 @@ import { useApprovedDosen } from "./hooks/use-dosen/approved-dosen"
 import { useGetDosen } from "./hooks/use-dosen/get-dosen"
 
 export default function KaprodiDashboardDosen({
-  role,
+  role
 }: {
   role: Role | undefined
 }) {
   const [value, setValue] = useAtom(dosenSearch)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 500)
 
   const { data, refetch, isFetching } = useGetDosen(
     currentPage,
     perPage,
-    search,
+    search
   )
   const { mutate: approved } = useApprovedDosen({
     onSuccess: res => {
@@ -39,7 +39,7 @@ export default function KaprodiDashboardDosen({
     },
     onError: err => {
       toast.error(err.response?.data.message)
-    },
+    }
   })
 
   const { mutate: active } = useActiveDosen({
@@ -52,13 +52,13 @@ export default function KaprodiDashboardDosen({
     },
     onError: err => {
       toast.error(err.response?.data.message)
-    },
+    }
   })
 
   const column = columnDosen({
     refetch: () => {},
     onApprove: approved,
-    onActive: active,
+    onActive: active
   })
 
   return (

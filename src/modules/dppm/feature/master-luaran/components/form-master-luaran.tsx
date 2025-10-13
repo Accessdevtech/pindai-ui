@@ -13,14 +13,14 @@ import { Luaran } from "../luaran.interface"
 import {
   KriteriaType,
   masterLuaranSchema,
-  MasterLuaranType,
+  MasterLuaranType
 } from "../schema/luaran"
 import { createEditableColumns } from "./column-input-luaran"
 
 export default function FormMasterLuaran({
   onClose,
   luaran,
-  refetch,
+  refetch
 }: {
   onClose: () => void
   luaran?: Luaran
@@ -31,8 +31,8 @@ export default function FormMasterLuaran({
     defaultValues: {
       name: luaran?.name || "",
       category: luaran?.category || "",
-      kriteria: luaran?.kriteria || [],
-    },
+      kriteria: luaran?.kriteria || []
+    }
   })
   const { mutate: createLuaran } = useCreateLuaran({
     onSuccess: res => {
@@ -46,12 +46,12 @@ export default function FormMasterLuaran({
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof MasterLuaranType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
       toast.error(err.response?.data.message)
-    },
+    }
   })
 
   const { mutate: updateLuaran } = useUpdateLuaran({
@@ -65,12 +65,12 @@ export default function FormMasterLuaran({
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof MasterLuaranType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
       toast.error(err.response?.data.message)
-    },
+    }
   })
   const onSubmit = async (data: MasterLuaranType) => {
     if (!luaran) {
@@ -83,7 +83,7 @@ export default function FormMasterLuaran({
   const kriteriaColumns = createEditableColumns<KriteriaType>(
     form,
     "kriteria",
-    ["id", "name", "nominal", "keterangan"],
+    ["id", "name", "nominal", "keterangan"]
   )
 
   return (
@@ -96,16 +96,16 @@ export default function FormMasterLuaran({
         options={[
           {
             id: "penelitian",
-            name: "penelitian",
+            name: "penelitian"
           },
           {
             id: "pengabdian",
-            name: "pengabdian",
+            name: "pengabdian"
           },
           {
             id: "publikasi",
-            name: "publikasi",
-          },
+            name: "publikasi"
+          }
         ]}
       />
 

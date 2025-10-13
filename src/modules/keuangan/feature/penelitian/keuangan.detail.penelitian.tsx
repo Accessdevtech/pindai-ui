@@ -141,7 +141,11 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
               { label: "Judul Penelitian", value: data?.title },
               { label: "Bidang", value: data?.bidang || "-" },
               { label: "Jenis Penelitian", value: data?.jenis_penelitian },
-              { label: "Jenis Kriteria", value: data?.jenis_kriteria },
+              {
+                label: "Jenis Kriteria",
+                value: `${data?.jenis_kriteria} (${data?.nominal.formatted})`
+              },
+              { label: "Terbilang", value: data?.nominal.in_words },
               { label: "Semester", value: data?.semester },
               { label: "Tahun", value: data?.academic_year },
               { label: "Abstrak", value: data?.deskripsi }

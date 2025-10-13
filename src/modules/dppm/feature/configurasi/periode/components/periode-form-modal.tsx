@@ -1,7 +1,7 @@
 "use client"
 import Modal from "@/components/atom/modal"
 
-import { DatePickerField } from "@/components/atom/date-picker"
+import { DatePickerField } from "@/components/atom/date-picker-field"
 import InputField from "@/components/atom/input-field"
 import SelectField from "@/components/atom/select-field"
 import Form from "@/components/molecules/form"

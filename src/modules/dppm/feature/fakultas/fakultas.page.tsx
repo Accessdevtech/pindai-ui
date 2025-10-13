@@ -25,11 +25,11 @@ export default function FakultasPage({ role }: { role: Role | undefined }) {
   const [value, setValue] = useAtom(fakultasSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const { data, refetch, isFetching } = useGetFakultas(
     currentPage,
     perPage,
-    search,
+    search
   )
 
   const { isOpen, closeDialog, toggleDialog } = useDialog(data?.fakultas || [])
@@ -50,19 +50,19 @@ export default function FakultasPage({ role }: { role: Role | undefined }) {
         for (const [key, value] of Object.entries(err.response.data.errors)) {
           form.setError(key as keyof FakultasType, {
             message: value as string,
-            type: "manual",
+            type: "manual"
           })
         }
       }
       toast.error(err.response?.data.message)
-    },
+    }
   })
 
   const form = useForm<FakultasType>({
     resolver: zodResolver(fakultasSchema),
     defaultValues: {
-      name: "",
-    },
+      name: ""
+    }
   })
 
   const onSubmit = async (data: FakultasType) => {
@@ -72,7 +72,7 @@ export default function FakultasPage({ role }: { role: Role | undefined }) {
   if (isError) toast.error(error?.message)
 
   const columns = columnFakultas({
-    refetch,
+    refetch
   })
 
   return (

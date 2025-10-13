@@ -12,17 +12,17 @@ import { useGetDosen } from "./hooks/use-dosen/get-dosen"
 export default function DosenPageDppm() {
   const [value, setValue] = useAtom(dosenSearch)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
   const [search] = useDebounce(value, 500)
 
   const { data, refetch, isFetching } = useGetDosen(
     currentPage,
     perPage,
-    search,
+    search
   )
 
   const column = columnDosen({
-    refetch,
+    refetch
   })
 
   return (

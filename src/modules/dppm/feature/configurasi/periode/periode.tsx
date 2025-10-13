@@ -18,7 +18,7 @@ export default function Periode({ role }: PeriodeProps) {
   const [value, setValue] = useAtom(prodiSearch)
   const [search] = useDebounce(value, 500)
   const [currentPage, setCurrentPage] = useState(1)
-  const [perPage, setPerPage] = useState(10)
+  const [perPage, setPerPage] = useState(20)
 
   const {
     data: periodeList,
