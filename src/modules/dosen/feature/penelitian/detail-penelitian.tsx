@@ -125,13 +125,17 @@ export default function DetailPenelitianPage({
     data?.status.keuangan
   ]
 
-  const isRejectedDppm = Reduce(statusArray, status => status === "rejected")
-
   const isRejectedKaprodi = Every(statusArray, status => status === "rejected")
 
   const isReturnedKaprodi = Every(statusArray, status => status === "returned")
 
-  const isReturnedDppm = Reduce(statusArray, status => status === "returned")
+  const isRejectedDppm = Every(statusArray, status => status === "rejected")
+
+  const isReturnedDppm = Every(statusArray, status => status === "returned")
+
+  const isRejectedKeuangan = Reduce(statusArray, status => status === "rejected")
+
+  const isReturnedKeuangan = Reduce(statusArray, status => status === "returned")
 
   const isFileExist = data?.existFile === true
   const isDisabled = !(
@@ -145,8 +149,6 @@ export default function DetailPenelitianPage({
       data.status.kaprodi === "returned" &&
       data.status.dppm === "pending")
   )
-
-  console.log(data)
 
   return (
     <div className='flex flex-col gap-4'>
@@ -166,25 +168,37 @@ export default function DetailPenelitianPage({
       </Breadcrumb>
 
       {isRejectedKaprodi && (
-        <KeteranganDitolak title='Penelitian ditolak oleh kaprodi'>
+        <KeteranganDitolak title={`Penelitian ditolak oleh Kaprodi`}>
           {data?.keterangan}
         </KeteranganDitolak>
       )}
 
       {isReturnedKaprodi && (
-        <KeteranganDitolak title='Penelitian dikembalikan oleh kaprodi'>
-          {data?.keterangan}
-        </KeteranganDitolak>
-      )}
-
-      {isRejectedDppm && (
-        <KeteranganDikembalikan title='Penelitian ditolak oleh dppm'>
+        <KeteranganDikembalikan title='Penelitian dikembalikan oleh kaprodi'>
           {data?.keterangan}
         </KeteranganDikembalikan>
       )}
 
+      {isRejectedDppm && (
+        <KeteranganDitolak title='Penelitian ditolak oleh dppm'>
+          {data?.keterangan}
+        </KeteranganDitolak>
+      )}
+
       {isReturnedDppm && (
         <KeteranganDikembalikan title='Penelitian dikembalikan oleh dppm'>
+          {data?.keterangan}
+        </KeteranganDikembalikan>
+      )}
+
+      {isRejectedKeuangan && (
+        <KeteranganDitolak title='Penelitian ditolak oleh keuangan'>
+          {data?.keterangan}
+        </KeteranganDitolak>
+      )}
+
+      {isReturnedKeuangan && (
+        <KeteranganDikembalikan title='Penelitian dikembalikan oleh keuangan'>
           {data?.keterangan}
         </KeteranganDikembalikan>
       )}

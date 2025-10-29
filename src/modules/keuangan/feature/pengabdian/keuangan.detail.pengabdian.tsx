@@ -1,28 +1,36 @@
 "use client"
 import Alert from "@/components/atom/alert"
 import Breadcrumb from "@/components/atom/bradcrumb"
+import Modal from "@/components/atom/modal"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
+import { Button } from "@/components/ui/button"
 import {
   Card,
   CardContent,
   CardDescription,
   CardTitle
 } from "@/components/ui/card"
+import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
+import { Textarea } from "@/components/ui/textarea"
+import { cn } from "@/lib/utils"
 import { columnsIdentitas } from "@/modules/dosen/feature/pengabdian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/pengabdian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { CheckIcon } from "lucide-react"
+import { CheckIcon, Undo2Icon, X } from "lucide-react"
 import { useState } from "react"
 import { toast } from "sonner"
 import { useApprovePengabdian } from "./hooks/use-pengabdian/approved-pengabdian"
 import { useCanclePengabdian } from "./hooks/use-pengabdian/cancle-pengabdian"
 import { useGetDetailPengabdian } from "./hooks/use-pengabdian/get-detail-pengabdian"
+import { useReturnedPengabdian } from "./hooks/use-pengabdian/return-pengabdian"
 
 export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
   const [alert, setAlert] = useState(false)
   const { data, refetch } = useGetDetailPengabdian(id)
+  const [keterangan, setKeterangan] = useState("")
+
   const { mutate: approved } = useApprovePengabdian({
     onSuccess(res) {
       if (res.status) {
@@ -49,6 +57,25 @@ export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
       if (!res.status) {
         toast.error(res.message)
       }
+      setKeterangan("")
+      refetch()
+    },
+
+    onError(error) {
+      toast.error(error.response?.data.message)
+    }
+  })
+
+  const { mutate: returned } = useReturnedPengabdian({
+    onSuccess(res) {
+      if (res.status) {
+        toast.success(res.message)
+      }
+
+      if (!res.status) {
+        toast.error(res.message)
+      }
+      setKeterangan("")
       refetch()
     },
 
@@ -128,6 +155,45 @@ export default function DetailPengabdianKeuanganPage({ id }: { id: string }) {
                 description='Apakah anda yakin ingin menyetujui pengabdian ini?'
                 onClick={() => approved({ id })}
               />
+
+              <Modal
+                title='Kembalikan Pengabdian'
+                name='Kembalikan'
+                Icon={Undo2Icon}
+                tooltipContent='Kembalikan Pengabdian'
+                btnStyle={cn(
+                  "grow border-yellow-500 text-yellow-500 hover:bg-yellow-500 hover:text-primary-foreground lg:w-fit"
+                )}
+                variant='outline'
+                description='Berikan keterangan pengembalian pengabdian'
+              >
+                <Textarea onChange={e => setKeterangan(e.target.value)} />
+
+                <Button onClick={() => returned({ id, keterangan })}>
+                  Simpan
+                </Button>
+              </Modal>
+
+              <Modal
+                title='Tolak Pengabdian'
+                name='Tolak'
+                Icon={X}
+                tooltipContent='Tolak Pengabdian'
+                btnStyle='grow border-red-500 text-red-500 hover:bg-red-500 hover:text-primary-foreground lg:w-fit'
+                variant='outline'
+                description='Berikan keterangan penolakan pengabdian'
+              >
+                <Input
+                  defaultValue={
+                    data?.keterangan === null ? "" : data?.keterangan
+                  }
+                  onChange={e => setKeterangan(e.target.value)}
+                />
+
+                <Button onClick={() => reject({ id, keterangan })}>
+                  Simpan
+                </Button>
+              </Modal>
             </CardContent>
           </Card>
         )}

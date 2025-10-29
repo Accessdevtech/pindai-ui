@@ -251,7 +251,6 @@ export default function DataTable<TData, TValue>({
                   <DateRangePicker
                     onUpdate={dates => {
                       setRangeDate(dates.range)
-                      console.log(dates.range)
                     }}
                     align='center'
                     locale='id-ID'
