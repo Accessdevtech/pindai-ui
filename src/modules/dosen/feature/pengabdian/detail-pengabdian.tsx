@@ -124,13 +124,23 @@ export default function DetailPengabdianPage({
     data?.status.keuangan
   ]
 
-  const isRejectedDppm = Reduce(statusArray, status => status === "rejected")
-
   const isRejectedKaprodi = Every(statusArray, status => status === "rejected")
 
   const isReturnedKaprodi = Every(statusArray, status => status === "returned")
 
-  const isReturnedDppm = Reduce(statusArray, status => status === "returned")
+  const isRejectedDppm = Every(statusArray, status => status === "rejected")
+
+  const isReturnedDppm = Every(statusArray, status => status === "returned")
+
+  const isRejectedKeuangan = Reduce(
+    statusArray,
+    status => status === "rejected"
+  )
+
+  const isReturnedKeuangan = Reduce(
+    statusArray,
+    status => status === "returned"
+  )
 
   const isFileExist = data?.existFile === true
   const isDisabled = !(
@@ -168,9 +178,9 @@ export default function DetailPengabdianPage({
       )}
 
       {isReturnedKaprodi && (
-        <KeteranganDitolak title='Penelitian dikembalikan oleh kaprodi'>
+        <KeteranganDikembalikan title='Penelitian dikembalikan oleh kaprodi'>
           {data?.keterangan}
-        </KeteranganDitolak>
+        </KeteranganDikembalikan>
       )}
 
       {isRejectedDppm && (
@@ -181,6 +191,18 @@ export default function DetailPengabdianPage({
 
       {isReturnedDppm && (
         <KeteranganDikembalikan title='Penelitian dikembalikan oleh dppm'>
+          {data?.keterangan}
+        </KeteranganDikembalikan>
+      )}
+
+      {isRejectedKeuangan && (
+        <KeteranganDitolak title='Pengabdian ditolak oleh keuangan'>
+          {data?.keterangan}
+        </KeteranganDitolak>
+      )}
+
+      {isReturnedKeuangan && (
+        <KeteranganDikembalikan title='Penelitian dikembalikan oleh keuangan'>
           {data?.keterangan}
         </KeteranganDikembalikan>
       )}

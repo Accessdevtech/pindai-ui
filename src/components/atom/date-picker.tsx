@@ -15,8 +15,6 @@ interface DatePickerProps {
 }
 
 export function DatePicker({ field, updateField }: DatePickerProps) {
-  // console.log(field)
-  // console.log("render date picker", new Date(field.value as string))
   return (
     <Popover>
       <PopoverTrigger asChild>

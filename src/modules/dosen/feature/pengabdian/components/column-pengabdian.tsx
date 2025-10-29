@@ -57,13 +57,18 @@ export const columnPengabdian = ({
         })
 
         const isStatusPending = Every(
-          [row.original.status.kaprodi, row.original.status.dppm],
+          [
+            row.original.status.kaprodi,
+            row.original.status.dppm,
+            row.original.status.keuangan
+          ],
           status => status === "pending"
         )
 
         const isStatusReturn = [
           row.original.status.kaprodi,
-          row.original.status.dppm
+          row.original.status.dppm,
+          row.original.status.keuangan
         ].some(status => status === "returned")
 
         const baseRoute = `${ROUTE.DASHBOARD}/dosen/pengabdian/edit/`

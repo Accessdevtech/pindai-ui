@@ -80,7 +80,6 @@ export default function DokumentPage() {
 
   async function savePayload() {
     saveConfigDokument({ data: payload })
-    // console.log(payload.fields)
   }
 
   return (
