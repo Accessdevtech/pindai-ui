@@ -1,6 +1,7 @@
 "use client"
 import Alert from "@/components/atom/alert"
 import Breadcrumb from "@/components/atom/bradcrumb"
+import FileView from "@/components/atom/file-view"
 import Modal from "@/components/atom/modal"
 import KeteranganDitolak from "@/components/molecules/keterangan-ditolak"
 import { Button } from "@/components/ui/button"
@@ -8,19 +9,24 @@ import {
   Card,
   CardContent,
   CardDescription,
+  CardHeader,
   CardTitle
 } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Separator } from "@/components/ui/separator"
 import { Textarea } from "@/components/ui/textarea"
+import { useViewDocs, useViewLaporanKemajuan } from "@/hooks/use-view-docs"
+import { LaporanKemajuan, ViewDocs } from "@/interface/type"
 import { cn } from "@/lib/utils"
 import { columnsIdentitas } from "@/modules/dosen/feature/penelitian/components/column-identitas"
 import { IdentitasTable } from "@/modules/dosen/feature/penelitian/components/identitas-table"
 import { ROUTE } from "@/services/route"
 import { EachUtil } from "@/utils/each-utils"
-import { CheckIcon, Undo2Icon, X } from "lucide-react"
-import { useState } from "react"
+import { downloadDocxFile } from "@/utils/files"
+import { CheckIcon, Loader2Icon, Undo2Icon, X } from "lucide-react"
+import { useEffect, useState } from "react"
 import { toast } from "sonner"
+import { useDownload } from "../../hooks/use-download"
 import { useApprovePenelitian } from "./hooks/use-penelitian/approved-penelitian"
 import { useCanclePenelitian } from "./hooks/use-penelitian/cancle-penelitian"
 import { useGetDetailPenelitian } from "./hooks/use-penelitian/get-detail-penelitian"
@@ -28,8 +34,14 @@ import { useReturnedPenelitian } from "./hooks/use-penelitian/return-penelitian"
 
 export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
   const [alert, setAlert] = useState(false)
-  const { data, refetch } = useGetDetailPenelitian(id)
+  const [resDocs, setResDocs] = useState<{
+    proposal?: ViewDocs
+    laporanKemajuan?: LaporanKemajuan[]
+    suratKeteranganSelesai?: ViewDocs
+    laporan?: ViewDocs
+  }>()
   const [keterangan, setKeterangan] = useState("")
+  const { data, refetch } = useGetDetailPenelitian(id)
 
   const { mutate: approved } = useApprovePenelitian({
     onSuccess(res) {
@@ -85,6 +97,63 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
     }
   })
 
+  const { mutate: download } = useDownload({
+    onSuccess(res) {
+      downloadDocxFile(res.base64, res.file_name)
+      toast.dismiss()
+    },
+    onError(err) {
+      toast.error(err.response?.data.message)
+      toast.dismiss()
+    }
+  })
+
+  const { mutateAsync: viewDocs, isPending } = useViewDocs()
+  const { mutateAsync: viewLaporanKemajuan } = useViewLaporanKemajuan()
+
+  const viewFile = async (jenis_dokument: string) => {
+    const response = await viewDocs({
+      id,
+      category: "penelitian",
+      jenis_dokumen: jenis_dokument.split(" ").join("_")
+    })
+    return response
+  }
+
+  const viewFileLaporanKemajuan = async () => {
+    const response = await viewLaporanKemajuan({
+      id,
+      category: "penelitian"
+    })
+
+    return response
+  }
+
+  useEffect(() => {
+    Promise.allSettled([
+      viewFile("proposal"),
+      viewFileLaporanKemajuan(),
+      viewFile("surat_keterangan_selesai"),
+      viewFile("laporan")
+    ]).then(response => {
+      const [proposal, laporanKemajuan, suratKeteranganSelesai, laporan] =
+        response
+      setResDocs({
+        proposal: proposal.status === "fulfilled" ? proposal.value : undefined,
+        laporanKemajuan:
+          laporanKemajuan.status === "fulfilled"
+            ? Array.isArray(laporanKemajuan.value)
+              ? laporanKemajuan.value
+              : [laporanKemajuan.value]
+            : undefined,
+        suratKeteranganSelesai:
+          suratKeteranganSelesai.status === "fulfilled"
+            ? suratKeteranganSelesai.value
+            : undefined,
+        laporan: laporan.status === "fulfilled" ? laporan.value : undefined
+      })
+    })
+  }, [])
   const columnsIdentity = columnsIdentitas({ status: data?.status })
 
   return (
@@ -226,6 +295,26 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
               </div>
             )}
           />
+          
+          <Modal
+            title={`${resDocs?.proposal ? resDocs?.proposal.file_name.split("-").join(" ").replace(".pdf", "") : "Sedang Mendapatkan File Proposal"}`}
+            name='Lihat Proposal'
+            btnStyle='w-full'
+            tooltipContent='Lihat Proposal'
+            className='max-w-fit'
+          >
+            <div className='max-h-[calc(100vh-200px)] flex-1 overflow-auto'>
+              {isPending ? (
+                <Loader2Icon className='animate-spin' />
+              ) : resDocs?.proposal ? (
+                <FileView resDocs={resDocs?.proposal as ViewDocs} scale={1} />
+              ) : (
+                <div className='capitalize'>
+                  File tidak tersedia / belum di unggah
+                </div>
+              )}
+            </div>
+          </Modal>
         </CardContent>
       </Card>
 
@@ -249,6 +338,108 @@ export default function DetailPenelitianKeuanganPage({ id }: { id: string }) {
           />
         </CardContent>
       </Card>
+
+      {/* Dokumen Penelitian */}
+      <Card>
+        <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+          <CardTitle className='capitalize tracking-wide'>
+            dokumen penelitian
+          </CardTitle>
+          <CardDescription>
+            Tabel berisi dokumen penelitian yang harus dilengkapi.
+          </CardDescription>
+        </CardContent>
+      </Card>
+
+      <div className='grid grid-cols-2 items-start gap-4'>
+        <Card>
+          <CardHeader className='flex items-center justify-between p-6'>
+            <CardTitle className='capitalize tracking-wide'>
+              Laporan Kemajuan
+            </CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+            {isPending ? (
+              <Loader2Icon className='animate-spin' />
+            ) : resDocs?.laporanKemajuan ? (
+              <EachUtil
+                of={resDocs.laporanKemajuan}
+                render={(laporanKemajuan, index) => (
+                  <div key={index}>
+                    <div className='flex items-center justify-between'>
+                      <span>
+                        <h1 className='font-semibold'>
+                          {laporanKemajuan.file_name
+                            .split("-")
+                            .join(" ")
+                            .replace(".pdf", "")}
+                        </h1>
+                        <p>{laporanKemajuan.date}</p>
+                      </span>
+
+                      <Modal
+                        title={laporanKemajuan.file_name
+                          .split("-")
+                          .join(" ")
+                          .replace(".pdf", "")}
+                        description={laporanKemajuan.date}
+                        name='Lihat Laporan Kemajuan'
+                        tooltipContent='Lihat Laporan Kemajuan'
+                      >
+                        <FileView
+                          resDocs={laporanKemajuan as LaporanKemajuan}
+                          scale={1}
+                        />
+                      </Modal>
+                    </div>
+                    <Separator />
+                  </div>
+                )}
+              />
+            ) : (
+              <div className='capitalize'>
+                File tidak tersedia / belum di unggah
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className='flex items-center justify-between p-6'>
+            <CardTitle className='capitalize tracking-wide'>
+              Surat Keterangan Selesai
+            </CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+            {isPending ? (
+              <Loader2Icon className='animate-spin' />
+            ) : resDocs?.suratKeteranganSelesai ? (
+              <FileView resDocs={resDocs?.suratKeteranganSelesai as ViewDocs} />
+            ) : (
+              <div className='capitalize'>
+                File tidak tersedia / belum di unggah
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className='flex items-center justify-between p-6'>
+            <CardTitle className='capitalize tracking-wide'>Laporan</CardTitle>
+          </CardHeader>
+          <CardContent className='space-y-2 p-6 capitalize text-muted-foreground'>
+            {isPending ? (
+              <Loader2Icon className='animate-spin' />
+            ) : resDocs?.laporan ? (
+              <FileView resDocs={resDocs?.laporan as ViewDocs} />
+            ) : (
+              <div className='capitalize'>
+                File tidak tersedia / belum di unggah
+              </div>
+            )}
+          </CardContent>
+        </Card>
+      </div>
     </div>
   )
 }
