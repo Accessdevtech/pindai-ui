@@ -42,6 +42,7 @@ export default function DetailPenelitianDppmPage({ id }: { id: string }) {
   }>()
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPenelitian(id)
+
   const { mutate: approved } = useApprovePenelitian({
     onSuccess(res) {
       if (res.status) {

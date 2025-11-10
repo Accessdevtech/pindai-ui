@@ -38,6 +38,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
   }>()
   const [keterangan, setKeterangan] = useState("")
   const { data, refetch } = useGetDetailPengabdian(id)
+  
   const { mutate: approved } = useApprovePengabdian({
     onSuccess(res) {
       if (res.status) {
@@ -136,6 +137,7 @@ export default function DetailPengabdianDppmPage({ id }: { id: string }) {
   }, [])
 
   const columnsIdentity = columnsIdentitas({ status: data?.status })
+  
   return (
     <div className='flex flex-col gap-4'>
       <Breadcrumb
